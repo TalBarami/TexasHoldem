@@ -7,7 +7,7 @@ import java.util.HashMap;
 /**
  * Created by RotemWald on 4/5/2017.
  */
-public class Users implements IUsers{
+public class Users implements IUsers {
     private HashMap<String, User> _userList;
 
     public Users() {
