@@ -5,4 +5,6 @@ package TexasHoldem.domain.game;
  */
 public class Round {
 
+    public void start(){}
+
 }
