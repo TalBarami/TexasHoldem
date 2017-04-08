@@ -5,6 +5,7 @@ import org.joda.time.DateTime;
 import TexasHoldem.domain.users.User;
 
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 /**
  * Created by אחיעד on 05/04/2017.
@@ -92,6 +93,46 @@ public class ProxyBridge implements Bridge {
     }
 
     public boolean searchgamebybuyin(int buyin) {
+        return true;
+    }
+
+    public boolean searchgamebychippolicy(int chippolicy) {
+        return true;
+    }
+
+    public boolean searchgamebyminbet(int minbet) {
+        return true;
+    }
+
+    public boolean searchgamebyminplayers(int numplayers) {
+        return true;
+    }
+
+    public boolean searchgamebymaxplayers(int numplayers) {
+        return true;
+    }
+
+    public boolean searchgamebyspectateisvalid(boolean spectatingavailable) {
+        return true;
+    }
+
+    public boolean spectateactivegame(String username, String gamename) {
+        return true;
+    }
+
+    public boolean leavegame(String username, String choise, String gamename) {
+        return true;
+    }
+
+    public boolean replaynonactivegame(String username, String gamename) {
+        return true;
+    }
+
+    public boolean saveturns(String username, String gamename, List<String> turns) {
+        return true;
+    }
+
+    public boolean searchavailablegamestojoin(String username) {
         return true;
     }
 

@@ -4,6 +4,7 @@ import junit.framework.TestCase;
 import org.joda.time.DateTime;
 
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 /**
  * Created by אחיעד on 05/04/2017.
@@ -85,5 +86,45 @@ public abstract class ProjectTest extends TestCase{
 
     public boolean searchgamebybuyin(int buyin) {
         return bridge.searchgamebybuyin(buyin);
+    }
+
+    public boolean searchgamebychippolicy(int chippolicy) {
+        return bridge.searchgamebychippolicy(chippolicy);
+    }
+
+    public boolean searchgamebyminbet(int minbet) {
+        return bridge.searchgamebyminbet(minbet);
+    }
+
+    public boolean searchgamebyminplayers(int numplayers) {
+        return bridge.searchgamebyminplayers(numplayers);
+    }
+
+    public boolean searchgamebymaxplayers(int numplayers) {
+        return bridge.searchgamebymaxplayers(numplayers);
+    }
+
+    public boolean searchgamebyspectateisvalid(boolean spectatingavailable) {
+        return bridge.searchgamebyspectateisvalid(spectatingavailable);
+    }
+
+    public boolean spectateactivegame(String username, String gamename) {
+        return bridge.spectateactivegame(username,gamename);
+    }
+
+    public boolean leavegame(String username, String choise, String gamename) {
+        return bridge.leavegame(username, choise, gamename);
+    }
+
+    public boolean replaynonactivegame(String username, String gamename) {
+        return bridge.replaynonactivegame(username,gamename);
+    }
+
+    public boolean saveturns(String username, String gamename, List<String> turns) {
+        return bridge.saveturns(username,gamename,turns);
+    }
+
+    public boolean searchavailablegamestojoin(String username) {
+        return bridge.searchavailablegamestojoin(username);
     }
 }
