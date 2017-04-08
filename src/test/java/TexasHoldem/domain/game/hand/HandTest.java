@@ -1,47 +1,34 @@
 package TexasHoldem.domain.game.hand;
 
-import TexasHoldem.domain.game.Card;
-import TexasHoldem.domain.game.Suit;
+import TexasHoldem.common.JsonSerializer;
 import org.junit.After;
+import org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static TexasHoldem.domain.game.Rank.*;
-import static TexasHoldem.domain.game.Suit.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.lessThan;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.number.OrderingComparison.greaterThan;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 
 /**
  * Created by Tal on 08/04/2017.
  */
 public class HandTest {
-    private List<Card> l1;
-    private List<Card> l2;
-    private List<Card> l3;
+    private List<Hand> hands;
 
     @Before
-    public void setUp(){
-        l1 = Arrays.asList(new Card(FOUR, HEART), new Card(FIVE, HEART), new Card(SIX, HEART), new Card(SEVEN, HEART),
-                new Card(EIGHT, HEART));
-
-        l2 = Arrays.asList(new Card(ACE, HEART), new Card(ACE, CLUB), new Card(ACE, DIAMOND), new Card(ACE, SPADE),
-                new Card(SIX, SPADE));
-
-        l3 = Arrays.asList(new Card(ACE, HEART), new Card(KING, HEART), new Card(QUEEN, HEART), new Card(JACK, HEART),
-                new Card(TEN, HEART));
-
-
-/*
-        l1 = Arrays.asList(new Card(TWO, HEART), new Card(THREE, HEART), new Card(FOUR, HEART), new Card(FIVE, HEART),
-                new Card(SIX, HEART), new Card(SEVEN, HEART), new Card(EIGHT, HEART));
-
-        l2 = Arrays.asList(new Card(ACE, HEART), new Card(ACE, CLUB), new Card(ACE, DIAMOND), new Card(ACE, SPADE),
-                new Card(SIX, SPADE), new Card(SEVEN, SPADE), new Card(EIGHT, SPADE));
-*/
-
+    public void setUp()  {
+        JsonSerializer json = new JsonSerializer();
+        hands = Arrays.asList(json.readValue(new File("src\\test\\java\\TexasHoldem\\domain\\game\\hand\\hands.json"), Hand[].class));
     }
 
     @After
@@ -50,15 +37,31 @@ public class HandTest {
     }
 
     @Test
-    public void testHand(){
-        Hand h1 = new Hand(l1);
-        Hand h2 = new Hand(l2);
-        Hand h3 = new Hand(l3);
+    public void testTwoPair(){
+        assertThat(hands.get(0).compareTo(hands.get(0)), is(0));
+        assertThat(hands.get(0).compareTo(hands.get(1)), is(lessThan(0)));
+    }
 
-        System.out.println(h1);
-        System.out.println(h2);
-        System.out.println(h3);
+    @Test
+    public void testStraightFlush(){
+        assertThat(hand(2).compareTo(hand(3)), is(greaterThan(0)));
+        assertThat(hand(2).compareTo(hand(1)), is(greaterThan(0)));
+    }
 
-        System.out.println(h1.compareTo(h3));
+    @Test
+    public void testFourOfAKing(){
+        assertThat(hand(4).compareTo(hand(4)), is(0));
+        assertThat(hand(4).compareTo(hand(5)), is(lessThan(0)));
+        assertThat(hand(4).compareTo(hand(1)), is(greaterThan(0)));
+        assertThat(hand(6).compareTo(hand(7)), is(lessThan(0)));
+    }
+
+    @Test
+    public void testHighCard(){
+        assertThat(hand(8).compareTo(hand(9)), is(lessThan(0)));
+    }
+
+    private Hand hand(int index){
+        return hands.get(index);
     }
 }

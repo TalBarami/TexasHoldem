@@ -22,9 +22,13 @@ public class Hand implements Comparable<Hand> {
         calculate();
     }
 
+    private Hand(){
+
+    }
+
 
     private void calculate(){
-        if(isStraight() && isFlush())
+        if(isStraightFlush())
             category = Category.STRAIGHT_FLUSH;
         else if(isFourOfAKind())
             category = Category.FOUR_OF_A_KIND;
@@ -61,8 +65,17 @@ public class Hand implements Comparable<Hand> {
         else return this.category.ordinal() - that.category.ordinal();
     }
 
+    private boolean isStraightFlush(){
+        return isStraight() && isFlush();
+    }
+
     private boolean isFlush(){
-        return hand.get(0).suit() == hand.get(hand.size() - 1).suit();
+        int suit = hand.get(0).suit();
+        for(Card card : hand){
+            if(card.suit() != suit)
+                return false;
+        }
+        return true;
     }
 
     private boolean isStraight(){
@@ -81,7 +94,7 @@ public class Hand implements Comparable<Hand> {
     }
 
     private boolean isFullHouse(){
-        return handGroup.values().stream().filter(lst -> lst.size() >= 2).count() == 2;
+        return isOnePair() && isThreeOfAKind();
     }
 
     private boolean isThreeOfAKind(){

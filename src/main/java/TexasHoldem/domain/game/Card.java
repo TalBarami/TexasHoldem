@@ -1,12 +1,15 @@
 package TexasHoldem.domain.game;
 
 public class Card implements Comparable<Card>{
-    private final Rank rank;
-    private final Suit suit;
+    private Rank rank;
+    private Suit suit;
 
     public Card(Rank rank, Suit suit) {
         this.rank = rank;
         this.suit = suit;
+    }
+
+    private Card(){
 
     }
 
