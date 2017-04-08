@@ -127,4 +127,16 @@ public abstract class ProjectTest extends TestCase{
     public boolean searchavailablegamestojoin(String username) {
         return bridge.searchavailablegamestojoin(username);
     }
+
+    public boolean playturn(String username, String gamename, String action) {
+        return bridge.playturn(username,gamename, action);
+    }
+
+    public int getPotSize(String gamename) {
+        return bridge.getPotSize(gamename);
+    }
+
+    public int getPlayerbalance(String username, String gamename) {
+        return  bridge.getPlayerbalance(username, gamename);
+    }
 }

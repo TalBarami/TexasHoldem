@@ -136,4 +136,16 @@ public class ProxyBridge implements Bridge {
         return true;
     }
 
+    public boolean playturn(String username,String gamename , String action) {
+        return true;
+    }
+
+    public int getPotSize(String gamename) {
+        return -1;
+    }
+
+    public int getPlayerbalance(String username, String gamename) {
+        return -1;
+    }
+
 }

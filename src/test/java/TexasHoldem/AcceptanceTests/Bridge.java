@@ -66,4 +66,10 @@ public interface Bridge {
     boolean saveturns(String username, String gamename, List<String> turns);
 
     boolean searchavailablegamestojoin(String username);
+
+    boolean playturn(String username, String gamename ,String action);
+
+    int getPotSize(String gamename);
+
+    int getPlayerbalance(String username, String gamename);
 }

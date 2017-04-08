@@ -129,4 +129,16 @@ public class RealBridge implements Bridge {
     public boolean searchavailablegamestojoin(String username) {
         return true;
     }
+
+    public boolean playturn(String username,String gamename , String action) {
+        return true;
+    }
+
+    public int getPotSize(String gamename) {
+        return -1;
+    }
+
+    public int getPlayerbalance(String username, String gamename) {
+        return -1;
+    }
 }
