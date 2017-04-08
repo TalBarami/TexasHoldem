@@ -140,9 +140,9 @@ public class Hand implements Comparable<Hand> {
     @Override
     public String toString() {
         return "Hand{" +
-                "\nhand=" + hand +
-                "\nhandGroup=" + handGroup +
-                "\ncategory=" + category +
+                "hand=" + hand +
+                ", handGroup=" + handGroup +
+                ", category=" + category +
                 '}';
     }
 }
