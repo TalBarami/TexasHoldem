@@ -38,7 +38,7 @@ public class Card implements Comparable<Card>{
     }
 
     public int rank() {
-        return this.rank.ordinal();
+        return this.rank.getRank();
     }
 
     public int suit() {

@@ -18,7 +18,6 @@ public class Hand implements Comparable<Hand> {
     public Hand(List<Card> cards){
         hand = cards;
         Collections.sort(hand);
-        Collections.reverse(hand);
         handGroup = groupHand();
         calculate();
     }
@@ -63,7 +62,7 @@ public class Hand implements Comparable<Hand> {
     }
 
     private boolean isFlush(){
-        return hand.get(0).suit() == hand.get(hand.size()).suit();
+        return hand.get(0).suit() == hand.get(hand.size() - 1).suit();
     }
 
     private boolean isStraight(){
@@ -104,7 +103,7 @@ public class Hand implements Comparable<Hand> {
                 .map(Card::rank)
                 .distinct()
                 .forEach(rank -> groups.put(rank, hand.stream()
-                        .filter(card -> rank.equals(card.suit()))
+                        .filter(card -> rank.equals(card.rank()))
                         .collect(Collectors.toList())));
         return groups;
     }
@@ -123,5 +122,14 @@ public class Hand implements Comparable<Hand> {
         });
         Collections.reverse(result);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Hand{" +
+                "\nhand=" + hand +
+                "\nhandGroup=" + handGroup +
+                "\ncategory=" + category +
+                '}';
     }
 }
