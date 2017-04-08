@@ -13,10 +13,10 @@ public class Player {
     private int lastBetSinceCardOpen;
     private int totalAmountPayedInRound;
 
-    public Player(User user){
+    public Player(User user,int chipsAmount){
         this.user=user;
         this.cards = new HashSet<>();
-        this.chipsAmount = 0;
+        this.chipsAmount = chipsAmount;
         this.lastBetSinceCardOpen = 0;
     }
 
@@ -62,7 +62,7 @@ public class Player {
         this.chipsAmount = chipsAmount;
     }
 
-    public void playTurn(List<GameActions> gameActions, double minRaise) {
+    public void playTurn(List<Game.GameActions> gameActions, double minRaise) {
     }
 
     public int chooseAmountToRaise(double minAmount) {
@@ -75,5 +75,12 @@ public class Player {
 
     public void setTotalAmountPayedInRound(int totalAmountPayedInRound) {
         this.totalAmountPayedInRound = totalAmountPayedInRound;
+    }
+
+    public void updateWallet(double amount){
+        user.getWallet().setBalance(user.getWallet().getBalance()+amount);
+    }
+    public void calculateEarnings(double ratio){
+        updateWallet(ratio*chipsAmount);
     }
 }

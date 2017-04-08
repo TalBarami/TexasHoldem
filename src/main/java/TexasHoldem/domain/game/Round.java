@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import static TexasHoldem.domain.game.Game.*;
+import static TexasHoldem.domain.game.Game.GameActions.*;
+
 /**
  * Created by Hod and Rotem on 05/04/2017.
  */
@@ -125,21 +128,21 @@ public class Round {
 
     private void playRoundFlow() {
         while (currentPlayer != lastPlayer) {
-            Game.GameActions chosenAction;
+            GameActions chosenAction;
             chosenAction = currentPlayer.chooseAction(calculateTurnOptions());
 
             switch (chosenAction) {
-                case Game.GameActions.RAISE:
+                case RAISE:
                     int amountToRaise = currentPlayer.chooseAmountToRaise(chipsToCall * 2);
                     playerRaiseTurn(amountToRaise);
                     break;
-                case Game.GameActions.CHECK:
+                case CHECK:
                     playerCheckTurn();
                     break;
-                case Game.GameActions.FOLD:
+                case FOLD:
                     playerFoldTurn();
                     break;
-                case Game.GameActions.CALL:
+                case CALL:
                     playerCallTurn();
                     break;
             }
@@ -180,15 +183,15 @@ public class Round {
         double difference = chipsToCall - currentPlayer.getLastBetSinceCardOpen();
 
         if (difference == 0)
-            gameActions.add(Game.GameActions.CHECK);
+            gameActions.add(CHECK);
 
         if (difference > 0)
-            gameActions.add(Game.GameActions.CALL);
+            gameActions.add(CALL);
 
         if (currentPlayer.getChipsAmount() > difference)
-            gameActions.add(Game.GameActions.RAISE);
+            gameActions.add(RAISE);
 
-        gameActions.add(Game.GameActions.FOLD);
+        gameActions.add(FOLD);
         return gameActions;
     }
 
