@@ -11,7 +11,7 @@ public class Dealer {
         deck = new Deck();
     }
 
-    public void dealCards(Collection<Player> players){
+    public void dealCardsToPlayers(Collection<Player> players){
         players.forEach(p -> p.addCards(deck.get(2)));
     }
 
