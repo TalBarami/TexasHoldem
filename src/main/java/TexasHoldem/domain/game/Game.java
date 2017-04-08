@@ -38,7 +38,7 @@ public class Game {
         if(spectate){
             if(!canBeSpectated())
                 throw new CantSpeactateThisRoomException("Selected game can't be spectated due to it's settings.");
-            else spectators.add(new Player(user,0));
+            else spectators.add(new Player(user,0, settings.getChipPolicy()));
         }
         else if (isFull())
             throw new GameIsFullException("Can't join game as player because it's full.");
@@ -89,7 +89,7 @@ public class Game {
         return settings.isAcceptSpectating();
     }
     private void addPlayer(User user){
-        Player p = new Player(user,settings.getChipPolicy());
+        Player p = new Player(user,settings.getChipPolicy(), settings.getChipPolicy());
         p.updateWallet(settings.getBuyInPolicy()*-1); //decrease amount by buy-in amount
         players.add(p);
     }

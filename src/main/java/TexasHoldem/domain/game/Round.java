@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static TexasHoldem.domain.game.Game.*;
 import static TexasHoldem.domain.game.Game.GameActions.*;
 
 /**
@@ -14,8 +13,9 @@ public class Round {
     private boolean isRoundActive;
     private GameSettings gameSettings;
     private List<Player> activePlayers;
+    private List<Player> originalPlayersInRound;
     private Dealer dealer;
-    private double chipsToCall;
+    private int chipsToCall;
     private Player currentPlayer;
     private Player lastPlayer;
     private int potAmount;
@@ -24,7 +24,8 @@ public class Round {
 
     public Round(List<Player> players, GameSettings settings, int dealerIndex) {
         this.gameSettings = settings;
-        this.activePlayers = players;
+        this.activePlayers = new ArrayList<Player>(players);
+        this.originalPlayersInRound = new ArrayList<Player>(players);
         this.dealer = new Dealer();
         this.currentDealerPlayer = activePlayers.get(dealerIndex);
         this.chipsToCall = gameSettings.getMinBet();
@@ -38,51 +39,77 @@ public class Round {
         initPlayersTotalAmountPayedInRound();
     }
 
-    private void initPlayersTotalAmountPayedInRound() {
-        for (Player p : activePlayers) {
-            p.setTotalAmountPayedInRound(0);
-        }
-    }
-
     public void startRound() {
         dealer.dealCardsToPlayers(activePlayers);
         paySmallAndBigBlind();
         playPreFlopRound();
 
         if (activePlayers.size() > 1) {
-            playFlopRound();
+            chipsToCall = 0;
+            initPlayersLastBetSinceCardOpen();
+            playFlopOrTurnRound();
         }
         if (activePlayers.size() > 1) {
-            playTurnRound();
+            chipsToCall = 0;
+            initPlayersLastBetSinceCardOpen();
+            playFlopOrTurnRound();
         }
         if (activePlayers.size() > 1) {
+            chipsToCall = 0;
+            initPlayersLastBetSinceCardOpen();
             playRiverRound();
         }
         if (activePlayers.size() > 1) {
+            chipsToCall = 0;
+            initPlayersLastBetSinceCardOpen();
             endRound();
         }
     }
 
-    private void playRiverRound() {
-        int dealerIndex = activePlayers.indexOf(currentDealerPlayer);
-        int newCurrentPlayerIndex = (dealerIndex + 1) % (activePlayers.size());
-        currentPlayer = activePlayers.get(newCurrentPlayerIndex);
+    public void notifyPlayerExited(Player player) {
+        potAmount += player.getLastBetSinceCardOpen();
 
-        playRoundFlow();
+        if (lastPlayer == player) {
+            int lastPlayerIndex = activePlayers.indexOf(lastPlayer);
+            int newLastPlayerIndex = (lastPlayerIndex - 1) % (activePlayers.size());
+            lastPlayer = activePlayers.get(newLastPlayerIndex);
+        }
+
+        if (currentPlayer == player) {
+            int currentPlayerIndex = activePlayers.indexOf(currentPlayer);
+            int newCurrentPlayerIndex = (currentPlayerIndex + 1) % (activePlayers.size());
+            currentPlayer = activePlayers.get(newCurrentPlayerIndex);
+        }
+
+        if (currentDealerPlayer == player) {
+            int currentPlayerIndex = activePlayers.indexOf(currentPlayer);
+            int newCurrentPlayerIndex = (currentPlayerIndex + 1) % (activePlayers.size());
+            currentDealerPlayer = activePlayers.get(newCurrentPlayerIndex);
+        }
+
+        activePlayers.remove(player);
+        potAmount += player.getLastBetSinceCardOpen();
+        System.out.println(player.getUser().getUsername() + " has left the game");
+
+        if (activePlayers.size() == 1) {
+            endRound();
+        }
     }
 
-    private void playTurnRound() {
-        int dealerIndex = activePlayers.indexOf(currentDealerPlayer);
-        int newCurrentPlayerIndex = (dealerIndex + 1) % (activePlayers.size());
-        currentPlayer = activePlayers.get(newCurrentPlayerIndex);
+    private void endRound() {
+        updatePotAmount();
 
-        playRoundFlow();
-        openedCards.addAll(dealer.openCards(1));
-        System.out.println("Cards opened are: ");
-
-        for (Card c : openedCards) {
-            System.out.println(c + ", ");
+        if (activePlayers.size() == 1) {
+            Player winner = activePlayers.get(0);
+            winner.addChips(potAmount);
+            System.out.println(winner.getUser().getUsername() + " is the winner!!!");
         }
+        else {
+            calculateWinner();
+        }
+
+        initPlayersTotalAmountPayedInRound();
+        setRoundActive(false);
     }
 
     private void paySmallAndBigBlind() {
@@ -101,7 +128,18 @@ public class Round {
         System.out.println("Big blind payed by " + bigPlayer.getUser().getUsername());
     }
 
-    private void playFlopRound() {
+    private void playPreFlopRound() {
+        playRoundFlow();
+
+        openedCards.addAll(dealer.openCards(3));
+        System.out.println("Cards opened are: ");
+
+        for (Card c : openedCards) {
+            System.out.println(c + ", ");
+        }
+    }
+
+    private void playFlopOrTurnRound() {
         int dealerIndex = activePlayers.indexOf(currentDealerPlayer);
         int newCurrentPlayerIndex = (dealerIndex + 1) % (activePlayers.size());
         currentPlayer = activePlayers.get(newCurrentPlayerIndex);
@@ -115,20 +153,17 @@ public class Round {
         }
     }
 
-    private void playPreFlopRound() {
+    private void playRiverRound() {
+        int dealerIndex = activePlayers.indexOf(currentDealerPlayer);
+        int newCurrentPlayerIndex = (dealerIndex + 1) % (activePlayers.size());
+        currentPlayer = activePlayers.get(newCurrentPlayerIndex);
+
         playRoundFlow();
-
-        openedCards.addAll(dealer.openCards(3));
-        System.out.println("Cards opened are: ");
-
-        for (Card c : openedCards) {
-            System.out.println(c + ", ");
-        }
     }
 
     private void playRoundFlow() {
         while (currentPlayer != lastPlayer) {
-            GameActions chosenAction;
+            Game.GameActions chosenAction;
             chosenAction = currentPlayer.chooseAction(calculateTurnOptions());
 
             switch (chosenAction) {
@@ -149,7 +184,7 @@ public class Round {
         }
     }
 
-    private void playerRaiseTurn(double amountToRaise) {
+    private void playerRaiseTurn(int amountToRaise) {
         int currentPlayerIndex = activePlayers.indexOf(currentPlayer);
         int nextPlayerIndex = (currentPlayerIndex + 1) % (activePlayers.size());
 
@@ -167,7 +202,7 @@ public class Round {
     }
 
     private void playerFoldTurn() {
-        removePlayerFromRound(currentPlayer);
+        notifyPlayerExited(currentPlayer);
     }
 
     private void playerCallTurn() {
@@ -195,61 +230,105 @@ public class Round {
         return gameActions;
     }
 
-    private void removePlayerFromRound(Player player) {
-        potAmount += player.getLastBetSinceCardOpen();
-
-        if (lastPlayer == player) {
-            int lastPlayerIndex = activePlayers.indexOf(lastPlayer);
-            int newLastPlayerIndex = (lastPlayerIndex - 1) % (activePlayers.size());
-            lastPlayer = activePlayers.get(newLastPlayerIndex);
-        }
-
-        if (currentPlayer == player) {
-            int currentPlayerIndex = activePlayers.indexOf(currentPlayer);
-            int newCurrentPlayerIndex = (currentPlayerIndex + 1) % (activePlayers.size());
-            currentPlayer = activePlayers.get(newCurrentPlayerIndex);
-        }
-
-        if (currentDealerPlayer == player) {
-            int currentPlayerIndex = activePlayers.indexOf(currentPlayer);
-            int newCurrentPlayerIndex = (currentPlayerIndex + 1) % (activePlayers.size());
-            currentDealerPlayer = activePlayers.get(newCurrentPlayerIndex);
-        }
-
-        activePlayers.remove(player);
-        System.out.println(player.getUser().getUsername() + " has left the game");
-
-        if (activePlayers.size() == 1) {
-            endRound();
-        }
-    }
-
-    private void endRound() {
-        if (activePlayers.size() == 1) {
-            Player winner = activePlayers.get(0);
-            winner.addChips(potAmount);
-            System.out.println(winner.getUser().getUsername() + " is the winner!!!");
-        }
-        else {
-            calculateWinner();
-        }
-
-        setRoundActive(false);
-    }
-
     private void calculateWinner() {
+        while(!activePlayers.isEmpty()) {
+            List<Player> winners = new LinkedList<Player>();
+            Player currentPlayer = activePlayers.get(0);
 
+            List<Card> cardList = new LinkedList<Card>();
+            cardList.addAll(openedCards);
+            cardList.addAll(currentPlayer.getCards());
+
+            Hand bestHand = new Hand(cardList);
+
+            for (Player p : activePlayers) {
+                List<Card> newCardList = new LinkedList<Card>();
+                newCardList.addAll(openedCards);
+                newCardList.addAll(p.getCards());
+
+                Hand hand = new Hand(newCardList);
+                int resultOfHandsCompare = hand.compareTo(bestHand);
+
+                if (resultOfHandsCompare > 0) {
+                    winners.clear();
+                    winners.add(p);
+                    bestHand = hand;
+                } else if (resultOfHandsCompare == 0) {
+                    winners.add(p);
+                }
+            }
+
+            Player winnerWithMinChips = findMinWinner(winners);
+            divideWinningsBetweenWinners(winners, winnerWithMinChips);
+            updateActivePlayers();
+        }
     }
 
-    public void notifyPlayerExited(Player p) {
+    private void divideWinningsBetweenWinners(List<Player> winners, Player winnerWithMinChips) {
+        int sumToDivide = 0;
+        int sumMinWinnerPut = winnerWithMinChips.getTotalAmountPayedInRound();
 
+        for (Player p : originalPlayersInRound) {
+            if (sumMinWinnerPut < p.getTotalAmountPayedInRound()) {
+                sumToDivide += sumMinWinnerPut;
+                p.setTotalAmountPayedInRound(p.getTotalAmountPayedInRound() - sumMinWinnerPut);
+            }
+            else {
+                sumToDivide += p.getTotalAmountPayedInRound();
+                p.setTotalAmountPayedInRound(0);
+            }
+        }
+
+        sumToDivide =  sumToDivide/winners.size();
+        for(Player p : winners)
+            p.addChips(sumToDivide);
     }
 
-    public boolean isRoundActive() {
-        return isRoundActive;
+    private Player findMinWinner(List<Player> winners) {
+        Player playerWithMinChips = winners.get(0);
+
+        for (Player p : winners) {
+            if (p.getTotalAmountPayedInRound() < playerWithMinChips.getTotalAmountPayedInRound()) {
+                playerWithMinChips = p;
+            }
+        }
+
+        return playerWithMinChips;
+    }
+
+    private void updatePotAmount() {
+        for (Player p : activePlayers) {
+            potAmount += p.getLastBetSinceCardOpen();
+        }
+    }
+
+    private void updateActivePlayers() {
+        List<Player> playersToRemove = new LinkedList<Player>();
+        for (Player p : activePlayers) {
+            if(p.getTotalAmountPayedInRound() == 0)
+                playersToRemove.add(p);
+        }
+
+        activePlayers.removeAll(playersToRemove);
+    }
+
+    private void initPlayersTotalAmountPayedInRound() {
+        for (Player p : activePlayers) {
+            p.setTotalAmountPayedInRound(0);
+        }
+    }
+
+    private void initPlayersLastBetSinceCardOpen() {
+        for (Player p : activePlayers) {
+            p.setLastBetSinceCardOpen(0);
+        }
     }
 
     public void setRoundActive(boolean roundActive) {
         isRoundActive = roundActive;
+    }
+
+    public boolean isRoundActive() {
+        return isRoundActive;
     }
 }
