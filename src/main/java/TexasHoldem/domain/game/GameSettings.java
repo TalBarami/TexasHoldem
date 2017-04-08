@@ -6,18 +6,18 @@ import org.apache.commons.lang3.tuple.Pair;
  * Created by RonenB on 4/5/2017.
  */
 public class GameSettings {
-    public enum Policy {
+    public enum GamePolicy {
         LIMIT, NOLIMIT, POTLIMIT
     }
 
-    private Policy gameType;
+    private GamePolicy gameType;
     private double minBet;
     private double buyInPolicy;
     private int chipPolicy;
     private Pair<Integer,Integer> playerRange;
     private boolean acceptSpectating;
 
-    public GameSettings(Policy policy,double minBet,double buyInPolicy,int chipPolicy,int minPlyerAmount,int maxPlayerAmount,boolean specAccept){
+    public GameSettings(GamePolicy policy, double minBet, double buyInPolicy, int chipPolicy, int minPlyerAmount, int maxPlayerAmount, boolean specAccept){
         this.gameType=policy;
         this.minBet=minBet;
         this.buyInPolicy=buyInPolicy;
@@ -26,9 +26,9 @@ public class GameSettings {
         this.acceptSpectating=specAccept;
     }
 
-    public Policy getGameType() {return gameType;}
+    public GamePolicy getGameType() {return gameType;}
 
-    public void setGameType(Policy gameType) {this.gameType = gameType;}
+    public void setGameType(GamePolicy gameType) {this.gameType = gameType;}
 
     public double getMinBet() {return minBet;}
 
