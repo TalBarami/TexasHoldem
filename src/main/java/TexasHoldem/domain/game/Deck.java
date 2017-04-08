@@ -16,8 +16,8 @@ public class Deck {
     }
 
     public void prepareDeck(){
-        for (Card.Suit suit : Card.Suit.values())
-            for (Card.Rank rank : Card.Rank.values())
+        for (Suit suit : Suit.values())
+            for (Rank rank : Rank.values())
                 cards.add(new Card(rank, suit));
         shuffle();
     }
