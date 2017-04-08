@@ -57,11 +57,11 @@ public class RegistrationTests extends ProjectTest {
     @Test
     public void testRegisterInValidCharecters()
     {
-        boolean useradded = this.registerUser("achi\nadg","aChi12#*","achiadg@gmail.com",new DateTime(1991,4,20,22,13));
+        boolean useradded = this.registerUser("achi\radg","aChi12#*","achiadg@gmail.com",new DateTime(1991,4,20,22,13));
         assertFalse(useradded);
         useradded = this.registerUser("achiadgelerenter","aC\nhi*","achiadg@gmail.com",new DateTime(1991,4,20,14,18));
         assertFalse(useradded);
-        useradded = this.registerUser("achiadgelerenter","aChi*","achiadg@gm\nail.com",new DateTime(1991,4,20,14,18));
+        useradded = this.registerUser("achiadgelerenter","aChi*","achiadg@gm\tail.com",new DateTime(1991,4,20,14,18));
         assertFalse(useradded);
         useradded = this.registerUser("achiadgelerenter","aChi*","achiadg@gmail.com",new DateTime(1991,4,38,14,18));
         assertFalse(useradded);

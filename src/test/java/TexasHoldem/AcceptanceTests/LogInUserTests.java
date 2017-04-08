@@ -8,7 +8,7 @@ import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 
-public class LogInUser extends ProjectTest {
+public class LogInUserTests extends ProjectTest {
 
     @Before
     public void setUp()
@@ -69,7 +69,7 @@ public class LogInUser extends ProjectTest {
         boolean useradded1 = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com",new DateTime(1991,4,20,22,13));
         boolean useradded2 = this.registerUser("hodbub","hBublil1308","hod.bub@gmail.com",new DateTime(1991,8,14,17,44));
         boolean userloggedin1 = this.login("achi\nadg","aChi12#*");
-        boolean userloggedin2 = this.login("hodbub","hBublil1\n308");
+        boolean userloggedin2 = this.login("hodbub","hBublil1\t308");
         assertFalse(userloggedin1);
         assertFalse(userloggedin2);
         boolean deleteUser1 = this.deleteUser("achiadg");
