@@ -145,4 +145,23 @@ public class Hand implements Comparable<Hand> {
                 ", category=" + category +
                 '}';
     }
+
+
+    @Override
+    public boolean equals(Object that) {
+        if (this == that) return true;
+        if (that == null || getClass() != that.getClass()) return false;
+
+        Hand hand1 = (Hand) that;
+
+        return hand.equals(hand1.hand) && handGroup.equals(hand1.handGroup) && category == hand1.category;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = hand.hashCode();
+        result = 31 * result + handGroup.hashCode();
+        result = 31 * result + category.hashCode();
+        return result;
+    }
 }

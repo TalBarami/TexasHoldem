@@ -15,10 +15,10 @@ public class Card implements Comparable<Card>{
 
     @Override
     public int compareTo(Card that) {
-        if (rank.equals(that.rank))
-            return suit.compareTo(that.suit);
+        if (this.rank.equals(that.rank))
+            return this.suit.compareTo(that.suit);
         else
-            return rank.compareTo(that.rank);
+            return this.rank.compareTo(that.rank);
 
     }
 
@@ -29,8 +29,7 @@ public class Card implements Comparable<Card>{
 
         Card card = (Card) o;
 
-        if (rank != card.rank) return false;
-        return suit == card.suit;
+        return rank == card.rank && suit == card.suit;
     }
 
     @Override
