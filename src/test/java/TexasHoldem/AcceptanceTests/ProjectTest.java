@@ -139,4 +139,16 @@ public abstract class ProjectTest extends TestCase{
     public int getPlayerbalance(String username, String gamename) {
         return  bridge.getPlayerbalance(username, gamename);
     }
+
+    public boolean playturnraise(String username, String gamename, String action, int amounttoraise) {
+        return bridge.playturnraise(username,gamename, action,amounttoraise);
+    }
+
+    public int getnumofround(String gamename) {
+        return bridge.getnumofround(gamename);
+    }
+
+    public int getnumofplayersinround(String gamename, int numofround) {
+        return  bridge.getnumofplayersinround(gamename,  numofround);
+    }
 }

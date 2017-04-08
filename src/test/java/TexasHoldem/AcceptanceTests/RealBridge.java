@@ -141,4 +141,16 @@ public class RealBridge implements Bridge {
     public int getPlayerbalance(String username, String gamename) {
         return -1;
     }
+
+    public boolean playturnraise(String username, String gamename, String action, int amounttoraise) {
+        return true;
+    }
+
+    public int getnumofround(String gamename) {
+        return -1;
+    }
+
+    public int getnumofplayersinround(String gamename, int numofround) {
+        return -1;
+    }
 }

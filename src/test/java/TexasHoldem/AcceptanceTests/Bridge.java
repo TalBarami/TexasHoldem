@@ -72,4 +72,10 @@ public interface Bridge {
     int getPotSize(String gamename);
 
     int getPlayerbalance(String username, String gamename);
+
+    boolean playturnraise(String username, String gamename, String action, int amounttoraise);
+
+    int getnumofround(String gamename);
+
+    int getnumofplayersinround(String gamename, int numofround);
 }

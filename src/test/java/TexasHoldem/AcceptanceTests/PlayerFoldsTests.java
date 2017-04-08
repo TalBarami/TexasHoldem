@@ -7,7 +7,7 @@ import org.junit.Test;
 /**
  * Created by אחיעד on 08/04/2017.
  */
-public class PlayerChecksTest extends ProjectTest {
+public class PlayerFoldsTests extends ProjectTest {
 
     @Before
     public void setUp()
@@ -16,30 +16,36 @@ public class PlayerChecksTest extends ProjectTest {
     }
 
     @Test
-    public void testPlayerChecksValid() {
+    public void testPlayerFoldsValid() {
         registerUsers();
         loginUsers();
         addBalance();
         createGames();
         usersJoinsGames();
+        int numofround1 = this.getnumofround("achiadg-poker-game");
+        int numofround2 = this.getnumofround("hodbub-poker-game");
+        int numofplayers1 = this.getnumofplayersinround("achiadg-poker-game", numofround1);
+        int numofplayers2 = this.getnumofplayersinround("hodbub-poker-game", numofround2);
         int potsize1 = this.getPotSize("achiadg-poker-game");
         int potsize2 = this.getPotSize("hodbub-poker-game");
         int playerbalance1 = this.getPlayerbalance("achiadg","achiadg-poker-game" );
         int playerbalance2 = this.getPlayerbalance("hodbub", "hodbub-poker-game");
-        boolean playedturn1 = this.playturn("achiadg", "achiadg-poker-game", "CHECK");
-        boolean playedturn2 = this.playturn("hodbub", "hodbub-poker-game", "CHECK");
+        boolean playedturn1 = this.playturn("achiadg", "achiadg-poker-game", "FOLD");
+        boolean playedturn2 = this.playturn("hodbub", "hodbub-poker-game", "FOLD");
         int potsize3 = this.getPotSize("achiadg-poker-game");
         int potsize4 = this.getPotSize("hodbub-poker-game");
         int playerbalance3 = this.getPlayerbalance("achiadg" ,"achiadg-poker-game");
         int playerbalance4 = this.getPlayerbalance("hodbub", "hodbub-poker-game");
+        int numofplayers3 = this.getnumofplayersinround("achiadg-poker-game", numofround1);
+        int numofplayers4 = this.getnumofplayersinround("hodbub-poker-game", numofround2);
         assertEquals(potsize1,potsize3);
         assertEquals(potsize2,potsize4);
         assertEquals(playerbalance1,playerbalance3);
         assertEquals(playerbalance2,playerbalance4);
+        assertEquals(numofplayers1,numofplayers3);
+        assertEquals(numofplayers2,numofplayers4);
         boolean closegame1 = this.closegame("achiadg-poker-game");
         boolean closegame2 = this.closegame("hodbub-poker-game");
-        assertTrue(closegame1);
-        assertTrue(closegame2);
         logoutUsers();
         deleteUsers();
     }

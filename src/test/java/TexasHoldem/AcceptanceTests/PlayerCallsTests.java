@@ -7,7 +7,7 @@ import org.junit.Test;
 /**
  * Created by אחיעד on 08/04/2017.
  */
-public class PlayerChecksTest extends ProjectTest {
+public class PlayerCallsTests extends ProjectTest {
 
     @Before
     public void setUp()
@@ -16,7 +16,7 @@ public class PlayerChecksTest extends ProjectTest {
     }
 
     @Test
-    public void testPlayerChecksValid() {
+    public void testPlayerCallsValid() {
         registerUsers();
         loginUsers();
         addBalance();
@@ -24,18 +24,20 @@ public class PlayerChecksTest extends ProjectTest {
         usersJoinsGames();
         int potsize1 = this.getPotSize("achiadg-poker-game");
         int potsize2 = this.getPotSize("hodbub-poker-game");
-        int playerbalance1 = this.getPlayerbalance("achiadg","achiadg-poker-game" );
-        int playerbalance2 = this.getPlayerbalance("hodbub", "hodbub-poker-game");
-        boolean playedturn1 = this.playturn("achiadg", "achiadg-poker-game", "CHECK");
-        boolean playedturn2 = this.playturn("hodbub", "hodbub-poker-game", "CHECK");
+        int playerbalance1 = this.getPlayerbalance("hodbub" , "achiadg-poker-game");
+        int playerbalance2 = this.getPlayerbalance("ronenbu" , "hodbub-poker-game");
+        boolean playedturn1 = this.playturnraise("achiadg" , "achiadg-poker-game","RAISE",400);
+        boolean playedturn2 = this.playturnraise("hodbub" , "hodbub-poker-game","RAISE",6);
+        boolean playedturn3 = this.playturn("hodbub" , "achiadg-poker-game","CALL");
+        boolean playedturn4 = this.playturn("ronenbu" , "hodbub-poker-game","CALL");
         int potsize3 = this.getPotSize("achiadg-poker-game");
         int potsize4 = this.getPotSize("hodbub-poker-game");
-        int playerbalance3 = this.getPlayerbalance("achiadg" ,"achiadg-poker-game");
-        int playerbalance4 = this.getPlayerbalance("hodbub", "hodbub-poker-game");
-        assertEquals(potsize1,potsize3);
-        assertEquals(potsize2,potsize4);
-        assertEquals(playerbalance1,playerbalance3);
-        assertEquals(playerbalance2,playerbalance4);
+        int playerbalance3 = this.getPlayerbalance("hodbub" , "achiadg-poker-game");
+        int playerbalance4 = this.getPlayerbalance("ronenbu" , "hodbub-poker-game");
+        assertEquals(potsize1 + 800,potsize3 );
+        assertEquals(potsize2 + 12,potsize4 );
+        assertEquals(playerbalance1,playerbalance3 - 400);
+        assertEquals(playerbalance2,playerbalance4 - 6);
         boolean closegame1 = this.closegame("achiadg-poker-game");
         boolean closegame2 = this.closegame("hodbub-poker-game");
         assertTrue(closegame1);
@@ -100,4 +102,5 @@ public class PlayerChecksTest extends ProjectTest {
         boolean useradded3 = this.registerUser("rotemw","rotemwald123","waldr@gmail.com",new DateTime(1991,5,7,12,31));
         boolean useradded4 = this.registerUser("ronenbu","ronenbu123","butirevr@gmail.com",new DateTime(1991,7,12,19,48));
     }
+
 }

@@ -25,10 +25,10 @@ public class PlayTurnTests extends ProjectTest {
         usersJoinsGames();
         boolean playedturn1 = this.playturn("achiadg" ,"achiadg-poker-game", "CHECK");
         boolean playedturn2 = this.playturn("hodbub" ,"hodbub-poker-game", "CHECK");
-        boolean playedturn3 = this.playturn("hodbub" , "achiadg-poker-game","RAISE");
+        boolean playedturn3 = this.playturnraise("hodbub" , "achiadg-poker-game","RAISE",400);
         boolean playedturn4 = this.playturn("ronenbu" , "hodbub-poker-game","CHECK");
         boolean playedturn5 = this.playturn("rotemw" , "achiadg-poker-game","CALL");
-        boolean playedturn6 = this.playturn("achiadg" , "hodbub-poker-game","CHECK");
+        boolean playedturn6 = this.playturn("achiadg" , "hodbub-poker-game","FOLD");
         assertTrue(playedturn1);
         assertTrue(playedturn2);
         assertTrue(playedturn3);
@@ -52,9 +52,9 @@ public class PlayTurnTests extends ProjectTest {
         addBalance();
         createGames();
         usersJoinsGames();
-        boolean playedturn1 = this.playturn("achiadg" , "achiadg-poker-game", "RAISE");
+        boolean playedturn1 = this.playturnraise("achiadg" , "achiadg-poker-game", "RAISE", 400);
         boolean playedturn2 = this.playturn("hodbub" , "hodbub-poker-game", "CHECK");
-        boolean playedturn3 = this.playturn("hodbub" , "achiadg-poker-game","RAISE");
+        boolean playedturn3 = this.playturnraise("hodbub" , "achiadg-poker-game","RAISE",400);
         boolean playedturn4 = this.playturn("ronenbu" , "hodbub-poker-game","CHECK");
         boolean playedturn5 = this.playturn("rotemw" , "achiadg-poker-game","CHECK");
         boolean playedturn6 = this.playturn("achiadg" , "hodbub-poker-game","CALL");
@@ -82,7 +82,7 @@ public class PlayTurnTests extends ProjectTest {
         usersJoinsGames();
         boolean playedturn1 = this.playturn("achiadg" ,"achiadg-poker-game", "CHE\nCK");
         boolean playedturn2 = this.playturn("hodbub" ,"hodbub-poker-game", "CHE\rCK");
-        boolean playedturn3 = this.playturn("hodbub" , "achiadg-poker-game","RAIS\tE");
+        boolean playedturn3 = this.playturnraise("hodbub" , "achiadg-poker-game","RAIS\tE",400);
         boolean playedturn4 = this.playturn("ronenbu" , "hodbub-poker-game","C\\\rHECK");
         boolean playedturn5 = this.playturn("rotemw" , "achiadg-poker-game","C\\\tALL");
         boolean playedturn6 = this.playturn("achiadg" , "hodbub-poker-game","C\rHECK");

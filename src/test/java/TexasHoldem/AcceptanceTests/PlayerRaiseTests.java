@@ -7,7 +7,7 @@ import org.junit.Test;
 /**
  * Created by אחיעד on 08/04/2017.
  */
-public class PlayerChecksTest extends ProjectTest {
+public class PlayerRaiseTests extends ProjectTest {
 
     @Before
     public void setUp()
@@ -16,7 +16,7 @@ public class PlayerChecksTest extends ProjectTest {
     }
 
     @Test
-    public void testPlayerChecksValid() {
+    public void testPlayerRaiseValid() {
         registerUsers();
         loginUsers();
         addBalance();
@@ -26,16 +26,16 @@ public class PlayerChecksTest extends ProjectTest {
         int potsize2 = this.getPotSize("hodbub-poker-game");
         int playerbalance1 = this.getPlayerbalance("achiadg","achiadg-poker-game" );
         int playerbalance2 = this.getPlayerbalance("hodbub", "hodbub-poker-game");
-        boolean playedturn1 = this.playturn("achiadg", "achiadg-poker-game", "CHECK");
-        boolean playedturn2 = this.playturn("hodbub", "hodbub-poker-game", "CHECK");
+        boolean playedturn1 = this.playturnraise("achiadg" , "achiadg-poker-game","RAISE",400);
+        boolean playedturn2 = this.playturnraise("hodbub" , "hodbub-poker-game","RAISE",6);
         int potsize3 = this.getPotSize("achiadg-poker-game");
         int potsize4 = this.getPotSize("hodbub-poker-game");
         int playerbalance3 = this.getPlayerbalance("achiadg" ,"achiadg-poker-game");
         int playerbalance4 = this.getPlayerbalance("hodbub", "hodbub-poker-game");
-        assertEquals(potsize1,potsize3);
-        assertEquals(potsize2,potsize4);
-        assertEquals(playerbalance1,playerbalance3);
-        assertEquals(playerbalance2,playerbalance4);
+        assertEquals(potsize1 + 400,potsize3);
+        assertEquals(potsize2 + 6,potsize4);
+        assertEquals(playerbalance1,playerbalance3 - 400);
+        assertEquals(playerbalance2,playerbalance4 - 6);
         boolean closegame1 = this.closegame("achiadg-poker-game");
         boolean closegame2 = this.closegame("hodbub-poker-game");
         assertTrue(closegame1);
