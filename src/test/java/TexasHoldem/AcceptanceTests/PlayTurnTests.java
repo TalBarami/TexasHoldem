@@ -21,6 +21,7 @@ public class PlayTurnTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
+        setUserLeague();
         createGames();
         usersJoinsGames();
         boolean playedturn1 = this.playturn("achiadg" ,"achiadg-poker-game", "CHECK");
@@ -50,6 +51,7 @@ public class PlayTurnTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
+        setUserLeague();
         createGames();
         usersJoinsGames();
         boolean playedturn1 = this.playturnraise("achiadg" , "achiadg-poker-game", "RAISE", 400);
@@ -78,6 +80,7 @@ public class PlayTurnTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
+        setUserLeague();
         createGames();
         usersJoinsGames();
         boolean playedturn1 = this.playturn("achiadg" ,"achiadg-poker-game", "CHE\nCK");
@@ -106,6 +109,7 @@ public class PlayTurnTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
+        setUserLeague();
         createGames();
         usersJoinsGames();
         boolean playedturn1 = this.playturn("achiadg" , "achiadg-poker-game", "SELECT * FROM USERS");
@@ -120,8 +124,8 @@ public class PlayTurnTests extends ProjectTest {
 
     private void createGames()
     {
-        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", "limit" , 10000, 10000, 100, 2, 9, true);
-        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", "no limit" , 300, 300, 2, 2, 9, true);
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", "limit" , 10000, 10000, 100, 2, 9, true, 4);
+        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", "no limit" , 300, 300, 2, 2, 9, true, 4);
     }
 
     private void usersJoinsGames() {
@@ -147,6 +151,14 @@ public class PlayTurnTests extends ProjectTest {
     }
 
 
+
+    public  void setUserLeague()
+    {
+        boolean leaguechanged1 = this.setuserleague("achiadg", 4);
+        boolean leaguechanged2 = this.setuserleague("hodbub", 4);
+        boolean leaguechanged3 = this.setuserleague("rotemw", 4);
+        boolean leaguechanged4 = this.setuserleague("ronenbu", 4);
+    }
 
 
     public void addBalance() {

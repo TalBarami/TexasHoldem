@@ -22,8 +22,9 @@ public class LeaveGameTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
-        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", "limit" , 10000, 10000, 100, 2, 9, true);
-        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", "no limit" , 300, 300, 2, 2, 9, true);
+        setUserLeague();
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", "limit" , 10000, 10000, 100, 2, 9, true, 4);
+        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", "no limit" , 300, 300, 2, 2, 9, true, 4);
         assertTrue(gamecreated1);
         assertTrue(gamecreated2);
         usersJoinsGames();
@@ -49,8 +50,9 @@ public class LeaveGameTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
-        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", "limit" , 10000, 10000, 100, 2, 9, true);
-        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", "no limit" , 300, 300, 2, 2, 9, true);
+        setUserLeague();
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", "limit" , 10000, 10000, 100, 2, 9, true, 4);
+        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", "no limit" , 300, 300, 2, 2, 9, true, 4);
         assertTrue(gamecreated1);
         assertTrue(gamecreated2);
         usersJoinsGames();
@@ -76,8 +78,9 @@ public class LeaveGameTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
-        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", "limit" , 10000, 10000, 100, 2, 9, true);
-        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", "no limit" , 300, 300, 2, 2, 9, true);
+        setUserLeague();
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", "limit" , 10000, 10000, 100, 2, 9, true, 4);
+        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", "no limit" , 300, 300, 2, 2, 9, true, 4);
         assertTrue(gamecreated1);
         assertTrue(gamecreated2);
         boolean leavedgame1 = this.leavegame("hodbub" , "YES", "hodbub-poker-game");
@@ -98,8 +101,9 @@ public class LeaveGameTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
-        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", "limit" , 10000, 10000, 100, 2, 9, true);
-        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", "no limit" , 300, 300, 2, 2, 9, true);
+        setUserLeague();
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", "limit" , 10000, 10000, 100, 2, 9, true, 4);
+        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", "no limit" , 300, 300, 2, 2, 9, true, 4);
         assertTrue(gamecreated1);
         assertTrue(gamecreated2);
         boolean leavedgame1 = this.leavegame("hodbub" , "YES", "achiadg-poker-game");
@@ -124,8 +128,9 @@ public class LeaveGameTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
-        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", "limit" , 10000, 10000, 100, 2, 9, true);
-        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", "no limit" , 300, 300, 2, 2, 9, true);
+        setUserLeague();
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", "limit" , 10000, 10000, 100, 2, 9, true, 4);
+        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", "no limit" , 300, 300, 2, 2, 9, true, 4);
         assertTrue(gamecreated1);
         assertTrue(gamecreated2);
         boolean leavedgame1 = this.leavegame("hodbub" , "YES", "hodbub-p\noker-game");
@@ -152,6 +157,14 @@ public class LeaveGameTests extends ProjectTest {
         boolean deleteUser2 = this.deleteUser("hodbub");
         boolean deleteUser3 = this.deleteUser("rotemw");
         boolean deleteUser4 = this.deleteUser("ronenbu");
+    }
+
+    public  void setUserLeague()
+    {
+        boolean leaguechanged1 = this.setuserleague("achiadg", 4);
+        boolean leaguechanged2 = this.setuserleague("hodbub", 4);
+        boolean leaguechanged3 = this.setuserleague("rotemw", 4);
+        boolean leaguechanged4 = this.setuserleague("ronenbu", 4);
     }
 
 

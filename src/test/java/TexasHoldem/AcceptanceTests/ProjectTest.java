@@ -64,8 +64,8 @@ public abstract class ProjectTest extends TestCase{
         return bridge.addbalancetouserwallet(username, amounttoadd);
     }
 
-    public boolean createnewgame(String username,String gamename, String policy, int buyin, int chippolicy, int minimumbet, int minplayers, int maxplayers, boolean spectateisvalid) {
-        return bridge.createnewgame(username,gamename, policy, buyin, chippolicy, minimumbet, minplayers, maxplayers, spectateisvalid);
+    public boolean createnewgame(String username,String gamename, String policy, int buyin, int chippolicy, int minimumbet, int minplayers, int maxplayers, boolean spectateisvalid, int league) {
+        return bridge.createnewgame(username,gamename, policy, buyin, chippolicy, minimumbet, minplayers, maxplayers, spectateisvalid, league);
     }
 
     public boolean closegame(String gamename) {
@@ -150,5 +150,13 @@ public abstract class ProjectTest extends TestCase{
 
     public int getnumofplayersinround(String gamename, int numofround) {
         return  bridge.getnumofplayersinround(gamename,  numofround);
+    }
+
+    public boolean setuserleague(String username, int league) {
+        return bridge.setuserleague(username,league);
+    }
+
+    public boolean searchgamebypotsize(int pot) {
+        return bridge.searchgamebypotsize( pot);
     }
 }

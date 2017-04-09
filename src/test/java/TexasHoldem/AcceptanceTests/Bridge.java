@@ -35,7 +35,7 @@ public interface Bridge {
 
     boolean addbalancetouserwallet(String username,int amounttoadd);
 
-    boolean createnewgame(String username,String gamename, String policy, int buyin, int chippolicy, int minimumbet, int minplayers, int maxplayers, boolean spectateisvalid);
+    boolean createnewgame(String username,String gamename, String policy, int buyin, int chippolicy, int minimumbet, int minplayers, int maxplayers, boolean spectateisvalid, int league);
 
     boolean closegame(String gamename);
 
@@ -78,4 +78,8 @@ public interface Bridge {
     int getnumofround(String gamename);
 
     int getnumofplayersinround(String gamename, int numofround);
+
+    boolean setuserleague(String username, int league);
+
+    boolean searchgamebypotsize(int pot);
 }

@@ -20,6 +20,7 @@ public class PlayerFoldsTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
+        setUserLeague();
         createGames();
         usersJoinsGames();
         int numofround1 = this.getnumofround("achiadg-poker-game");
@@ -53,8 +54,8 @@ public class PlayerFoldsTests extends ProjectTest {
 
     private void createGames()
     {
-        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", "limit" , 10000, 10000, 100, 2, 9, true);
-        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", "no limit" , 300, 300, 2, 2, 9, true);
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", "limit" , 10000, 10000, 100, 2, 9, true, 4);
+        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", "no limit" , 300, 300, 2, 2, 9, true, 4);
     }
 
     private void usersJoinsGames() {
@@ -71,6 +72,13 @@ public class PlayerFoldsTests extends ProjectTest {
         boolean deleteUser4 = this.deleteUser("ronenbu");
     }
 
+    public  void setUserLeague()
+    {
+        boolean leaguechanged1 = this.setuserleague("achiadg", 4);
+        boolean leaguechanged2 = this.setuserleague("hodbub", 4);
+        boolean leaguechanged3 = this.setuserleague("rotemw", 4);
+        boolean leaguechanged4 = this.setuserleague("ronenbu", 4);
+    }
 
     public void logoutUsers() {
         boolean userloggedout1 = this.logout("achiadg");

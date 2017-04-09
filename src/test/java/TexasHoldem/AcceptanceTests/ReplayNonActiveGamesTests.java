@@ -21,10 +21,10 @@ public class ReplayNonActiveGamesTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
-        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", "limit" , 10000, 10000, 100, 2, 9, true);
-        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", "no limit" , 300, 300, 2, 2, 9, true);
-        assertTrue(gamecreated1);
-        assertTrue(gamecreated2);
+        setUserLeague();
+        createGames();
+        usersJoinsGames();
+        playturns();
         boolean closegame1 = this.closegame("achiadg-poker-game");
         boolean closegame2 = this.closegame("hodbub-poker-game");
         assertTrue(closegame1);
@@ -37,11 +37,42 @@ public class ReplayNonActiveGamesTests extends ProjectTest {
         deleteUsers();
     }
 
+    public  void setUserLeague()
+    {
+        boolean leaguechanged1 = this.setuserleague("achiadg", 4);
+        boolean leaguechanged2 = this.setuserleague("hodbub", 4);
+        boolean leaguechanged3 = this.setuserleague("rotemw", 4);
+        boolean leaguechanged4 = this.setuserleague("ronenbu", 4);
+    }
+
+    public  void  playturns()
+    {
+        boolean playedturn1 = this.playturn("achiadg" ,"achiadg-poker-game", "CHECK");
+        boolean playedturn2 = this.playturn("hodbub" ,"hodbub-poker-game", "CHECK");
+        boolean playedturn3 = this.playturnraise("hodbub" , "achiadg-poker-game","RAISE",400);
+        boolean playedturn4 = this.playturn("ronenbu" , "hodbub-poker-game","CHECK");
+        boolean playedturn5 = this.playturn("rotemw" , "achiadg-poker-game","CALL");
+        boolean playedturn6 = this.playturn("achiadg" , "hodbub-poker-game","FOLD");
+    }
+
     public void deleteUsers() {
         boolean deleteUser1 = this.deleteUser("achiadg");
         boolean deleteUser2 = this.deleteUser("hodbub");
         boolean deleteUser3 = this.deleteUser("rotemw");
         boolean deleteUser4 = this.deleteUser("ronenbu");
+    }
+
+    private void createGames()
+    {
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", "limit" , 10000, 10000, 100, 2, 9, true, 4);
+        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", "no limit" , 300, 300, 2, 2, 9, true, 4);
+    }
+
+    private void usersJoinsGames() {
+        boolean useraddedgame1 = this.joinexistinggame("hodbub" , "achiadg-poker-game");
+        boolean useraddedgame2 = this.joinexistinggame("rotemw" , "achiadg-poker-game");
+        boolean useraddedgame3 = this.joinexistinggame("ronenbu" , "hodbub-poker-game");
+        boolean useraddedgame4 = this.joinexistinggame("achiadg" , "hodbub-poker-game");
     }
 
 

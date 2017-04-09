@@ -72,7 +72,7 @@ public class ProxyBridge implements Bridge {
         return true;
     }
 
-    public boolean createnewgame(String username, String gamename, String policy, int buyin, int chippolicy, int minimumbet, int minplayers, int maxplayers, boolean spectateisvalid) {
+    public boolean createnewgame(String username, String gamename, String policy, int buyin, int chippolicy, int minimumbet, int minplayers, int maxplayers, boolean spectateisvalid,int league) {
         return true;
     }
 
@@ -158,6 +158,14 @@ public class ProxyBridge implements Bridge {
 
     public int getnumofplayersinround(String gamename, int numofround) {
         return -1;
+    }
+
+    public boolean setuserleague(String username, int league) {
+        return true;
+    }
+
+    public boolean searchgamebypotsize(int pot) {
+        return true;
     }
 
 }

@@ -22,8 +22,9 @@ public class FindAllAvailableGamesToJoinTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
-        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", "limit" , 10000, 10000, 100, 2, 5, true);
-        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", "no limit" , 300, 300, 2, 2, 5, false);
+        setUserLeague();
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", "limit" , 10000, 10000, 100, 2, 5, true, 4);
+        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", "no limit" , 300, 300, 2, 2, 5, false, 4);
         assertTrue(gamecreated1);
         assertTrue(gamecreated2);
         boolean gamesfound1 = this.searchavailablegamestojoin("achiadg");
@@ -48,8 +49,9 @@ public class FindAllAvailableGamesToJoinTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
-        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", "limit" , 100000, 10000, 100, 2, 5, true);
-        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", "no limit" , 300, 400, 2, 2, 3, false);
+        setUserLeague();
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", "limit" , 100000, 10000, 100, 2, 5, true, 4);
+        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", "no limit" , 300, 400, 2, 2, 3, false, 4);
         assertTrue(gamecreated1);
         assertTrue(gamecreated2);
         usersJoinsGames();
@@ -90,6 +92,15 @@ public class FindAllAvailableGamesToJoinTests extends ProjectTest {
     }
 
 
+
+
+    public  void setUserLeague()
+    {
+        boolean leaguechanged1 = this.setuserleague("achiadg", 4);
+        boolean leaguechanged2 = this.setuserleague("hodbub", 4);
+        boolean leaguechanged3 = this.setuserleague("rotemw", 4);
+        boolean leaguechanged4 = this.setuserleague("ronenbu", 4);
+    }
 
 
     public void addBalance() {

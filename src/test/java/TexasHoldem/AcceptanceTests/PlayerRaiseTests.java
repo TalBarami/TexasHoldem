@@ -20,6 +20,7 @@ public class PlayerRaiseTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
+        setUserLeague();
         createGames();
         usersJoinsGames();
         int potsize1 = this.getPotSize("achiadg-poker-game");
@@ -47,8 +48,16 @@ public class PlayerRaiseTests extends ProjectTest {
 
     private void createGames()
     {
-        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", "limit" , 10000, 10000, 100, 2, 9, true);
-        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", "no limit" , 300, 300, 2, 2, 9, true);
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", "limit" , 10000, 10000, 100, 2, 9, true, 4);
+        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", "no limit" , 300, 300, 2, 2, 9, true, 4);
+    }
+
+    public  void setUserLeague()
+    {
+        boolean leaguechanged1 = this.setuserleague("achiadg", 4);
+        boolean leaguechanged2 = this.setuserleague("hodbub", 4);
+        boolean leaguechanged3 = this.setuserleague("rotemw", 4);
+        boolean leaguechanged4 = this.setuserleague("ronenbu", 4);
     }
 
     private void usersJoinsGames() {
