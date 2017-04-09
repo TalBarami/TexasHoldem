@@ -1,6 +1,7 @@
 package TexasHoldem.domain.game;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by Tal on 05/04/2017.
@@ -11,9 +12,11 @@ public class Dealer {
         deck = new Deck();
     }
 
-    public void dealCards(Collection<Player> players){
+    public void dealCardsToPlayers(Collection<Player> players){
         players.forEach(p -> p.addCards(deck.get(2)));
     }
 
-
+    public List<Card> openCards(int numOfCards) {
+        return deck.get(3);
+    }
 }
