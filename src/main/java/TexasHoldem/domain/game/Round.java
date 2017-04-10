@@ -1,5 +1,7 @@
 package TexasHoldem.domain.game;
 
+import TexasHoldem.domain.game.hand.Hand;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;

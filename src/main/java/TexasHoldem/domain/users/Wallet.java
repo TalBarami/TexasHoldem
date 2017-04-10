@@ -20,5 +20,9 @@ public class Wallet {
         this.balance = balance;
     }
 
+    public void deposit(double amount){
+        balance=+amount;
+    }
+
 
 }

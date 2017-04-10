@@ -1,33 +1,33 @@
 package TexasHoldem.domain.users;
 
-import org.joda.time.DateTime;
+import TexasHoldem.domain.game.Game;
+import TexasHoldem.domain.game.Player;
 
 import java.awt.image.BufferedImage;
-import java.util.Date;
-
-/**
- * Created by Tal on 05/04/2017.
- */
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 
 public class User {
 
     private String username;
     private String password;
     private String email;
-    private DateTime dateofbirth;
+    private LocalDate dateOfBirth;
     BufferedImage img;
     private Wallet wallet;
+    private Map<Game,Player> playerInGames;
 
-    public User(String user, String pass, String email, DateTime date)
+    public User(String user, String pass, String email, LocalDate date)
     {
         this.username = user;
         this.password = pass;
         this.wallet = new Wallet();
         this.email = email;
-        this.dateofbirth = date;
+        dateOfBirth = date;
         img = null;
+        playerInGames=new HashMap<>();
     }
-
 
     public String getPassword() {
         return password;
@@ -57,8 +57,8 @@ public class User {
         return email;
     }
 
-    public DateTime getDateofbirth() {
-        return dateofbirth;
+    public LocalDate getDateofbirth() {
+        return dateOfBirth;
     }
 
     public BufferedImage getImg() {
@@ -69,11 +69,19 @@ public class User {
         this.email = email;
     }
 
-    public void setDateofbirth(DateTime dateofbirth) {
-        this.dateofbirth = dateofbirth;
+    public void setDateOfBirth(LocalDate date) {
+        this.dateOfBirth = date;
     }
 
     public void setImg(BufferedImage img) {
         this.img = img;
+    }
+
+    public Map<Game,Player> getGamePlayerMappings(){
+        return playerInGames;
+    }
+
+    public void addGamePlayer(Game game,Player p){
+        playerInGames.put(game,p);
     }
 }
