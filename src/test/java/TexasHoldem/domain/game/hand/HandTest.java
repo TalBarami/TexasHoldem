@@ -1,24 +1,15 @@
 package TexasHoldem.domain.game.hand;
 
-import TexasHoldem.common.JsonSerializer;
-import TexasHoldem.domain.game.card.Card;
 import org.junit.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.util.Arrays;
-import java.util.List;
 
 import static TexasHoldem.domain.game.card.Rank.*;
 import static TexasHoldem.domain.game.card.Suit.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-
-/**
- * Created by Tal on 08/04/2017.
- */
 public class HandTest {
     private static Logger logger = LoggerFactory.getLogger(HandTest.class);
 

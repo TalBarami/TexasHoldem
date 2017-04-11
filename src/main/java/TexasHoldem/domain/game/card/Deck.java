@@ -1,11 +1,15 @@
 package TexasHoldem.domain.game.card;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 
 public class Deck {
+    private static Logger logger = LoggerFactory.getLogger(Deck.class);
     private List<Card> cards;
 
     public Deck(){
@@ -14,6 +18,7 @@ public class Deck {
     }
 
     public void prepareDeck(){
+        logger.info("Preparing new deck.");
         for (Suit suit : Suit.values())
             for (Rank rank : Rank.values())
                 cards.add(rank.of(suit));
@@ -28,6 +33,7 @@ public class Deck {
         int deckSize = cards.size();
         List<Card> topCards = cards.subList(deckSize - amount, deckSize);
         cards.removeAll(topCards);
+        logger.info("Taking {} cards from the top of the deck: {}", amount, topCards);
         return topCards;
     }
 }

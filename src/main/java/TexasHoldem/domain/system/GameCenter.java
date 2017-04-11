@@ -1,8 +1,10 @@
 package TexasHoldem.domain.system;
 
+import TexasHoldem.common.Exceptions.ArgumentNotInBoundsException;
 import TexasHoldem.common.Exceptions.InvalidArgumentException;
 import TexasHoldem.data.users.Users;
 import TexasHoldem.domain.game.Game;
+import TexasHoldem.domain.game.leagues.LeagueManager;
 import TexasHoldem.domain.users.User;
 
 import javax.security.auth.login.LoginException;
@@ -15,12 +17,18 @@ public class GameCenter {
     private List<Game> activeGames;
     private List<User> loggedInUsers;
     private Users usersDb;
+    LeagueManager leagueManager;
+
     public GameCenter() {
         activeGames=new ArrayList<>();
         usersDb=new Users();
+        leagueManager = new LeagueManager();
     }
+
     public void registerUser(String userName, String pass, String email, LocalDate date) throws InvalidArgumentException {
-        usersDb.addUser(new User(userName,pass,email,date));
+        User newUser = new User(userName,pass,email,date);
+        usersDb.addUser(newUser);
+        leagueManager.addNewUserToLegue(newUser);
     }
 
     public void login(String userName,String pass) throws LoginException {
@@ -47,7 +55,7 @@ public class GameCenter {
         usersDb.editUser(originalUserName,newUserName,pass,email,date);
     }
 
-    public void depositMoney(String userName,double amount) throws InvalidArgumentException {
+    public void depositMoney(String userName,int amount) throws ArgumentNotInBoundsException {
         usersDb.getUserByUserName(userName).deposit(amount,false);
     }
 }

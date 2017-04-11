@@ -19,4 +19,8 @@ public abstract class Participant {
 
     public abstract void removeFromGame(Game g);
 
+    public User getUser(){
+        return user;
+    }
+
 }

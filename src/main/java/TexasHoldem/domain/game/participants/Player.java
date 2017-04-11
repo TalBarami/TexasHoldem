@@ -1,5 +1,7 @@
 package TexasHoldem.domain.game.participants;
 
+import TexasHoldem.common.Exceptions.ArgumentNotInBoundsException;
+import TexasHoldem.common.Exceptions.InvalidArgumentException;
 import TexasHoldem.domain.game.card.Card;
 import TexasHoldem.domain.game.Game;
 import TexasHoldem.domain.users.User;
@@ -30,7 +32,11 @@ public class Player extends Participant{
     //todo : remove getWallet and user other methods (deposit/withdraw)
     public void addChips(int amount) {
         if (chipPolicy == 0) {
-            user.getWallet().setBalance(user.getWallet().getBalance() + amount);
+            try {
+                user.deposit(amount, false);
+            } catch (ArgumentNotInBoundsException e) {
+                System.out.println("amount to add to player cannot be negative");
+            }
         }
         else
             chipsAmount += amount;
@@ -39,17 +45,14 @@ public class Player extends Participant{
     //todo : remove getWallet and user other methods (deposit/withdraw)
     public void payChips(int amount) {
         if (chipPolicy == 0) {
-            if (user.getWallet().getBalance() >= amount) {
-                user.getWallet().setBalance(user.getWallet().getBalance() - amount);
-                lastBetSinceCardOpen += amount;
-                totalAmountPayedInRound += amount;
+            int amountWasReduced = 0;
+            try {
+                amountWasReduced = user.withdraw(amount, false);
+            } catch (ArgumentNotInBoundsException e) {
+                System.out.println("amount for player to pay cannot be negative");
             }
-
-            else {
-                lastBetSinceCardOpen += chipsAmount;
-                totalAmountPayedInRound += chipsAmount;
-                user.getWallet().setBalance(0);
-            }
+            lastBetSinceCardOpen += amountWasReduced;
+            totalAmountPayedInRound += amountWasReduced;
         }
         else {
             if (chipsAmount >= amount) {
@@ -81,13 +84,15 @@ public class Player extends Participant{
         }
     }
 
-    public void calculateEarnings(double ratio){
-        updateWallet(ratio*chipsAmount);
-    }
+    //TODO :: Ronen will decide what to do with it
+//    public void calculateEarnings(double ratio){
+//        updateWallet(ratio*chipsAmount);
+//    }
 
-    public void updateWallet(double amount){
-        user.getWallet().setBalance(user.getWallet().getBalance()+amount);
-    }
+    //TODO :: Ronen will decide what to do with it
+//    public void updateWallet(double amount){
+//        user.getWallet().setBalance(user.getWallet().getBalance()+amount);
+//    }
 
     public void addCards(Collection<Card> cards){
         this.cards.addAll(cards);
@@ -95,10 +100,6 @@ public class Player extends Participant{
 
     public Set<Card> getCards() {
         return cards;
-    }
-
-    public User getUser() {
-        return user;
     }
 
     public int getChipsAmount() {

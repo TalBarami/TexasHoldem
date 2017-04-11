@@ -2,11 +2,13 @@ package TexasHoldem.domain.game.hand;
 
 import TexasHoldem.common.Exceptions.HandException;
 import TexasHoldem.domain.game.card.Card;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
 public class HandCalculator {
-
+    private static Logger logger = LoggerFactory.getLogger(HandCalculator.class);
     private static Card[][] getPossibleHands(List<Card> cards){
         Card[][] possibleHands = new Card[21][5];
         int cardsSelected = 0;
@@ -31,13 +33,16 @@ public class HandCalculator {
     }
 
     public static Hand getHand(List<Card> cards){
+        logger.debug("Received a set of the following cards: {}", cards);
         Card[][] possibleHands = getPossibleHands(cards);
-        Optional<Hand> hand = Arrays.stream(possibleHands)
+        Optional<Hand> optHand = Arrays.stream(possibleHands)
                 .map(h -> new Hand(Arrays.asList(h)))
                 .max(Hand::compareTo);
-        if(!hand.isPresent())
+        if(!optHand.isPresent())
             throw new HandException();
-        return hand.get();
+        Hand hand = optHand.get();
+        logger.debug("Returns the following hand: {}", hand);
+        return hand;
     }
 
     public static Hand getHand(Card ... cards){

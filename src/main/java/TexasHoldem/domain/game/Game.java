@@ -4,9 +4,12 @@ import TexasHoldem.common.Exceptions.BelowBuyInPolicyException;
 import TexasHoldem.common.Exceptions.CantSpeactateThisRoomException;
 import TexasHoldem.common.Exceptions.GameIsFullException;
 import TexasHoldem.common.Exceptions.NoBalanceForBuyInException;
+import TexasHoldem.domain.game.leagues.LeagueManager;
 import TexasHoldem.domain.game.participants.Player;
 import TexasHoldem.domain.game.participants.Spectator;
 import TexasHoldem.domain.users.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +18,7 @@ public class Game {
     public enum GameActions {
         CHECK, RAISE, CALL, FOLD
     }
-
+    private static Logger logger = LoggerFactory.getLogger(Game.class);
     private GameSettings settings;
     private int id;
     private List<Player> players;
@@ -23,11 +26,13 @@ public class Game {
     private List<Spectator> spectators;
     private int dealerIndex;
     private double convertRatio;
+    private LeagueManager leagueManager;
 
-    public Game(GameSettings settings, User creator){
+    public Game(GameSettings settings, User creator, LeagueManager leagueManager){
         this.rounds=new ArrayList<>();
         this.players=new ArrayList<>();
         this.settings=settings;
+        this.leagueManager = leagueManager;
         spectators= new ArrayList<>();
         dealerIndex=0;
         convertRatio = (settings.getChipPolicy() != 0) ? settings.getBuyInPolicy()/settings.getChipPolicy() : 1;
@@ -54,7 +59,6 @@ public class Game {
             throw new GameIsFullException("Can't join game as player because it's full.");
         else if(user.getBalance() < settings.getBuyInPolicy())
             throw new BelowBuyInPolicyException("Buy in is "+settings.getBuyInPolicy()+", but user's balance is "+user.getBalance());
-
         addPlayer(user);
         return true;
     }
@@ -72,14 +76,17 @@ public class Game {
     }
 
     public void removePlayer(Spectator spectator){
+        logger.info("{} has stopped watching this game.", spectator);
         spectators.remove(spectator);
     }
+
     public void removePlayer(Player player){
+        logger.info("{} has left the game.", player.getUser().getUsername());
         players.remove(player);
 
         //todo : remove because of tournament mode ????
-        if(settings.getChipPolicy()!=0)
-            player.calculateEarnings(convertRatio);
+//        if(settings.getChipPolicy()!=0)
+//            player.calculateEarnings(convertRatio);
 
         //if the player is within an active round, inform the round
         if(!rounds.isEmpty()){
@@ -87,6 +94,8 @@ public class Game {
             if(lastRound.isRoundActive())
                 lastRound.notifyPlayerExited(player);
         }
+
+        leagueManager.updateUserLeague(player.getUser());
     }
 
     private boolean isFull(){
@@ -99,10 +108,11 @@ public class Game {
 
     private void addPlayer(User user){
         Player p = new Player(user,settings.getChipPolicy(), settings.getChipPolicy());
-        if(!realMoneyGame())
-            p.updateWallet(settings.getBuyInPolicy()*-1); //decrease amount by buy-in amount
+//        if(!realMoneyGame())
+//            p.updateWallet(settings.getBuyInPolicy()*-1); //decrease amount by buy-in amount
         players.add(p);
         user.addGameParticipant(this,p);
+        logger.info("{} has joined the game.", user.getUsername());
     }
 
     public boolean realMoneyGame(){
