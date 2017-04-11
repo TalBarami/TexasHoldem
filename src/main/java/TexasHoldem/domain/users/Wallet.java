@@ -7,6 +7,10 @@ public class Wallet {
 
     private double balance;
 
+    public Wallet(double balance){
+        this.balance = balance;
+    }
+
     public Wallet()
     {
         balance = 0;
@@ -20,5 +24,7 @@ public class Wallet {
         this.balance = balance;
     }
 
-
+    public void deposit(double amount){
+        balance=+amount;
+    }
 }
