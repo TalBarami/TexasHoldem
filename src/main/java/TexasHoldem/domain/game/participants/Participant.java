@@ -9,8 +9,12 @@ import TexasHoldem.domain.users.User;
 public abstract class Participant {
     protected User user;
 
-    public Participant(User user){
+    Participant(User user){
         this.user=user;
+    }
+
+    Participant(){
+
     }
 
     public abstract void removeFromGame(Game g);

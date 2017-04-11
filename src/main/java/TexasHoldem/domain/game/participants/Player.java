@@ -24,7 +24,7 @@ public class Player extends Participant{
     }
 
     private Player(){
-
+        super();
     }
 
     //todo : remove getWallet and user other methods (deposit/withdraw)
