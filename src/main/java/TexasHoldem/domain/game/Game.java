@@ -82,8 +82,8 @@ public class Game {
         players.remove(player);
 
         //todo : remove because of tournament mode ????
-        if(settings.getChipPolicy()!=0)
-            player.calculateEarnings(convertRatio);
+//        if(settings.getChipPolicy()!=0)
+//            player.calculateEarnings(convertRatio);
 
         //if the player is within an active round, inform the round
         if(!rounds.isEmpty()){
@@ -105,8 +105,8 @@ public class Game {
 
     private void addPlayer(User user){
         Player p = new Player(user,settings.getChipPolicy(), settings.getChipPolicy());
-        if(!realMoneyGame())
-            p.updateWallet(settings.getBuyInPolicy()*-1); //decrease amount by buy-in amount
+//        if(!realMoneyGame())
+//            p.updateWallet(settings.getBuyInPolicy()*-1); //decrease amount by buy-in amount
         players.add(p);
         user.addGameParticipant(this,p);
     }

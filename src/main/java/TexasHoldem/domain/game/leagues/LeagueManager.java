@@ -24,11 +24,12 @@ public class LeagueManager {
         createNewLeagueIfNeed(defaultLeagueForNewUsers);
         usersInLeague.get(defaultLeagueForNewUsers).add(user);
         updateMaxLeagueIfNeed(defaultLeagueForNewUsers);
+        user.setCurrLeague(defaultLeagueForNewUsers);
     }
 
     public void updateUserLeague(User user)
     {
-        if(user.getAmountEarnedInLeague() > criteriaToMovingLeague)
+        if(user.getAmountEarnedInLeague() >= criteriaToMovingLeague)
         {
             usersInLeague.get(user.getCurrLeague()).remove(user);
 
@@ -51,6 +52,13 @@ public class LeagueManager {
     private void createNewLeagueIfNeed(int newLeagueForUser) {
         if(!usersInLeague.containsKey(newLeagueForUser))
             usersInLeague.put(newLeagueForUser, new ArrayList<User>());
+    }
+
+    public void removeUserFromLeague(User user){
+        if(usersInLeague.containsKey(user.getCurrLeague())) {
+            usersInLeague.get(user.getCurrLeague()).remove(user);
+            user.setCurrLeague(0);
+        }
     }
 
     private int checkIfLegalLeague(int newLeagueForUser) {
