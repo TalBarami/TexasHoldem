@@ -8,6 +8,8 @@ import TexasHoldem.domain.game.leagues.LeagueManager;
 import TexasHoldem.domain.game.participants.Player;
 import TexasHoldem.domain.game.participants.Spectator;
 import TexasHoldem.domain.users.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +18,7 @@ public class Game {
     public enum GameActions {
         CHECK, RAISE, CALL, FOLD
     }
-
+    private static Logger logger = LoggerFactory.getLogger(Game.class);
     private GameSettings settings;
     private int id;
     private List<Player> players;
@@ -57,7 +59,6 @@ public class Game {
             throw new GameIsFullException("Can't join game as player because it's full.");
         else if(user.getBalance() < settings.getBuyInPolicy())
             throw new BelowBuyInPolicyException("Buy in is "+settings.getBuyInPolicy()+", but user's balance is "+user.getBalance());
-
         addPlayer(user);
         return true;
     }
@@ -75,10 +76,12 @@ public class Game {
     }
 
     public void removePlayer(Spectator spectator){
+        logger.info("{} has stopped watching this game.", spectator);
         spectators.remove(spectator);
     }
 
     public void removePlayer(Player player){
+        logger.info("{} has left the game.", player.getUser().getUsername());
         players.remove(player);
 
         //todo : remove because of tournament mode ????
@@ -109,6 +112,7 @@ public class Game {
             p.updateWallet(settings.getBuyInPolicy()*-1); //decrease amount by buy-in amount
         players.add(p);
         user.addGameParticipant(this,p);
+        logger.info("{} has joined the game.", user.getUsername());
     }
 
     public boolean realMoneyGame(){

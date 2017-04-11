@@ -102,10 +102,6 @@ public class Player extends Participant{
         return cards;
     }
 
-    public User getUser() {
-        return user;
-    }
-
     public int getChipsAmount() {
         return chipsAmount;
     }

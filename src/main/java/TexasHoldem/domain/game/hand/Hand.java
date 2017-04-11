@@ -2,15 +2,15 @@ package TexasHoldem.domain.game.hand;
 
 
 import TexasHoldem.domain.game.card.Card;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 
-/**
- * Created by Tal on 05/04/2017.
- */
 public class Hand implements Comparable<Hand> {
+    private static Logger logger = LoggerFactory.getLogger(Hand.class);
     private List<Card> hand;
     private Map<Integer, List<Card>> handGroup;
     private Category category;
@@ -20,6 +20,7 @@ public class Hand implements Comparable<Hand> {
         Collections.sort(hand);
         handGroup = groupHand();
         calculate();
+        logger.debug("The set {} is of type {}", hand, category);
     }
 
     public Hand(Card ... cards){
