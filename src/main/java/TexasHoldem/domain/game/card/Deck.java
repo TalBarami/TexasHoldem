@@ -1,4 +1,4 @@
-package TexasHoldem.domain.game;
+package TexasHoldem.domain.game.card;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,13 +11,13 @@ public class Deck {
     private List<Card> cards;
 
     public Deck(){
-        cards = new ArrayList<Card>();
+        cards = new ArrayList<>();
         prepareDeck();
     }
 
     public void prepareDeck(){
-        for (Card.Suit suit : Card.Suit.values())
-            for (Card.Rank rank : Card.Rank.values())
+        for (Suit suit : Suit.values())
+            for (Rank rank : Rank.values())
                 cards.add(new Card(rank, suit));
         shuffle();
     }
