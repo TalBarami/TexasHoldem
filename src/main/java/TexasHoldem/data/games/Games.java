@@ -18,10 +18,6 @@ public class Games implements IGames {
         _newGameId = 0;
     }
 
-    private int getNewGameId() {
-        return _newGameId++;
-    }
-
     public boolean addGame(Game game) {
         int gameId = getNewGameId();
 
@@ -45,5 +41,9 @@ public class Games implements IGames {
 
     public LinkedList<Game> getActiveGames() {
         return searchGame(g -> g.isActive());
+    }
+
+    private int getNewGameId() {
+        return _newGameId++;
     }
 }
