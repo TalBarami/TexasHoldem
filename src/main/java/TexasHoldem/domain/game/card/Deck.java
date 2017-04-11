@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by Tal on 05/04/2017.
- */
+
 public class Deck {
     private List<Card> cards;
 
@@ -18,7 +16,7 @@ public class Deck {
     public void prepareDeck(){
         for (Suit suit : Suit.values())
             for (Rank rank : Rank.values())
-                cards.add(new Card(rank, suit));
+                cards.add(rank.of(suit));
         shuffle();
     }
 
