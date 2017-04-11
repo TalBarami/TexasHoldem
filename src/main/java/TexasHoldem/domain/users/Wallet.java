@@ -2,9 +2,9 @@ package TexasHoldem.domain.users;
 
 public class Wallet {
 
-    private double balance;
+    private int balance;
 
-    public Wallet(double balance){
+    public Wallet(int balance){
         this.balance = balance;
     }
 
@@ -13,11 +13,11 @@ public class Wallet {
         balance = 0;
     }
 
-    public double getBalance() {
+    public int getBalance() {
         return balance;
     }
 
-    public void setBalance(double balance) {
+    public void setBalance(int balance) {
         this.balance = balance;
     }
 
