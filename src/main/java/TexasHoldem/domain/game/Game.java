@@ -1,9 +1,6 @@
 package TexasHoldem.domain.game;
 
-import TexasHoldem.common.Exceptions.BelowBuyInPolicyException;
-import TexasHoldem.common.Exceptions.CantSpeactateThisRoomException;
-import TexasHoldem.common.Exceptions.GameIsFullException;
-import TexasHoldem.common.Exceptions.NoBalanceForBuyInException;
+import TexasHoldem.common.Exceptions.*;
 import TexasHoldem.domain.game.leagues.LeagueManager;
 import TexasHoldem.domain.game.participants.Player;
 import TexasHoldem.domain.game.participants.Spectator;
@@ -25,7 +22,6 @@ public class Game {
     private List<Round> rounds;
     private List<Spectator> spectators;
     private int dealerIndex;
-    private double convertRatio;
     private LeagueManager leagueManager;
 
     public Game(GameSettings settings, User creator, LeagueManager leagueManager){
@@ -35,38 +31,42 @@ public class Game {
         this.leagueManager = leagueManager;
         spectators= new ArrayList<>();
         dealerIndex=0;
-        convertRatio = (settings.getChipPolicy() != 0) ? settings.getBuyInPolicy()/settings.getChipPolicy() : 1;
         //Automatically the creator is added to the room.
         addPlayer(creator);
     }
 
-    private Game(){
+    private Game(){}
 
-    }
+    public void joinGameAsPlayer(User user,boolean spectate) throws GameIsFullException, NoBalanceForBuyInException, LeaguesDontMatchException {
+        int gameLeague=getLeague();
+        int usersLeague=user.getCurrLeague();
+        double userBalance=user.getBalance();
+        double buyInPolicy=getBuyInPolicy();
 
-    public boolean joinGame(User user,boolean spectate,int buyIn) throws CantSpeactateThisRoomException,
-            GameIsFullException, BelowBuyInPolicyException {
-        if(spectate){
-            if(!canBeSpectated())
-                throw new CantSpeactateThisRoomException("Selected game can't be spectated due to it's settings.");
-            else {
-                Spectator spec=new Spectator(user);
-                spectators.add(spec);
-                user.addGameParticipant(this,spec);
-            }
-        }
+        if(gameLeague != usersLeague)
+            throw new LeaguesDontMatchException(String.format("Can't join game, user's league is %d ,while game's league is %d.",usersLeague,gameLeague));
         else if (isFull())
             throw new GameIsFullException("Can't join game as player because it's full.");
-        else if(user.getBalance() < settings.getBuyInPolicy())
-            throw new BelowBuyInPolicyException("Buy in is "+settings.getBuyInPolicy()+", but user's balance is "+user.getBalance());
+        else if(userBalance < buyInPolicy)
+            throw new NoBalanceForBuyInException(String.format("Buy in is %d, but user's balance is %d;",buyInPolicy,userBalance));
+
         addPlayer(user);
-        return true;
     }
 
-    public void startNewRound() throws NoBalanceForBuyInException {
+    public void joinGameAsSpectator(User user) throws CantSpeactateThisRoomException {
+        if(!canBeSpectated())
+            throw new CantSpeactateThisRoomException("Selected game can't be spectated due to it's settings.");
+
+        Spectator spec=new Spectator(user);
+        spectators.add(spec);
+        user.addGameParticipant(this,spec);
+    }
+
+    //todo: handle differently if its tournamnet or not .
+    public void startNewRound() throws Exception {
         if(players.size()< settings.getPlayerRange().getLeft())
-            throw new NoBalanceForBuyInException("Can't start round, minimal amount for a new round is "+
-                    settings.getPlayerRange().getLeft()+", but currently only "+players.size() +" exist.");
+            throw new Exception(String.format("Can't start round, minimal amount for a new round is %d, but currently there are only %d players.",
+                    getMinimalAmountOfPlayer(),players.size()));
         else{
             Round rnd=new Round(players,settings,dealerIndex);
             dealerIndex=dealerIndex++%players.size();
@@ -83,10 +83,6 @@ public class Game {
     public void removePlayer(Player player){
         logger.info("{} has left the game.", player.getUser().getUsername());
         players.remove(player);
-
-        //todo : remove because of tournament mode ????
-        if(settings.getChipPolicy()!=0)
-            player.calculateEarnings(convertRatio);
 
         //if the player is within an active round, inform the round
         if(!rounds.isEmpty()){
@@ -108,8 +104,10 @@ public class Game {
 
     private void addPlayer(User user){
         Player p = new Player(user,settings.getChipPolicy(), settings.getChipPolicy());
-        if(!realMoneyGame())
-            p.updateWallet(settings.getBuyInPolicy()*-1); //decrease amount by buy-in amount
+        if(!realMoneyGame()) try {
+            p.getUser().withdraw(getBuyInPolicy(), false);//decrease amount by buy-in amount
+        } catch (ArgumentNotInBoundsException ignored) {}//Do nothing, wont be exception because there is check in the callee.
+
         players.add(p);
         user.addGameParticipant(this,p);
         logger.info("{} has joined the game.", user.getUsername());
@@ -119,13 +117,41 @@ public class Game {
         return settings.getChipPolicy()==0;
     }
 
+    private double getConvertRatio(){
+        return (realMoneyGame()) ? 1 : settings.getBuyInPolicy()/settings.getChipPolicy();
+
+    }
     // FIXME: Temporary to fix the build.
     public boolean isActive(){
         return players.size() == 0;
     }
 
-    // FIXME: Temporary to fix the build.
+    // todo :needed?
     public void setGameId(int gameId){
+        this.id=gameId;
+    }
 
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public List<Round> getRounds() {
+        return rounds;
+    }
+
+    public GameSettings getSettings() {
+        return settings;
+    }
+
+    public int getLeague(){
+        return settings.getLeagueCriteria();
+    }
+
+    public int getBuyInPolicy(){
+        return settings.getBuyInPolicy();
+    }
+
+    public int getMinimalAmountOfPlayer(){
+        return settings.getPlayerRange().getLeft();
     }
 }
