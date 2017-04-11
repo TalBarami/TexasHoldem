@@ -29,7 +29,7 @@ public class Game {
         spectators= new ArrayList<>();
         dealerIndex=0;
         convertRatio = (settings.getChipPolicy() != 0) ? settings.getBuyInPolicy()/settings.getChipPolicy() : 1;
-        //Automatically add the creator is added to the room.
+        //Automatically the creator is added to the room.
         addPlayer(creator);
     }
 
@@ -61,7 +61,7 @@ public class Game {
         }
     }
 
-    public void removePlyaer(Player player){
+    public void removePlayer(Player player){
         //if that's player spectating -> just remove him from spectators list.
         if(spectators.contains(player)){
             spectators.remove(player);
@@ -85,12 +85,15 @@ public class Game {
     private boolean isFull(){
         return players.size() == settings.getPlayerRange().getRight();
     }
+
     private boolean canBeSpectated(){
         return settings.isAcceptSpectating();
     }
+
     private void addPlayer(User user){
         Player p = new Player(user,settings.getChipPolicy(), settings.getChipPolicy());
         p.updateWallet(settings.getBuyInPolicy()*-1); //decrease amount by buy-in amount
         players.add(p);
+        user.addGamePlayer(this,p);
     }
 }
