@@ -22,6 +22,10 @@ public class Hand implements Comparable<Hand> {
         calculate();
     }
 
+    public Hand(Card ... cards){
+        this(Arrays.asList(cards));
+    }
+
     private Hand(){
 
     }
@@ -52,15 +56,19 @@ public class Hand implements Comparable<Hand> {
     @Override
     public int compareTo(Hand that) {
         if(this.category == that.category) {
-            List<List<Card>> dis = cardsComparator(this.handGroup);
-            List<List<Card>> dat = cardsComparator(that.handGroup);
+            if(this.isSmallestStraight() || that.isSmallestStraight()){
+                return this.hand.get(0).rank() - that.hand.get(0).rank();
+            } else {
+                List<List<Card>> dis = cardsComparator(this.handGroup);
+                List<List<Card>> dat = cardsComparator(that.handGroup);
 
-            for(int i=0; i < dis.size(); i++) {
-                if (dis.get(i).get(0).rank() != dat.get(i).get(0).rank()) {
-                    return dis.get(i).get(0).rank() - dat.get(i).get(0).rank();
+                for (int i = 0; i < dis.size(); i++) {
+                    if (dis.get(i).get(0).rank() != dat.get(i).get(0).rank()) {
+                        return dis.get(i).get(0).rank() - dat.get(i).get(0).rank();
+                    }
                 }
+                return 0;
             }
-            return 0;
         }
         else return this.category.ordinal() - that.category.ordinal();
     }
@@ -88,6 +96,11 @@ public class Hand implements Comparable<Hand> {
         }
         return true;
     }
+
+    private boolean isSmallestStraight(){
+        return isStraight() && hand.get(0).rank() == 14;
+    }
+
 
     private boolean isFourOfAKind(){
         return handGroup.values().stream().filter(lst -> lst.size() == 4).count() == 1;

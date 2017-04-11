@@ -1,4 +1,4 @@
-package TexasHoldem.domain.game.hand;
+package TexasHoldem.common.Exceptions;
 
 /**
  * Created by Tal on 08/04/2017.

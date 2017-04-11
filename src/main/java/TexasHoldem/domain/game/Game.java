@@ -3,7 +3,9 @@ package TexasHoldem.domain.game;
 import TexasHoldem.common.Exceptions.BelowBuyInPolicyException;
 import TexasHoldem.common.Exceptions.CantSpeactateThisRoomException;
 import TexasHoldem.common.Exceptions.GameIsFullException;
-import TexasHoldem.common.Exceptions.NoMinimumAmountOfPlayersException;
+import TexasHoldem.common.Exceptions.NoBalanceForBuyInException;
+import TexasHoldem.domain.game.participants.Player;
+import TexasHoldem.domain.game.participants.Spectator;
 import TexasHoldem.domain.users.User;
 
 import java.util.ArrayList;
@@ -18,7 +20,7 @@ public class Game {
     private int id;
     private List<Player> players;
     private List<Round> rounds;
-    private List<Player> spectators;
+    private List<Spectator> spectators;
     private int dealerIndex;
     private double convertRatio;
 
@@ -42,20 +44,24 @@ public class Game {
         if(spectate){
             if(!canBeSpectated())
                 throw new CantSpeactateThisRoomException("Selected game can't be spectated due to it's settings.");
-            else spectators.add(new Player(user,0, settings.getChipPolicy()));
+            else {
+                Spectator spec=new Spectator(user);
+                spectators.add(spec);
+                user.addGameParticipant(this,spec);
+            }
         }
         else if (isFull())
             throw new GameIsFullException("Can't join game as player because it's full.");
-        else if(buyIn != settings.getBuyInPolicy())
-            throw new BelowBuyInPolicyException("Buy-in amount  is :" + settings.getBuyInPolicy() + ", can't join with different amount.");
+        else if(user.getBalance() < settings.getBuyInPolicy())
+            throw new BelowBuyInPolicyException("Buy in is "+settings.getBuyInPolicy()+", but user's balance is "+user.getBalance());
 
         addPlayer(user);
         return true;
     }
 
-    public void startNewRound() throws NoMinimumAmountOfPlayersException {
+    public void startNewRound() throws NoBalanceForBuyInException {
         if(players.size()< settings.getPlayerRange().getLeft())
-            throw new NoMinimumAmountOfPlayersException("Can't start round, minimal amount for a new round is "+
+            throw new NoBalanceForBuyInException("Can't start round, minimal amount for a new round is "+
                     settings.getPlayerRange().getLeft()+", but currently only "+players.size() +" exist.");
         else{
             Round rnd=new Round(players,settings,dealerIndex);
@@ -65,15 +71,13 @@ public class Game {
         }
     }
 
+    public void removePlayer(Spectator spectator){
+        spectators.remove(spectator);
+    }
     public void removePlayer(Player player){
-        //if that's player spectating -> just remove him from spectators list.
-        if(spectators.contains(player)){
-            spectators.remove(player);
-            return;
-        }
-
         players.remove(player);
 
+        //todo : remove because of tournament mode ????
         if(settings.getChipPolicy()!=0)
             player.calculateEarnings(convertRatio);
 
@@ -83,7 +87,6 @@ public class Game {
             if(lastRound.isRoundActive())
                 lastRound.notifyPlayerExited(player);
         }
-
     }
 
     private boolean isFull(){
@@ -96,8 +99,23 @@ public class Game {
 
     private void addPlayer(User user){
         Player p = new Player(user,settings.getChipPolicy(), settings.getChipPolicy());
-        p.updateWallet(settings.getBuyInPolicy()*-1); //decrease amount by buy-in amount
+        if(!realMoneyGame())
+            p.updateWallet(settings.getBuyInPolicy()*-1); //decrease amount by buy-in amount
         players.add(p);
-        user.addGamePlayer(this,p);
+        user.addGameParticipant(this,p);
+    }
+
+    public boolean realMoneyGame(){
+        return settings.getChipPolicy()==0;
+    }
+
+    // FIXME: Temporary to fix the build.
+    public boolean isActive(){
+        return players.size() == 0;
+    }
+
+    // FIXME: Temporary to fix the build.
+    public void setGameId(int gameId){
+
     }
 }

@@ -1,12 +1,10 @@
 package TexasHoldem.domain.game.hand;
 
+import TexasHoldem.common.Exceptions.HandException;
 import TexasHoldem.domain.game.card.Card;
 
 import java.util.*;
 
-/**
- * Created by Tal on 08/04/2017.
- */
 public class HandCalculator {
 
     private static Card[][] getPossibleHands(List<Card> cards){
@@ -40,5 +38,9 @@ public class HandCalculator {
         if(!hand.isPresent())
             throw new HandException();
         return hand.get();
+    }
+
+    public static Hand getHand(Card ... cards){
+        return getHand(Arrays.asList(cards));
     }
 }

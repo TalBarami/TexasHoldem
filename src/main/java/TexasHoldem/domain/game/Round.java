@@ -2,6 +2,7 @@ package TexasHoldem.domain.game;
 
 import TexasHoldem.domain.game.card.Card;
 import TexasHoldem.domain.game.hand.Hand;
+import TexasHoldem.domain.game.participants.Player;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

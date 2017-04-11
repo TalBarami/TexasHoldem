@@ -1,7 +1,9 @@
 package TexasHoldem.domain.users;
 
+import TexasHoldem.common.Exceptions.ArgumentNotInBoundsException;
+import TexasHoldem.common.Exceptions.InvalidArgumentException;
 import TexasHoldem.domain.game.Game;
-import TexasHoldem.domain.game.Player;
+import TexasHoldem.domain.game.participants.Participant;
 
 import java.awt.image.BufferedImage;
 import java.time.LocalDate;
@@ -16,7 +18,7 @@ public class User {
     private LocalDate dateOfBirth;
     BufferedImage img;
     private Wallet wallet;
-    private Map<Game,Player> playerInGames;
+    private Map<Game,Participant> playerInGames;
 
     public User(String user, String pass, String email, LocalDate date)
     {
@@ -41,6 +43,7 @@ public class User {
         return username;
     }
 
+    //todo : make it private player changes (delete usages of getWallet)
     public Wallet getWallet() {
         return wallet;
     }
@@ -53,20 +56,12 @@ public class User {
         this.password = password;
     }
 
-    public void setWallet(Wallet wallet) {
-        this.wallet = wallet;
-    }
-
     public String getEmail() {
         return email;
     }
 
-    public LocalDate getDateofbirth() {
+    public LocalDate getDateOfBirth() {
         return dateOfBirth;
-    }
-
-    public BufferedImage getImg() {
-        return img;
     }
 
     public void setEmail(String email) {
@@ -77,15 +72,32 @@ public class User {
         this.dateOfBirth = date;
     }
 
-    public void setImg(BufferedImage img) {
-        this.img = img;
-    }
-
-    public Map<Game,Player> getGamePlayerMappings(){
+    public Map<Game,Participant> getGamePlayerMappings(){
         return playerInGames;
     }
 
-    public void addGamePlayer(Game game,Player p){
+    public void addGameParticipant(Game game,Participant p){
         playerInGames.put(game,p);
+    }
+
+    public void deposit(double amount,boolean selfDeposit) throws InvalidArgumentException {
+        if(amount < 0)
+            throw new InvalidArgumentException("Amount less than zero , should be greater.");
+        getWallet().setBalance(getWallet().getBalance() + amount);
+
+        if(!selfDeposit)
+            System.out.println("");//todo : calculate league someway
+    }
+
+    public void withdraw(double amount) throws InvalidArgumentException, ArgumentNotInBoundsException {
+        if(amount < 0)
+            throw new InvalidArgumentException("Amount less than zero , should be greater.");
+        else if(amount > getWallet().getBalance())
+            throw new ArgumentNotInBoundsException("Amount to be withdrawn is more than player's balance.");
+        getWallet().setBalance(getWallet().getBalance() - amount);
+    }
+
+    public double getBalance(){
+        return getWallet().getBalance();
     }
 }
