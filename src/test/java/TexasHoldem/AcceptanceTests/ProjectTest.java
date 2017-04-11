@@ -152,11 +152,15 @@ public abstract class ProjectTest extends TestCase{
         return  bridge.getnumofplayersinround(gamename,  numofround);
     }
 
-    public boolean setuserleague(String username, int league) {
-        return bridge.setuserleague(username,league);
-    }
-
     public boolean searchgamebypotsize(int pot) {
         return bridge.searchgamebypotsize( pot);
+    }
+
+    public boolean setuserleague(String adminname, String username, int newleague) {
+        return bridge.setuserleague(adminname, username,newleague);
+    }
+
+    public boolean setcriteriatomoveleague(String adminname, int criteria) {
+        return bridge.setcriteriatomoveleague(adminname,criteria);
     }
 }

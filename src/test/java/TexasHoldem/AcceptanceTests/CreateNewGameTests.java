@@ -28,8 +28,9 @@ public class CreateNewGameTests extends ProjectTest {
         boolean addedbalance2 = this.addbalancetouserwallet("hodbub",1000);
         assertTrue(addedbalance1);
         assertTrue(addedbalance2);
+        setUserLeague();
         boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", "limit" , 10000, 10000, 100, 2, 9, true, 1);
-        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", "no limit" , 300, 300, 2, 2, 9, false, 4);
+        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", "no limit" , 300, 300, 2, 2, 9, false, 1);
         boolean closegame1 = this.closegame("achiadg-poker-game");
         boolean closegame2 = this.closegame("hodbub-poker-game");
         assertTrue(closegame1);
@@ -59,7 +60,7 @@ public class CreateNewGameTests extends ProjectTest {
         assertTrue(addedbalance2);
         setUserLeague();
         boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", "limit" , 10000, 10000, 100, 2, 9, true, 1);
-        boolean gamecreated2 = this.createnewgame("hodbub","achiadg-poker-game", "no limit" , 300, 300, 2, 2, 9, false, 4);
+        boolean gamecreated2 = this.createnewgame("hodbub","achiadg-poker-game", "no limit" , 300, 300, 2, 2, 9, false, 1);
         assertTrue(gamecreated1);
         assertFalse(gamecreated2);
         boolean closegame1 = this.closegame("achiadg-poker-game");
@@ -115,7 +116,7 @@ public class CreateNewGameTests extends ProjectTest {
         assertTrue(addedbalance2);
         setUserLeague();
         boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", "limit" , 10000, 10000, 100, 1, 9, true, 1);
-        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", "pot limit" , 300, 300, 2, 2, 12, false, 4);
+        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", "pot limit" , 300, 300, 2, 2, 12, false, 1);
         assertFalse(gamecreated1);
         assertFalse(gamecreated2);
         boolean userloggedout1 = this.logout("achiadg");
@@ -134,7 +135,7 @@ public class CreateNewGameTests extends ProjectTest {
         assertTrue(userloggedin1);
         boolean addedbalance1 = this.addbalancetouserwallet("achiadg",20000);
         assertTrue(addedbalance1);
-        boolean leaguechanged1 = this.setuserleague("achiadg", 1);
+        boolean leaguechanged1 = this.setuserleague("achiadg","achiadg", 1);
         boolean gamecreated1 = this.createnewgame("achiadg",null, "limit" , 10000, 10000, 100, 1, 9, true, 1);
         assertFalse(gamecreated1);
         boolean userloggedout1 = this.logout("achiadg");
@@ -150,7 +151,7 @@ public class CreateNewGameTests extends ProjectTest {
         assertTrue(userloggedin1);
         boolean addedbalance1 = this.addbalancetouserwallet("achiadg",20000);
         assertTrue(addedbalance1);
-        boolean leaguechanged1 = this.setuserleague("achiadg", 1);
+        boolean leaguechanged1 = this.setuserleague("achiadg","achiadg", 1);
         boolean gamecreated1 = this.createnewgame("achiadg","achiad-poker-game", "limit" , 21000, 10000, 100, 1, 9, true, 1);
         assertFalse(gamecreated1);
         boolean userloggedout1 = this.logout("achiadg");
@@ -174,8 +175,8 @@ public class CreateNewGameTests extends ProjectTest {
         setUserLeague();
         boolean gamecreated1 = this.createnewgame("achiadg", "achiadg-poke\tr-game", "limit" , 10000, 10000, 100, 1, 9, true, 1);
         boolean gamecreated2 = this.createnewgame("achiadg","achiad-poker-game", "no li\nmit" , 300, 300, 2, 2, 12, false, 1);
-        boolean gamecreated3 = this.createnewgame("hodbub","new-p\\\noker-game", "limit" , 10000, 10000, 100, 1, 9, true, 4);
-        boolean gamecreated4 = this.createnewgame("hodbub","fun-poker-gam\\\re", "pot l\timit" , 300, 300, 2, 2, 12, false, 4);
+        boolean gamecreated3 = this.createnewgame("hodbub","new-p\\\noker-game", "limit" , 10000, 10000, 100, 1, 9, true, 1);
+        boolean gamecreated4 = this.createnewgame("hodbub","fun-poker-gam\\\re", "pot l\timit" , 300, 300, 2, 2, 12, false, 1);
         assertFalse(gamecreated1);
         assertFalse(gamecreated2);
         assertFalse(gamecreated3);
@@ -196,7 +197,7 @@ public class CreateNewGameTests extends ProjectTest {
         assertTrue(userloggedin1);
         boolean addedbalance1 = this.addbalancetouserwallet("achiadg",20000);
         assertTrue(addedbalance1);
-        boolean leaguechanged1 = this.setuserleague("achiadg", 1);
+        boolean leaguechanged1 = this.setuserleague("achiadg","achiadg", 1);
         boolean gamecreated1 = this.createnewgame("achiadg","SELECT * FROM GAMES WHERE GAMENAME = achiad-poker-game", "limit" , 10000, 10000, 100, 1, 9, true, 1);
         assertFalse(gamecreated1);
         boolean userloggedout1 = this.logout("achiadg");
@@ -206,8 +207,8 @@ public class CreateNewGameTests extends ProjectTest {
 
     public  void setUserLeague()
     {
-        boolean leaguechanged1 = this.setuserleague("achiadg", 1);
-        boolean leaguechanged2 = this.setuserleague("hodbub", 4);
+        boolean leaguechanged1 = this.setuserleague("achiadg","achiadg", 1);
+        boolean leaguechanged2 = this.setuserleague("achiadg","hodbub", 1);
     }
 
 }

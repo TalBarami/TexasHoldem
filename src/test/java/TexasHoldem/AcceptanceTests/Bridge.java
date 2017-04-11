@@ -79,7 +79,9 @@ public interface Bridge {
 
     int getnumofplayersinround(String gamename, int numofround);
 
-    boolean setuserleague(String username, int league);
+    boolean setuserleague(String adminname, String username, int league);
 
     boolean searchgamebypotsize(int pot);
+
+    boolean setcriteriatomoveleague(String adminname, int criteria);
 }

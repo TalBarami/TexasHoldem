@@ -154,11 +154,15 @@ public class RealBridge implements Bridge {
         return -1;
     }
 
-    public boolean setuserleague(String username, int league) {
+    public boolean setuserleague(String adminname, String username, int league) {
         return true;
     }
 
     public boolean searchgamebypotsize(int pot) {
+        return true;
+    }
+
+    public boolean setcriteriatomoveleague(String adminname, int criteria) {
         return true;
     }
 }

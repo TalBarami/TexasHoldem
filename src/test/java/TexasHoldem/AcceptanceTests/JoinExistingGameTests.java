@@ -88,9 +88,9 @@ public class JoinExistingGameTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
-        boolean leaguechanged2 = this.setuserleague("hodbub", 3);
-        boolean leaguechanged3 = this.setuserleague("rotemw", 6);
-        boolean leaguechanged4 = this.setuserleague("ronenbu", 7);
+        boolean leaguechanged2 = this.setuserleague("hodbub","hodbub", 3);
+        boolean leaguechanged3 = this.setuserleague("hodbub","rotemw", 6);
+        boolean leaguechanged4 = this.setuserleague("hodbub","ronenbu", 7);
         boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", "limit" , 90000, 10000, 100, 2, 3, true, 4);
         assertTrue(gamecreated1);
         boolean useraddedgame1 = this.joinexistinggame("hodbub" , "achiadg-poker-game");
@@ -168,10 +168,10 @@ public class JoinExistingGameTests extends ProjectTest {
 
     public  void setUserLeague()
     {
-        boolean leaguechanged1 = this.setuserleague("achiadg", 4);
-        boolean leaguechanged2 = this.setuserleague("hodbub", 4);
-        boolean leaguechanged3 = this.setuserleague("rotemw", 4);
-        boolean leaguechanged4 = this.setuserleague("ronenbu", 4);
+        boolean leaguechanged1 = this.setuserleague("hodbub","achiadg", 4);
+        boolean leaguechanged2 = this.setuserleague("hodbub","hodbub", 4);
+        boolean leaguechanged3 = this.setuserleague("hodbub","rotemw", 4);
+        boolean leaguechanged4 = this.setuserleague("hodbub","ronenbu", 4);
     }
 
 }

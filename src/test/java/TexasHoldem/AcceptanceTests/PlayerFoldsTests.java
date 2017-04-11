@@ -74,10 +74,10 @@ public class PlayerFoldsTests extends ProjectTest {
 
     public  void setUserLeague()
     {
-        boolean leaguechanged1 = this.setuserleague("achiadg", 4);
-        boolean leaguechanged2 = this.setuserleague("hodbub", 4);
-        boolean leaguechanged3 = this.setuserleague("rotemw", 4);
-        boolean leaguechanged4 = this.setuserleague("ronenbu", 4);
+        boolean leaguechanged1 = this.setuserleague("hodbub","achiadg", 4);
+        boolean leaguechanged2 = this.setuserleague("hodbub","hodbub", 4);
+        boolean leaguechanged3 = this.setuserleague("hodbub","rotemw", 4);
+        boolean leaguechanged4 = this.setuserleague("hodbub","ronenbu", 4);
     }
 
     public void logoutUsers() {
