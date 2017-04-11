@@ -24,6 +24,10 @@ public class GameSettings {
         this.acceptSpectating=specAccept;
     }
 
+    private GameSettings(){
+
+    }
+
     public GamePolicy getGameType() {return gameType;}
 
     public int getMinBet() {return minBet;}

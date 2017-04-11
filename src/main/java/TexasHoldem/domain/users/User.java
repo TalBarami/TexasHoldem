@@ -29,6 +29,10 @@ public class User {
         playerInGames=new HashMap<>();
     }
 
+    private User(){
+
+    }
+
     public String getPassword() {
         return password;
     }

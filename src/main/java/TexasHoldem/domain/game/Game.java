@@ -33,6 +33,10 @@ public class Game {
         addPlayer(creator);
     }
 
+    private Game(){
+
+    }
+
     public boolean joinGame(User user,boolean spectate,int buyIn) throws CantSpeactateThisRoomException,
             GameIsFullException, BelowBuyInPolicyException {
         if(spectate){

@@ -23,6 +23,10 @@ public class Player {
         this.chipPolicy = policy;
     }
 
+    private Player(){
+
+    }
+
     public void addChips(int amount) {
         if (chipPolicy == 0) {
             user.getWallet().setBalance(user.getWallet().getBalance() + amount);

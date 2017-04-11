@@ -42,6 +42,10 @@ public class Round {
         initPlayersTotalAmountPayedInRound();
     }
 
+    private Round(){
+
+    }
+
     public void startRound() {
         dealer.dealCardsToPlayers(activePlayers);
         paySmallAndBigBlind();

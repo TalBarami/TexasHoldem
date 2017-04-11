@@ -1,9 +1,5 @@
 package TexasHoldem.domain.game.card;
 
-import TexasHoldem.domain.game.card.Card;
-import TexasHoldem.domain.game.card.Rank;
-import TexasHoldem.domain.game.card.Suit;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -15,7 +11,7 @@ public class Deck {
     private List<Card> cards;
 
     public Deck(){
-        cards = new ArrayList<Card>();
+        cards = new ArrayList<>();
         prepareDeck();
     }
 
