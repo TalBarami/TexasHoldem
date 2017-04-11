@@ -1,5 +1,8 @@
 package TexasHoldem.domain.game;
 
+import TexasHoldem.domain.game.card.Card;
+import TexasHoldem.domain.game.card.Deck;
+
 import java.util.Collection;
 import java.util.List;
 

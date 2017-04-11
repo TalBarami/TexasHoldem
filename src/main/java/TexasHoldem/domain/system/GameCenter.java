@@ -45,7 +45,7 @@ public class GameCenter {
         //remove from all playing rooms
         loggedInUsers.forEach(user -> {
             if(user.getUsername().equals(userName))
-                user.getGamePlayerMappings().forEach((k,v) -> k.removePlayer(v));
+                user.getGamePlayerMappings().forEach(Game::removePlayer);
         });
 
         //remove from logged in users

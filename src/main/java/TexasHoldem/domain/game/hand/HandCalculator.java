@@ -1,6 +1,6 @@
 package TexasHoldem.domain.game.hand;
 
-import TexasHoldem.domain.game.Card;
+import TexasHoldem.domain.game.card.Card;
 
 import java.util.*;
 

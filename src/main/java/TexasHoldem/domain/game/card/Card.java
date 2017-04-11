@@ -1,4 +1,4 @@
-package TexasHoldem.domain.game;
+package TexasHoldem.domain.game.card;
 
 public class Card implements Comparable<Card>{
     private Rank rank;

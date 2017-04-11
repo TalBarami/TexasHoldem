@@ -1,4 +1,8 @@
-package TexasHoldem.domain.game;
+package TexasHoldem.domain.game.card;
+
+import TexasHoldem.domain.game.card.Card;
+import TexasHoldem.domain.game.card.Rank;
+import TexasHoldem.domain.game.card.Suit;
 
 import java.util.ArrayList;
 import java.util.Collections;
