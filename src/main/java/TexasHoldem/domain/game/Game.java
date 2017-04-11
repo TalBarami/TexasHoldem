@@ -4,6 +4,7 @@ import TexasHoldem.common.Exceptions.BelowBuyInPolicyException;
 import TexasHoldem.common.Exceptions.CantSpeactateThisRoomException;
 import TexasHoldem.common.Exceptions.GameIsFullException;
 import TexasHoldem.common.Exceptions.NoBalanceForBuyInException;
+import TexasHoldem.domain.game.leagues.LeagueManager;
 import TexasHoldem.domain.game.participants.Player;
 import TexasHoldem.domain.game.participants.Spectator;
 import TexasHoldem.domain.users.User;
@@ -23,11 +24,13 @@ public class Game {
     private List<Spectator> spectators;
     private int dealerIndex;
     private double convertRatio;
+    private LeagueManager leagueManager;
 
-    public Game(GameSettings settings, User creator){
+    public Game(GameSettings settings, User creator, LeagueManager leagueManager){
         this.rounds=new ArrayList<>();
         this.players=new ArrayList<>();
         this.settings=settings;
+        this.leagueManager = leagueManager;
         spectators= new ArrayList<>();
         dealerIndex=0;
         convertRatio = (settings.getChipPolicy() != 0) ? settings.getBuyInPolicy()/settings.getChipPolicy() : 1;
@@ -74,6 +77,7 @@ public class Game {
     public void removePlayer(Spectator spectator){
         spectators.remove(spectator);
     }
+
     public void removePlayer(Player player){
         players.remove(player);
 
@@ -87,6 +91,8 @@ public class Game {
             if(lastRound.isRoundActive())
                 lastRound.notifyPlayerExited(player);
         }
+
+        leagueManager.updateUserLeague(player.getUser());
     }
 
     private boolean isFull(){

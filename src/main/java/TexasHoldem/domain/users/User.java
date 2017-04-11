@@ -16,6 +16,9 @@ public class User {
     private String password;
     private String email;
     private LocalDate dateOfBirth;
+    private int amountEarnedInLeague;
+    private int currLeague;
+
     BufferedImage img;
     private Wallet wallet;
     private Map<Game,Participant> playerInGames;
@@ -25,6 +28,7 @@ public class User {
         this.username = user;
         this.password = pass;
         this.wallet = new Wallet();
+        this.amountEarnedInLeague = 0;
         this.email = email;
         dateOfBirth = date;
         img = null;
@@ -80,24 +84,46 @@ public class User {
         playerInGames.put(game,p);
     }
 
-    public void deposit(double amount,boolean selfDeposit) throws InvalidArgumentException {
+    public void deposit(int amount, boolean selfDeposit) throws ArgumentNotInBoundsException {
         if(amount < 0)
-            throw new InvalidArgumentException("Amount less than zero , should be greater.");
+            throw new ArgumentNotInBoundsException("Amount less than zero , should be greater.");
         getWallet().setBalance(getWallet().getBalance() + amount);
 
         if(!selfDeposit)
-            System.out.println("");//todo : calculate league someway
+            amountEarnedInLeague += amount;
     }
 
-    public void withdraw(double amount) throws InvalidArgumentException, ArgumentNotInBoundsException {
+    public int withdraw(int amount, boolean selfDeposit) throws ArgumentNotInBoundsException {
+        int amountToReduce = amount;
         if(amount < 0)
-            throw new InvalidArgumentException("Amount less than zero , should be greater.");
+            throw new ArgumentNotInBoundsException("Amount less than zero , should be greater.");
+        //withdraw as many as he can
         else if(amount > getWallet().getBalance())
-            throw new ArgumentNotInBoundsException("Amount to be withdrawn is more than player's balance.");
-        getWallet().setBalance(getWallet().getBalance() - amount);
+            amountToReduce = getWallet().getBalance();
+        getWallet().setBalance(getWallet().getBalance() - amountToReduce);
+
+        if(!selfDeposit)
+            amountEarnedInLeague -= amountToReduce;
+        return amountToReduce;
     }
 
     public double getBalance(){
         return getWallet().getBalance();
+    }
+
+    public int getAmountEarnedInLeague() {
+        return amountEarnedInLeague;
+    }
+
+    public void setAmountEarnedInLeague(int amountEarnedInLeague) {
+        this.amountEarnedInLeague = amountEarnedInLeague;
+    }
+
+    public int getCurrLeague() {
+        return currLeague;
+    }
+
+    public void setCurrLeague(int currLeague) {
+        this.currLeague = currLeague;
     }
 }
