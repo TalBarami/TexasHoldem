@@ -88,7 +88,7 @@ public class Game {
         //if the player is within an active round, inform the round
         if(!rounds.isEmpty()){
             Round lastRound=rounds.get(rounds.size()-1);
-            if(lastRound.isRoundActive())
+            if(lastRound.getIsRoundActive())
                 lastRound.notifyPlayerExited(player);
         }
 
