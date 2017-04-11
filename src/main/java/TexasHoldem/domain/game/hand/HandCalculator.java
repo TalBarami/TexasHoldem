@@ -41,4 +41,8 @@ public class HandCalculator {
             throw new HandException();
         return hand.get();
     }
+
+    public static Hand getHand(Card ... cards){
+        return getHand(Arrays.asList(cards));
+    }
 }

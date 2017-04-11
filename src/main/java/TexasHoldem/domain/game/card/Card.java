@@ -1,5 +1,6 @@
 package TexasHoldem.domain.game.card;
 
+
 public class Card implements Comparable<Card>{
     private Rank rank;
     private Suit suit;
@@ -15,11 +16,7 @@ public class Card implements Comparable<Card>{
 
     @Override
     public int compareTo(Card that) {
-        if (this.rank.equals(that.rank))
-            return this.suit.compareTo(that.suit);
-        else
-            return this.rank.compareTo(that.rank);
-
+        return this.rank.compareTo(that.rank);
     }
 
     @Override
@@ -51,5 +48,9 @@ public class Card implements Comparable<Card>{
         return rank + " of " + suit;
     }
 
+    public static Card fromString(String card){
+        String[] arr = card.split(" ");
+        return new Card(Rank.valueOf(arr[0].toUpperCase()), Suit.valueOf(arr[2].toUpperCase()));
+    }
 }
 

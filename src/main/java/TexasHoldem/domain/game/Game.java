@@ -100,4 +100,14 @@ public class Game {
         players.add(p);
         user.addGamePlayer(this,p);
     }
+
+    // FIXME: Temporary to fix the build.
+    public boolean isActive(){
+        return players.size() == 0;
+    }
+
+    // FIXME: Temporary to fix the build.
+    public void setGameId(int gameId){
+
+    }
 }

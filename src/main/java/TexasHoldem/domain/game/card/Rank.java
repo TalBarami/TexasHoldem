@@ -10,4 +10,8 @@ public enum Rank {
     public int getRank(){
         return rank;
     }
+
+    public Card of(Suit suit){
+        return new Card(this, suit);
+    }
 }
