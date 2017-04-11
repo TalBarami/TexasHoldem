@@ -2,11 +2,14 @@ package TexasHoldem.domain.game;
 
 import TexasHoldem.domain.game.card.Card;
 import TexasHoldem.domain.game.hand.Hand;
+import TexasHoldem.domain.game.hand.HandCalculator;
 import TexasHoldem.domain.game.participants.Player;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static TexasHoldem.domain.game.Game.GameActions.*;
 
@@ -247,14 +250,14 @@ public class Round {
             cardList.addAll(openedCards);
             cardList.addAll(currentPlayer.getCards());
 
-            Hand bestHand = new Hand(cardList);
+            Hand bestHand = HandCalculator.getHand(cardList);
 
             for (Player p : activePlayers) {
                 List<Card> newCardList = new LinkedList<Card>();
                 newCardList.addAll(openedCards);
                 newCardList.addAll(p.getCards());
 
-                Hand hand = new Hand(newCardList);
+                Hand hand = HandCalculator.getHand(newCardList);
                 int resultOfHandsCompare = hand.compareTo(bestHand);
 
                 if (resultOfHandsCompare > 0) {
