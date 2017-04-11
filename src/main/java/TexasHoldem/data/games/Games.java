@@ -21,7 +21,7 @@ public class Games implements IGames {
     public boolean addGame(Game game) {
         int gameId = getNewGameId();
 
-        game.setGameId(gameId);
+        game.setGameId(gameId); // FIXME: Using temporary method
         _games.put(gameId, game);
 
         return true;
@@ -30,7 +30,7 @@ public class Games implements IGames {
     public LinkedList<Game> searchGame(Predicate<Game> p) {
         LinkedList<Game> result = new LinkedList<Game>();
 
-        for (Game g : _games) {
+        for (Game g : _games.values()) {
             if (p.test(g)) {
                 result.add(g);
             }
@@ -40,7 +40,7 @@ public class Games implements IGames {
     }
 
     public LinkedList<Game> getActiveGames() {
-        return searchGame(g -> g.isActive());
+        return searchGame(Game::isActive); // FIXME: Using temporary method.
     }
 
     private int getNewGameId() {
