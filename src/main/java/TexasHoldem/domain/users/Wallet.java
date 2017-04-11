@@ -20,5 +20,4 @@ public class Wallet {
     public void setBalance(int balance) {
         this.balance = balance;
     }
-
 }

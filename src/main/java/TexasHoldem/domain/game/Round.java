@@ -342,4 +342,8 @@ public class Round {
     public boolean isRoundActive() {
         return isRoundActive;
     }
+
+    public int getPotAmount() {
+        return potAmount;
+    }
 }

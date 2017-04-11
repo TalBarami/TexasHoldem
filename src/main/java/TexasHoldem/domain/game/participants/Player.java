@@ -1,7 +1,6 @@
 package TexasHoldem.domain.game.participants;
 
 import TexasHoldem.common.Exceptions.ArgumentNotInBoundsException;
-import TexasHoldem.common.Exceptions.InvalidArgumentException;
 import TexasHoldem.domain.game.card.Card;
 import TexasHoldem.domain.game.Game;
 import TexasHoldem.domain.users.User;
@@ -29,7 +28,6 @@ public class Player extends Participant{
         super();
     }
 
-    //todo : remove getWallet and user other methods (deposit/withdraw)
     public void addChips(int amount) {
         if (chipPolicy == 0) {
             try {
@@ -42,7 +40,6 @@ public class Player extends Participant{
             chipsAmount += amount;
     }
 
-    //todo : remove getWallet and user other methods (deposit/withdraw)
     public void payChips(int amount) {
         if (chipPolicy == 0) {
             int amountWasReduced = 0;
@@ -83,16 +80,6 @@ public class Player extends Participant{
             return Game.GameActions.CHECK;
         }
     }
-
-    //TODO :: Ronen will decide what to do with it
-//    public void calculateEarnings(double ratio){
-//        updateWallet(ratio*chipsAmount);
-//    }
-
-    //TODO :: Ronen will decide what to do with it
-//    public void updateWallet(double amount){
-//        user.getWallet().setBalance(user.getWallet().getBalance()+amount);
-//    }
 
     public void addCards(Collection<Card> cards){
         this.cards.addAll(cards);

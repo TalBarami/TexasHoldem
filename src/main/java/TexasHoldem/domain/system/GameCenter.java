@@ -8,6 +8,8 @@ import TexasHoldem.domain.game.leagues.LeagueManager;
 import TexasHoldem.domain.users.User;
 
 import javax.security.auth.login.LoginException;
+import java.awt.image.BufferedImage;
+import java.nio.Buffer;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +19,7 @@ public class GameCenter {
     private List<Game> activeGames;
     private List<User> loggedInUsers;
     private Users usersDb;
-    LeagueManager leagueManager;
+    private LeagueManager leagueManager;
 
     public GameCenter() {
         activeGames=new ArrayList<>();
@@ -25,8 +27,8 @@ public class GameCenter {
         leagueManager = new LeagueManager();
     }
 
-    public void registerUser(String userName, String pass, String email, LocalDate date) throws InvalidArgumentException {
-        User newUser = new User(userName,pass,email,date);
+    public void registerUser(String userName, String pass, String email, LocalDate date, BufferedImage img) throws InvalidArgumentException {
+        User newUser = new User(userName,pass,email,date,img);
         usersDb.addUser(newUser);
         leagueManager.addNewUserToLegue(newUser);
     }
@@ -44,7 +46,10 @@ public class GameCenter {
         //remove from all playing rooms
         loggedInUsers.forEach(user -> {
             if(user.getUsername().equals(userName))
-                user.getGamePlayerMappings().forEach((game,participant) -> participant.removeFromGame(game));
+                user.getGamePlayerMappings().forEach((game,participant) -> {
+                    participant.removeFromGame(game);
+                    user.removeGameParticipant(game);
+            });
         });
 
         //remove from logged in users
