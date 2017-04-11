@@ -1,27 +1,29 @@
-package TexasHoldem.domain.game;
+package TexasHoldem.domain.game.participants;
 
+import TexasHoldem.domain.game.Card;
+import TexasHoldem.domain.game.Game;
 import TexasHoldem.domain.users.User;
 import java.util.*;
 
 /**
  * Created by Hod and Rotem on 05/04/2017.
  */
-public class Player {
-    private User user;
+public class Player extends Participant{
     private Set<Card> cards;
     private int chipsAmount;
     private int lastBetSinceCardOpen;
     private int totalAmountPayedInRound;
     private int chipPolicy;
 
-    public Player(User user, int chipsAmount, int policy){
-        this.user=user;
+    public Player(User user,int chipsAmount, int policy){
+        super(user);
         this.cards = new HashSet<>();
         this.chipsAmount = chipsAmount;
         this.lastBetSinceCardOpen = 0;
         this.chipPolicy = policy;
     }
 
+    //todo : remove getWallet and user other methods (deposit/withdraw)
     public void addChips(int amount) {
         if (chipPolicy == 0) {
             user.getWallet().setBalance(user.getWallet().getBalance() + amount);
@@ -30,6 +32,7 @@ public class Player {
             chipsAmount += amount;
     }
 
+    //todo : remove getWallet and user other methods (deposit/withdraw)
     public void payChips(int amount) {
         if (chipPolicy == 0) {
             if (user.getWallet().getBalance() >= amount) {
@@ -116,5 +119,9 @@ public class Player {
 
     public void setTotalAmountPayedInRound(int totalAmountPayedInRound) {
         this.totalAmountPayedInRound = totalAmountPayedInRound;
+    }
+
+    public void removeFromGame(Game g){
+        g.removePlayer(this);
     }
 }

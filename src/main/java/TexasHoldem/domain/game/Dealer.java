@@ -1,5 +1,7 @@
 package TexasHoldem.domain.game;
 
+import TexasHoldem.domain.game.participants.Player;
+
 import java.util.Collection;
 import java.util.List;
 

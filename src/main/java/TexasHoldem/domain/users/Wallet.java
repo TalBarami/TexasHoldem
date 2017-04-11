@@ -1,8 +1,5 @@
 package TexasHoldem.domain.users;
 
-/**
- * Created by אחיעד on 05/04/2017.
- */
 public class Wallet {
 
     private double balance;
@@ -19,10 +16,5 @@ public class Wallet {
     public void setBalance(double balance) {
         this.balance = balance;
     }
-
-    public void deposit(double amount){
-        balance=+amount;
-    }
-
 
 }
