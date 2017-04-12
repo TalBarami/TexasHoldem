@@ -50,7 +50,7 @@ public class TexasHoldemService {
     }
 
     public void createGame(String creatorUsername, String gameName, GameSettings.GamePolicy policy, int limit, int minBet, int buyInPolicy, int chipPolicy,
-                           int minPlyerAmount, int maxPlayerAmount, boolean specAccept) throws NoBalanceForBuyInException, InvalidArgumentException {
+                           int minPlyerAmount, int maxPlayerAmount, boolean specAccept) throws NoBalanceForBuyInException, InvalidArgumentException, ArgumentNotInBoundsException {
         gameCenter.createGame(creatorUsername, new GameSettings(gameName, policy, limit, minBet, buyInPolicy, chipPolicy, minPlyerAmount, maxPlayerAmount, specAccept));
     }
 

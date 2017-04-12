@@ -81,8 +81,15 @@ public class GameCenter {
 
 
     //todo : service layer will catch exception if  game room already chosen or balance below buy in.
-    public void createGame(String creatorUserName,GameSettings settings) throws InvalidArgumentException, NoBalanceForBuyInException {
+    public void createGame(String creatorUserName,GameSettings settings) throws InvalidArgumentException, NoBalanceForBuyInException, ArgumentNotInBoundsException {
         User creator=usersDb.getUserByUserName(creatorUserName);
+        int minPlayers=settings.getPlayerRange().getLeft();
+        int maxPlayers=settings.getPlayerRange().getRight();
+
+        if(maxPlayers<minPlayers)
+            throw new InvalidArgumentException("Maximal amount of players is greater than minimal.");
+        else if(minPlayers<2 || maxPlayers>9)
+            throw new ArgumentNotInBoundsException(String.format("Players amount should be between 2 and 9, but actually they are between %d and %d",minPlayers,maxPlayers));
 
         if(settings.tournamentMode() && creator.getBalance()<settings.getBuyInPolicy())
             throw new NoBalanceForBuyInException("User's balance below the selected game buy in.");
