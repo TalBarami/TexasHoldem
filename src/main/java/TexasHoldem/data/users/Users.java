@@ -24,9 +24,11 @@ public class Users implements IUsers {
     }
 
     public void editUser(String oldUser, String newUser, String pass, String email, LocalDate date) throws InvalidArgumentException {
-        verifyUserNameAndEmail(newUser,email);
-
         User user=getUserByUserName(oldUser);
+        String oldEmail=user.getEmail();
+        if((!oldUser.equals(newUser)) || (!oldEmail.equals(email)))
+            verifyUserNameAndEmail(oldUser,user.getEmail(),newUser,email);
+
         if(!user.getUsername().equals(newUser))
             user.setUsername(newUser);
         if(!user.getPassword().equals(pass))
@@ -64,10 +66,26 @@ public class Users implements IUsers {
         return _userList.get(userName);
     }
 
+    private void verifyUserNameAndEmail(String oldUser,String oldEmail,String newName,String newEmail) throws InvalidArgumentException {
+        boolean nameExists=false;
+        boolean emailExists=false;
+
+        if(!oldUser.equals(newName))
+            nameExists=userNameExists(newName);
+        if(!oldEmail.equals(newEmail))
+            emailExists=emailExists(newEmail);
+
+        checkUserNameAndEmailExistence(nameExists,emailExists);
+    }
+
     private void verifyUserNameAndEmail(String username,String email) throws InvalidArgumentException {
         boolean nameExists=userNameExists(username);
         boolean emailExists=emailExists(email);
 
+        checkUserNameAndEmailExistence(nameExists,emailExists);
+    }
+
+    private void checkUserNameAndEmailExistence(boolean nameExists, boolean emailExists) throws InvalidArgumentException {
         if(nameExists && emailExists)
             throw new InvalidArgumentException("Selected user name and e-mail already exist.");
         else if(nameExists)
@@ -75,6 +93,7 @@ public class Users implements IUsers {
         else if(emailExists)
             throw new InvalidArgumentException("Selected e-mail already exist.");
     }
+
 
     public User verifyCredentials(String userName,String password) throws LoginException {
         User user=getUserByUserName(userName);
