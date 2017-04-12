@@ -161,5 +161,8 @@ public class Game {
 
     public Round getLastRound(){
         return rounds.get(rounds.size()-1);
+
+    public int getMaximalAmountOfPlayers() {
+        return settings.getPlayerRange().getRight();
     }
 }

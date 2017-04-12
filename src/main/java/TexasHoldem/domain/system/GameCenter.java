@@ -53,7 +53,7 @@ public class GameCenter {
         });
 
         //remove from logged in users
-        loggedInUsers=loggedInUsers.stream().filter(user -> !user.getUsername().equals(userName)).collect(Collectors.toList());
+            loggedInUsers=loggedInUsers.stream().filter(user -> !user.getUsername().equals(userName)).collect(Collectors.toList());
     }
 
     public void editProfile(String originalUserName,String newUserName, String pass,String email, LocalDate date) throws InvalidArgumentException {
@@ -63,6 +63,7 @@ public class GameCenter {
     public void depositMoney(String userName,int amount) throws ArgumentNotInBoundsException {
         usersDb.getUserByUserName(userName).deposit(amount,false);
     }
+
 
     //todo : service layer will catch exception if  game room already chosen or balance below buy in.
     public void createGame(String creatorUserName,GameSettings settings) throws InvalidArgumentException, NoBalanceForBuyInException {
@@ -88,5 +89,13 @@ public class GameCenter {
             toJoin.joinGameAsSpectator(user);
         else
             toJoin.joinGameAsPlayer(user);
+
+    public List<Game> findAvailableGames(User user){
+        return activeGames.stream().filter(game -> game.getLeague() == user.getCurrLeague() &&
+                game.getBuyInPolicy() <= user.getBalance() &&
+                (game.realMoneyGame() || (!game.realMoneyGame() && !game.isActive())) &&
+                game.getPlayers().size() <= game.getMaximalAmountOfPlayers())
+                .collect(Collectors.toList());
+
     }
 }

@@ -1,7 +1,4 @@
-package TexasHoldem.domain.game;
-
-import TexasHoldem.domain.game.card.Card;
-import TexasHoldem.domain.game.card.Deck;
+package TexasHoldem.domain.game.card;
 
 import TexasHoldem.domain.game.participants.Player;
 import org.slf4j.Logger;
@@ -20,7 +17,7 @@ public class Dealer {
         deck = new Deck();
     }
 
-    public void dealCardsToPlayers(Collection<Player> players){
+    public void deal(Collection<Player> players){
         players.forEach(p -> {
             List<Card> cards = deck.get(2);
             logger.info("{} received 2 cards: {}", p.getUser().getUsername(), cards);
@@ -28,7 +25,7 @@ public class Dealer {
         });
     }
 
-    public List<Card> openCards(int numOfCards) {
+    public List<Card> open(int numOfCards) {
         List<Card> cards = deck.get(numOfCards);
         logger.info("Revealing {} new cards: {}", numOfCards, cards);
         return deck.get(numOfCards);

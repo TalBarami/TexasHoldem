@@ -15,7 +15,7 @@ public class Hand implements Comparable<Hand> {
     private Map<Integer, List<Card>> handGroup;
     private Category category;
 
-    public Hand(List<Card> cards){
+    Hand(List<Card> cards){
         hand = cards;
         Collections.sort(hand);
         handGroup = groupHand();
@@ -23,7 +23,7 @@ public class Hand implements Comparable<Hand> {
         logger.debug("The set {} is of type {}", hand, category);
     }
 
-    public Hand(Card ... cards){
+    Hand(Card... cards){
         this(Arrays.asList(cards));
     }
 
