@@ -18,16 +18,16 @@ public class Dealer {
     }
 
     public void deal(Collection<Player> players){
-        for(Player p : players){
+        players.forEach(p -> {
             List<Card> cards = deck.get(2);
             logger.info("{} received 2 cards: {}", p.getUser().getUsername(), cards);
             p.addCards(cards);
-        }
+        });
     }
 
     public List<Card> open(int numOfCards) {
         List<Card> cards = deck.get(numOfCards);
         logger.info("Revealing {} new cards: {}", numOfCards, cards);
-        return deck.get(numOfCards);
+        return cards;
     }
 }
