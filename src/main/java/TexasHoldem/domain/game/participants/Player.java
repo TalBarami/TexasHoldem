@@ -2,9 +2,13 @@ package TexasHoldem.domain.game.participants;
 
 import TexasHoldem.common.Exceptions.ArgumentNotInBoundsException;
 import TexasHoldem.domain.game.GameActions;
+import TexasHoldem.domain.game.Round;
 import TexasHoldem.domain.game.card.Card;
 import TexasHoldem.domain.game.Game;
 import TexasHoldem.domain.user.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.*;
 
 import static TexasHoldem.domain.game.GameActions.*;
@@ -13,6 +17,8 @@ import static TexasHoldem.domain.game.GameActions.*;
  * Created by Hod and Rotem on 05/04/2017.
  */
 public class Player extends Participant{
+    private static Logger logger = LoggerFactory.getLogger(Player.class);
+
     private Set<Card> cards;
     private int chipsAmount;
     private int lastBetSinceCardOpen;
@@ -36,7 +42,7 @@ public class Player extends Participant{
             try {
                 user.deposit(amount, false);
             } catch (ArgumentNotInBoundsException e) {
-                System.out.println("amount to add to player cannot be negative");
+                logger.error("amount to add to player cannot be negative");
             }
         }
         else
@@ -49,7 +55,7 @@ public class Player extends Participant{
             try {
                 amountWasReduced = user.withdraw(amount, false);
             } catch (ArgumentNotInBoundsException e) {
-                System.out.println("amount for player to pay cannot be negative");
+                logger.error("amount to add to player cannot be negative");
             }
             lastBetSinceCardOpen += amountWasReduced;
             totalAmountPayedInRound += amountWasReduced;

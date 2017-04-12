@@ -31,7 +31,7 @@ public class Deck {
 
     public List<Card> get(int amount){
         int deckSize = cards.size();
-        List<Card> topCards = cards.subList(deckSize - amount, deckSize);
+        List<Card> topCards = new ArrayList<>(cards.subList(deckSize - amount, deckSize));
         cards.removeAll(topCards);
         logger.info("Taking {} cards from the top of the deck: {}", amount, topCards);
         return topCards;
