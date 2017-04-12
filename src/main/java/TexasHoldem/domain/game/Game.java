@@ -12,9 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Game {
-    public enum GameActions {
-        CHECK, RAISE, CALL, FOLD
-    }
+
     private static Logger logger = LoggerFactory.getLogger(Game.class);
     private GameSettings settings;
     private int id;
@@ -37,26 +35,11 @@ public class Game {
 
     private Game(){}
 
-    public void joinGameAsPlayer(User user) throws GameIsFullException, NoBalanceForBuyInException, LeaguesDontMatchException {
-        int gameLeague=getLeague();
-        int usersLeague=user.getCurrLeague();
-        double userBalance=user.getBalance();
-        double buyInPolicy=getBuyInPolicy();
-
-        if(gameLeague != usersLeague)
-            throw new LeaguesDontMatchException(String.format("Can't join game, user's league is %d ,while game's league is %d.",usersLeague,gameLeague));
-        else if (isFull())
-            throw new GameIsFullException("Can't join game as player because it's full.");
-        else if(!realMoneyGame() && (userBalance < buyInPolicy))
-            throw new NoBalanceForBuyInException(String.format("Buy in is %d, but user's balance is %d;",buyInPolicy,userBalance));
-
+    public void joinGameAsPlayer(User user){
         addPlayer(user);
     }
 
-    public void joinGameAsSpectator(User user) throws CantSpeactateThisRoomException {
-        if(!canBeSpectated())
-            throw new CantSpeactateThisRoomException("Selected game can't be spectated due to it's settings.");
-
+    public void joinGameAsSpectator(User user){
         Spectator spec=new Spectator(user);
         spectators.add(spec);
         user.addGameParticipant(this,spec);
@@ -94,7 +77,7 @@ public class Game {
         leagueManager.updateUserLeague(player.getUser());
     }
 
-    private boolean isFull(){
+    public boolean isFull(){
         return players.size() == settings.getPlayerRange().getRight();
     }
 

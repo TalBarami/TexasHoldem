@@ -10,7 +10,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static TexasHoldem.domain.game.Game.GameActions.*;
+import static TexasHoldem.domain.game.GameActions.*;
+
 
 /**
  * Created by Hod and Rotem on 05/04/2017.
@@ -173,7 +174,7 @@ public class Round {
 
     private void playRoundFlow() {
         while (currentPlayer != lastPlayer) {
-            Game.GameActions chosenAction;
+            GameActions chosenAction;
             chosenAction = currentPlayer.chooseAction(calculateTurnOptions());
 
             switch (chosenAction) {
@@ -223,8 +224,8 @@ public class Round {
         currentPlayer = activePlayers.get(nextPlayerIndex);
     }
 
-    private List<Game.GameActions> calculateTurnOptions() {
-        List<Game.GameActions> gameActions = new LinkedList<Game.GameActions>();
+    private List<GameActions> calculateTurnOptions() {
+        List<GameActions> gameActions = new LinkedList<GameActions>();
         double difference = chipsToCall - currentPlayer.getLastBetSinceCardOpen();
 
         if (difference == 0)

@@ -18,14 +18,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class GameCenter {
-    private List<Game> activeGames;
     private List<User> loggedInUsers;
     private IUsers usersDb;
     private IGames gamesDb;
     private LeagueManager leagueManager;
 
     public GameCenter() {
-        activeGames=new ArrayList<>();
         usersDb=new Users();
         gamesDb=new Games();
         leagueManager = new LeagueManager();
@@ -85,14 +83,18 @@ public class GameCenter {
             throw new InvalidArgumentException("There is no game in the system with selected name.");
         Game toJoin = games.get(0);
         User user = usersDb.getUserByUserName(userName);
-        if (asSpectator)
+        if (asSpectator){
+            if(!toJoin.canBeSpectated())
+                throw new CantSpeactateThisRoomException("Selected game can't be spectated due to it's settings.");
             toJoin.joinGameAsSpectator(user);
+        }
         else
-            toJoin.joinGameAsPlayer(user);
+            handleJoinGameAsPlayer(toJoin,user);
     }
 
     public List<Game> findAvailableGames(String username){
         User user = usersDb.getUserByUserName(username);
+        List<Game> activeGames = gamesDb.getActiveGames();
         return activeGames.stream()
                 .filter(game -> game.getLeague() == user.getCurrLeague() &&
                         game.getBuyInPolicy() <= user.getBalance() &&
@@ -102,8 +104,25 @@ public class GameCenter {
     }
 
     public List<Game> findSpectateableGames(){
+        List<Game> activeGames = gamesDb.getActiveGames();
         return activeGames.stream()
                 .filter(Game::canBeSpectated)
                 .collect(Collectors.toList());
+    }
+
+    private void handleJoinGameAsPlayer(Game game,User user) throws LeaguesDontMatchException, GameIsFullException, NoBalanceForBuyInException {
+        int gameLeague=game.getLeague();
+        int usersLeague=user.getCurrLeague();
+        double userBalance=user.getBalance();
+        double buyInPolicy=game.getBuyInPolicy();
+
+        if(gameLeague != usersLeague)
+            throw new LeaguesDontMatchException(String.format("Can't join game, user's league is %d ,while game's league is %d.",usersLeague,gameLeague));
+        else if (game.isFull())
+            throw new GameIsFullException("Can't join game as player because it's full.");
+        else if(!game.realMoneyGame() && (userBalance < buyInPolicy))
+            throw new NoBalanceForBuyInException(String.format("Buy in is %d, but user's balance is %d;",buyInPolicy,userBalance));
+
+        game.joinGameAsPlayer(user);
     }
 }
