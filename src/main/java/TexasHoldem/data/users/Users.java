@@ -24,7 +24,7 @@ public class Users implements IUsers {
     }
 
     public void editUser(String oldUser, String newUser, String pass, String email, LocalDate date) throws InvalidArgumentException {
-        verifyUserNameAndEmail(newUser,pass);
+        verifyUserNameAndEmail(newUser,email);
 
         User user=getUserByUserName(oldUser);
         if(!user.getUsername().equals(newUser))
@@ -64,9 +64,9 @@ public class Users implements IUsers {
         return _userList.get(userName);
     }
 
-    private void verifyUserNameAndEmail(String username,String pass) throws InvalidArgumentException {
+    private void verifyUserNameAndEmail(String username,String email) throws InvalidArgumentException {
         boolean nameExists=userNameExists(username);
-        boolean emailExists=emailExists(pass);
+        boolean emailExists=emailExists(email);
 
         if(nameExists && emailExists)
             throw new InvalidArgumentException("Selected user name and e-mail already exist.");
