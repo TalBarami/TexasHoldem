@@ -6,6 +6,8 @@ import TexasHoldem.domain.game.hand.Hand;
 import TexasHoldem.domain.game.hand.HandCalculator;
 import TexasHoldem.domain.game.participants.Player;
 import org.apache.commons.lang3.tuple.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -15,6 +17,8 @@ import static TexasHoldem.domain.game.GameActions.*;
  * Created by Hod and Rotem on 05/04/2017.
  */
 public class Round {
+    private static Logger logger = LoggerFactory.getLogger(Round.class);
+
     private boolean isRoundActive;
     private GameSettings gameSettings;
     private List<Player> activePlayers;
@@ -129,7 +133,7 @@ public class Round {
         }
 
         activePlayers.remove(player);
-        System.out.println(player.getUser().getUsername() + " has left the game");
+        logger.info("{} has left the game", player.getUser().getUsername());
 
         if (activePlayers.size() == 1) {
             endRound();
@@ -140,7 +144,7 @@ public class Round {
         if (activePlayers.size() == 1) {
             Player winner = activePlayers.get(0);
             winner.addChips(potAmount);
-            System.out.println(winner.getUser().getUsername() + " is the winner!!!");
+            logger.info("{} is the winner!!!", winner.getUser().getUsername());
         }
         else {
             calculateWinner();
@@ -161,9 +165,9 @@ public class Round {
         int bigBlind = gameSettings.getMinBet();
 
         potAmount += smallPlayer.payChips(smallBlind);
-        System.out.println("Small blind payed by " + smallPlayer.getUser().getUsername());
+        logger.info("Small blind payed by {}", smallPlayer.getUser().getUsername());
         potAmount += bigPlayer.payChips(bigBlind);
-        System.out.println("Big blind payed by " + bigPlayer.getUser().getUsername());
+        logger.info("Big blind payed by {}", bigPlayer.getUser().getUsername());
     }
 
     private void playRoundFlow(Map<Player, List<Pair<GameActions, Integer>>> decisions) {
@@ -203,10 +207,10 @@ public class Round {
         playRoundFlow(decisions);
 
         openedCards.addAll(dealer.open(3));
-        System.out.println("Cards opened are: ");
+        logger.info("Cards opened are: ");
 
         for (Card c : openedCards) {
-            System.out.println(c + ", ");
+            logger.info("{} , ", c);
         }
     }
 
@@ -217,10 +221,10 @@ public class Round {
 
         playRoundFlow(decisions);
         openedCards.addAll(dealer.open(1));
-        System.out.println("Cards opened are: ");
+        logger.info("Cards opened are: ");
 
         for (Card c : openedCards) {
-            System.out.println(c + ", ");
+            logger.info("{} , ", c);
         }
     }
 
