@@ -24,6 +24,7 @@ public class GameCenter {
     private LeagueManager leagueManager;
 
     public GameCenter() {
+        loggedInUsers=new ArrayList<>();
         usersDb=new Users();
         gamesDb=new Games();
         leagueManager = new LeagueManager();
