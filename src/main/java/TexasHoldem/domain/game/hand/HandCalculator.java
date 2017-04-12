@@ -36,8 +36,10 @@ public class HandCalculator {
         Optional<Hand> optHand = Arrays.stream(possibleHands)
                 .map(h -> new Hand(Arrays.asList(h)))
                 .max(Hand::compareTo);
-        if(!optHand.isPresent())
+        if(!optHand.isPresent()) {
+            logger.error("An error occurred while attempting to calculate the maximal hand.");
             throw new HandException();
+        }
         Hand hand = optHand.get();
         logger.debug("Returns the following hand: {}", hand);
         return hand;
