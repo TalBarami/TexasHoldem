@@ -74,6 +74,10 @@ public class Games implements IGames {
         return searchActiveGame(g -> g.canBeSpectated() == spectationAllowed);
     }
 
+    public List<Game> getActiveGames(){
+        return searchActiveGame(g -> true);
+    }
+
     private LinkedList<Game> searchActiveGame(Predicate<Game> p) {
         LinkedList<Game> result = new LinkedList<Game>();
 

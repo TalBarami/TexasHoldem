@@ -12,6 +12,7 @@ import java.util.List;
 public interface IGames {
     boolean addGame(Game game) throws InvalidArgumentException;
     List<String> getAllGameNames();
+    List<Game> getActiveGames();
     List<Game> getActiveGamesByName(String name);
     List<Game> getActiveGamesByPlayerName(String playerName);
     List<Game> getActiveGamesByPotSize(int potSize);

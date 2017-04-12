@@ -18,14 +18,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class GameCenter {
-    private List<Game> activeGames;
     private List<User> loggedInUsers;
     private IUsers usersDb;
     private IGames gamesDb;
     private LeagueManager leagueManager;
 
     public GameCenter() {
-        activeGames=new ArrayList<>();
         usersDb=new Users();
         gamesDb=new Games();
         leagueManager = new LeagueManager();
@@ -93,6 +91,7 @@ public class GameCenter {
 
     public List<Game> findAvailableGames(String username){
         User user = usersDb.getUserByUserName(username);
+        List<Game> activeGames = gamesDb.getActiveGames();
         return activeGames.stream()
                 .filter(game -> game.getLeague() == user.getCurrLeague() &&
                         game.getBuyInPolicy() <= user.getBalance() &&
@@ -102,6 +101,7 @@ public class GameCenter {
     }
 
     public List<Game> findSpectateableGames(){
+        List<Game> activeGames = gamesDb.getActiveGames();
         return activeGames.stream()
                 .filter(Game::canBeSpectated)
                 .collect(Collectors.toList());
