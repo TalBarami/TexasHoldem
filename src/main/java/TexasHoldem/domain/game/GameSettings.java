@@ -8,6 +8,7 @@ public class GameSettings {
     }
 
     private GamePolicy gameType;
+    private int gameTypeLimit;
     private int minBet;
     private int buyInPolicy;
     private int chipPolicy;
@@ -15,21 +16,24 @@ public class GameSettings {
     private boolean acceptSpectating;
     private int leagueCriteria;
 
-    public GameSettings(GamePolicy policy, int minBet, int buyInPolicy, int chipPolicy, int minPlyerAmount, int maxPlayerAmount, boolean specAccept,int league){
-        this.gameType=policy;
-        this.minBet=minBet;
-        this.buyInPolicy=buyInPolicy;
-        this.chipPolicy=chipPolicy;
-        playerRange=Pair.of(minPlyerAmount,maxPlayerAmount);
-        this.acceptSpectating=specAccept;
-        this.leagueCriteria=league;
+    public GameSettings(GamePolicy policy,int limit, int minBet, int buyInPolicy, int chipPolicy, int minPlyerAmount, int maxPlayerAmount, boolean specAccept,int league){
+        this.gameType = policy;
+        this.gameTypeLimit = limit;
+        this.minBet = minBet;
+        this.buyInPolicy = buyInPolicy;
+        this.chipPolicy = chipPolicy;
+        playerRange = Pair.of(minPlyerAmount,maxPlayerAmount);
+        this.acceptSpectating = specAccept;
+        this.leagueCriteria = league;
     }
 
-    private GameSettings(){
-
-    }
+    private GameSettings(){}
 
     public GamePolicy getGameType() {return gameType;}
+
+    public int getGameTypeLimit() {
+        return gameTypeLimit;
+    }
 
     public int getMinBet() {return minBet;}
 
