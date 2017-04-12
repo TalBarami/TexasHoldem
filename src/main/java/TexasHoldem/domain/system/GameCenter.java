@@ -136,8 +136,8 @@ public class GameCenter {
     private void handleJoinGameAsPlayer(Game game,User user) throws LeaguesDontMatchException, GameIsFullException, NoBalanceForBuyInException {
         int gameLeague=game.getLeague();
         int usersLeague=user.getCurrLeague();
-        double userBalance=user.getBalance();
-        double buyInPolicy=game.getBuyInPolicy();
+        int userBalance=user.getBalance();
+        int buyInPolicy=game.getBuyInPolicy();
 
         if(gameLeague != usersLeague)
             throw new LeaguesDontMatchException(String.format("Can't join game, user's league is %d ,while game's league is %d.",usersLeague,gameLeague));

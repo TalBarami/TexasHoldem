@@ -70,7 +70,7 @@ public class JoinExistingGameTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
-        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GameSettings.GamePolicy.NOLIMIT , 90000, 10000, 100, 2, 3, true);
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GameSettings.GamePolicy.NOLIMIT , 43000, 10000, 100, 2, 3, true);
         assertTrue(gamecreated1);
         boolean useraddedgame1 = this.joinexistinggame("hodbub" , "achiadg-poker-game",false);
         boolean useraddedgame2 = this.joinexistinggame("rotemw" , "achiadg-poker-game",false);
@@ -88,7 +88,7 @@ public class JoinExistingGameTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
-        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GameSettings.GamePolicy.NOLIMIT , 90000, 10000, 100, 2, 6, true);
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GameSettings.GamePolicy.NOLIMIT , 5000, 10000, 100, 2, 6, true);
         assertTrue(gamecreated1);
         boolean useraddedgame1 = this.joinexistinggame("hodbub" , "achiadg-poker-game",false);
         boolean useraddedgame2 = this.joinexistinggame("rotemw" , "achiadg-poker-game",false);
@@ -108,9 +108,10 @@ public class JoinExistingGameTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
-        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GameSettings.GamePolicy.NOLIMIT , 90000, 10000, 100, 2, 3, true);
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GameSettings.GamePolicy.NOLIMIT , 20000, 90000, 100, 2, 4, true);
         assertTrue(gamecreated1);
         boolean useraddedgame1 = this.joinexistinggame("hodbub" , "SELECT * FROM GAMES WHERE GAMENAME = achiad-poker-game",false);
+        //todo : failing of not the right problem , it's failing because there is no game with the given name, not because of sql injection.
         assertFalse(useraddedgame1);
         boolean closegame1 = this.closegame("achiadg-poker-game");
         assertTrue(closegame1);
@@ -138,7 +139,7 @@ public class JoinExistingGameTests extends ProjectTest {
 
 
     public void addBalance() {
-        boolean addedbalance1 = this.addbalancetouserwallet("achiadg",20000);
+        boolean addedbalance1 = this.addbalancetouserwallet("achiadg",45000);
         boolean addedbalance2 = this.addbalancetouserwallet("hodbub",40000);
         boolean addedbalance3 = this.addbalancetouserwallet("rotemw",20000);
         boolean addedbalance4 = this.addbalancetouserwallet("ronenbu",30000);
