@@ -1,4 +1,4 @@
-package TexasHoldem.domain.users.leagues;
+package TexasHoldem.domain.user;
 
 import TexasHoldem.domain.user.User;
 

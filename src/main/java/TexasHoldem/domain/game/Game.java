@@ -1,7 +1,7 @@
 package TexasHoldem.domain.game;
 
 import TexasHoldem.common.Exceptions.*;
-import TexasHoldem.domain.users.leagues.LeagueManager;
+import TexasHoldem.domain.user.LeagueManager;
 import TexasHoldem.domain.game.participants.Player;
 import TexasHoldem.domain.game.participants.Spectator;
 import TexasHoldem.domain.user.User;

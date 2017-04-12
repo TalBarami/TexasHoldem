@@ -1,5 +1,6 @@
 package TexasHoldem.domain.users.leagues;
 
+import TexasHoldem.domain.user.LeagueManager;
 import TexasHoldem.domain.user.User;
 import org.junit.After;
 import org.junit.Before;

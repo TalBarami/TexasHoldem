@@ -8,7 +8,7 @@ import TexasHoldem.data.users.Users;
 import TexasHoldem.domain.game.Game;
 import TexasHoldem.domain.game.GameSettings;
 import TexasHoldem.domain.user.User;
-import TexasHoldem.domain.users.leagues.LeagueManager;
+import TexasHoldem.domain.user.LeagueManager;
 
 import javax.security.auth.login.LoginException;
 import java.awt.image.BufferedImage;
