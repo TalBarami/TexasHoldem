@@ -4,12 +4,11 @@ import TexasHoldem.common.Exceptions.ArgumentNotInBoundsException;
 import TexasHoldem.common.Exceptions.InvalidArgumentException;
 import TexasHoldem.data.users.Users;
 import TexasHoldem.domain.game.Game;
-import TexasHoldem.domain.game.leagues.LeagueManager;
+import TexasHoldem.domain.users.leagues.LeagueManager;
 import TexasHoldem.domain.users.User;
 
 import javax.security.auth.login.LoginException;
 import java.awt.image.BufferedImage;
-import java.nio.Buffer;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
