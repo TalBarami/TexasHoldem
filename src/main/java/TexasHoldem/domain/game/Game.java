@@ -12,9 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Game {
-    public enum GameActions {
-        CHECK, RAISE, CALL, FOLD
-    }
+
     private static Logger logger = LoggerFactory.getLogger(Game.class);
     private GameSettings settings;
     private int id;
