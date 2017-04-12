@@ -41,6 +41,10 @@ public class TexasHoldemService {
         gameCenter.editProfile(originalUserName, newUserName, pass, email, date);
     }
 
+    public void deposit(String username, int amount) throws ArgumentNotInBoundsException {
+        gameCenter.depositMoney(username, amount);
+    }
+
     public User getUser(String username){
         return gameCenter.getUser(username);
     }
