@@ -1,8 +1,11 @@
 package TexasHoldem.domain.game;
 
-import TexasHoldem.domain.game.leagues.LeagueManager;
+import TexasHoldem.domain.game.card.Card;
+import TexasHoldem.domain.game.hand.Hand;
 import TexasHoldem.domain.game.participants.Player;
-import TexasHoldem.domain.users.User;
+import TexasHoldem.domain.user.LeagueManager;
+import TexasHoldem.domain.user.User;
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -21,7 +24,7 @@ public class RoundTest {
     Round round1;
 
     public RoundTest() {
-        setAndGetRound1();
+        setRound1();
     }
 
     @Before
@@ -32,11 +35,11 @@ public class RoundTest {
     public void tearDown() throws Exception {
     }
 
-    public void setAndGetRound1() {
-        User user1 = new User("waldr", "1234", "waldr@post.bgu.ac.il", LocalDate.now());
-        User user2 = new User("hodbub", "1234", "hobdud@post.bgu.ac.il", LocalDate.now());
-        User user3 = new User("achiadg", "1234", "achiadg@post.bgu.ac.il", LocalDate.now());
-        User user4 = new User("ronenb", "1234", "ronenb@post.bgu.ac.il", LocalDate.now());
+    public void setRound1() {
+        User user1 = new User("waldr", "1234", "waldr@post.bgu.ac.il", LocalDate.now(), null);
+        User user2 = new User("hodbub", "1234", "hobdud@post.bgu.ac.il", LocalDate.now(), null);
+        User user3 = new User("achiadg", "1234", "achiadg@post.bgu.ac.il", LocalDate.now(), null);
+        User user4 = new User("ronenb", "1234", "ronenb@post.bgu.ac.il", LocalDate.now(), null);
 
         Player player1 = new Player(user1, 100, 100);
         Player player2 = new Player(user2, 100, 100);
@@ -49,7 +52,7 @@ public class RoundTest {
         playerList1.add(player3);
         playerList1.add(player4);
 
-        GameSettings settings1 = new GameSettings(GameSettings.GamePolicy.NOLIMIT, 10, 5, 100, 2, 9, false);
+        GameSettings settings1 = new GameSettings("Game1", GameSettings.GamePolicy.NOLIMIT, 100, 10, 5, 100, 2, 9, false);
         Game game1 = new Game(settings1, user1, new LeagueManager());
         Round round1 = new Round(playerList1, settings1, 0);
 
@@ -83,22 +86,32 @@ public class RoundTest {
 
     @Test
     public void round1_testPlayPreFlopRound() throws Exception {
-        Map<Player, Game.GameActions> playerDecisions = new HashMap<Player, Game.GameActions>();
+        Map<Player, List<Pair<Game.GameActions, Integer>>> playerDecisions = new HashMap<Player, List<Pair<Game.GameActions, Integer>>>();
 
         Player dealer = round1.getCurrentDealerPlayer();
         Player smallPlayer = round1.getSmallPlayer();
         Player bigPlayer = round1.getBigPlayer();
         Player lastPlayer = round1.getActivePlayers().stream().filter(p -> p != dealer && p != smallPlayer && p != bigPlayer).findFirst().get();
 
-        int dealerOldRealCurrency = dealer.getUser().getWallet().getBalance();
-        int smallPlayerOldRealCurrency = smallPlayer.getUser().getWallet().getBalance();
-        int bigPlayerOldRealCurrency = bigPlayer.getUser().getWallet().getBalance();
-        int lastPlayerOldRealCurrency = lastPlayer.getUser().getWallet().getBalance();
+        double dealerOldRealCurrency = dealer.getUser().getBalance();
+        double smallPlayerOldRealCurrency = smallPlayer.getUser().getBalance();
+        double bigPlayerOldRealCurrency = bigPlayer.getUser().getBalance();
+        double lastPlayerOldRealCurrency = lastPlayer.getUser().getBalance();
 
-        playerDecisions.put(dealer, Game.GameActions.CALL);
-        playerDecisions.put(smallPlayer, Game.GameActions.CALL);
-        playerDecisions.put(bigPlayer, Game.GameActions.CHECK);
-        playerDecisions.put(lastPlayer, Game.GameActions.CALL);
+        List<Pair<Game.GameActions, Integer>> dealerDecisionList = new LinkedList<Pair<Game.GameActions, Integer>>();
+        List<Pair<Game.GameActions, Integer>> smallPlayerDecisionList = new LinkedList<Pair<Game.GameActions, Integer>>();
+        List<Pair<Game.GameActions, Integer>> bigPlayerDecisionList = new LinkedList<Pair<Game.GameActions, Integer>>();
+        List<Pair<Game.GameActions, Integer>> lastPlayerDecisionList = new LinkedList<Pair<Game.GameActions, Integer>>();
+
+        dealerDecisionList.add(Pair.of(Game.GameActions.CALL, null));
+        smallPlayerDecisionList.add(Pair.of(Game.GameActions.CALL, null));
+        bigPlayerDecisionList.add(Pair.of(Game.GameActions.CHECK, null));
+        lastPlayerDecisionList.add(Pair.of(Game.GameActions.CALL, null));
+
+        playerDecisions.put(dealer, dealerDecisionList);
+        playerDecisions.put(smallPlayer, smallPlayerDecisionList);
+        playerDecisions.put(bigPlayer, bigPlayerDecisionList);
+        playerDecisions.put(lastPlayer, lastPlayerDecisionList);
 
         round1.runPlayPreFlopRound(playerDecisions);
 
@@ -106,9 +119,95 @@ public class RoundTest {
         Assert.assertTrue(round1.getActivePlayers().size() == 4);
         Assert.assertTrue(round1.getActivePlayers().stream().allMatch(p -> p.getChipsAmount() == 90));
 
-        Assert.assertTrue(dealer.getUser().getWallet().getBalance() == dealerOldRealCurrency);
-        Assert.assertTrue(smallPlayer.getUser().getWallet().getBalance() == smallPlayerOldRealCurrency);
-        Assert.assertTrue(bigPlayer.getUser().getWallet().getBalance() == bigPlayerOldRealCurrency);
-        Assert.assertTrue(lastPlayer.getUser().getWallet().getBalance() == lastPlayerOldRealCurrency);
+        Assert.assertTrue(dealer.getUser().getBalance() == dealerOldRealCurrency);
+        Assert.assertTrue(smallPlayer.getUser().getBalance() == smallPlayerOldRealCurrency);
+        Assert.assertTrue(bigPlayer.getUser().getBalance() == bigPlayerOldRealCurrency);
+        Assert.assertTrue(lastPlayer.getUser().getBalance() == lastPlayerOldRealCurrency);
+    }
+
+    @Test
+    public void round1_testPlayFlopRound() {
+        Map<Player, List<Pair<Game.GameActions, Integer>>> playerDecisions = new HashMap<Player, List<Pair<Game.GameActions, Integer>>>();
+
+        Player dealer = round1.getCurrentDealerPlayer();
+        Player smallPlayer = round1.getSmallPlayer();
+        Player bigPlayer = round1.getBigPlayer();
+        Player lastPlayer = round1.getActivePlayers().stream().filter(p -> p != dealer && p != smallPlayer && p != bigPlayer).findFirst().get();
+
+        double dealerOldRealCurrency = dealer.getUser().getBalance();
+        double smallPlayerOldRealCurrency = smallPlayer.getUser().getBalance();
+        double bigPlayerOldRealCurrency = bigPlayer.getUser().getBalance();
+        double lastPlayerOldRealCurrency = lastPlayer.getUser().getBalance();
+
+        List<Pair<Game.GameActions, Integer>> dealerDecisionList = new LinkedList<Pair<Game.GameActions, Integer>>();
+        List<Pair<Game.GameActions, Integer>> smallPlayerDecisionList = new LinkedList<Pair<Game.GameActions, Integer>>();
+        List<Pair<Game.GameActions, Integer>> bigPlayerDecisionList = new LinkedList<Pair<Game.GameActions, Integer>>();
+        List<Pair<Game.GameActions, Integer>> lastPlayerDecisionList = new LinkedList<Pair<Game.GameActions, Integer>>();
+
+        dealerDecisionList.add(Pair.of(Game.GameActions.CALL, null));
+        smallPlayerDecisionList.add(Pair.of(Game.GameActions.RAISE, 10));
+        bigPlayerDecisionList.add(Pair.of(Game.GameActions.CALL, null));
+        lastPlayerDecisionList.add(Pair.of(Game.GameActions.FOLD, null));
+
+        playerDecisions.put(dealer, dealerDecisionList);
+        playerDecisions.put(smallPlayer, smallPlayerDecisionList);
+        playerDecisions.put(bigPlayer, bigPlayerDecisionList);
+        playerDecisions.put(lastPlayer, lastPlayerDecisionList);
+
+        round1.runPreStartOfNewTurn();
+        round1.runPlayFlopRound(playerDecisions);
+
+        Assert.assertTrue(round1.getPotAmount() == 70);
+        Assert.assertTrue(round1.getActivePlayers().size() == 3);
+        Assert.assertTrue(dealer.getChipsAmount() == 80);
+        Assert.assertTrue(smallPlayer.getChipsAmount() == 80);
+        Assert.assertTrue(bigPlayer.getChipsAmount() == 80);
+        Assert.assertTrue(lastPlayer.getChipsAmount() == 90);
+
+        Assert.assertTrue(dealer.getUser().getBalance() == dealerOldRealCurrency);
+        Assert.assertTrue(smallPlayer.getUser().getBalance() == smallPlayerOldRealCurrency);
+        Assert.assertTrue(bigPlayer.getUser().getBalance() == bigPlayerOldRealCurrency);
+        Assert.assertTrue(lastPlayer.getUser().getBalance() == lastPlayerOldRealCurrency);
+    }
+
+    @Test
+    public void round1_runPlayRiverRound() {
+        Map<Player, List<Pair<Game.GameActions, Integer>>> playerDecisions = new HashMap<Player, List<Pair<Game.GameActions, Integer>>>();
+
+        Player dealer = round1.getCurrentDealerPlayer();
+        Player smallPlayer = round1.getSmallPlayer();
+        Player bigPlayer = round1.getBigPlayer();
+
+        double dealerOldRealCurrency = dealer.getUser().getBalance();
+        double smallPlayerOldRealCurrency = smallPlayer.getUser().getBalance();
+        double bigPlayerOldRealCurrency = bigPlayer.getUser().getBalance();
+
+        List<Pair<Game.GameActions, Integer>> dealerDecisionList = new LinkedList<Pair<Game.GameActions, Integer>>();
+        List<Pair<Game.GameActions, Integer>> smallPlayerDecisionList = new LinkedList<Pair<Game.GameActions, Integer>>();
+        List<Pair<Game.GameActions, Integer>> bigPlayerDecisionList = new LinkedList<Pair<Game.GameActions, Integer>>();
+
+        smallPlayerDecisionList.add(Pair.of(Game.GameActions.CHECK, null));
+        bigPlayerDecisionList.add(Pair.of(Game.GameActions.RAISE, 10));
+        dealerDecisionList.add(Pair.of(Game.GameActions.RAISE, 20));
+        smallPlayerDecisionList.add(Pair.of(Game.GameActions.FOLD, null));
+        bigPlayerDecisionList.add(Pair.of(Game.GameActions.RAISE, 30));
+        dealerDecisionList.add(Pair.of(Game.GameActions.CALL, null));
+
+        playerDecisions.put(dealer, dealerDecisionList);
+        playerDecisions.put(smallPlayer, smallPlayerDecisionList);
+        playerDecisions.put(bigPlayer, bigPlayerDecisionList);
+
+        round1.runPreStartOfNewTurn();
+        round1.runPlayRiverRound(playerDecisions);
+
+        Assert.assertTrue(round1.getPotAmount() == 220);
+        Assert.assertTrue(round1.getActivePlayers().size() == 2);
+        Assert.assertTrue(dealer.getChipsAmount() == 20);
+        Assert.assertTrue(smallPlayer.getChipsAmount() == 50);
+        Assert.assertTrue(bigPlayer.getChipsAmount() == 20);
+
+        Assert.assertTrue(dealer.getUser().getBalance() == dealerOldRealCurrency);
+        Assert.assertTrue(smallPlayer.getUser().getBalance() == smallPlayerOldRealCurrency);
+        Assert.assertTrue(bigPlayer.getUser().getBalance() == bigPlayerOldRealCurrency);
     }
 }

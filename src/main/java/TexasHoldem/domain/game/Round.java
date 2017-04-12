@@ -1,13 +1,13 @@
 package TexasHoldem.domain.game;
 
 import TexasHoldem.domain.game.card.Card;
+import TexasHoldem.domain.game.card.Dealer;
 import TexasHoldem.domain.game.hand.Hand;
+import TexasHoldem.domain.game.hand.HandCalculator;
 import TexasHoldem.domain.game.participants.Player;
+import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static TexasHoldem.domain.game.Game.GameActions.*;
 
@@ -44,41 +44,63 @@ public class Round {
         initPlayersTotalAmountPayedInRound();
     }
 
-    private Round(){
-
+    private Round() {
     }
 
     public void runDealCards() {
-        dealer.dealCardsToPlayers(activePlayers);
+        dealer.deal(activePlayers);
     }
 
     public void runPaySmallAndBigBlind() {
         paySmallAndBigBlind();
     }
 
-    public void runPlayPreFlopRound(Map<Player, Game.GameActions> decisions) {
+    public void runPlayPreFlopRound(Map<Player, List<Pair<Game.GameActions, Integer>>> decisions) {
         playPreFlopRound(decisions);
     }
 
+    public void runPreStartOfNewTurn() {
+        chipsToCall = 0;
+        initPlayersLastBetSinceCardOpen();
+    }
+
+    public void runPlayFlopRound(Map<Player, List<Pair<Game.GameActions, Integer>>> decisions) {
+        playFlopOrTurnRound(decisions);
+    }
+
+    public void runPlayTurnRound(Map<Player, List<Pair<Game.GameActions, Integer>>> decisions) {
+        playFlopOrTurnRound(decisions);
+    }
+
+    public void runPlayRiverRound(Map<Player, List<Pair<Game.GameActions, Integer>>> decisions) {
+        playRiverRound(decisions);
+    }
+
+    public void runEndRound() {
+        endRound();
+    }
+
     public void startRound() {
-        dealer.dealCardsToPlayers(activePlayers);
+        Map<Player, List<Pair<Game.GameActions, Integer>>> playerDecisions = new HashMap<Player, List<Pair<Game.GameActions, Integer>>>();
+
+        dealer.deal(activePlayers);
         paySmallAndBigBlind();
-        playPreFlopRound();
+        playPreFlopRound(playerDecisions);
 
         if (activePlayers.size() > 1) {
             chipsToCall = 0;
             initPlayersLastBetSinceCardOpen();
-            playFlopOrTurnRound();
+            playFlopOrTurnRound(playerDecisions);
         }
         if (activePlayers.size() > 1) {
             chipsToCall = 0;
             initPlayersLastBetSinceCardOpen();
-            playFlopOrTurnRound();
+            playFlopOrTurnRound(playerDecisions);
         }
         if (activePlayers.size() > 1) {
             chipsToCall = 0;
             initPlayersLastBetSinceCardOpen();
-            playRiverRound();
+            playRiverRound(playerDecisions);
         }
         if (activePlayers.size() > 1) {
             chipsToCall = 0;
@@ -88,8 +110,6 @@ public class Round {
     }
 
     public void notifyPlayerExited(Player player) {
-        potAmount += player.getLastBetSinceCardOpen();
-
         if (lastPlayer == player) {
             int lastPlayerIndex = activePlayers.indexOf(lastPlayer);
             int newLastPlayerIndex = (lastPlayerIndex - 1) % (activePlayers.size());
@@ -109,7 +129,6 @@ public class Round {
         }
 
         activePlayers.remove(player);
-        potAmount += player.getLastBetSinceCardOpen();
         System.out.println(player.getUser().getUsername() + " has left the game");
 
         if (activePlayers.size() == 1) {
@@ -118,8 +137,6 @@ public class Round {
     }
 
     private void endRound() {
-        updatePotAmount();
-
         if (activePlayers.size() == 1) {
             Player winner = activePlayers.get(0);
             winner.addChips(potAmount);
@@ -143,16 +160,49 @@ public class Round {
         int smallBlind = gameSettings.getMinBet() / 2;
         int bigBlind = gameSettings.getMinBet();
 
-        smallPlayer.payChips(smallBlind);
+        potAmount += smallPlayer.payChips(smallBlind);
         System.out.println("Small blind payed by " + smallPlayer.getUser().getUsername());
-        bigPlayer.payChips(bigBlind);
+        potAmount += bigPlayer.payChips(bigBlind);
         System.out.println("Big blind payed by " + bigPlayer.getUser().getUsername());
     }
 
-    private void playPreFlopRound(Map<Player, Game.GameActions> decisions) {
+    private void playRoundFlow(Map<Player, List<Pair<Game.GameActions, Integer>>> decisions) {
+        int listIndex = 0;
+        int numOfPlayers = activePlayers.size();
+        int iteration = 0;
+
+        while (currentPlayer != lastPlayer) {
+            Game.GameActions chosenAction;
+            chosenAction = decisions.get(currentPlayer).get(listIndex).getLeft();
+
+            switch (chosenAction) {
+                case RAISE:
+                    int amountToRaise = decisions.get(currentPlayer).get(listIndex).getRight();
+                    playerRaiseTurn(amountToRaise);
+                    break;
+                case CHECK:
+                    playerCheckTurn();
+                    break;
+                case FOLD:
+                    playerFoldTurn();
+                    break;
+                case CALL:
+                    playerCallTurn();
+                    break;
+            }
+
+            iteration++;
+            if (iteration % numOfPlayers == 0) {
+                listIndex++;
+                numOfPlayers = activePlayers.size();
+            }
+        }
+    }
+
+    private void playPreFlopRound(Map<Player, List<Pair<Game.GameActions, Integer>>> decisions) {
         playRoundFlow(decisions);
 
-        openedCards.addAll(dealer.openCards(3));
+        openedCards.addAll(dealer.open(3));
         System.out.println("Cards opened are: ");
 
         for (Card c : openedCards) {
@@ -160,26 +210,13 @@ public class Round {
         }
     }
 
-    /*
-    private void playPreFlopRound() {
-        playRoundFlow();
-
-        openedCards.addAll(dealer.openCards(3));
-        System.out.println("Cards opened are: ");
-
-        for (Card c : openedCards) {
-            System.out.println(c + ", ");
-        }
-    }
-    */
-
-    private void playFlopOrTurnRound() {
+    private void playFlopOrTurnRound(Map<Player, List<Pair<Game.GameActions, Integer>>> decisions) {
         int dealerIndex = activePlayers.indexOf(currentDealerPlayer);
         int newCurrentPlayerIndex = (dealerIndex + 1) % (activePlayers.size());
         currentPlayer = activePlayers.get(newCurrentPlayerIndex);
 
-        playRoundFlow();
-        openedCards.addAll(dealer.openCards(1));
+        playRoundFlow(decisions);
+        openedCards.addAll(dealer.open(1));
         System.out.println("Cards opened are: ");
 
         for (Card c : openedCards) {
@@ -187,67 +224,19 @@ public class Round {
         }
     }
 
-    private void playRiverRound() {
+    private void playRiverRound(Map<Player, List<Pair<Game.GameActions, Integer>>> decisions) {
         int dealerIndex = activePlayers.indexOf(currentDealerPlayer);
         int newCurrentPlayerIndex = (dealerIndex + 1) % (activePlayers.size());
         currentPlayer = activePlayers.get(newCurrentPlayerIndex);
 
-        playRoundFlow();
+        playRoundFlow(decisions);
     }
-
-    private void playRoundFlow(Map<Player, Game.GameActions> decisions) {
-        while (currentPlayer != lastPlayer) {
-            Game.GameActions chosenAction;
-            chosenAction = decisions.get(currentPlayer);
-
-            switch (chosenAction) {
-                case RAISE:
-                    int amountToRaise = currentPlayer.chooseAmountToRaise(chipsToCall * 2);
-                    playerRaiseTurn(amountToRaise);
-                    break;
-                case CHECK:
-                    playerCheckTurn();
-                    break;
-                case FOLD:
-                    playerFoldTurn();
-                    break;
-                case CALL:
-                    playerCallTurn();
-                    break;
-            }
-        }
-    }
-
-    /*
-    private void playRoundFlow() {
-        while (currentPlayer != lastPlayer) {
-            Game.GameActions chosenAction;
-            chosenAction = currentPlayer.chooseAction(calculateTurnOptions());
-
-            switch (chosenAction) {
-                case RAISE:
-                    int amountToRaise = currentPlayer.chooseAmountToRaise(chipsToCall * 2);
-                    playerRaiseTurn(amountToRaise);
-                    break;
-                case CHECK:
-                    playerCheckTurn();
-                    break;
-                case FOLD:
-                    playerFoldTurn();
-                    break;
-                case CALL:
-                    playerCallTurn();
-                    break;
-            }
-        }
-    }
-    */
 
     private void playerRaiseTurn(int amountToRaise) {
         int currentPlayerIndex = activePlayers.indexOf(currentPlayer);
         int nextPlayerIndex = (currentPlayerIndex + 1) % (activePlayers.size());
 
-        currentPlayer.payChips(amountToRaise - currentPlayer.getLastBetSinceCardOpen());
+        potAmount += currentPlayer.payChips(amountToRaise - currentPlayer.getLastBetSinceCardOpen());
         lastPlayer = currentPlayer;
         chipsToCall = amountToRaise;
         currentPlayer = activePlayers.get(nextPlayerIndex);
@@ -268,7 +257,7 @@ public class Round {
         int currentPlayerIndex = activePlayers.indexOf(currentPlayer);
         int nextPlayerIndex = (currentPlayerIndex + 1) % (activePlayers.size());
 
-        currentPlayer.payChips(chipsToCall - currentPlayer.getLastBetSinceCardOpen());
+        potAmount += currentPlayer.payChips(chipsToCall - currentPlayer.getLastBetSinceCardOpen());
         currentPlayer = activePlayers.get(nextPlayerIndex);
     }
 
@@ -298,14 +287,14 @@ public class Round {
             cardList.addAll(openedCards);
             cardList.addAll(currentPlayer.getCards());
 
-            Hand bestHand = new Hand(cardList);
+            Hand bestHand = HandCalculator.getHand(cardList);
 
             for (Player p : activePlayers) {
                 List<Card> newCardList = new LinkedList<Card>();
                 newCardList.addAll(openedCards);
                 newCardList.addAll(p.getCards());
 
-                Hand hand = new Hand(newCardList);
+                Hand hand = HandCalculator.getHand(newCardList);
                 int resultOfHandsCompare = hand.compareTo(bestHand);
 
                 if (resultOfHandsCompare > 0) {
@@ -355,12 +344,6 @@ public class Round {
         return playerWithMinChips;
     }
 
-    private void updatePotAmount() {
-        for (Player p : activePlayers) {
-            potAmount += p.getLastBetSinceCardOpen();
-        }
-    }
-
     private void updateActivePlayers() {
         List<Player> playersToRemove = new LinkedList<Player>();
         for (Player p : activePlayers) {
@@ -387,7 +370,7 @@ public class Round {
         isRoundActive = roundActive;
     }
 
-    public boolean getIsRoundActive() {
+    public boolean isRoundActive() {
         return isRoundActive;
     }
 
