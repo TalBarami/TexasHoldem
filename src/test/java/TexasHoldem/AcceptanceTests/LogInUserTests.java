@@ -8,6 +8,8 @@ import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.time.LocalDate;
+
 public class LogInUserTests extends ProjectTest {
 
     @Before
@@ -19,8 +21,8 @@ public class LogInUserTests extends ProjectTest {
     @Test
     public void testLogInValidUser()
     {
-        boolean useradded1 = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com",new DateTime(1991,4,20,22,13));
-        boolean useradded2 = this.registerUser("hodbub","hBublil1308","hod.bub@gmail.com",new DateTime(1991,8,14,17,44));
+        boolean useradded1 = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com", LocalDate.of(1991,4,20),null);
+        boolean useradded2 = this.registerUser("hodbub","hBublil1308","hod.bub@gmail.com",LocalDate.of(1991,8,28),null);
         boolean userloggedin1 = this.login("achiadg","aChi12#*");
         boolean userloggedin2 = this.login("hodbub","hBublil1308");
         assertTrue(userloggedin1);
@@ -36,8 +38,8 @@ public class LogInUserTests extends ProjectTest {
     @Test
     public void testLogInInvalidUser()
     {
-        boolean useradded1 = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com",new DateTime(1991,4,20,22,13));
-        boolean useradded2 = this.registerUser("hodbub","hBublil1308","hod.bub@gmail.com",new DateTime(1991,8,14,17,44));
+        boolean useradded1 = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com", LocalDate.of(1991,4,20),null);
+        boolean useradded2 = this.registerUser("hodbub","hBublil1308","hod.bub@gmail.com",LocalDate.of(1991,8,28),null);
         boolean userloggedin1 = this.login("ronenbut","aChi12#*");
         boolean userloggedin2 = this.login("hodbub43","hBublil1308");
         assertFalse(userloggedin1);
@@ -51,8 +53,8 @@ public class LogInUserTests extends ProjectTest {
     @Test
     public void testLogInInvalidPassword()
     {
-        boolean useradded1 = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com",new DateTime(1991,4,20,22,13));
-        boolean useradded2 = this.registerUser("hodbub","hBublil1308","hod.bub@gmail.com",new DateTime(1991,8,14,17,44));
+        boolean useradded1 = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com", LocalDate.of(1991,4,20),null);
+        boolean useradded2 = this.registerUser("hodbub","hBublil1308","hod.bub@gmail.com",LocalDate.of(1991,8,28),null);
         boolean userloggedin1 = this.login("achiadg","ronen1");
         boolean userloggedin2 = this.login("hodbub","hBublil13085678");
         assertFalse(userloggedin1);
@@ -66,8 +68,8 @@ public class LogInUserTests extends ProjectTest {
     @Test
     public void testLogInInvalidCharecters()
     {
-        boolean useradded1 = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com",new DateTime(1991,4,20,22,13));
-        boolean useradded2 = this.registerUser("hodbub","hBublil1308","hod.bub@gmail.com",new DateTime(1991,8,14,17,44));
+        boolean useradded1 = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com",LocalDate.of(1991,4,20),null);
+        boolean useradded2 = this.registerUser("hodbub","hBublil1308","hod.bub@gmail.com",LocalDate.of(1991,8,28),null);
         boolean userloggedin1 = this.login("achi\nadg","aChi12#*");
         boolean userloggedin2 = this.login("hodbub","hBublil1\t308");
         assertFalse(userloggedin1);
@@ -81,7 +83,7 @@ public class LogInUserTests extends ProjectTest {
     @Test
     public void testLogInPasswordSqlInjection()
     {
-        boolean useradded1 = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com",new DateTime(1991,4,20,22,13));
+        boolean useradded1 = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com",LocalDate.of(1991,4,20),null);
         boolean userloggedin1 = this.login("achiadg","aChi12#* SELECT * FROM Users");
         assertFalse(userloggedin1);
         boolean deleteUser1 = this.deleteUser("achiadg");

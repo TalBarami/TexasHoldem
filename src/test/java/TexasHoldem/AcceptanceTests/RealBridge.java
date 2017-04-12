@@ -1,70 +1,106 @@
 package TexasHoldem.AcceptanceTests;
 
+import TexasHoldem.common.Exceptions.*;
 import org.joda.time.DateTime;
 
 import java.awt.image.BufferedImage;
+import java.time.LocalDate;
 import java.util.List;
+
+import TexasHoldem.service.TexasHoldemService;
+import TexasHoldem.domain.game.GameSettings;
+import javax.security.auth.login.LoginException;
 
 /**
  * Created by אחיעד on 05/04/2017.
  */
 public class RealBridge implements Bridge {
 
-    public RealBridge(){
+    TexasHoldemService service;
 
+    public RealBridge(){
+        service = new TexasHoldemService();
     }
 
 
-    public boolean registerUser(String username, String password, String email, DateTime dateTime)
+    public boolean registerUser(String username, String password, String email, LocalDate dateTime, BufferedImage img)
     {
+        try {
+            service.register(username, password, email, dateTime, img);
+        }catch (InvalidArgumentException e){
+            return false;
+        }
         return true;
     }
 
     public boolean searchUser(String username)
     {
-        return true;
+        if(service.getUser(username) != null)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public  boolean deleteUser(String username)
     {
+        try {
+            service.deleteUser(username);
+        }catch (EntityDoesNotExistsException e){
+            return false;
+        }
         return true;
     }
 
     public boolean login(String username, String password)
     {
+        try {
+            service.login(username,password);
+        }catch ( LoginException e){
+            return false;
+        }
         return true;
     }
 
     public boolean logout(String username)
     {
+        service.logout(username);
         return true;
     }
 
-    public boolean editUserName(String oldusername, String newusername) {
+    @Override
+    public boolean editUserName(String oldusername, String newusername, String password, String email, LocalDate date) {
+        try {
+            service.editProfile(oldusername,newusername,  password, email, date);
+        }catch (InvalidArgumentException e){
+            return false;
+        }
         return true;
     }
 
-    public boolean editPassword(String oldusername, String password) {
-        return true;
-    }
-
-    public boolean editEmail(String oldusername, String email) {
-        return true;
-    }
-
-    public boolean editDateOfBirth(String oldusername, DateTime dateofbirth) {
-        return true;
-    }
-
-    public boolean editImage(String oldusername, BufferedImage newimage) {
-        return true;
-    }
 
     public boolean addbalancetouserwallet(String username, int amounttoadd) {
+        try {
+            service.deposit(username,amounttoadd);
+        }catch (ArgumentNotInBoundsException e){
+            return false;
+        }
         return true;
     }
 
-    public boolean createnewgame(String username, String gamename, String policy, int buyin, int chippolicy, int minimumbet, int minplayers, int maxplayers, boolean spectateisvalid, int league) {
+    public boolean createnewgame(String username, String gamename, GameSettings.GamePolicy policy, int buyin, int chippolicy, int minimumbet, int minplayers, int maxplayers, boolean spectateisvalid) {
+        try {
+            service.createGame(username,gamename,policy,0,buyin,chippolicy,minimumbet,minplayers,maxplayers,spectateisvalid);
+        }catch (NoBalanceForBuyInException e){
+            return false;
+        }catch (  InvalidArgumentException e){
+            return false;
+        }catch (  ArgumentNotInBoundsException e){
+            return false;
+        }
         return true;
     }
 
@@ -72,7 +108,20 @@ public class RealBridge implements Bridge {
         return true;
     }
 
-    public boolean joinexistinggame(String username, String gamename) {
+    public boolean joinexistinggame(String username, String gamename, boolean spec) {
+        try {
+            service.joinGame(username, gamename,spec);
+        }catch (GameIsFullException e){
+            return false;
+        }catch (  InvalidArgumentException e){
+            return false;
+        }catch (  LeaguesDontMatchException e){
+            return false;
+        }catch (  CantSpeactateThisRoomException e){
+            return false;
+        }catch (   NoBalanceForBuyInException e){
+            return false;
+        }
         return true;
     }
 
