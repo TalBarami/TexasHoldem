@@ -2,33 +2,43 @@ package TexasHoldem.domain.game;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-
 public class GameSettings {
     public enum GamePolicy {
         LIMIT, NOLIMIT, POTLIMIT
     }
 
+    private String name;
     private GamePolicy gameType;
+    private int gameTypeLimit;
     private int minBet;
     private int buyInPolicy;
     private int chipPolicy;
     private Pair<Integer,Integer> playerRange;
     private boolean acceptSpectating;
+    private int leagueCriteria;
 
-    public GameSettings(GamePolicy policy, int minBet, int buyInPolicy, int chipPolicy, int minPlyerAmount, int maxPlayerAmount, boolean specAccept){
-        this.gameType=policy;
-        this.minBet=minBet;
-        this.buyInPolicy=buyInPolicy;
-        this.chipPolicy=chipPolicy;
-        playerRange=Pair.of(minPlyerAmount,maxPlayerAmount);
-        this.acceptSpectating=specAccept;
+    public GameSettings(String name, GamePolicy policy,int limit, int minBet, int buyInPolicy, int chipPolicy, int minPlyerAmount, int maxPlayerAmount, boolean specAccept){
+        this.name = name;
+        this.gameType = policy;
+        this.gameTypeLimit = limit;
+        this.minBet = minBet;
+        this.buyInPolicy = buyInPolicy;
+        this.chipPolicy = chipPolicy;
+        playerRange = Pair.of(minPlyerAmount,maxPlayerAmount);
+        this.acceptSpectating = specAccept;
     }
 
-    private GameSettings(){
+    private GameSettings(){}
 
+    public String getName(){
+        return this.name;
     }
 
     public GamePolicy getGameType() {return gameType;}
+
+    public int getGameTypeLimit() {
+        return gameTypeLimit;
+    }
 
     public int getMinBet() {return minBet;}
 
@@ -39,4 +49,16 @@ public class GameSettings {
     public Pair<Integer, Integer> getPlayerRange() {return playerRange;}
 
     public boolean isAcceptSpectating() {return acceptSpectating;}
+
+    public int getLeagueCriteria() {
+        return leagueCriteria;
+    }
+
+    public void setLeagueCriteria(int leagueCriteria) {
+        this.leagueCriteria = leagueCriteria;
+    }
+
+    public boolean tournamentMode(){
+        return getChipPolicy()!= 0;
+    }
 }

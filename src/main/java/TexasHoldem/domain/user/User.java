@@ -1,7 +1,6 @@
-package TexasHoldem.domain.users;
+package TexasHoldem.domain.user;
 
 import TexasHoldem.common.Exceptions.ArgumentNotInBoundsException;
-import TexasHoldem.common.Exceptions.InvalidArgumentException;
 import TexasHoldem.domain.game.Game;
 import TexasHoldem.domain.game.participants.Participant;
 
@@ -16,14 +15,16 @@ public class User {
     private String password;
     private String email;
     private LocalDate dateOfBirth;
+    private BufferedImage img;
+    private Wallet wallet;
+    private Map<Game,Participant> gameMapping;
+
     private int amountEarnedInLeague;
     private int currLeague;
 
-    BufferedImage img;
-    private Wallet wallet;
-    private Map<Game,Participant> playerInGames;
+    private User(){}
 
-    public User(String user, String pass, String email, LocalDate date)
+    public User(String user, String pass, String email, LocalDate date, BufferedImage image)
     {
         this.username = user;
         this.password = pass;
@@ -31,12 +32,31 @@ public class User {
         this.amountEarnedInLeague = 0;
         this.email = email;
         dateOfBirth = date;
-        img = null;
-        playerInGames=new HashMap<>();
+        img = image;
+        gameMapping =new HashMap<>();
     }
 
-    private User(){
+    public void deposit(int amount, boolean selfDeposit) throws ArgumentNotInBoundsException {
+        if(amount < 0)
+            throw new ArgumentNotInBoundsException("Amount less than zero , should be greater.");
+        getWallet().setBalance(getWallet().getBalance() + amount);
 
+        if(!selfDeposit)
+            amountEarnedInLeague += amount;
+    }
+
+    public int withdraw(int amount, boolean selfDeposit) throws ArgumentNotInBoundsException {
+        int amountToReduce = amount;
+        if(amount < 0)
+            throw new ArgumentNotInBoundsException("Amount less than zero , should be greater.");
+            //withdraw as many as he can
+        else if(amount > getWallet().getBalance())
+            amountToReduce = getWallet().getBalance();
+        getWallet().setBalance(getWallet().getBalance() - amountToReduce);
+
+        if(!selfDeposit)
+            amountEarnedInLeague -= amountToReduce;
+        return amountToReduce;
     }
 
     public String getPassword() {
@@ -47,8 +67,7 @@ public class User {
         return username;
     }
 
-    //todo : make it private player changes (delete usages of getWallet)
-    public Wallet getWallet() {
+    private Wallet getWallet() {
         return wallet;
     }
 
@@ -77,34 +96,15 @@ public class User {
     }
 
     public Map<Game,Participant> getGamePlayerMappings(){
-        return playerInGames;
+        return gameMapping;
     }
 
     public void addGameParticipant(Game game,Participant p){
-        playerInGames.put(game,p);
+        gameMapping.put(game,p);
     }
 
-    public void deposit(int amount, boolean selfDeposit) throws ArgumentNotInBoundsException {
-        if(amount < 0)
-            throw new ArgumentNotInBoundsException("Amount less than zero , should be greater.");
-        getWallet().setBalance(getWallet().getBalance() + amount);
-
-        if(!selfDeposit)
-            amountEarnedInLeague += amount;
-    }
-
-    public int withdraw(int amount, boolean selfDeposit) throws ArgumentNotInBoundsException {
-        int amountToReduce = amount;
-        if(amount < 0)
-            throw new ArgumentNotInBoundsException("Amount less than zero , should be greater.");
-        //withdraw as many as he can
-        else if(amount > getWallet().getBalance())
-            amountToReduce = getWallet().getBalance();
-        getWallet().setBalance(getWallet().getBalance() - amountToReduce);
-
-        if(!selfDeposit)
-            amountEarnedInLeague -= amountToReduce;
-        return amountToReduce;
+    public void removeGameParticipant(Game game){
+        gameMapping.remove(game);
     }
 
     public double getBalance(){
@@ -125,5 +125,13 @@ public class User {
 
     public void setCurrLeague(int currLeague) {
         this.currLeague = currLeague;
+    }
+
+    public BufferedImage getImg() {
+        return img;
+    }
+
+    public void setImg(BufferedImage img) {
+        this.img = img;
     }
 }

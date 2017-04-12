@@ -2,10 +2,13 @@ package TexasHoldem.domain.game.hand;
 
 import TexasHoldem.common.Exceptions.HandException;
 import TexasHoldem.domain.game.card.Card;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
 public class HandCalculator {
+    private static Logger logger = LoggerFactory.getLogger(HandCalculator.class);
 
     private static Card[][] getPossibleHands(List<Card> cards){
         Card[][] possibleHands = new Card[21][5];
@@ -14,15 +17,12 @@ public class HandCalculator {
 
 
         for(int firstCard = 0; firstCard < 7; firstCard++){
-            // select first card not to be in the hand
             for(int secondCard = firstCard + 1; secondCard < 7; secondCard++){
-                // every card that is not the first or second will added to the hand
                 for(int i = 0; i < 7; i++){
                     if(i != firstCard && i != secondCard){
                         possibleHands[hand][cardsSelected++] = cards.get(i);
                     }
                 }
-                // next hand
                 cardsSelected = 0;
                 hand++;
             }
@@ -31,13 +31,16 @@ public class HandCalculator {
     }
 
     public static Hand getHand(List<Card> cards){
+        logger.debug("Received a set of the following cards: {}", cards);
         Card[][] possibleHands = getPossibleHands(cards);
-        Optional<Hand> hand = Arrays.stream(possibleHands)
+        Optional<Hand> optHand = Arrays.stream(possibleHands)
                 .map(h -> new Hand(Arrays.asList(h)))
                 .max(Hand::compareTo);
-        if(!hand.isPresent())
+        if(!optHand.isPresent())
             throw new HandException();
-        return hand.get();
+        Hand hand = optHand.get();
+        logger.debug("Returns the following hand: {}", hand);
+        return hand;
     }
 
     public static Hand getHand(Card ... cards){
