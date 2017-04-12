@@ -80,22 +80,22 @@ public class GameCenter {
 
     public void joinGame(String gameName,String userName,boolean asSpectator) throws InvalidArgumentException, CantSpeactateThisRoomException,
             NoBalanceForBuyInException, GameIsFullException, LeaguesDontMatchException {
-        List<Game> games=gamesDb.getActiveGamesByName(gameName);
-        if(games.isEmpty())
+        List<Game> games = gamesDb.getActiveGamesByName(gameName);
+        if (games.isEmpty())
             throw new InvalidArgumentException("There is no game in the system with selected name.");
-        Game toJoin=games.get(0);
-        User user=usersDb.getUserByUserName(userName);
-        if(asSpectator)
+        Game toJoin = games.get(0);
+        User user = usersDb.getUserByUserName(userName);
+        if (asSpectator)
             toJoin.joinGameAsSpectator(user);
         else
             toJoin.joinGameAsPlayer(user);
+    }
 
     public List<Game> findAvailableGames(User user){
-        return activeGames.stream().filter(game -> game.getLeague() == user.getCurrLeague() &&
-                game.getBuyInPolicy() <= user.getBalance() &&
-                (game.realMoneyGame() || (!game.realMoneyGame() && !game.isActive())) &&
-                game.getPlayers().size() <= game.getMaximalAmountOfPlayers())
-                .collect(Collectors.toList());
-
+            return activeGames.stream().filter(game -> game.getLeague() == user.getCurrLeague() &&
+                    game.getBuyInPolicy() <= user.getBalance() &&
+                    (game.realMoneyGame() || (!game.realMoneyGame() && !game.isActive())) &&
+                    game.getPlayers().size() <= game.getMaximalAmountOfPlayers())
+                    .collect(Collectors.toList());
     }
 }
