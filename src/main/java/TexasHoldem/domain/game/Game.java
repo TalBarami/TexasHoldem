@@ -4,7 +4,7 @@ import TexasHoldem.common.Exceptions.*;
 import TexasHoldem.domain.game.leagues.LeagueManager;
 import TexasHoldem.domain.game.participants.Player;
 import TexasHoldem.domain.game.participants.Spectator;
-import TexasHoldem.domain.users.User;
+import TexasHoldem.domain.user.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -159,8 +159,9 @@ public class Game {
         return settings.getName();
     }
 
-    public Round getLastRound(){
-        return rounds.get(rounds.size()-1);
+    public Round getLastRound() {
+        return rounds.get(rounds.size() - 1);
+    }
 
     public int getMaximalAmountOfPlayers() {
         return settings.getPlayerRange().getRight();

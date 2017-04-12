@@ -8,7 +8,7 @@ import TexasHoldem.data.users.Users;
 import TexasHoldem.domain.game.Game;
 import TexasHoldem.domain.game.GameSettings;
 import TexasHoldem.domain.game.leagues.LeagueManager;
-import TexasHoldem.domain.users.User;
+import TexasHoldem.domain.user.User;
 
 import javax.security.auth.login.LoginException;
 import java.awt.image.BufferedImage;
@@ -52,7 +52,7 @@ public class GameCenter {
             });
         });
 
-        //remove from logged in users
+        //remove from logged in user
             loggedInUsers=loggedInUsers.stream().filter(user -> !user.getUsername().equals(userName)).collect(Collectors.toList());
     }
 

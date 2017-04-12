@@ -3,7 +3,7 @@ package TexasHoldem.domain.game.participants;
 import TexasHoldem.common.Exceptions.ArgumentNotInBoundsException;
 import TexasHoldem.domain.game.card.Card;
 import TexasHoldem.domain.game.Game;
-import TexasHoldem.domain.users.User;
+import TexasHoldem.domain.user.User;
 import java.util.*;
 
 /**

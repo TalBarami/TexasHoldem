@@ -1,6 +1,6 @@
 package TexasHoldem.domain.game.leagues;
 
-import TexasHoldem.domain.users.User;
+import TexasHoldem.domain.user.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;

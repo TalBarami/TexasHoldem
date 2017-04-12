@@ -1,7 +1,7 @@
 package TexasHoldem.data.users;
 
 import TexasHoldem.common.Exceptions.InvalidArgumentException;
-import TexasHoldem.domain.users.User;
+import TexasHoldem.domain.user.User;
 
 import javax.security.auth.login.LoginException;
 import java.time.LocalDate;

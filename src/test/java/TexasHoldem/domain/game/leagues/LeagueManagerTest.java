@@ -1,12 +1,9 @@
 package TexasHoldem.domain.game.leagues;
 
-import TexasHoldem.domain.users.User;
-import org.joda.time.DateTime;
+import TexasHoldem.domain.user.User;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.time.LocalDate;
 
 import static org.junit.Assert.*;
 

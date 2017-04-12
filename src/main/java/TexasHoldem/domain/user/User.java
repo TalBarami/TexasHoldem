@@ -1,4 +1,4 @@
-package TexasHoldem.domain.users;
+package TexasHoldem.domain.user;
 
 import TexasHoldem.common.Exceptions.ArgumentNotInBoundsException;
 import TexasHoldem.domain.game.Game;

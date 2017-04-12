@@ -1,4 +1,4 @@
-package TexasHoldem.domain.users;
+package TexasHoldem.domain.user;
 
 public class Wallet {
 
