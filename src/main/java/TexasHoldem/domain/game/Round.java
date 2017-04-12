@@ -11,7 +11,6 @@ import java.util.*;
 
 import static TexasHoldem.domain.game.GameActions.*;
 
-
 /**
  * Created by Hod and Rotem on 05/04/2017.
  */
@@ -56,7 +55,7 @@ public class Round {
         paySmallAndBigBlind();
     }
 
-    public void runPlayPreFlopRound(Map<Player, List<Pair<Game.GameActions, Integer>>> decisions) {
+    public void runPlayPreFlopRound(Map<Player, List<Pair<GameActions, Integer>>> decisions) {
         playPreFlopRound(decisions);
     }
 
@@ -65,15 +64,15 @@ public class Round {
         initPlayersLastBetSinceCardOpen();
     }
 
-    public void runPlayFlopRound(Map<Player, List<Pair<Game.GameActions, Integer>>> decisions) {
+    public void runPlayFlopRound(Map<Player, List<Pair<GameActions, Integer>>> decisions) {
         playFlopOrTurnRound(decisions);
     }
 
-    public void runPlayTurnRound(Map<Player, List<Pair<Game.GameActions, Integer>>> decisions) {
+    public void runPlayTurnRound(Map<Player, List<Pair<GameActions, Integer>>> decisions) {
         playFlopOrTurnRound(decisions);
     }
 
-    public void runPlayRiverRound(Map<Player, List<Pair<Game.GameActions, Integer>>> decisions) {
+    public void runPlayRiverRound(Map<Player, List<Pair<GameActions, Integer>>> decisions) {
         playRiverRound(decisions);
     }
 
@@ -82,7 +81,7 @@ public class Round {
     }
 
     public void startRound() {
-        Map<Player, List<Pair<Game.GameActions, Integer>>> playerDecisions = new HashMap<Player, List<Pair<Game.GameActions, Integer>>>();
+        Map<Player, List<Pair<GameActions, Integer>>> playerDecisions = new HashMap<Player, List<Pair<GameActions, Integer>>>();
 
         dealer.deal(activePlayers);
         paySmallAndBigBlind();
@@ -167,13 +166,13 @@ public class Round {
         System.out.println("Big blind payed by " + bigPlayer.getUser().getUsername());
     }
 
-    private void playRoundFlow(Map<Player, List<Pair<Game.GameActions, Integer>>> decisions) {
+    private void playRoundFlow(Map<Player, List<Pair<GameActions, Integer>>> decisions) {
         int listIndex = 0;
         int numOfPlayers = activePlayers.size();
         int iteration = 0;
 
         while (currentPlayer != lastPlayer) {
-            Game.GameActions chosenAction;
+            GameActions chosenAction;
             chosenAction = decisions.get(currentPlayer).get(listIndex).getLeft();
 
             switch (chosenAction) {
@@ -200,7 +199,7 @@ public class Round {
         }
     }
 
-    private void playPreFlopRound(Map<Player, List<Pair<Game.GameActions, Integer>>> decisions) {
+    private void playPreFlopRound(Map<Player, List<Pair<GameActions, Integer>>> decisions) {
         playRoundFlow(decisions);
 
         openedCards.addAll(dealer.open(3));
@@ -211,7 +210,7 @@ public class Round {
         }
     }
 
-    private void playFlopOrTurnRound(Map<Player, List<Pair<Game.GameActions, Integer>>> decisions) {
+    private void playFlopOrTurnRound(Map<Player, List<Pair<GameActions, Integer>>> decisions) {
         int dealerIndex = activePlayers.indexOf(currentDealerPlayer);
         int newCurrentPlayerIndex = (dealerIndex + 1) % (activePlayers.size());
         currentPlayer = activePlayers.get(newCurrentPlayerIndex);
@@ -225,7 +224,7 @@ public class Round {
         }
     }
 
-    private void playRiverRound(Map<Player, List<Pair<Game.GameActions, Integer>>> decisions) {
+    private void playRiverRound(Map<Player, List<Pair<GameActions, Integer>>> decisions) {
         int dealerIndex = activePlayers.indexOf(currentDealerPlayer);
         int newCurrentPlayerIndex = (dealerIndex + 1) % (activePlayers.size());
         currentPlayer = activePlayers.get(newCurrentPlayerIndex);
