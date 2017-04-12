@@ -78,7 +78,7 @@ public class GameCenter {
         //todo : what about the 'activeGames' field?  delete\leave ( and add the game to the list)?
     }
 
-    public void joinGame(String gameName,String userName,boolean asSpectator) throws InvalidArgumentException, CantSpeactateThisRoomException,
+    public void joinGame(String userName, String gameName, boolean asSpectator) throws InvalidArgumentException, CantSpeactateThisRoomException,
             NoBalanceForBuyInException, GameIsFullException, LeaguesDontMatchException {
         List<Game> games = gamesDb.getActiveGamesByName(gameName);
         if (games.isEmpty())
@@ -91,11 +91,19 @@ public class GameCenter {
             toJoin.joinGameAsPlayer(user);
     }
 
-    public List<Game> findAvailableGames(User user){
-            return activeGames.stream().filter(game -> game.getLeague() == user.getCurrLeague() &&
-                    game.getBuyInPolicy() <= user.getBalance() &&
-                    (game.realMoneyGame() || (!game.realMoneyGame() && !game.isActive())) &&
-                    game.getPlayers().size() <= game.getMaximalAmountOfPlayers())
-                    .collect(Collectors.toList());
+    public List<Game> findAvailableGames(String username){
+        User user = usersDb.getUserByUserName(username);
+        return activeGames.stream()
+                .filter(game -> game.getLeague() == user.getCurrLeague() &&
+                        game.getBuyInPolicy() <= user.getBalance() &&
+                        (game.realMoneyGame() || (!game.realMoneyGame() && !game.isActive())) &&
+                        game.getPlayers().size() <= game.getMaximalAmountOfPlayers())
+                .collect(Collectors.toList());
+    }
+
+    public List<Game> findSpectateableGames(){
+        return activeGames.stream()
+                .filter(Game::canBeSpectated)
+                .collect(Collectors.toList());
     }
 }
