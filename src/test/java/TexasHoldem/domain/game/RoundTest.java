@@ -17,6 +17,7 @@ import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
@@ -79,12 +80,24 @@ public class RoundTest {
         Game game1 = new Game(settings1, user1, new LeagueManager());
         Round round1 = new Round(playerList1, settings1, 0);
 
+        round1.initLastPlayer();
+
         when(player1.chooseAction(any())).thenReturn(GameActions.CHECK);
         when(player2.chooseAction(any())).thenReturn(GameActions.CHECK);
         when(player3.chooseAction(any())).thenReturn(GameActions.CHECK);
         when(player4.chooseAction(any())).thenReturn(GameActions.CHECK);
 
+        when(player1.getUser()).thenReturn(user1);
+        when(player2.getUser()).thenReturn(user2);
+        when(player3.getUser()).thenReturn(user3);
+        when(player4.getUser()).thenReturn(user4);
+
         round1.playFlopOrTurnRound();
+
+        verify(player1).chooseAction(any());
+        verify(player2).chooseAction(any());
+        verify(player3).chooseAction(any());
+        verify(player4).chooseAction(any());
 
         Assert.assertTrue(round1.getPotAmount() == 0);
         Assert.assertTrue(round1.getActivePlayers().size() == 4);

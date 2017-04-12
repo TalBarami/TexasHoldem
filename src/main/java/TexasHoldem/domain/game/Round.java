@@ -43,9 +43,8 @@ public class Round {
         this.openedCards = new ArrayList<Card>();
 
         int startingPlayerIndex = (dealerIndex + 3) % activePlayers.size();
-        int lastPlayerIndex = (dealerIndex + 2) % activePlayers.size();
         this.currentPlayer = activePlayers.get(startingPlayerIndex);
-        this.lastPlayer = activePlayers.get(lastPlayerIndex);
+        this.lastPlayer = getBigPlayer();
         initPlayersTotalAmountPayedInRound();
     }
 
@@ -81,8 +80,6 @@ public class Round {
     }
 
     public void notifyPlayerExited(Player player) {
-        potAmount += player.getLastBetSinceCardOpen();
-
         if (lastPlayer == player) {
             int lastPlayerIndex = activePlayers.indexOf(lastPlayer);
             int newLastPlayerIndex = (lastPlayerIndex - 1) % (activePlayers.size());
@@ -140,9 +137,14 @@ public class Round {
     }
 
     private void playRoundFlow() {
-        while (currentPlayer != lastPlayer) {
+        boolean isLastPlayerPlayed = false;
+
+        while (!isLastPlayerPlayed) {
             GameActions chosenAction;
             chosenAction = currentPlayer.chooseAction(calculateTurnOptions());
+
+            if (currentPlayer == lastPlayer)
+                isLastPlayerPlayed = true;
 
             switch (chosenAction) {
                 case RAISE:
@@ -160,6 +162,8 @@ public class Round {
                     break;
             }
         }
+
+        initLastPlayer();
     }
 
     private void playPreFlopRound() {
@@ -327,6 +331,10 @@ public class Round {
         for (Player p : activePlayers) {
             p.setLastBetSinceCardOpen(0);
         }
+    }
+
+    public void initLastPlayer() {
+        lastPlayer = currentDealerPlayer;
     }
 
     public void setRoundActive(boolean roundActive) {
