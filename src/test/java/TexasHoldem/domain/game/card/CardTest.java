@@ -17,6 +17,13 @@ public class CardTest {
     private static Logger logger = LoggerFactory.getLogger(CardTest.class);
 
     @Test
+    public void equality() throws Exception{
+        Card card1 = TEN.of(HEART);
+        Card card2 = new Card(TEN, HEART);
+        assertThat(card1, equalTo(card2));
+    }
+
+    @Test
     public void compareRank() throws Exception {
         Card thisCard = TEN.of(HEART);
         Card thatCard = NINE.of(HEART);
@@ -35,7 +42,7 @@ public class CardTest {
     }
 
     @Test
-    public void fromString(){
+    public void fromString() throws Exception{
         Card card = Card.fromString("five of diamond");
         assertThat(card, is(FIVE.of(DIAMOND)));
     }
