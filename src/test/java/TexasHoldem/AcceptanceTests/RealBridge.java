@@ -93,7 +93,7 @@ public class RealBridge implements Bridge {
 
     public boolean createnewgame(String username, String gamename, GameSettings.GamePolicy policy, int buyin, int chippolicy, int minimumbet, int minplayers, int maxplayers, boolean spectateisvalid) {
         try {
-            service.createGame(username,gamename,policy,0,buyin,chippolicy,minimumbet,minplayers,maxplayers,spectateisvalid);
+            service.createGame(username,gamename,policy,0,minimumbet,buyin,chippolicy,minplayers,maxplayers,spectateisvalid);
         }catch (NoBalanceForBuyInException e){
             return false;
         }catch (  InvalidArgumentException e){
@@ -157,10 +157,6 @@ public class RealBridge implements Bridge {
         return true;
     }
 
-    public boolean spectateactivegame(String username, String gamename) {
-        return true;
-    }
-
     public boolean leavegame(String username, String choise, String gamename) {
         return true;
     }
@@ -210,6 +206,24 @@ public class RealBridge implements Bridge {
     }
 
     public boolean setcriteriatomoveleague(String adminname, int criteria) {
+        return true;
+    }
+
+    @Override
+    public boolean spectateactivegame(String username, String gamename, boolean spec) {
+        try {
+            service.spectateGame(username, gamename,spec);
+        }catch (GameIsFullException e){
+            return false;
+        }catch (  InvalidArgumentException e){
+            return false;
+        }catch (  LeaguesDontMatchException e){
+            return false;
+        }catch (  CantSpeactateThisRoomException e){
+            return false;
+        }catch (   NoBalanceForBuyInException e){
+            return false;
+        }
         return true;
     }
 }

@@ -47,9 +47,7 @@ public interface Bridge {
     boolean searchgamebymaxplayers(int numplayers);
 
     boolean searchgamebyspectateisvalid(boolean spectatingavailable);
-
-    boolean spectateactivegame(String username, String gamename);
-
+    
     boolean leavegame(String username, String choise, String gamename);
 
     boolean replaynonactivegame(String username, String gamename);
@@ -75,4 +73,6 @@ public interface Bridge {
     boolean searchgamebypotsize(int pot);
 
     boolean setcriteriatomoveleague(String adminname, int criteria);
+
+    boolean spectateactivegame(String username, String gamename, boolean spec);
 }

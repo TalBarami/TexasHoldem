@@ -108,7 +108,6 @@ public class CreateNewGameTests extends ProjectTest {
         assertTrue(userloggedin1);
         boolean addedbalance1 = this.addbalancetouserwallet("achiadg",20000);
         assertTrue(addedbalance1);
-        boolean leaguechanged1 = this.setuserleague("achiadg","achiadg", 1);
         boolean gamecreated1 = this.createnewgame("achiadg",null, GameSettings.GamePolicy.POTLIMIT, 10000, 10000, 100, 2, 9, true);
         assertFalse(gamecreated1);
         boolean userloggedout1 = this.logout("achiadg");
@@ -124,7 +123,6 @@ public class CreateNewGameTests extends ProjectTest {
         assertTrue(userloggedin1);
         boolean addedbalance1 = this.addbalancetouserwallet("achiadg",20000);
         assertTrue(addedbalance1);
-        boolean leaguechanged1 = this.setuserleague("achiadg","achiadg", 1);
         boolean gamecreated1 = this.createnewgame("achiadg","achiad-poker-game", GameSettings.GamePolicy.POTLIMIT , 21000, 10000, 100, 2, 9, true);
         assertFalse(gamecreated1);
         boolean userloggedout1 = this.logout("achiadg");

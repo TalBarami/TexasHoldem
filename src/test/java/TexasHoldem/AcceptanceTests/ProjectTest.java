@@ -92,9 +92,6 @@ public abstract class ProjectTest extends TestCase{
         return bridge.searchgamebyspectateisvalid(spectatingavailable);
     }
 
-    public boolean spectateactivegame(String username, String gamename) {
-        return bridge.spectateactivegame(username,gamename);
-    }
 
     public boolean leavegame(String username, String choise, String gamename) {
         return bridge.leavegame(username, choise, gamename);
@@ -146,5 +143,9 @@ public abstract class ProjectTest extends TestCase{
 
     public boolean setcriteriatomoveleague(String adminname, int criteria) {
         return bridge.setcriteriatomoveleague(adminname,criteria);
+    }
+
+    public boolean spectateactivegame(String username, String gamename, boolean spec) {
+        return bridge.spectateactivegame(username, gamename, spec);
     }
 }

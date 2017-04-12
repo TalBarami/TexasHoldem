@@ -101,10 +101,6 @@ public class ProxyBridge implements Bridge {
         return true;
     }
 
-    public boolean spectateactivegame(String username, String gamename) {
-        return true;
-    }
-
     public boolean leavegame(String username, String choise, String gamename) {
         return true;
     }
@@ -155,6 +151,11 @@ public class ProxyBridge implements Bridge {
 
     public boolean setcriteriatomoveleague(String adminname, int criteria) {
         return true;
+    }
+
+    @Override
+    public boolean spectateactivegame(String username, String gamename, boolean spec) {
+        return real.spectateactivegame(username,gamename, spec);
     }
 
 }
