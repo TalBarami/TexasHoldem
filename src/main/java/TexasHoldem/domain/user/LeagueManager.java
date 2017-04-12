@@ -1,6 +1,5 @@
 package TexasHoldem.domain.user;
 
-import TexasHoldem.domain.user.User;
 
 /**
  * Created by hod on 11/04/2017.
