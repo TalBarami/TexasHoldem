@@ -1,12 +1,10 @@
-package TexasHoldem.domain.game.leagues;
+package TexasHoldem.domain.users.leagues;
 
-import TexasHoldem.domain.users.User;
-import org.joda.time.DateTime;
+import TexasHoldem.domain.user.LeagueManager;
+import TexasHoldem.domain.user.User;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.time.LocalDate;
 
 import static org.junit.Assert.*;
 
@@ -18,7 +16,7 @@ public class LeagueManagerTest {
     LeagueManager leagueManager;
     @Before
     public void setUp() throws Exception {
-        user = new User("hod", "1234", "hod.bub@gmail.com", null);
+        user = new User("hod", "1234", "hod.bub@gmail.com", null, null);
         leagueManager = new LeagueManager();
     }
 
@@ -37,10 +35,8 @@ public class LeagueManagerTest {
     @Test
     public void updateUserLeague() throws Exception {
         leagueManager.addNewUserToLegue(user);
-        System.out.println("previous league is " + user.getCurrLeague());
         user.setAmountEarnedInLeague(leagueManager.getCriteriaToMovingLeague());
         leagueManager.updateUserLeague(user);
-        System.out.println("new league is " + user.getCurrLeague());
         assertEquals(leagueManager.getDefaultLeagueForNewUsers() + 1, user.getCurrLeague());
         assertEquals(0, user.getAmountEarnedInLeague());
 
@@ -58,9 +54,15 @@ public class LeagueManagerTest {
         user.setAmountEarnedInLeague(leagueManager.getCriteriaToMovingLeague());
         leagueManager.updateUserLeague(user);
         assertTrue(leagueManager.checkIfHasPermissions(user));
-        User user2 = new User("Rotem", "1234", "waldr@gmail.com", null);
+        User user2 = new User("Rotem", "1234", "waldr@gmail.com", null, null);
         leagueManager.addNewUserToLegue(user2);
         assertFalse(leagueManager.checkIfHasPermissions(user2));
+    }
+
+    @Test
+    public void moveUserToLeague() throws Exception {
+        leagueManager.moveUserToLeague(user, 10);
+        assertEquals(10, user.getCurrLeague());
     }
 
     @Test

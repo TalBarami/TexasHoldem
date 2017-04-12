@@ -1,7 +1,9 @@
 package TexasHoldem.domain.game;
 
 import TexasHoldem.domain.game.card.Card;
+import TexasHoldem.domain.game.card.Dealer;
 import TexasHoldem.domain.game.hand.Hand;
+import TexasHoldem.domain.game.hand.HandCalculator;
 import TexasHoldem.domain.game.participants.Player;
 
 import java.util.ArrayList;
@@ -48,7 +50,7 @@ public class Round {
     }
 
     public void startRound() {
-        dealer.dealCardsToPlayers(activePlayers);
+        dealer.deal(activePlayers);
         paySmallAndBigBlind();
         playPreFlopRound();
 
@@ -139,7 +141,7 @@ public class Round {
     private void playPreFlopRound() {
         playRoundFlow();
 
-        openedCards.addAll(dealer.openCards(3));
+        openedCards.addAll(dealer.open(3));
         System.out.println("Cards opened are: ");
 
         for (Card c : openedCards) {
@@ -153,7 +155,7 @@ public class Round {
         currentPlayer = activePlayers.get(newCurrentPlayerIndex);
 
         playRoundFlow();
-        openedCards.addAll(dealer.openCards(1));
+        openedCards.addAll(dealer.open(1));
         System.out.println("Cards opened are: ");
 
         for (Card c : openedCards) {
@@ -247,14 +249,14 @@ public class Round {
             cardList.addAll(openedCards);
             cardList.addAll(currentPlayer.getCards());
 
-            Hand bestHand = new Hand(cardList);
+            Hand bestHand = HandCalculator.getHand(cardList);
 
             for (Player p : activePlayers) {
                 List<Card> newCardList = new LinkedList<Card>();
                 newCardList.addAll(openedCards);
                 newCardList.addAll(p.getCards());
 
-                Hand hand = new Hand(newCardList);
+                Hand hand = HandCalculator.getHand(newCardList);
                 int resultOfHandsCompare = hand.compareTo(bestHand);
 
                 if (resultOfHandsCompare > 0) {
@@ -338,5 +340,9 @@ public class Round {
 
     public boolean isRoundActive() {
         return isRoundActive;
+    }
+
+    public int getPotAmount() {
+        return potAmount;
     }
 }

@@ -2,8 +2,6 @@ package TexasHoldem.AcceptanceTests;
 
 import org.joda.time.DateTime;
 
-import TexasHoldem.domain.users.User;
-
 import java.awt.image.BufferedImage;
 import java.util.List;
 

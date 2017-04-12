@@ -1,7 +1,7 @@
 package TexasHoldem.domain.game.participants;
 
 import TexasHoldem.domain.game.Game;
-import TexasHoldem.domain.users.User;
+import TexasHoldem.domain.user.User;
 
 /**
  * Created by RonenB on 4/11/2017.
@@ -12,6 +12,6 @@ public class Spectator extends Participant {
     }
 
     public void removeFromGame(Game g){
-        g.removePlayer(this);
+        g.removeParticipant(this);
     }
 }

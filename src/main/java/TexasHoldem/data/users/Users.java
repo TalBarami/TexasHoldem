@@ -1,8 +1,9 @@
 package TexasHoldem.data.users;
 
 import TexasHoldem.common.Exceptions.InvalidArgumentException;
-import TexasHoldem.domain.users.User;
+import TexasHoldem.domain.user.User;
 
+import javax.security.auth.login.LoginException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -51,11 +52,6 @@ public class Users implements IUsers {
         return _userList.values().stream().map(User::getUsername).collect(Collectors.toList());
     }
 
-    public String getPassByUserName(String userName){
-        User user = _userList.get(userName);
-        return user == null ? null : user.getPassword();
-    }
-
     public User getUserByUserName(String userName){
         return _userList.get(userName);
     }
@@ -70,6 +66,15 @@ public class Users implements IUsers {
             throw new InvalidArgumentException("Selected user name already exist.");
         else if(emailExists)
             throw new InvalidArgumentException("Selected e-mail already exist.");
+    }
+
+    public User verifyCredentials(String userName,String password) throws LoginException {
+        User user=getUserByUserName(userName);
+        if(user == null)
+            throw new LoginException("User name doesn't exist in the system");
+        else if(!password.equals(user.getPassword()))
+            throw new LoginException("Wrong password.");
+        return user;
     }
 
 }

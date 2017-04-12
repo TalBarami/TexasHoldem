@@ -1,4 +1,4 @@
-package TexasHoldem.domain.users;
+package TexasHoldem.domain.user;
 
 public class Wallet {
 
@@ -20,5 +20,4 @@ public class Wallet {
     public void setBalance(int balance) {
         this.balance = balance;
     }
-
 }
