@@ -1,5 +1,6 @@
 package TexasHoldem.data.users;
 
+import TexasHoldem.common.Exceptions.EntityDoesNotExistsException;
 import TexasHoldem.common.Exceptions.InvalidArgumentException;
 import TexasHoldem.domain.user.User;
 
@@ -34,6 +35,13 @@ public class Users implements IUsers {
             user.setEmail(email);
         if(!user.getDateOfBirth().isEqual(date))
             user.setDateOfBirth(date);
+    }
+
+    public void deleteUser(String username) throws EntityDoesNotExistsException {
+        if(!_userList.containsKey(username)){
+            throw new EntityDoesNotExistsException("This user name is not registered in the system.");
+        }
+        _userList.remove(username);
     }
 
     private boolean emailExists(String email){

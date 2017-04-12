@@ -1,5 +1,6 @@
 package TexasHoldem.data.users;
 
+import TexasHoldem.common.Exceptions.EntityDoesNotExistsException;
 import TexasHoldem.common.Exceptions.InvalidArgumentException;
 import TexasHoldem.domain.user.User;
 
@@ -14,5 +15,5 @@ public interface IUsers {
     void editUser(String oldUser, String newUser, String pass, String email, LocalDate date) throws InvalidArgumentException;
     User verifyCredentials(String userName,String password) throws LoginException;
     User getUserByUserName(String userName);
-
+    void deleteUser(String username) throws EntityDoesNotExistsException;
 }

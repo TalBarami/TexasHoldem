@@ -35,6 +35,14 @@ public class GameCenter {
         leagueManager.addNewUserToLegue(newUser);
     }
 
+    public void deleteUser(String username) throws EntityDoesNotExistsException {
+        usersDb.deleteUser(username);
+    }
+
+    public User getUser(String username){
+        return usersDb.getUserByUserName(username);
+    }
+
     public void login(String userName,String pass) throws LoginException {
         User user=usersDb.verifyCredentials(userName,pass);
         loggedInUsers.add(user);//todo: or maybe change status in Db that he logged in?
