@@ -12,6 +12,6 @@ public class Spectator extends Participant {
     }
 
     public void removeFromGame(Game g){
-        g.removePlayer(this);
+        g.removeParticipant(this);
     }
 }

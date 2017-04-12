@@ -37,7 +37,7 @@ public class Game {
 
     private Game(){}
 
-    public void joinGameAsPlayer(User user,boolean spectate) throws GameIsFullException, NoBalanceForBuyInException, LeaguesDontMatchException {
+    public void joinGameAsPlayer(User user) throws GameIsFullException, NoBalanceForBuyInException, LeaguesDontMatchException {
         int gameLeague=getLeague();
         int usersLeague=user.getCurrLeague();
         double userBalance=user.getBalance();
@@ -47,7 +47,7 @@ public class Game {
             throw new LeaguesDontMatchException(String.format("Can't join game, user's league is %d ,while game's league is %d.",usersLeague,gameLeague));
         else if (isFull())
             throw new GameIsFullException("Can't join game as player because it's full.");
-        else if(userBalance < buyInPolicy)
+        else if(!realMoneyGame() && (userBalance < buyInPolicy))
             throw new NoBalanceForBuyInException(String.format("Buy in is %d, but user's balance is %d;",buyInPolicy,userBalance));
 
         addPlayer(user);
@@ -75,18 +75,18 @@ public class Game {
         }
     }
 
-    public void removePlayer(Spectator spectator){
+    public void removeParticipant(Spectator spectator){
         logger.info("{} has stopped watching this game.", spectator);
         spectators.remove(spectator);
     }
 
-    public void removePlayer(Player player){
+    public void removeParticipant(Player player){
         logger.info("{} has left the game.", player.getUser().getUsername());
         players.remove(player);
 
         //if the player is within an active round, inform the round
         if(!rounds.isEmpty()){
-            Round lastRound=rounds.get(rounds.size()-1);
+            Round lastRound=getLastRound();
             if(lastRound.isRoundActive())
                 lastRound.notifyPlayerExited(player);
         }
@@ -98,7 +98,7 @@ public class Game {
         return players.size() == settings.getPlayerRange().getRight();
     }
 
-    private boolean canBeSpectated(){
+    public boolean canBeSpectated(){
         return settings.isAcceptSpectating();
     }
 
@@ -114,14 +114,14 @@ public class Game {
     }
 
     public boolean realMoneyGame(){
-        return settings.getChipPolicy()==0;
+        return !settings.tournamentMode();
     }
 
     private double getConvertRatio(){
         return (realMoneyGame()) ? 1 : settings.getBuyInPolicy()/settings.getChipPolicy();
 
     }
-    // FIXME: Temporary to fix the build.
+    // todo : think what to do with this flag, when to flip to false\true
     public boolean isActive(){
         return players.size() == 0;
     }
@@ -154,6 +154,13 @@ public class Game {
     public int getMinimalAmountOfPlayer(){
         return settings.getPlayerRange().getLeft();
     }
+
+    public String getName(){
+        return settings.getName();
+    }
+
+    public Round getLastRound(){
+        return rounds.get(rounds.size()-1);
 
     public int getMaximalAmountOfPlayers() {
         return settings.getPlayerRange().getRight();

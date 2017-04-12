@@ -7,6 +7,7 @@ public class GameSettings {
         LIMIT, NOLIMIT, POTLIMIT
     }
 
+    private String name;
     private GamePolicy gameType;
     private int gameTypeLimit;
     private int minBet;
@@ -16,7 +17,8 @@ public class GameSettings {
     private boolean acceptSpectating;
     private int leagueCriteria;
 
-    public GameSettings(GamePolicy policy,int limit, int minBet, int buyInPolicy, int chipPolicy, int minPlyerAmount, int maxPlayerAmount, boolean specAccept,int league){
+    public GameSettings(String name, GamePolicy policy,int limit, int minBet, int buyInPolicy, int chipPolicy, int minPlyerAmount, int maxPlayerAmount, boolean specAccept){
+        this.name = name;
         this.gameType = policy;
         this.gameTypeLimit = limit;
         this.minBet = minBet;
@@ -24,10 +26,13 @@ public class GameSettings {
         this.chipPolicy = chipPolicy;
         playerRange = Pair.of(minPlyerAmount,maxPlayerAmount);
         this.acceptSpectating = specAccept;
-        this.leagueCriteria = league;
     }
 
     private GameSettings(){}
+
+    public String getName(){
+        return this.name;
+    }
 
     public GamePolicy getGameType() {return gameType;}
 
@@ -51,5 +56,9 @@ public class GameSettings {
 
     public void setLeagueCriteria(int leagueCriteria) {
         this.leagueCriteria = leagueCriteria;
+    }
+
+    public boolean tournamentMode(){
+        return getChipPolicy()!= 0;
     }
 }
