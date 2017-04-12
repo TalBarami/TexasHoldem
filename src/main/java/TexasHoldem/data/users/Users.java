@@ -19,7 +19,7 @@ public class Users implements IUsers {
     }
 
     public void addUser(User user) throws InvalidArgumentException {
-        verifyUserNameAndEmail(user.getUsername(),user.getPassword());
+        verifyUserNameAndEmail(user.getUsername(),user.getEmail());
         _userList.put(user.getUsername(),user);
     }
 
