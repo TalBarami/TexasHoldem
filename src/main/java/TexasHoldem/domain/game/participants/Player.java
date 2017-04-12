@@ -43,7 +43,7 @@ public class Player extends Participant{
             chipsAmount += amount;
     }
 
-    public void payChips(int amount) {
+    public int payChips(int amount) {
         if (chipPolicy == 0) {
             int amountWasReduced = 0;
             try {
@@ -53,18 +53,25 @@ public class Player extends Participant{
             }
             lastBetSinceCardOpen += amountWasReduced;
             totalAmountPayedInRound += amountWasReduced;
+
+            return amountWasReduced;
         }
         else {
             if (chipsAmount >= amount) {
                 chipsAmount -= amount;
                 lastBetSinceCardOpen += amount;
                 totalAmountPayedInRound += amount;
+
+                return amount;
             }
 
             else {
                 lastBetSinceCardOpen += chipsAmount;
                 totalAmountPayedInRound += chipsAmount;
+                int amountToReturn = chipsAmount;
                 chipsAmount = 0;
+
+                return amountToReturn;
             }
         }
     }
