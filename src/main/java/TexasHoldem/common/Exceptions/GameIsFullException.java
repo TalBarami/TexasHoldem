@@ -1,6 +1,6 @@
 package TexasHoldem.common.Exceptions;
 
-public class GameIsFullException extends Exception {
+public class GameIsFullException extends GameException {
     public GameIsFullException(String message){
         super(message);
     }
