@@ -18,11 +18,11 @@ public class Dealer {
     }
 
     public void deal(Collection<Player> players){
-        players.forEach(p -> {
+        for(Player p : players){
             List<Card> cards = deck.get(2);
             logger.info("{} received 2 cards: {}", p.getUser().getUsername(), cards);
             p.addCards(cards);
-        });
+        }
     }
 
     public List<Card> open(int numOfCards) {
