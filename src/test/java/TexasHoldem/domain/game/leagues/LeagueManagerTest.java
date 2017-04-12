@@ -18,7 +18,7 @@ public class LeagueManagerTest {
     LeagueManager leagueManager;
     @Before
     public void setUp() throws Exception {
-        user = new User("hod", "1234", "hod.bub@gmail.com", null);
+        user = new User("hod", "1234", "hod.bub@gmail.com", null, null);
         leagueManager = new LeagueManager();
     }
 
@@ -58,7 +58,7 @@ public class LeagueManagerTest {
         user.setAmountEarnedInLeague(leagueManager.getCriteriaToMovingLeague());
         leagueManager.updateUserLeague(user);
         assertTrue(leagueManager.checkIfHasPermissions(user));
-        User user2 = new User("Rotem", "1234", "waldr@gmail.com", null);
+        User user2 = new User("Rotem", "1234", "waldr@gmail.com", null, null);
         leagueManager.addNewUserToLegue(user2);
         assertFalse(leagueManager.checkIfHasPermissions(user2));
     }
