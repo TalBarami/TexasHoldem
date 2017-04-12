@@ -35,7 +35,7 @@ public class Games implements IGames {
     }
 
     public LinkedList<Game> getActiveGamesByPlayerName(String playerName) {
-        return searchActiveGame(g -> g.getPlayers().stream().anyMatch(p -> p.getUser().getUsername() == playerName));
+        return searchActiveGame(g -> g.getPlayers().stream().anyMatch(p -> p.getUser().getUsername().equals(playerName)));
     }
 
     public List<String> getAllGameNames(){
