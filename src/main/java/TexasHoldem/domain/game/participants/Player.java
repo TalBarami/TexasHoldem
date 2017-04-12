@@ -1,10 +1,13 @@
 package TexasHoldem.domain.game.participants;
 
 import TexasHoldem.common.Exceptions.ArgumentNotInBoundsException;
+import TexasHoldem.domain.game.GameActions;
 import TexasHoldem.domain.game.card.Card;
 import TexasHoldem.domain.game.Game;
 import TexasHoldem.domain.user.User;
 import java.util.*;
+
+import static TexasHoldem.domain.game.GameActions.*;
 
 /**
  * Created by Hod and Rotem on 05/04/2017.
@@ -79,12 +82,12 @@ public class Player extends Participant{
     }
 
     // TODO :: Make choose dynamically
-    public Game.GameActions chooseAction(List<Game.GameActions> gameActions) {
-        if (gameActions.contains(Game.GameActions.CALL)) {
-            return Game.GameActions.CALL;
+    public GameActions chooseAction(List<GameActions> gameActions) {
+        if (gameActions.contains(CALL)) {
+            return CALL;
         }
         else {
-            return Game.GameActions.CHECK;
+            return CHECK;
         }
     }
 

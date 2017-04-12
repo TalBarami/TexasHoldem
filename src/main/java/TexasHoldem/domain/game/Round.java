@@ -9,7 +9,8 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
 
-import static TexasHoldem.domain.game.Game.GameActions.*;
+import static TexasHoldem.domain.game.GameActions.*;
+
 
 /**
  * Created by Hod and Rotem on 05/04/2017.
@@ -261,8 +262,8 @@ public class Round {
         currentPlayer = activePlayers.get(nextPlayerIndex);
     }
 
-    private List<Game.GameActions> calculateTurnOptions() {
-        List<Game.GameActions> gameActions = new LinkedList<Game.GameActions>();
+    private List<GameActions> calculateTurnOptions() {
+        List<GameActions> gameActions = new LinkedList<GameActions>();
         double difference = chipsToCall - currentPlayer.getLastBetSinceCardOpen();
 
         if (difference == 0)
