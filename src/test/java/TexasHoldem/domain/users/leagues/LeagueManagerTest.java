@@ -1,4 +1,4 @@
-package TexasHoldem.domain.game.leagues;
+package TexasHoldem.domain.users.leagues;
 
 import TexasHoldem.domain.user.User;
 import org.junit.After;
@@ -34,10 +34,8 @@ public class LeagueManagerTest {
     @Test
     public void updateUserLeague() throws Exception {
         leagueManager.addNewUserToLegue(user);
-        System.out.println("previous league is " + user.getCurrLeague());
         user.setAmountEarnedInLeague(leagueManager.getCriteriaToMovingLeague());
         leagueManager.updateUserLeague(user);
-        System.out.println("new league is " + user.getCurrLeague());
         assertEquals(leagueManager.getDefaultLeagueForNewUsers() + 1, user.getCurrLeague());
         assertEquals(0, user.getAmountEarnedInLeague());
 
@@ -58,6 +56,12 @@ public class LeagueManagerTest {
         User user2 = new User("Rotem", "1234", "waldr@gmail.com", null, null);
         leagueManager.addNewUserToLegue(user2);
         assertFalse(leagueManager.checkIfHasPermissions(user2));
+    }
+
+    @Test
+    public void moveUserToLeague() throws Exception {
+        leagueManager.moveUserToLeague(user, 10);
+        assertEquals(10, user.getCurrLeague());
     }
 
     @Test
