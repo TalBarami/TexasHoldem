@@ -53,7 +53,7 @@ public class GameCenter {
         });
 
         //remove from logged in users
-        loggedInUsers=loggedInUsers.stream().filter(user -> !user.getUsername().equals(userName)).collect(Collectors.toList());
+            loggedInUsers=loggedInUsers.stream().filter(user -> !user.getUsername().equals(userName)).collect(Collectors.toList());
     }
 
     public void editProfile(String originalUserName,String newUserName, String pass,String email, LocalDate date) throws InvalidArgumentException {
@@ -62,5 +62,13 @@ public class GameCenter {
 
     public void depositMoney(String userName,int amount) throws ArgumentNotInBoundsException {
         usersDb.getUserByUserName(userName).deposit(amount,false);
+    }
+
+    public List<Game> findAvailableGames(User user){
+        return activeGames.stream().filter(game -> game.getLeague() == user.getCurrLeague() &&
+                game.getBuyInPolicy() <= user.getBalance() &&
+                (game.realMoneyGame() || (!game.realMoneyGame() && !game.isActive())) &&
+                game.getPlayers().size() <= game.getMaximalAmountOfPlayers())
+                .collect(Collectors.toList());
     }
 }

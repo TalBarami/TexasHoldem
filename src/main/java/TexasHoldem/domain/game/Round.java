@@ -8,8 +8,6 @@ import TexasHoldem.domain.game.participants.Player;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static TexasHoldem.domain.game.Game.GameActions.*;
 
@@ -51,7 +49,7 @@ public class Round {
     }
 
     public void startRound() {
-        dealer.dealCardsToPlayers(activePlayers);
+        dealer.dealCards(activePlayers);
         paySmallAndBigBlind();
         playPreFlopRound();
 

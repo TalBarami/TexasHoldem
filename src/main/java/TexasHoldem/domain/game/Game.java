@@ -154,4 +154,8 @@ public class Game {
     public int getMinimalAmountOfPlayer(){
         return settings.getPlayerRange().getLeft();
     }
+
+    public int getMaximalAmountOfPlayers() {
+        return settings.getPlayerRange().getRight();
+    }
 }

@@ -20,7 +20,7 @@ public class Dealer {
         deck = new Deck();
     }
 
-    public void dealCardsToPlayers(Collection<Player> players){
+    public void dealCards(Collection<Player> players){
         players.forEach(p -> {
             List<Card> cards = deck.get(2);
             logger.info("{} received 2 cards: {}", p.getUser().getUsername(), cards);

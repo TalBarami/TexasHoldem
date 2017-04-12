@@ -14,10 +14,10 @@ public class Deck {
 
     public Deck(){
         cards = new ArrayList<>();
-        prepareDeck();
+        prepare();
     }
 
-    public void prepareDeck(){
+    private void prepare(){
         logger.info("Preparing new deck.");
         for (Suit suit : Suit.values())
             for (Rank rank : Rank.values())
@@ -25,7 +25,7 @@ public class Deck {
         shuffle();
     }
 
-    public void shuffle(){
+    private void shuffle(){
         Collections.shuffle(cards);
     }
 
