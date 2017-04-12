@@ -4,6 +4,7 @@ import TexasHoldem.common.Exceptions.*;
 import TexasHoldem.domain.game.Game;
 import TexasHoldem.domain.game.GameSettings;
 import TexasHoldem.domain.system.GameCenter;
+import TexasHoldem.domain.user.User;
 
 import javax.security.auth.login.LoginException;
 import java.awt.image.BufferedImage;
@@ -24,6 +25,10 @@ public class TexasHoldemService {
         gameCenter.registerUser(username, pass, email, date, img);
     }
 
+    public void deleteUser(String username) throws EntityDoesNotExistsException {
+        gameCenter.deleteUser(username);
+    }
+
     public void login(String username,String pass) throws LoginException {
         gameCenter.login(username, pass);
     }
@@ -34,6 +39,10 @@ public class TexasHoldemService {
 
     public void editProfile(String originalUserName,String newUserName, String pass,String email, LocalDate date) throws InvalidArgumentException {
         gameCenter.editProfile(originalUserName, newUserName, pass, email, date);
+    }
+
+    public User getUser(String username){
+        return gameCenter.getUser(username);
     }
 
     public void createGame(String creatorUsername, String gameName, GameSettings.GamePolicy policy, int limit, int minBet, int buyInPolicy, int chipPolicy,
