@@ -76,9 +76,8 @@ public class GameCenter {
     }
 
     public void depositMoney(String userName,int amount) throws ArgumentNotInBoundsException {
-        usersDb.getUserByUserName(userName).deposit(amount,false);
+        usersDb.getUserByUserName(userName).deposit(amount,true);
     }
-
 
     //todo : service layer will catch exception if  game room already chosen or balance below buy in.
     public void createGame(String creatorUserName,GameSettings settings) throws InvalidArgumentException, NoBalanceForBuyInException, ArgumentNotInBoundsException {
