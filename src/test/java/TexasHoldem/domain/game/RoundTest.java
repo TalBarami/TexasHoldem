@@ -1,7 +1,5 @@
 package TexasHoldem.domain.game;
 
-import TexasHoldem.domain.game.card.Card;
-import TexasHoldem.domain.game.hand.Hand;
 import TexasHoldem.domain.game.participants.Player;
 import TexasHoldem.domain.user.LeagueManager;
 import TexasHoldem.domain.user.User;
@@ -68,7 +66,6 @@ public class RoundTest {
         }
     }
 
-    @Test
     public void round1_testPaySmallAndBigBlind() throws Exception {
         int smallBlindAmount = 5;
         int bigBlindAmount = 10;
@@ -84,9 +81,8 @@ public class RoundTest {
         Assert.assertTrue(bigPlayer.getChipsAmount() == bigPlayerOldChipAmount - bigBlindAmount);
     }
 
-    @Test
     public void round1_testPlayPreFlopRound() throws Exception {
-        Map<Player, List<Pair<Game.GameActions, Integer>>> playerDecisions = new HashMap<Player, List<Pair<Game.GameActions, Integer>>>();
+        Map<Player, List<Pair<GameActions, Integer>>> playerDecisions = new HashMap<Player, List<Pair<GameActions, Integer>>>();
 
         Player dealer = round1.getCurrentDealerPlayer();
         Player smallPlayer = round1.getSmallPlayer();
@@ -98,15 +94,15 @@ public class RoundTest {
         double bigPlayerOldRealCurrency = bigPlayer.getUser().getBalance();
         double lastPlayerOldRealCurrency = lastPlayer.getUser().getBalance();
 
-        List<Pair<Game.GameActions, Integer>> dealerDecisionList = new LinkedList<Pair<Game.GameActions, Integer>>();
-        List<Pair<Game.GameActions, Integer>> smallPlayerDecisionList = new LinkedList<Pair<Game.GameActions, Integer>>();
-        List<Pair<Game.GameActions, Integer>> bigPlayerDecisionList = new LinkedList<Pair<Game.GameActions, Integer>>();
-        List<Pair<Game.GameActions, Integer>> lastPlayerDecisionList = new LinkedList<Pair<Game.GameActions, Integer>>();
+        List<Pair<GameActions, Integer>> dealerDecisionList = new LinkedList<Pair<GameActions, Integer>>();
+        List<Pair<GameActions, Integer>> smallPlayerDecisionList = new LinkedList<Pair<GameActions, Integer>>();
+        List<Pair<GameActions, Integer>> bigPlayerDecisionList = new LinkedList<Pair<GameActions, Integer>>();
+        List<Pair<GameActions, Integer>> lastPlayerDecisionList = new LinkedList<Pair<GameActions, Integer>>();
 
-        dealerDecisionList.add(Pair.of(Game.GameActions.CALL, null));
-        smallPlayerDecisionList.add(Pair.of(Game.GameActions.CALL, null));
-        bigPlayerDecisionList.add(Pair.of(Game.GameActions.CHECK, null));
-        lastPlayerDecisionList.add(Pair.of(Game.GameActions.CALL, null));
+        dealerDecisionList.add(Pair.of(GameActions.CALL, null));
+        smallPlayerDecisionList.add(Pair.of(GameActions.CALL, null));
+        bigPlayerDecisionList.add(Pair.of(GameActions.CHECK, null));
+        lastPlayerDecisionList.add(Pair.of(GameActions.CALL, null));
 
         playerDecisions.put(dealer, dealerDecisionList);
         playerDecisions.put(smallPlayer, smallPlayerDecisionList);
@@ -125,9 +121,8 @@ public class RoundTest {
         Assert.assertTrue(lastPlayer.getUser().getBalance() == lastPlayerOldRealCurrency);
     }
 
-    @Test
     public void round1_testPlayFlopRound() {
-        Map<Player, List<Pair<Game.GameActions, Integer>>> playerDecisions = new HashMap<Player, List<Pair<Game.GameActions, Integer>>>();
+        Map<Player, List<Pair<GameActions, Integer>>> playerDecisions = new HashMap<Player, List<Pair<GameActions, Integer>>>();
 
         Player dealer = round1.getCurrentDealerPlayer();
         Player smallPlayer = round1.getSmallPlayer();
@@ -139,15 +134,15 @@ public class RoundTest {
         double bigPlayerOldRealCurrency = bigPlayer.getUser().getBalance();
         double lastPlayerOldRealCurrency = lastPlayer.getUser().getBalance();
 
-        List<Pair<Game.GameActions, Integer>> dealerDecisionList = new LinkedList<Pair<Game.GameActions, Integer>>();
-        List<Pair<Game.GameActions, Integer>> smallPlayerDecisionList = new LinkedList<Pair<Game.GameActions, Integer>>();
-        List<Pair<Game.GameActions, Integer>> bigPlayerDecisionList = new LinkedList<Pair<Game.GameActions, Integer>>();
-        List<Pair<Game.GameActions, Integer>> lastPlayerDecisionList = new LinkedList<Pair<Game.GameActions, Integer>>();
+        List<Pair<GameActions, Integer>> dealerDecisionList = new LinkedList<Pair<GameActions, Integer>>();
+        List<Pair<GameActions, Integer>> smallPlayerDecisionList = new LinkedList<Pair<GameActions, Integer>>();
+        List<Pair<GameActions, Integer>> bigPlayerDecisionList = new LinkedList<Pair<GameActions, Integer>>();
+        List<Pair<GameActions, Integer>> lastPlayerDecisionList = new LinkedList<Pair<GameActions, Integer>>();
 
-        dealerDecisionList.add(Pair.of(Game.GameActions.CALL, null));
-        smallPlayerDecisionList.add(Pair.of(Game.GameActions.RAISE, 10));
-        bigPlayerDecisionList.add(Pair.of(Game.GameActions.CALL, null));
-        lastPlayerDecisionList.add(Pair.of(Game.GameActions.FOLD, null));
+        dealerDecisionList.add(Pair.of(GameActions.CALL, null));
+        smallPlayerDecisionList.add(Pair.of(GameActions.RAISE, 10));
+        bigPlayerDecisionList.add(Pair.of(GameActions.CALL, null));
+        lastPlayerDecisionList.add(Pair.of(GameActions.FOLD, null));
 
         playerDecisions.put(dealer, dealerDecisionList);
         playerDecisions.put(smallPlayer, smallPlayerDecisionList);
@@ -170,9 +165,8 @@ public class RoundTest {
         Assert.assertTrue(lastPlayer.getUser().getBalance() == lastPlayerOldRealCurrency);
     }
 
-    @Test
     public void round1_runPlayRiverRound() {
-        Map<Player, List<Pair<Game.GameActions, Integer>>> playerDecisions = new HashMap<Player, List<Pair<Game.GameActions, Integer>>>();
+        Map<Player, List<Pair<GameActions, Integer>>> playerDecisions = new HashMap<Player, List<Pair<GameActions, Integer>>>();
 
         Player dealer = round1.getCurrentDealerPlayer();
         Player smallPlayer = round1.getSmallPlayer();
@@ -182,16 +176,16 @@ public class RoundTest {
         double smallPlayerOldRealCurrency = smallPlayer.getUser().getBalance();
         double bigPlayerOldRealCurrency = bigPlayer.getUser().getBalance();
 
-        List<Pair<Game.GameActions, Integer>> dealerDecisionList = new LinkedList<Pair<Game.GameActions, Integer>>();
-        List<Pair<Game.GameActions, Integer>> smallPlayerDecisionList = new LinkedList<Pair<Game.GameActions, Integer>>();
-        List<Pair<Game.GameActions, Integer>> bigPlayerDecisionList = new LinkedList<Pair<Game.GameActions, Integer>>();
+        List<Pair<GameActions, Integer>> dealerDecisionList = new LinkedList<Pair<GameActions, Integer>>();
+        List<Pair<GameActions, Integer>> smallPlayerDecisionList = new LinkedList<Pair<GameActions, Integer>>();
+        List<Pair<GameActions, Integer>> bigPlayerDecisionList = new LinkedList<Pair<GameActions, Integer>>();
 
-        smallPlayerDecisionList.add(Pair.of(Game.GameActions.CHECK, null));
-        bigPlayerDecisionList.add(Pair.of(Game.GameActions.RAISE, 10));
-        dealerDecisionList.add(Pair.of(Game.GameActions.RAISE, 20));
-        smallPlayerDecisionList.add(Pair.of(Game.GameActions.FOLD, null));
-        bigPlayerDecisionList.add(Pair.of(Game.GameActions.RAISE, 30));
-        dealerDecisionList.add(Pair.of(Game.GameActions.CALL, null));
+        smallPlayerDecisionList.add(Pair.of(GameActions.CHECK, null));
+        bigPlayerDecisionList.add(Pair.of(GameActions.RAISE, 10));
+        dealerDecisionList.add(Pair.of(GameActions.RAISE, 20));
+        smallPlayerDecisionList.add(Pair.of(GameActions.FOLD, null));
+        bigPlayerDecisionList.add(Pair.of(GameActions.RAISE, 30));
+        dealerDecisionList.add(Pair.of(GameActions.CALL, null));
 
         playerDecisions.put(dealer, dealerDecisionList);
         playerDecisions.put(smallPlayer, smallPlayerDecisionList);
