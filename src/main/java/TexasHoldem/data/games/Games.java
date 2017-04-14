@@ -4,6 +4,7 @@ import TexasHoldem.common.Exceptions.InvalidArgumentException;
 import TexasHoldem.domain.game.Game;
 import TexasHoldem.domain.game.GameSettings;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,10 +16,12 @@ import java.util.stream.Collectors;
  */
 public class Games implements IGames {
     private HashMap<Integer, Game> _games;
+    private List<Game> archivedGames;
     int _newGameId;
 
     public Games() {
         _games = new HashMap<Integer, Game>();
+        archivedGames=new ArrayList<>();
         _newGameId = 0;
     }
 
@@ -32,6 +35,11 @@ public class Games implements IGames {
         _games.put(gameId, game);
 
         return true;
+    }
+
+    public void archiveGame(Game game){
+        archivedGames.add(game);
+        _games.remove(game.getId());
     }
 
     public LinkedList<Game> getActiveGamesByPlayerName(String playerName) {
