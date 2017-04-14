@@ -5,11 +5,12 @@ import TexasHoldem.domain.game.card.Dealer;
 import TexasHoldem.domain.game.hand.Hand;
 import TexasHoldem.domain.game.hand.HandCalculator;
 import TexasHoldem.domain.game.participants.Player;
-import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import static TexasHoldem.domain.game.GameActions.*;
 
@@ -42,46 +43,13 @@ public class Round {
         this.openedCards = new ArrayList<Card>();
 
         int startingPlayerIndex = (dealerIndex + 3) % activePlayers.size();
-        int lastPlayerIndex = (dealerIndex + 2) % activePlayers.size();
         this.currentPlayer = activePlayers.get(startingPlayerIndex);
-        this.lastPlayer = activePlayers.get(lastPlayerIndex);
+        this.lastPlayer = getBigPlayer();
         initPlayersTotalAmountPayedInRound();
     }
 
-    private Round() {
-    }
+    private Round(){
 
-    public void runDealCards() {
-        dealer.deal(activePlayers);
-    }
-
-    public void runPaySmallAndBigBlind() {
-        paySmallAndBigBlind();
-    }
-
-    public void runPlayPreFlopRound(Map<Player, List<Pair<GameActions, Integer>>> decisions) {
-        playPreFlopRound(decisions);
-    }
-
-    public void runPreStartOfNewTurn() {
-        chipsToCall = 0;
-        initPlayersLastBetSinceCardOpen();
-    }
-
-    public void runPlayFlopRound(Map<Player, List<Pair<GameActions, Integer>>> decisions) {
-        playFlopOrTurnRound(decisions);
-    }
-
-    public void runPlayTurnRound(Map<Player, List<Pair<GameActions, Integer>>> decisions) {
-        playFlopOrTurnRound(decisions);
-    }
-
-    public void runPlayRiverRound(Map<Player, List<Pair<GameActions, Integer>>> decisions) {
-        playRiverRound(decisions);
-    }
-
-    public void runEndRound() {
-        endRound();
     }
 
     public void startRound() {
@@ -90,22 +58,22 @@ public class Round {
 
         dealer.deal(activePlayers);
         paySmallAndBigBlind();
-        playPreFlopRound(playerDecisions);
+        playPreFlopRound();
 
         if (activePlayers.size() > 1) {
             chipsToCall = 0;
             initPlayersLastBetSinceCardOpen();
-            playFlopOrTurnRound(playerDecisions);
+            playFlopOrTurnRound();
         }
         if (activePlayers.size() > 1) {
             chipsToCall = 0;
             initPlayersLastBetSinceCardOpen();
-            playFlopOrTurnRound(playerDecisions);
+            playFlopOrTurnRound();
         }
         if (activePlayers.size() > 1) {
             chipsToCall = 0;
             initPlayersLastBetSinceCardOpen();
-            playRiverRound(playerDecisions);
+            playRiverRound();
         }
         if (activePlayers.size() > 1) {
             chipsToCall = 0;
@@ -171,18 +139,19 @@ public class Round {
         logger.info("Big blind payed by {}", bigPlayer.getUser().getUsername());
     }
 
-    private void playRoundFlow(Map<Player, List<Pair<GameActions, Integer>>> decisions) {
-        int listIndex = 0;
-        int numOfPlayers = activePlayers.size();
-        int iteration = 0;
+    private void playRoundFlow() {
+        boolean isLastPlayerPlayed = false;
 
-        while (currentPlayer != lastPlayer) {
+        while (!isLastPlayerPlayed) {
             GameActions chosenAction;
-            chosenAction = decisions.get(currentPlayer).get(listIndex).getLeft();
+            chosenAction = currentPlayer.chooseAction(calculateTurnOptions());
+
+            if (currentPlayer == lastPlayer)
+                isLastPlayerPlayed = true;
 
             switch (chosenAction) {
                 case RAISE:
-                    int amountToRaise = decisions.get(currentPlayer).get(listIndex).getRight();
+                    int amountToRaise = currentPlayer.chooseAmountToRaise(chipsToCall * 2);
                     playerRaiseTurn(amountToRaise);
                     break;
                 case CHECK:
@@ -195,17 +164,13 @@ public class Round {
                     playerCallTurn();
                     break;
             }
-
-            iteration++;
-            if (iteration % numOfPlayers == 0) {
-                listIndex++;
-                numOfPlayers = activePlayers.size();
-            }
         }
+
+        initLastPlayer();
     }
 
-    private void playPreFlopRound(Map<Player, List<Pair<GameActions, Integer>>> decisions) {
-        playRoundFlow(decisions);
+    private void playPreFlopRound() {
+        playRoundFlow();
 
         openedCards.addAll(dealer.open(3));
         logger.info("Cards opened are: ");
@@ -215,12 +180,12 @@ public class Round {
         }
     }
 
-    private void playFlopOrTurnRound(Map<Player, List<Pair<GameActions, Integer>>> decisions) {
+    public void playFlopOrTurnRound() {
         int dealerIndex = activePlayers.indexOf(currentDealerPlayer);
         int newCurrentPlayerIndex = (dealerIndex + 1) % (activePlayers.size());
         currentPlayer = activePlayers.get(newCurrentPlayerIndex);
 
-        playRoundFlow(decisions);
+        playRoundFlow();
         openedCards.addAll(dealer.open(1));
         logger.info("Cards opened are: ");
 
@@ -229,12 +194,12 @@ public class Round {
         }
     }
 
-    private void playRiverRound(Map<Player, List<Pair<GameActions, Integer>>> decisions) {
+    private void playRiverRound() {
         int dealerIndex = activePlayers.indexOf(currentDealerPlayer);
         int newCurrentPlayerIndex = (dealerIndex + 1) % (activePlayers.size());
         currentPlayer = activePlayers.get(newCurrentPlayerIndex);
 
-        playRoundFlow(decisions);
+        playRoundFlow();
     }
 
     private void playerRaiseTurn(int amountToRaise) {
@@ -369,6 +334,10 @@ public class Round {
         for (Player p : activePlayers) {
             p.setLastBetSinceCardOpen(0);
         }
+    }
+
+    public void initLastPlayer() {
+        lastPlayer = currentDealerPlayer;
     }
 
     public void setRoundActive(boolean roundActive) {
