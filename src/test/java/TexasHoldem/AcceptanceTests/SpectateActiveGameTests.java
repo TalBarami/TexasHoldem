@@ -1,8 +1,11 @@
 package TexasHoldem.AcceptanceTests;
 
+import TexasHoldem.domain.game.GameSettings;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.time.LocalDate;
 
 /**
  * Created by אחיעד on 08/04/2017.
@@ -22,14 +25,14 @@ public class SpectateActiveGameTests extends ProjectTest {
         loginUsers();
         addBalance();
         setUserLeague();
-        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", "limit" , 10000, 10000, 100, 2, 9, true,4);
-        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", "no limit" , 300, 300, 2, 2, 9, true,4);
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GameSettings.GamePolicy.NOLIMIT , 10000, 10000, 100, 2, 9, true);
+        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game",  GameSettings.GamePolicy.NOLIMIT , 300, 300, 2, 2, 9, true);
         assertTrue(gamecreated1);
         assertTrue(gamecreated2);
-        boolean spectategameisvalid1 = this.spectateactivegame("hodbub" , "achiadg-poker-game");
-        boolean spectategameisvalid2 = this.spectateactivegame("achiadg" , "hodbub-poker-game");
-        boolean spectategameisvalid3 = this.spectateactivegame("rotemw" , "achiadg-poker-game");
-        boolean spectategameisvalid4 = this.spectateactivegame("ronenbu" , "hodbub-poker-game");
+        boolean spectategameisvalid1 = this.spectateactivegame("hodbub" , "achiadg-poker-game",true);
+        boolean spectategameisvalid2 = this.spectateactivegame("achiadg" , "hodbub-poker-game",true);
+        boolean spectategameisvalid3 = this.spectateactivegame("rotemw" , "achiadg-poker-game",true);
+        boolean spectategameisvalid4 = this.spectateactivegame("ronenbu" , "hodbub-poker-game",true);
         assertTrue(spectategameisvalid1);
         assertTrue(spectategameisvalid2);
         assertTrue(spectategameisvalid3);
@@ -49,14 +52,14 @@ public class SpectateActiveGameTests extends ProjectTest {
         loginUsers();
         addBalance();
         setUserLeague();
-        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", "limit" , 10000, 10000, 100, 2, 9, false,4);
-        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", "no limit" , 300, 300, 2, 2, 9, false,4);
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GameSettings.GamePolicy.NOLIMIT , 10000, 10000, 100, 2, 9, false);
+        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game",  GameSettings.GamePolicy.NOLIMIT , 300, 300, 2, 2, 9, false);
         assertTrue(gamecreated1);
         assertTrue(gamecreated2);
-        boolean spectategameisvalid1 = this.spectateactivegame("hodbub" , "achiadg-poker-game");
-        boolean spectategameisvalid2 = this.spectateactivegame("achiadg" , "hodbub-poker-game");
-        boolean spectategameisvalid3 = this.spectateactivegame("rotemw" , "achiadg-poker-game");
-        boolean spectategameisvalid4 = this.spectateactivegame("ronenbu" , "hodbub-poker-game");
+        boolean spectategameisvalid1 = this.spectateactivegame("hodbub" , "achiadg-poker-game",true);
+        boolean spectategameisvalid2 = this.spectateactivegame("achiadg" , "hodbub-poker-game",true);
+        boolean spectategameisvalid3 = this.spectateactivegame("rotemw" , "achiadg-poker-game",true);
+        boolean spectategameisvalid4 = this.spectateactivegame("ronenbu" , "hodbub-poker-game",true);
         assertFalse(spectategameisvalid1);
         assertFalse(spectategameisvalid2);
         assertFalse(spectategameisvalid3);
@@ -76,14 +79,14 @@ public class SpectateActiveGameTests extends ProjectTest {
         loginUsers();
         addBalance();
         setUserLeague();
-        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", "limit" , 10000, 10000, 100, 2, 9, true,4);
-        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", "no limit" , 300, 300, 2, 2, 9, true,4);
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GameSettings.GamePolicy.NOLIMIT , 10000, 10000, 100, 2, 9, true);
+        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game",  GameSettings.GamePolicy.NOLIMIT , 300, 300, 2, 2, 9, true);
         assertTrue(gamecreated1);
         assertTrue(gamecreated2);
-        boolean spectategameisvalid1 = this.spectateactivegame("hodbub" , "achiadg-poker-ga\nme");
-        boolean spectategameisvalid2 = this.spectateactivegame("achiadg" , "hodb\tub-poker-game");
-        boolean spectategameisvalid3 = this.spectateactivegame("rotemw" , "achiadg-po\\\nker-game");
-        boolean spectategameisvalid4 = this.spectateactivegame("ronenbu" , "h\rodbub-poker-game");
+        boolean spectategameisvalid1 = this.spectateactivegame("hodb\nub" , "achiadg-poker-game",true);
+        boolean spectategameisvalid2 = this.spectateactivegame("ac\rhiadg" , "hodbub-poker-game",true);
+        boolean spectategameisvalid3 = this.spectateactivegame("rotemw" , "achiadg-poke\tr-game",true);
+        boolean spectategameisvalid4 = this.spectateactivegame("ronenbu" , "h\rodbub-poker-game",true);
         assertFalse(spectategameisvalid1);
         assertFalse(spectategameisvalid2);
         assertFalse(spectategameisvalid3);
@@ -104,9 +107,9 @@ public class SpectateActiveGameTests extends ProjectTest {
         loginUsers();
         addBalance();
         setUserLeague();
-        boolean gamecreated1 = this.createnewgame("hodbub","hodbub-poker-game", "no limit" , 300, 300, 2, 2, 9, true,4);
+        boolean gamecreated1 = this.createnewgame("hodbub","hodbub-poker-game",  GameSettings.GamePolicy.NOLIMIT , 300, 300, 2, 2, 9, true);
         assertTrue(gamecreated1);
-        boolean spectategameisvalid1 = this.spectateactivegame("hodbub" , "SELECT * FROM GAMES WHERE GAMENAME = achiad-poker-game");
+        boolean spectategameisvalid1 = this.spectateactivegame("achiadg" , "SELECT * FROM USERS WHERE username = achiadg-poker-game",true);
         assertFalse(spectategameisvalid1);
         boolean closegame1 = this.closegame("hodbub-poker-game");
         assertTrue(closegame1);
@@ -158,9 +161,9 @@ public class SpectateActiveGameTests extends ProjectTest {
 
     public void registerUsers()
     {
-        boolean useradded1 = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com",new DateTime(1991,4,20,22,13));
-        boolean useradded2 = this.registerUser("hodbub","hBublil1308","hod.bub@gmail.com",new DateTime(1991,8,14,17,44));
-        boolean useradded3 = this.registerUser("rotemw","rotemwald123","waldr@gmail.com",new DateTime(1991,5,7,12,31));
-        boolean useradded4 = this.registerUser("ronenbu","ronenbu123","butirevr@gmail.com",new DateTime(1991,7,12,19,48));
+        boolean useradded1 = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com", LocalDate.of(1991,4,20),null);
+        boolean useradded2 = this.registerUser("hodbub","hBublil1308","hod.bub@gmail.com",LocalDate.of(1991,8,28),null);
+        boolean useradded3 = this.registerUser("rotemw","rotemwald123","waldr@gmail.com",LocalDate.of(1991,11,26),null);
+        boolean useradded4 = this.registerUser("ronenbu","ronenbu123","butirevr@gmail.com",LocalDate.of(1991,4,26),null);
     }
 }

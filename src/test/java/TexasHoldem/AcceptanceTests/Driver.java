@@ -7,7 +7,7 @@ public abstract class Driver {
 
     public static Bridge getBridge(){
         ProxyBridge bridge = new ProxyBridge ();
-        bridge.setRealBridge(null);
+        bridge.setRealBridge(new RealBridge());
         return bridge;
     }
 

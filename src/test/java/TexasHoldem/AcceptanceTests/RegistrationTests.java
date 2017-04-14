@@ -1,6 +1,7 @@
 package TexasHoldem.AcceptanceTests;
 
 import org.joda.time.DateTime;
+import java.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,7 +19,7 @@ public class RegistrationTests extends ProjectTest {
     @Test
     public void testRegisterValidUser()
     {
-        boolean useradded = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com",new DateTime(1991,4,20,22,13));
+        boolean useradded = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com",LocalDate.of(1991,4,20),null);
         assertTrue(useradded);
         boolean userfound = this.searchUser("achiadg");
         assertTrue(userfound);
@@ -31,9 +32,9 @@ public class RegistrationTests extends ProjectTest {
     @Test
     public void testRegisterInValidUserName()
     {
-        boolean useradded = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com",new DateTime(1991,4,20,22,13));
+        boolean useradded = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com",LocalDate.of(1991,4,20), null);
         assertTrue(useradded);
-        useradded = this.registerUser("achiadg","aCh*","achiadg@gmail.post.bgu.ac.il",new DateTime(1995,3,28,14,18));
+        useradded = this.registerUser("achiadg","aCh*","achiadg@gmail.post.bgu.ac.il",LocalDate.of(1991,3,28), null);
         assertFalse(useradded);
         boolean deleteUser = this.deleteUser("achiadg");
         assertTrue(deleteUser);
@@ -44,9 +45,9 @@ public class RegistrationTests extends ProjectTest {
     @Test
     public void testRegisterInValidEmail()
     {
-        boolean useradded = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com",new DateTime(1991,4,20,22,13));
+        boolean useradded = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com",LocalDate.of(1991,4,20), null);
         assertTrue(useradded);
-        useradded = this.registerUser("achiadgelerenter","aChi*","achiadg@gmail.com",new DateTime(1991,4,20,14,18));
+        useradded = this.registerUser("achiadgelerenter","aChi*","achiadg@gmail.com",LocalDate.of(1991,4,20), null);
         assertFalse(useradded);
         boolean deleteUser = this.deleteUser("achiadg");
         assertTrue(deleteUser);
@@ -57,13 +58,13 @@ public class RegistrationTests extends ProjectTest {
     @Test
     public void testRegisterInValidCharecters()
     {
-        boolean useradded = this.registerUser("achi\radg","aChi12#*","achiadg@gmail.com",new DateTime(1991,4,20,22,13));
+        boolean useradded = this.registerUser("achi\radg","aChi12#*","achiadg@gmail.com",LocalDate.of(1991,4,20), null);
         assertFalse(useradded);
-        useradded = this.registerUser("achiadgelerenter","aC\nhi*","achiadg@gmail.com",new DateTime(1991,4,20,14,18));
+        useradded = this.registerUser("achiadgelerenter","aC\nhi*","achiadg@gmail.com",LocalDate.of(1991,4,20), null);
         assertFalse(useradded);
-        useradded = this.registerUser("achiadgelerenter","aChi*","achiadg@gm\tail.com",new DateTime(1991,4,20,14,18));
+        useradded = this.registerUser("achiadgelerenter","aChi*","achiadg@gm\tail.com",LocalDate.of(1991,4,20), null);
         assertFalse(useradded);
-        useradded = this.registerUser("achiadgelerenter","aChi*","achiadg@gmail.com",new DateTime(1991,4,38,14,18));
+        useradded = this.registerUser("achiadgelerenter","aChi*","achiadggmail.com",LocalDate.of(1991,4,20), null);
         assertFalse(useradded);
     }
 

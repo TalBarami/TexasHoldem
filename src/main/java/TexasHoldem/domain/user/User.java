@@ -107,7 +107,7 @@ public class User {
         gameMapping.remove(game);
     }
 
-    public double getBalance(){
+    public int getBalance(){
         return getWallet().getBalance();
     }
 

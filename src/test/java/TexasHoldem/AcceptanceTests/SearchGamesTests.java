@@ -1,8 +1,11 @@
 package TexasHoldem.AcceptanceTests;
 
+import TexasHoldem.domain.game.GameSettings;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.time.LocalDate;
 
 /**
  * Created by אחיעד on 08/04/2017.
@@ -22,8 +25,8 @@ public class SearchGamesTests extends ProjectTest {
         loginUsers();
         addBalance();
         setUserLeague();
-        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", "limit" , 10000, 10000, 100, 2, 9, true,4);
-        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", "no limit" , 300, 300, 2, 2, 9, false,4);
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GameSettings.GamePolicy.NOLIMIT , 10000, 10000, 100, 2, 9, true);
+        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game",  GameSettings.GamePolicy.NOLIMIT , 300, 300, 2, 2, 9, false);
         assertTrue(gamecreated1);
         assertTrue(gamecreated2);
         boolean gamesfound1 = this.searchgamebyplayername("achiadg");
@@ -74,8 +77,8 @@ public class SearchGamesTests extends ProjectTest {
         loginUsers();
         addBalance();
         setUserLeague();
-        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", "limit" , 10000, 10000, 100, 2, 9, true,4);
-        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", "no limit" , 300, 300, 2, 2, 9, false,4);
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", GameSettings.GamePolicy.NOLIMIT, 10000, 10000, 100, 2, 9, true);
+        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game",  GameSettings.GamePolicy.NOLIMIT , 300, 300, 2, 2, 9, false);
         assertTrue(gamecreated1);
         assertTrue(gamecreated2);
         boolean gamesfound1 = this.searchgamebytypepolicy("limit");
@@ -99,8 +102,8 @@ public class SearchGamesTests extends ProjectTest {
         loginUsers();
         addBalance();
         setUserLeague();
-        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", "limit" , 10000, 10000, 100, 2, 9, true,4);
-        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", "no limit" , 300, 300, 2, 2, 9, false,4);
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", GameSettings.GamePolicy.NOLIMIT , 10000, 10000, 100, 2, 9, true);
+        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game",  GameSettings.GamePolicy.NOLIMIT , 300, 300, 2, 2, 9, false);
         assertTrue(gamecreated1);
         assertTrue(gamecreated2);
         boolean gamesfound1 = this.searchgamebybuyin(10000);
@@ -126,8 +129,8 @@ public class SearchGamesTests extends ProjectTest {
         loginUsers();
         addBalance();
         setUserLeague();
-        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", "limit" , 10000, 10000, 100, 2, 9, true,4);
-        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", "no limit" , 300, 300, 2, 2, 9, false,4);
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GameSettings.GamePolicy.NOLIMIT , 10000, 10000, 100, 2, 9, true);
+        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game",  GameSettings.GamePolicy.NOLIMIT , 300, 300, 2, 2, 9, false);
         assertTrue(gamecreated1);
         assertTrue(gamecreated2);
         boolean gamesfound1 = this.searchgamebychippolicy(10000);
@@ -153,8 +156,8 @@ public class SearchGamesTests extends ProjectTest {
         loginUsers();
         addBalance();
         setUserLeague();
-        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", "limit" , 10000, 10000, 100, 2, 9, true,4);
-        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", "no limit" , 300, 300, 2, 3, 9, false,4);
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GameSettings.GamePolicy.NOLIMIT , 10000, 10000, 100, 2, 9, true);
+        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game",  GameSettings.GamePolicy.NOLIMIT , 300, 300, 2, 3, 9, false);
         assertTrue(gamecreated1);
         assertTrue(gamecreated2);
         boolean gamesfound1 = this.searchgamebyminbet(100);
@@ -180,8 +183,8 @@ public class SearchGamesTests extends ProjectTest {
         loginUsers();
         addBalance();
         setUserLeague();
-        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", "limit" , 10000, 10000, 100, 2, 9, true,4);
-        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", "no limit" , 300, 300, 2, 2, 9, false,4);
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GameSettings.GamePolicy.NOLIMIT , 10000, 10000, 100, 2, 9, true);
+        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game",  GameSettings.GamePolicy.NOLIMIT , 300, 300, 2, 2, 9, false);
         assertTrue(gamecreated1);
         assertTrue(gamecreated2);
         boolean gamesfound1 = this.searchgamebyminplayers(2);
@@ -207,8 +210,8 @@ public class SearchGamesTests extends ProjectTest {
         loginUsers();
         addBalance();
         setUserLeague();
-        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", "limit" , 10000, 10000, 100, 2, 9, true,4);
-        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", "no limit" , 300, 300, 2, 3, 8, false,4);
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GameSettings.GamePolicy.NOLIMIT , 10000, 10000, 100, 2, 9, true);
+        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game",  GameSettings.GamePolicy.NOLIMIT , 300, 300, 2, 3, 8, false);
         assertTrue(gamecreated1);
         assertTrue(gamecreated2);
         boolean gamesfound1 = this.searchgamebymaxplayers(9);
@@ -234,7 +237,7 @@ public class SearchGamesTests extends ProjectTest {
         loginUsers();
         addBalance();
         setUserLeague();
-        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", "limit" , 10000, 10000, 100, 2, 9, true,4);
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GameSettings.GamePolicy.NOLIMIT , 10000, 10000, 100, 2, 9, true);
         assertTrue(gamecreated1);
         boolean gamesfound1 = this.searchgamebyspectateisvalid(true);
         boolean gamesfound2 = this.searchgamebyspectateisvalid(false);
@@ -288,23 +291,23 @@ public class SearchGamesTests extends ProjectTest {
     }
 
     private void usersJoinsGames() {
-        boolean useraddedgame1 = this.joinexistinggame("hodbub" , "achiadg-poker-game");
-        boolean useraddedgame2 = this.joinexistinggame("rotemw" , "achiadg-poker-game");
-        boolean useraddedgame3 = this.joinexistinggame("ronenbu" , "hodbub-poker-game");
-        boolean useraddedgame4 = this.joinexistinggame("achiadg" , "hodbub-poker-game");
+        boolean useraddedgame1 = this.joinexistinggame("hodbub" , "achiadg-poker-game",false);
+        boolean useraddedgame2 = this.joinexistinggame("rotemw" , "achiadg-poker-game",false);
+        boolean useraddedgame3 = this.joinexistinggame("ronenbu" , "hodbub-poker-game",false);
+        boolean useraddedgame4 = this.joinexistinggame("achiadg" , "hodbub-poker-game",false);
     }
 
     public void registerUsers()
     {
-        boolean useradded1 = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com",new DateTime(1991,4,20,22,13));
-        boolean useradded2 = this.registerUser("hodbub","hBublil1308","hod.bub@gmail.com",new DateTime(1991,8,14,17,44));
-        boolean useradded3 = this.registerUser("rotemw","rotemwald123","waldr@gmail.com",new DateTime(1991,5,7,12,31));
-        boolean useradded4 = this.registerUser("ronenbu","ronenbu123","butirevr@gmail.com",new DateTime(1991,7,12,19,48));
+        boolean useradded1 = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com", LocalDate.of(1991,4,20),null);
+        boolean useradded2 = this.registerUser("hodbub","hBublil1308","hod.bub@gmail.com",LocalDate.of(1991,8,28),null);
+        boolean useradded3 = this.registerUser("rotemw","rotemwald123","waldr@gmail.com",LocalDate.of(1991,11,26),null);
+        boolean useradded4 = this.registerUser("ronenbu","ronenbu123","butirevr@gmail.com",LocalDate.of(1991,4,26),null);
     }
 
     private void createGames()
     {
-        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", "limit" , 10000, 10000, 100, 2, 9, true, 4);
-        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", "no limit" , 300, 300, 2, 2, 9, true, 4);
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GameSettings.GamePolicy.NOLIMIT , 10000, 10000, 100, 2, 9, true);
+        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game",  GameSettings.GamePolicy.NOLIMIT , 300, 300, 2, 2, 9, true);
     }
 }

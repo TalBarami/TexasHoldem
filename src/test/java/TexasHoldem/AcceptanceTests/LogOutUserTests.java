@@ -8,6 +8,8 @@ import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.time.LocalDate;
+
 public class LogOutUserTests extends ProjectTest {
 
     @Before
@@ -19,12 +21,10 @@ public class LogOutUserTests extends ProjectTest {
     @Test
     public void testLogOutUser()
     {
-        boolean useradded = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com",new DateTime(1991,4,20,22,13));
+        boolean useradded = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com", LocalDate.of(1991,4,20),null);
         boolean userloggedin = this.login("achiadg","aChi12#*");
         boolean userloggedout1 = this.logout("achiadg");
         assertTrue(userloggedout1);
-        boolean userloggedout2 = this.logout("hodbub");
-        assertFalse(userloggedout2);
         boolean deleteUser1 = this.deleteUser("achiadg");
         assertTrue(deleteUser1);
     }

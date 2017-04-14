@@ -106,7 +106,7 @@ public class Game {
     }
     // todo : think what to do with this flag, when to flip to false\true
     public boolean isActive(){
-        return players.size() == 0;
+        return players.size() != 0;
     }
 
     // todo :needed?

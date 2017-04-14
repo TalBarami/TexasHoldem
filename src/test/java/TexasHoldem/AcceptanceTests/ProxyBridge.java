@@ -1,10 +1,11 @@
 package TexasHoldem.AcceptanceTests;
 
 import org.joda.time.DateTime;
+import java.time.LocalDate;
 
 import java.awt.image.BufferedImage;
 import java.util.List;
-
+import TexasHoldem.domain.game.GameSettings;
 /**
  * Created by אחיעד on 05/04/2017.
  */
@@ -25,61 +26,47 @@ public class ProxyBridge implements Bridge {
     }
 
 
-    public boolean registerUser(String username, String password, String email, DateTime dateTime) {
-        return true;
+    public boolean registerUser(String username, String password, String email, LocalDate dateTime, BufferedImage img) {
+       return real.registerUser(username, password, email, dateTime, img);
     }
 
     public boolean searchUser(String username) {
-        return true;
+        return real.searchUser(username);
     }
 
     public  boolean deleteUser(String username){
-        return true;
+        return real.deleteUser(username);
     }
 
     public boolean login(String username, String password)
     {
-        return true;
+        return real.login(username, password);
     }
     public boolean logout(String username)
     {
-        return true;
+        return real.logout(username);
     }
 
-    public boolean editUserName(String oldusername, String newusername) {
-        return true;
+    @Override
+    public boolean editUserName(String oldusername, String newusername, String password, String email, LocalDate date) {
+        return real.editUserName(oldusername,newusername, password, email, date);
     }
 
-    public boolean editPassword(String oldusername, String password) {
-        return true;
-    }
-
-    public boolean editEmail(String oldusername, String email) {
-        return true;
-    }
-
-    public boolean editDateOfBirth(String oldusername, DateTime dateofbirth) {
-        return true;
-    }
-
-    public boolean editImage(String oldusername, BufferedImage newimage) {
-        return true;
-    }
 
     public boolean addbalancetouserwallet(String username,int amounttoadd) {
-        return true;
+        return real.addbalancetouserwallet(username,amounttoadd);
     }
 
-    public boolean createnewgame(String username, String gamename, String policy, int buyin, int chippolicy, int minimumbet, int minplayers, int maxplayers, boolean spectateisvalid,int league) {
-        return true;
+    public boolean createnewgame(String username, String gamename, GameSettings.GamePolicy policy, int buyin, int chippolicy, int minimumbet, int minplayers, int maxplayers, boolean spectateisvalid) {
+        return real.createnewgame(username, gamename, policy, buyin,chippolicy, minimumbet,  minplayers, maxplayers, spectateisvalid);
     }
 
     public boolean closegame(String gamename) {
         return true;
     }
 
-    public boolean joinexistinggame(String username, String gamename) {
-        return true;
+    public boolean joinexistinggame(String username, String gamename, boolean spec) {
+       return real.joinexistinggame(username, gamename,spec);
     }
 
     public boolean searchgamebyplayername(String username) {
@@ -111,10 +98,6 @@ public class ProxyBridge implements Bridge {
     }
 
     public boolean searchgamebyspectateisvalid(boolean spectatingavailable) {
-        return true;
-    }
-
-    public boolean spectateactivegame(String username, String gamename) {
         return true;
     }
 
@@ -168,6 +151,11 @@ public class ProxyBridge implements Bridge {
 
     public boolean setcriteriatomoveleague(String adminname, int criteria) {
         return true;
+    }
+
+    @Override
+    public boolean spectateactivegame(String username, String gamename, boolean spec) {
+        return real.spectateactivegame(username,gamename, spec);
     }
 
 }

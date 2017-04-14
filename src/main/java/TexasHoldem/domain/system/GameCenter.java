@@ -7,6 +7,7 @@ import TexasHoldem.data.users.IUsers;
 import TexasHoldem.data.users.Users;
 import TexasHoldem.domain.game.Game;
 import TexasHoldem.domain.game.GameSettings;
+import TexasHoldem.domain.game.participants.Participant;
 import TexasHoldem.domain.user.User;
 import TexasHoldem.domain.user.LeagueManager;
 
@@ -14,7 +15,9 @@ import javax.security.auth.login.LoginException;
 import java.awt.image.BufferedImage;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class GameCenter {
@@ -52,15 +55,20 @@ public class GameCenter {
     public void logout(String userName){
         //remove from all playing rooms
         loggedInUsers.forEach(user -> {
-            if(user.getUsername().equals(userName))
-                user.getGamePlayerMappings().forEach((game,participant) -> {
-                    participant.removeFromGame(game);
-                    user.removeGameParticipant(game);
-            });
+            if(user.getUsername().equals(userName)) {
+                Map<Game, Participant> mappings = user.getGamePlayerMappings();
+                Iterator<Map.Entry<Game, Participant>> it = mappings.entrySet().iterator();
+                while (it.hasNext()) {
+                    Map.Entry<Game, Participant> keyValue = it.next();
+                    Game g = keyValue.getKey();
+                    Participant p = mappings.get(g);
+                    p.removeFromGame(g);
+                    it.remove();
+                }
+            }
         });
-
         //remove from logged in user
-            loggedInUsers=loggedInUsers.stream().filter(user -> !user.getUsername().equals(userName)).collect(Collectors.toList());
+        loggedInUsers=loggedInUsers.stream().filter(user -> !user.getUsername().equals(userName)).collect(Collectors.toList());
     }
 
     public void editProfile(String originalUserName,String newUserName, String pass,String email, LocalDate date) throws InvalidArgumentException {
@@ -68,13 +76,19 @@ public class GameCenter {
     }
 
     public void depositMoney(String userName,int amount) throws ArgumentNotInBoundsException {
-        usersDb.getUserByUserName(userName).deposit(amount,false);
+        usersDb.getUserByUserName(userName).deposit(amount,true);
     }
 
-
     //todo : service layer will catch exception if  game room already chosen or balance below buy in.
-    public void createGame(String creatorUserName,GameSettings settings) throws InvalidArgumentException, NoBalanceForBuyInException {
+    public void createGame(String creatorUserName,GameSettings settings) throws InvalidArgumentException, NoBalanceForBuyInException, ArgumentNotInBoundsException {
         User creator=usersDb.getUserByUserName(creatorUserName);
+        int minPlayers=settings.getPlayerRange().getLeft();
+        int maxPlayers=settings.getPlayerRange().getRight();
+
+        if(maxPlayers<minPlayers)
+            throw new InvalidArgumentException("Maximal amount of players is greater than minimal.");
+        else if(minPlayers<2 || maxPlayers>9)
+            throw new ArgumentNotInBoundsException(String.format("Players amount should be between 2 and 9, but actually they are between %d and %d",minPlayers,maxPlayers));
 
         if(settings.tournamentMode() && creator.getBalance()<settings.getBuyInPolicy())
             throw new NoBalanceForBuyInException("User's balance below the selected game buy in.");
@@ -122,8 +136,8 @@ public class GameCenter {
     private void handleJoinGameAsPlayer(Game game,User user) throws LeaguesDontMatchException, GameIsFullException, NoBalanceForBuyInException {
         int gameLeague=game.getLeague();
         int usersLeague=user.getCurrLeague();
-        double userBalance=user.getBalance();
-        double buyInPolicy=game.getBuyInPolicy();
+        int userBalance=user.getBalance();
+        int buyInPolicy=game.getBuyInPolicy();
 
         if(gameLeague != usersLeague)
             throw new LeaguesDontMatchException(String.format("Can't join game, user's league is %d ,while game's league is %d.",usersLeague,gameLeague));
