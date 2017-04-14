@@ -95,10 +95,10 @@ public class Users implements IUsers {
     }
 
 
-    public User verifyCredentials(String userName,String password) throws LoginException {
+    public User verifyCredentials(String userName,String password) throws LoginException, EntityDoesNotExistsException {
         User user=getUserByUserName(userName);
         if(user == null)
-            throw new LoginException("User name doesn't exist in the system");
+            throw new EntityDoesNotExistsException(String.format("'%s' doesn't exist in the system.",userName));
         else if(!password.equals(user.getPassword()))
             throw new LoginException("Wrong password.");
         return user;

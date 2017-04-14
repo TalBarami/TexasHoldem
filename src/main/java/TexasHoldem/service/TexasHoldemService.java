@@ -34,7 +34,7 @@ public class TexasHoldemService {
         gameCenter.deleteUser(username);
     }
 
-    public void login(String username,String pass) throws LoginException, InvalidArgumentException {
+    public void login(String username,String pass) throws LoginException, InvalidArgumentException, EntityDoesNotExistsException {
         verifyStrings(username);
         gameCenter.login(username, pass);
     }

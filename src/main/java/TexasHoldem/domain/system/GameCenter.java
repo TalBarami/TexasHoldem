@@ -16,10 +16,7 @@ import org.slf4j.LoggerFactory;
 import javax.security.auth.login.LoginException;
 import java.awt.image.BufferedImage;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class GameCenter {
@@ -53,14 +50,15 @@ public class GameCenter {
         return usersDb.getUserByUserName(username);
     }
 
-    public void login(String userName,String pass) throws LoginException {
+    public void login(String userName,String pass) throws LoginException, EntityDoesNotExistsException {
         User user=usersDb.verifyCredentials(userName,pass);
         loggedInUsers.add(user);//todo: or maybe change status in Db that he logged in?
         logger.info("{} has logged in to the system.",userName);
     }
 
-    public void logout(String userName){
-        logger.info("{} has logged out from the system, attempting to notify played games.",userName);
+    public void logout(String userName) throws InvalidArgumentException {
+        if(loggedInUsers.stream().filter(user -> user.getUsername().equals(userName)).collect(Collectors.toList()).isEmpty())
+            throw new InvalidArgumentException(String.format("'%s' isn't logged in, so can't log out.",userName));
 
         //remove from all playing rooms
         loggedInUsers.forEach(user -> {
@@ -78,6 +76,7 @@ public class GameCenter {
         });
         //remove from logged in user
         loggedInUsers=loggedInUsers.stream().filter(user -> !user.getUsername().equals(userName)).collect(Collectors.toList());
+        logger.info("{} has logged out from the system, attempting to notify played games if needed.",userName);
     }
 
     public void editProfile(String originalUserName,String newUserName, String pass,String email, LocalDate date) throws InvalidArgumentException {
@@ -166,5 +165,18 @@ public class GameCenter {
             throw new NoBalanceForBuyInException(String.format("Buy in is %d, but user's balance is %d;",buyInPolicy,userBalance));
 
         game.joinGameAsPlayer(user);
+    }
+
+    public LeagueManager getLeagueManager(){
+        return leagueManager;
+    }
+
+    public List<User> getLoggedInUsers() {
+        return loggedInUsers;
+    }
+
+    public Game getGameByName(String gameName){
+        List<Game> games = gamesDb.getActiveGamesByName(gameName);
+        return games.isEmpty() ? null : games.get(0);
     }
 }

@@ -35,12 +35,16 @@ public class RealBridge implements Bridge {
 
     public boolean searchUser(String username)
     {
-        if(service.getUser(username) != null)
-        {
-            return true;
-        }
-        else
-        {
+        try {
+            if(service.getUser(username) != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        } catch (InvalidArgumentException e) {
             return false;
         }
     }
@@ -50,6 +54,8 @@ public class RealBridge implements Bridge {
         try {
             service.deleteUser(username);
         }catch (EntityDoesNotExistsException e){
+            return false;
+        } catch (InvalidArgumentException e) {
             return false;
         }
         return true;
@@ -61,13 +67,21 @@ public class RealBridge implements Bridge {
             service.login(username,password);
         }catch ( LoginException e){
             return false;
+        } catch (InvalidArgumentException e) {
+            return false;
+        } catch (EntityDoesNotExistsException e) {
+            return false;
         }
         return true;
     }
 
     public boolean logout(String username)
     {
-        service.logout(username);
+        try {
+            service.logout(username);
+        } catch (InvalidArgumentException e) {
+            return false;
+        }
         return true;
     }
 
@@ -86,6 +100,8 @@ public class RealBridge implements Bridge {
         try {
             service.deposit(username,amounttoadd);
         }catch (ArgumentNotInBoundsException e){
+            return false;
+        } catch (InvalidArgumentException e) {
             return false;
         }
         return true;
