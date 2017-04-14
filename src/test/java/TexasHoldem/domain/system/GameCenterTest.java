@@ -1,5 +1,6 @@
 package TexasHoldem.domain.system;
 
+import TexasHoldem.common.Exceptions.ArgumentNotInBoundsException;
 import TexasHoldem.common.Exceptions.EntityDoesNotExistsException;
 import TexasHoldem.common.Exceptions.InvalidArgumentException;
 import TexasHoldem.domain.game.Game;
@@ -210,7 +211,21 @@ public class GameCenterTest {
     }
 
     @Test
-    public void depositMoney() throws Exception {
+    public void depositMoneyFailTest() throws Exception {
+        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
+        try{
+            gc.depositMoney(testUser1,-100);
+        }catch(ArgumentNotInBoundsException e){}
+    }
+
+    @Test
+    public void depositMoneySuccessTest() throws Exception {
+        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
+        assertThat(gc.getUser(testUser1).getAmountEarnedInLeague(),is(0));
+        assertThat(gc.getUser(testUser1).getBalance(),is(0));
+        gc.depositMoney(testUser1,1000);
+        assertThat(gc.getUser(testUser1).getAmountEarnedInLeague(),is(0));
+        assertThat(gc.getUser(testUser1).getBalance(),is(1000));
     }
 
     @Test
