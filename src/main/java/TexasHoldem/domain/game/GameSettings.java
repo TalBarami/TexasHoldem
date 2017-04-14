@@ -63,6 +63,10 @@ public class GameSettings {
     }
 
     public void setMaximalPlayers(int amount){
-        playerRange.setValue(amount);
+        playerRange=Pair.of(playerRange.getLeft(),amount);
+    }
+
+    public void setMinimalPlayers(int amount){
+        playerRange=Pair.of(amount,playerRange.getRight());
     }
 }

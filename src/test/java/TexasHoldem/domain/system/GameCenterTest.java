@@ -1,9 +1,6 @@
 package TexasHoldem.domain.system;
 
-import TexasHoldem.common.Exceptions.ArgumentNotInBoundsException;
-import TexasHoldem.common.Exceptions.EntityDoesNotExistsException;
-import TexasHoldem.common.Exceptions.InvalidArgumentException;
-import TexasHoldem.common.Exceptions.NoBalanceForBuyInException;
+import TexasHoldem.common.Exceptions.*;
 import TexasHoldem.domain.game.Game;
 import TexasHoldem.domain.game.GameSettings;
 import TexasHoldem.domain.user.LeagueManager;
@@ -28,14 +25,10 @@ public class GameCenterTest {
     private LocalDate now;
     private String testUser1,testUser1Pass,testUser1Email;
     private String testUser2,testUser2Pass,testUser2Email;
+    private String testUser3,testUser3Pass,testUser3Email;
 
     private GameSettings tournamentGameSettings;
     private GameSettings realMoneyGameSettings;
-
-    /*private User testUser1;
-    private User testUser2;
-    private User testUser3;
-    private User testUser4;*/
 
     @Before
     public void setUp() throws Exception {
@@ -47,17 +40,12 @@ public class GameCenterTest {
         testUser2="testUser2";
         testUser2Pass="2222222";
         testUser1Email="test2@gmail.com";
-
+        testUser3="testUser3";
+        testUser3Pass="3333333";
+        testUser3Email="test3@gmail.com";
 
         tournamentGameSettings =new GameSettings("tournamentTest",LIMIT,100,100,100,100,2,4,true);
         realMoneyGameSettings =new GameSettings("realMoneyTest",LIMIT,100,100,100,0,2,4,false);
-        /*testUser1=new User("testUser1","00000","test1@gmail.com", LocalDate.of(1111,10,10),null);
-        testUser2=new User("testUser2","11111","test2@gmail.com", LocalDate.of(2222,10,10),null);
-        testUser3=new User("testUser3","22222","test3@gmail.com", LocalDate.of(3333,10,10),null);
-        testUser4=new User("testUser4","33333","test4@gmail.com", LocalDate.of(4444,10,10),null);
-        testUser1.deposit(1500,true);
-        testUser2.deposit(2500,true);*/
-
     }
 
     @After
@@ -70,13 +58,12 @@ public class GameCenterTest {
         testUser2=null;
         testUser2Pass=null;
         testUser2Email=null;
+        testUser3=null;
+        testUser3Pass=null;
+        testUser3Email=null;
 
         tournamentGameSettings =null;
         realMoneyGameSettings=null;
-        /*testUser1=null;
-        testUser2=null;
-        testUser3=null;
-        testUser4=null;*/
     }
 
     @Test
@@ -274,7 +261,76 @@ public class GameCenterTest {
     }
 
     @Test
-    public void joinGame() throws Exception {
+    public void joinGameFailTest() throws Exception {
+        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
+        gc.registerUser(testUser2,testUser2Pass,testUser2Email,now,null);
+        gc.registerUser(testUser3,testUser3Pass,testUser3Email,now,null);
+
+        try{
+            gc.joinGame(testUser1,"fail",false);
+            fail();
+        }catch(InvalidArgumentException e){
+            if(!e.getMessage().equals("There is no game in the system with selected name."))
+                fail();
+        }
+
+        gc.createGame(testUser1,realMoneyGameSettings);
+        try{
+            gc.joinGame(testUser2,realMoneyGameSettings.getName(),true);
+            fail();
+        }catch(CantSpeactateThisRoomException e){
+            if(!e.getMessage().equals("Selected game can't be spectated due to it's settings."))
+                fail();
+        }
+
+        gc.getUser(testUser3).setCurrLeague(gc.getGameByName(realMoneyGameSettings.getName()).getLeague()+1);
+        try{
+            gc.joinGame(testUser3,realMoneyGameSettings.getName(),false);
+            fail();
+        }catch(LeaguesDontMatchException e){
+            if(!e.getMessage().contains("Can't join game, user's league is"))
+                fail();
+        }
+
+        gc.getGameByName(realMoneyGameSettings.getName()).getSettings().setMaximalPlayers(2);
+        gc.joinGame(testUser2,realMoneyGameSettings.getName(),false);
+        gc.getUser(testUser3).setCurrLeague(gc.getGameByName(realMoneyGameSettings.getName()).getLeague());
+        try{
+            gc.joinGame(testUser3,realMoneyGameSettings.getName(),false);
+            fail();
+        }catch(GameIsFullException e){
+            if(!e.getMessage().contains("Can't join game as player because it's full."))
+                fail();
+        }
+
+        gc.depositMoney(testUser1,tournamentGameSettings.getBuyInPolicy()+100);
+        gc.createGame(testUser1,tournamentGameSettings);
+        try{
+            gc.joinGame(testUser2,tournamentGameSettings.getName(),false);
+            fail();
+        }catch(NoBalanceForBuyInException e){
+            if(!e.getMessage().contains("Buy in is"))
+                fail();
+        }
+    }
+
+    @Test
+    public void joinGameSuccessTest() throws Exception {
+        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
+        gc.registerUser(testUser2,testUser2Pass,testUser2Email,now,null);
+
+        gc.depositMoney(testUser1,tournamentGameSettings.getBuyInPolicy()+100);
+        gc.depositMoney(testUser2,tournamentGameSettings.getBuyInPolicy()+100);
+
+        gc.createGame(testUser1,tournamentGameSettings);
+        gc.joinGame(testUser2,tournamentGameSettings.getName(),false);
+
+        Game g=gc.getGameByName(tournamentGameSettings.getName());
+        User u=gc.getUser(testUser2);
+        assertTrue(u.getGamePlayerMappings().containsKey(g));
+        assertThat(u.getBalance(),is(100));
+        assertThat(g.getPlayers().size(),is(2));
+        assertThat(g.getSpectators().size(),is(0));
     }
 
     @Test
