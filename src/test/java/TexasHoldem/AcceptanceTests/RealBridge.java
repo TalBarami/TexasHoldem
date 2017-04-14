@@ -91,6 +91,8 @@ public class RealBridge implements Bridge {
             service.editProfile(oldusername,newusername,  password, email, date);
         }catch (InvalidArgumentException e){
             return false;
+        } catch (EntityDoesNotExistsException e) {
+            e.printStackTrace();
         }
         return true;
     }

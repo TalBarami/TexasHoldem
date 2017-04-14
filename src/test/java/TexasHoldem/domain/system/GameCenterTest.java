@@ -23,8 +23,9 @@ import static org.junit.Assert.*;
  */
 public class GameCenterTest {
     private GameCenter gc;
-    private String testUser1,testUser1Pass;
-    private String testUser2,testUser2Pass;
+    private LocalDate now;
+    private String testUser1,testUser1Pass,testUser1Email;
+    private String testUser2,testUser2Pass,testUser2Email;
 
     private GameSettings tournamentGameSettings;
     private GameSettings realMoneyGameSettings;
@@ -37,10 +38,13 @@ public class GameCenterTest {
     @Before
     public void setUp() throws Exception {
         gc=new GameCenter();
+        now=LocalDate.now();
         testUser1="testUser1";
         testUser1Pass="1111111";
+        testUser1Email="test1@gmail.com";
         testUser2="testUser2";
         testUser2Pass="2222222";
+        testUser1Email="test2@gmail.com";
 
 
         tournamentGameSettings =new GameSettings("tournamentTest",LIMIT,100,100,100,100,2,4,true);
@@ -57,10 +61,13 @@ public class GameCenterTest {
     @After
     public void tearDown() throws Exception {
         gc=null;
+        now=null;
         testUser1=null;
         testUser1Pass=null;
+        testUser1Email=null;
         testUser2=null;
         testUser2Pass=null;
+        testUser2Email=null;
 
         tournamentGameSettings =null;
         realMoneyGameSettings=null;
@@ -73,7 +80,7 @@ public class GameCenterTest {
     @Test
     public void registerUserTest() throws Exception {
         Assert.assertNull(gc.getUser(testUser1));
-        gc.registerUser(testUser1,testUser1Pass,"test@gmail.com",LocalDate.now(),null);
+        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
         assertThat(gc.getUser(testUser1).getPassword(),is(testUser1Pass));
         assertThat(gc.getUser(testUser1).getCurrLeague(),is(gc.getLeagueManager().getDefaultLeagueForNewUsers()));
     }
@@ -88,7 +95,7 @@ public class GameCenterTest {
 
     @Test
     public void deleteUserSuccessTest() throws Exception {
-        gc.registerUser(testUser1,testUser1Pass,"test@gmail.com",LocalDate.now(),null);
+        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
         assertNotNull(gc.getUser(testUser1));
         gc.deleteUser(testUser1);
         assertNull(gc.getUser(testUser1));
@@ -100,7 +107,7 @@ public class GameCenterTest {
             gc.login("failFail","1234");
         }catch(EntityDoesNotExistsException e){}
 
-        gc.registerUser(testUser1,testUser1Pass,"test@gmail.com",LocalDate.now(),null);
+        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
         assertTrue(gc.getLoggedInUsers().isEmpty());
 
         try{
@@ -111,7 +118,7 @@ public class GameCenterTest {
 
     @Test
     public void loginSuccessTest() throws Exception {
-        gc.registerUser(testUser1,testUser1Pass,"test@gmail.com",LocalDate.now(),null);
+        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
         assertTrue(gc.getLoggedInUsers().isEmpty());
         gc.login(testUser1,testUser1Pass);
         assertThat(gc.getLoggedInUsers().size(),is(1));
@@ -128,13 +135,13 @@ public class GameCenterTest {
 
     @Test
     public void logoutSuccesslTest() throws Exception {
-        gc.registerUser(testUser1,testUser1Pass,"test@gmail.com",LocalDate.now(),null);
+        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
         gc.login(testUser1,testUser1Pass);
         assertThat(gc.getLoggedInUsers().size(),is(1));
         gc.logout(testUser1);
         assertTrue(gc.getLoggedInUsers().isEmpty());
 
-        gc.registerUser(testUser2,testUser2Pass,"test2@gmail.com",LocalDate.now(),null);
+        gc.registerUser(testUser2,testUser2Pass,testUser2Email,now,null);
         gc.login(testUser1,testUser1Pass);
         gc.login(testUser2,testUser2Pass);
         assertTrue(gc.getUser(testUser1).getGamePlayerMappings().isEmpty());
@@ -157,7 +164,49 @@ public class GameCenterTest {
     }
 
     @Test
-    public void editProfile() throws Exception {
+    public void editProfileFailTest() throws Exception {
+        try{
+            gc.editProfile("fail",testUser1,testUser1Pass,testUser1Email,now);
+            fail();
+        }catch(EntityDoesNotExistsException e){}
+
+        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
+        gc.registerUser(testUser2,testUser2Pass,testUser2Email,now,null);
+        try{
+            gc.editProfile(testUser1,testUser2,testUser1Pass,testUser1Email,now);
+            fail();
+        }catch(InvalidArgumentException e){
+            if(!e.getMessage().equals("Selected user name already exist."))
+                fail();
+        }
+
+        try{
+            gc.editProfile(testUser1,testUser1,testUser1Pass,testUser2Email,now);
+            fail();
+        }catch(InvalidArgumentException e){
+            if(!e.getMessage().equals("Selected e-mail already exist."))
+                fail();
+        }
+
+        try{
+            gc.editProfile(testUser1,testUser2,testUser1Pass,testUser2Email,now);
+            fail();
+        }catch(InvalidArgumentException e){
+            if(!e.getMessage().equals("Selected user name and e-mail already exist."))
+                fail();
+        }
+    }
+
+    @Test
+    public void editProfileSuccessTest() throws Exception {
+        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
+        assertNull(gc.getUser("newName"));
+        gc.editProfile(testUser1,"newName","newPass","new@gmail.com",now.minusYears(2));
+        assertNull(gc.getUser(testUser1));
+        User u=gc.getUser("newName");
+        assertThat(u.getPassword(),is("newPass"));
+        assertThat(u.getEmail(),is("new@gmail.com"));
+        assertThat(u.getDateOfBirth(),is(now.minusYears(2)));
     }
 
     @Test
