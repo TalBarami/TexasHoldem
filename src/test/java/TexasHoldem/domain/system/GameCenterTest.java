@@ -3,6 +3,7 @@ package TexasHoldem.domain.system;
 import TexasHoldem.common.Exceptions.ArgumentNotInBoundsException;
 import TexasHoldem.common.Exceptions.EntityDoesNotExistsException;
 import TexasHoldem.common.Exceptions.InvalidArgumentException;
+import TexasHoldem.common.Exceptions.NoBalanceForBuyInException;
 import TexasHoldem.domain.game.Game;
 import TexasHoldem.domain.game.GameSettings;
 import TexasHoldem.domain.user.LeagueManager;
@@ -135,7 +136,7 @@ public class GameCenterTest {
     }
 
     @Test
-    public void logoutSuccesslTest() throws Exception {
+    public void logoutSuccessTest() throws Exception {
         gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
         gc.login(testUser1,testUser1Pass);
         assertThat(gc.getLoggedInUsers().size(),is(1));
@@ -229,7 +230,47 @@ public class GameCenterTest {
     }
 
     @Test
-    public void createGame() throws Exception {
+    public void createGameFailTest() throws Exception {
+        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
+        tournamentGameSettings.setMaximalPlayers(0);
+        try{
+            gc.createGame(testUser1,tournamentGameSettings);
+        }catch(InvalidArgumentException e){
+            if(!e.getMessage().equals("Maximal amount of players is greater than minimal."))
+                fail();
+        }
+
+        tournamentGameSettings.setMaximalPlayers(10);
+        try{
+            gc.createGame(testUser1,tournamentGameSettings);
+        }catch(ArgumentNotInBoundsException e){
+            if(!e.getMessage().contains("Players amount should be between 2 and 9"))
+                fail();
+        }
+
+        tournamentGameSettings.setMaximalPlayers(6);
+        try{
+            gc.createGame(testUser1,tournamentGameSettings);
+        }catch(NoBalanceForBuyInException e){
+            if(!e.getMessage().contains("User's balance below the selected game buy in."))
+                fail();
+        }
+    }
+
+    @Test
+    public void createGameSuccessTest() throws Exception {
+        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
+        gc.depositMoney(testUser1,tournamentGameSettings.getBuyInPolicy()+100);
+        assertNull(gc.getGameByName(tournamentGameSettings.getName()));
+
+        gc.createGame(testUser1,tournamentGameSettings);
+        User user=gc.getUser(testUser1);
+        Game game=gc.getGameByName(tournamentGameSettings.getName());
+        assertTrue(user.getGamePlayerMappings().containsKey(game));
+        assertThat(user.getBalance(),is(100));
+        assertThat(game.getLeague(),is(user.getCurrLeague()));
+        assertThat(game.getPlayers().size(),is(1));
+        assertTrue(game.getSpectators().isEmpty());
     }
 
     @Test
