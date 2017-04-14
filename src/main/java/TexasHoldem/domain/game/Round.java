@@ -53,6 +53,9 @@ public class Round {
     }
 
     public void startRound() {
+        Map<Player, List<Pair<GameActions, Integer>>> playerDecisions = new HashMap<Player, List<Pair<GameActions, Integer>>>();
+        setRoundActive(true);
+
         dealer.deal(activePlayers);
         paySmallAndBigBlind();
         playPreFlopRound();
@@ -99,7 +102,7 @@ public class Round {
         }
 
         activePlayers.remove(player);
-        logger.info("{} has left the game", player.getUser().getUsername());
+        logger.info("{} has left the game {} during a played round.", player.getUser().getUsername(), gameSettings.getName());
 
         if (activePlayers.size() == 1) {
             endRound();
