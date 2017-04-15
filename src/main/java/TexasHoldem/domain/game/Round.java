@@ -78,6 +78,8 @@ public class Round {
             initPlayersLastBetSinceCardOpen();
             endRound();
         }
+
+        logger.info("Round finished.");
     }
 
     public void notifyPlayerExited(Player player) {
@@ -206,6 +208,8 @@ public class Round {
 
         int lastBet = currentPlayer.getLastBetSinceCardOpen();
         potAmount += currentPlayer.payChips(amountToRaise - lastBet);
+        logger.info("Player {} raised {}$", currentPlayer.getUser().getUsername(), amountToRaise);
+
         int newLastPlayerIndex = (currentPlayerIndex == 0) ? (activePlayers.size() - 1) : ((currentPlayerIndex - 1) % activePlayers.size());
         lastPlayer = activePlayers.get(newLastPlayerIndex);
         chipsToCall = amountToRaise;
@@ -216,10 +220,12 @@ public class Round {
         int currentPlayerIndex = activePlayers.indexOf(currentPlayer);
         int nextPlayerIndex = (currentPlayerIndex + 1) % (activePlayers.size());
 
+        logger.info("Player {} checked", currentPlayer.getUser().getUsername());
         currentPlayer = activePlayers.get(nextPlayerIndex);
     }
 
     private void playerFoldTurn() {
+        logger.info("Player {} folded", currentPlayer.getUser().getUsername());
         notifyPlayerExited(currentPlayer);
     }
 
@@ -228,6 +234,8 @@ public class Round {
         int nextPlayerIndex = (currentPlayerIndex + 1) % (activePlayers.size());
 
         potAmount += currentPlayer.payChips(chipsToCall - currentPlayer.getLastBetSinceCardOpen());
+        logger.info("Player {} called.", currentPlayer.getUser().getUsername());
+
         currentPlayer = activePlayers.get(nextPlayerIndex);
     }
 
@@ -299,8 +307,10 @@ public class Round {
         }
 
         sumToDivide =  sumToDivide/winners.size();
-        for(Player p : winners)
+        for(Player p : winners) {
             p.addChips(sumToDivide);
+            logger.info("Player {} earned {}$", p.getUser().getUsername(), sumToDivide);
+        }
     }
 
     private Player findMinWinner(List<Player> winners) {
