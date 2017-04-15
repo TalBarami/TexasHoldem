@@ -125,13 +125,26 @@ public class GameCenter {
             handleJoinGameAsPlayer(toJoin,user);
     }
 
-    public void leaveGame(String userName,String gameName){
+    public void leaveGame(String userName,String gameName) throws GameException {
         User user=usersDb.getUserByUserName(userName);
+        if(user==null)
+            throw new InvalidArgumentException(String.format("User '%s' doesn't exist in the system.",userName));
+
+        if(gamesDb.getActiveGamesByName(gameName).isEmpty())
+            throw new InvalidArgumentException(String.format("Game '%s' doesn't exist in the system.",gameName));
+
         Game game=gamesDb.getActiveGamesByName(gameName).get(0);
+        if(!user.getGamePlayerMappings().containsKey(game))
+            throw new GameException(String.format("User '%s' can't leave game '%s', since he is not playing inside.",userName,gameName));
+
+
         user.getGamePlayerMappings().get(game).removeFromGame(game);
         user.getGamePlayerMappings().remove(game);
-        if(game.canBeArchived())
-            gamesDb.archiveGame(game); // todo : notify someway to spectators of the room?
+        if(game.canBeArchived()){
+            gamesDb.archiveGame(game); // todo : notify someway to spectators of the room that room is closed?
+            logger.info("Game '{}' is archived, since all players left.",gameName);
+        }
+
     }
 
     public List<Game> findAvailableGames(String username){
@@ -139,8 +152,8 @@ public class GameCenter {
         List<Game> activeGames = gamesDb.getActiveGames();
         return activeGames.stream()
                 .filter(game -> game.getLeague() == user.getCurrLeague() &&
-                        game.getBuyInPolicy() <= user.getBalance() &&
-                        (game.realMoneyGame() || (!game.realMoneyGame() && !game.isActive())) &&
+                        /*(!game.realMoneyGame() && (game.getBuyInPolicy() <= user.getBalance())) &&*/
+                        (game.realMoneyGame() || (!game.realMoneyGame() && game.isActive() && (game.getBuyInPolicy() <= user.getBalance()))) &&
                         game.getPlayers().size() <= game.getMaximalAmountOfPlayers())
                 .collect(Collectors.toList());
     }
@@ -179,5 +192,9 @@ public class GameCenter {
     public Game getGameByName(String gameName){
         List<Game> games = gamesDb.getActiveGamesByName(gameName);
         return games.isEmpty() ? null : games.get(0);
+    }
+
+    public boolean isArchived(Game g){
+        return gamesDb.isArchived(g);
     }
 }

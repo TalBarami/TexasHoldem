@@ -12,6 +12,7 @@ import org.junit.Test;
 
 import javax.security.auth.login.LoginException;
 import java.time.LocalDate;
+import java.util.List;
 
 import static TexasHoldem.domain.game.GameSettings.GamePolicy.LIMIT;
 import static org.hamcrest.CoreMatchers.is;
@@ -28,7 +29,9 @@ public class GameCenterTest {
     private String testUser3,testUser3Pass,testUser3Email;
 
     private GameSettings tournamentGameSettings;
+    private GameSettings tournamentGameSettings2;
     private GameSettings realMoneyGameSettings;
+    private GameSettings realMoneyGameSettings2;
 
     @Before
     public void setUp() throws Exception {
@@ -45,7 +48,9 @@ public class GameCenterTest {
         testUser3Email="test3@gmail.com";
 
         tournamentGameSettings =new GameSettings("tournamentTest",LIMIT,100,100,100,100,2,4,true);
+        tournamentGameSettings2 =new GameSettings("tournamentTest2",LIMIT,100,100,2000,100,2,4,false);
         realMoneyGameSettings =new GameSettings("realMoneyTest",LIMIT,100,100,100,0,2,4,false);
+        realMoneyGameSettings2 =new GameSettings("realMoneyTest2",LIMIT,100,100,100,0,2,4,true);
     }
 
     @After
@@ -63,7 +68,9 @@ public class GameCenterTest {
         testUser3Email=null;
 
         tournamentGameSettings =null;
+        tournamentGameSettings2 =null;
         realMoneyGameSettings=null;
+        realMoneyGameSettings2=null;
     }
 
     @Test
@@ -334,11 +341,96 @@ public class GameCenterTest {
     }
 
     @Test
-    public void leaveGame() throws Exception {
+    public void leaveGameFailTest() throws Exception {
+        try{
+            gc.leaveGame(testUser1,tournamentGameSettings.getName());
+            fail();
+        }catch(InvalidArgumentException e){
+            if(!e.getMessage().contains(String.format("User '%s' doesn't exist in the system.",testUser1)))
+                fail();
+        }
+
+        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
+        try{
+            gc.leaveGame(testUser1,tournamentGameSettings.getName());
+            fail();
+        }catch(InvalidArgumentException e){
+            if(!e.getMessage().contains(String.format("Game '%s' doesn't exist in the system.",tournamentGameSettings.getName())))
+                fail();
+        }
+
+        gc.createGame(testUser1,realMoneyGameSettings);
+        gc.registerUser(testUser2,testUser2Pass,testUser2Email,now,null);
+        try{
+            gc.leaveGame(testUser2,realMoneyGameSettings.getName());
+            fail();
+        }catch(GameException e){
+            if(!e.getMessage().contains(String.format("User '%s' can't leave game '%s', since he is not playing inside.",testUser2,realMoneyGameSettings.getName())))
+                fail();
+        }
     }
 
     @Test
+    public void leaveGameSuccessTest() throws Exception {
+        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
+        gc.registerUser(testUser2,testUser2Pass,testUser2Email,now,null);
+        gc.createGame(testUser1,realMoneyGameSettings);
+        gc.joinGame(testUser2,realMoneyGameSettings.getName(),false);
+
+        gc.leaveGame(testUser2,realMoneyGameSettings.getName());
+
+        Game g=gc.getGameByName(realMoneyGameSettings.getName());
+        assertFalse(gc.isArchived(g));
+        assertThat(g.getPlayers().size(),is(1));
+        assertThat(g.getPlayers().get(0).getUser().getUsername(),is(testUser1));
+        User u1=gc.getUser(testUser1);
+        User u2=gc.getUser(testUser2);
+        assertTrue(u1.getGamePlayerMappings().containsKey(g));
+        assertTrue(!u2.getGamePlayerMappings().containsKey(g));
+    }
+
+    @Test
+    public void leaveGameSuccessWithArchivingTest() throws Exception {
+        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
+        gc.createGame(testUser1,realMoneyGameSettings);
+        Game g=gc.getGameByName(realMoneyGameSettings.getName());
+
+        gc.leaveGame(testUser1,realMoneyGameSettings.getName());
+        assertTrue(gc.isArchived(g));
+    }
+
+
+    @Test
     public void findAvailableGames() throws Exception {
+        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
+        gc.registerUser(testUser2,testUser2Pass,testUser2Email,now,null);
+
+        gc.depositMoney(testUser1,100000000);
+
+        gc.createGame(testUser1,tournamentGameSettings);
+        gc.createGame(testUser1,tournamentGameSettings2);
+        gc.createGame(testUser1,realMoneyGameSettings);
+        gc.createGame(testUser1,realMoneyGameSettings2);
+
+        Game g1=gc.getGameByName(tournamentGameSettings.getName());
+        Game g2=gc.getGameByName(tournamentGameSettings2.getName());
+        Game g3=gc.getGameByName(realMoneyGameSettings.getName());
+        Game g4=gc.getGameByName(realMoneyGameSettings2.getName());
+
+        List<Game> games=gc.findAvailableGames(testUser2);
+        assertThat(games.size(),is(2));
+        assertTrue(games.contains(g3));
+        assertTrue(games.contains(g4));
+
+        gc.depositMoney(testUser2,1000);
+        games=gc.findAvailableGames(testUser2);
+        assertThat(games.size(),is(3));
+        assertTrue(games.contains(g1));
+
+        gc.depositMoney(testUser2,1000000);
+        games=gc.findAvailableGames(testUser2);
+        assertThat(games.size(),is(4));
+        assertTrue(games.contains(g2));
     }
 
     @Test

@@ -67,6 +67,7 @@ public class Game {
     }
 
     public void removeParticipant(Player player){
+        players.remove(player);
         logger.info("'{}' has left the game. Attempting to notify active round if exists ...", player.getUser().getUsername());
 
         //if the player is within an active round, inform the round
@@ -74,11 +75,7 @@ public class Game {
             Round lastRound=getLastRound();
             if(lastRound.isRoundActive())
                 lastRound.notifyPlayerExited(player);
-            else
-                players.remove(player);
         }
-        else
-            players.remove(player);
 
         leagueManager.updateUserLeague(player.getUser());
     }
