@@ -179,7 +179,7 @@ public class RealBridge implements Bridge {
     }
 
     public boolean searchavailablegamestojoin(String username) {
-        if(service.findAvailableGames(username) != null)
+        if(service.findAvailableGames(username).size() != 0)
         {
             return true;
         }
