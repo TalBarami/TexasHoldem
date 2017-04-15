@@ -83,7 +83,7 @@ public class Player extends Participant{
     }
 
     // TODO :: Make choose dynamically
-    public int chooseAmountToRaise(int minAmount) {
+    public int chooseAmountToRaise(int minAmount, int maxAmount) {
         return minAmount;
     }
 
