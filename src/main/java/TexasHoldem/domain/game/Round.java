@@ -252,6 +252,7 @@ public class Round {
         while(!activePlayers.isEmpty()) {
             List<Player> winners = new LinkedList<Player>();
             Player currentPlayer = activePlayers.get(0);
+            winners.add(currentPlayer);
 
             List<Card> cardList = new LinkedList<Card>();
             cardList.addAll(openedCards);
@@ -259,7 +260,7 @@ public class Round {
 
             Hand bestHand = HandCalculator.getHand(cardList);
 
-            for (Player p : activePlayers) {
+            for (Player p : activePlayers.subList(1, activePlayers.size())) {
                 List<Card> newCardList = new LinkedList<Card>();
                 newCardList.addAll(openedCards);
                 newCardList.addAll(p.getCards());
@@ -304,9 +305,11 @@ public class Round {
 
     private Player findMinWinner(List<Player> winners) {
         Player playerWithMinChips = winners.get(0);
+        int minPlayerAmountInPot = playerWithMinChips.getTotalAmountPayedInRound();
 
         for (Player p : winners) {
-            if (p.getTotalAmountPayedInRound() < playerWithMinChips.getTotalAmountPayedInRound()) {
+            int currentPlayerAmountInPot = p.getTotalAmountPayedInRound();
+            if (currentPlayerAmountInPot < minPlayerAmountInPot) {
                 playerWithMinChips = p;
             }
         }
@@ -334,6 +337,10 @@ public class Round {
         for (Player p : activePlayers) {
             p.setLastBetSinceCardOpen(0);
         }
+    }
+
+    public void setOpenedCards(List<Card> openedCards) {
+        this.openedCards = openedCards;
     }
 
     public void initLastPlayer() {
