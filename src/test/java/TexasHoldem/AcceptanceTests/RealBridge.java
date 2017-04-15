@@ -35,14 +35,12 @@ public class RealBridge implements Bridge {
 
     public boolean searchUser(String username)
     {
-        if(service.getUser(username) != null)
-        {
-            return true;
-        }
-        else
-        {
+        try {
+            service.getUser(username);
+        }catch (InvalidArgumentException e){
             return false;
         }
+        return true;
     }
 
     public  boolean deleteUser(String username)
@@ -50,6 +48,8 @@ public class RealBridge implements Bridge {
         try {
             service.deleteUser(username);
         }catch (EntityDoesNotExistsException e){
+            return false;
+        }catch (InvalidArgumentException e){
             return false;
         }
         return true;
@@ -61,13 +61,19 @@ public class RealBridge implements Bridge {
             service.login(username,password);
         }catch ( LoginException e){
             return false;
+        }catch ( InvalidArgumentException e){
+            return false;
         }
         return true;
     }
 
     public boolean logout(String username)
     {
-        service.logout(username);
+        try {
+            service.logout(username);
+        }catch (InvalidArgumentException e){
+            return false;
+        }
         return true;
     }
 
@@ -86,6 +92,8 @@ public class RealBridge implements Bridge {
         try {
             service.deposit(username,amounttoadd);
         }catch (ArgumentNotInBoundsException e){
+            return false;
+        }catch (InvalidArgumentException e){
             return false;
         }
         return true;
@@ -158,6 +166,7 @@ public class RealBridge implements Bridge {
     }
 
     public boolean leavegame(String username, String choise, String gamename) {
+        service.leaveGame();
         return true;
     }
 
@@ -170,7 +179,14 @@ public class RealBridge implements Bridge {
     }
 
     public boolean searchavailablegamestojoin(String username) {
-        return true;
+        if(service.findAvailableGames(username) != null)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public boolean playturn(String username,String gamename , String action) {

@@ -25,24 +25,23 @@ public class LeaveGameTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
-        setUserLeague();
         boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GameSettings.GamePolicy.NOLIMIT , 10000, 10000, 100, 2, 9, true);
         boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game",  GameSettings.GamePolicy.NOLIMIT , 300, 300, 2, 2, 9, true);
         assertTrue(gamecreated1);
         assertTrue(gamecreated2);
         usersJoinsGames();
-        boolean leavedgame1 = this.leavegame("hodbub" , "YES", "achiadg-poker-game");
-        boolean leavedgame2 = this.leavegame("achiadg" , "YES", "hodbub-poker-game");
-        boolean leavedgame3 = this.leavegame("rotemw" , "YES", "achiadg-poker-game");
-        boolean leavedgame4 = this.leavegame("ronenbu" , "YES", "hodbub-poker-game");
-        assertTrue(leavedgame1);
-        assertTrue(leavedgame2);
-        assertTrue(leavedgame3);
-        assertTrue(leavedgame4);
-        boolean closegame1 = this.closegame("achiadg-poker-game");
-        boolean closegame2 = this.closegame("hodbub-poker-game");
+        boolean closegame1 = this.leavegame("achiadg", "YES", "achiadg-poker-game");
+        boolean closegame2 = this.leavegame("hodbub","YES","hodbub-poker-game");
+        boolean closegame3 = this.leavegame("hodbub" ,"YES", "achiadg-poker-game");
+        boolean closegame4 = this.leavegame("rotemw" , "YES","achiadg-poker-game");
+        boolean closegame5 = this.leavegame("ronenbu" , "YES","hodbub-poker-game");
+        boolean closegame6 = this.leavegame("achiadg" , "YES","hodbub-poker-game");
         assertTrue(closegame1);
         assertTrue(closegame2);
+        assertTrue(closegame3);
+        assertTrue(closegame4);
+        assertTrue(closegame5);
+        assertTrue(closegame6);
         logoutUsers();
         deleteUsers();
     }
@@ -53,7 +52,6 @@ public class LeaveGameTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
-        setUserLeague();
         boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GameSettings.GamePolicy.NOLIMIT , 10000, 10000, 100, 2, 9, true);
         boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game",  GameSettings.GamePolicy.NOLIMIT , 300, 300, 2, 2, 9, true);
         assertTrue(gamecreated1);
@@ -67,6 +65,7 @@ public class LeaveGameTests extends ProjectTest {
         assertFalse(leavedgame2);
         assertFalse(leavedgame3);
         assertFalse(leavedgame4);
+        leaveGames();
         boolean closegame1 = this.closegame("achiadg-poker-game");
         boolean closegame2 = this.closegame("hodbub-poker-game");
         assertTrue(closegame1);
@@ -81,7 +80,6 @@ public class LeaveGameTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
-        setUserLeague();
         boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", GameSettings.GamePolicy.NOLIMIT , 10000, 10000, 100, 2, 9, true);
         boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game",  GameSettings.GamePolicy.NOLIMIT , 300, 300, 2, 2, 9, true);
         assertTrue(gamecreated1);
@@ -90,10 +88,6 @@ public class LeaveGameTests extends ProjectTest {
         boolean leavedgame2 = this.leavegame("achiadg" , "YES", "achiadg-poker-game");
         assertTrue(leavedgame1);
         assertTrue(leavedgame2);
-        boolean closegame1 = this.closegame("achiadg-poker-game");
-        boolean closegame2 = this.closegame("hodbub-poker-game");
-        assertTrue(closegame1);
-        assertTrue(closegame2);
         logoutUsers();
         deleteUsers();
     }
@@ -104,7 +98,6 @@ public class LeaveGameTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
-        setUserLeague();
         boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GameSettings.GamePolicy.NOLIMIT , 10000, 10000, 100, 2, 9, true);
         boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game",  GameSettings.GamePolicy.NOLIMIT , 300, 300, 2, 2, 9, true);
         assertTrue(gamecreated1);
@@ -117,10 +110,8 @@ public class LeaveGameTests extends ProjectTest {
         assertFalse(leavedgame2);
         assertFalse(leavedgame3);
         assertFalse(leavedgame4);
-        boolean closegame1 = this.closegame("achiadg-poker-game");
-        boolean closegame2 = this.closegame("hodbub-poker-game");
-        assertTrue(closegame1);
-        assertTrue(closegame2);
+        boolean closegame1 = this.leavegame("achiadg", "YES", "achiadg-poker-game");
+        boolean closegame2 = this.leavegame("hodbub","YES","hodbub-poker-game");
         logoutUsers();
         deleteUsers();
     }
@@ -131,7 +122,6 @@ public class LeaveGameTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
-        setUserLeague();
         boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GameSettings.GamePolicy.NOLIMIT, 10000, 10000, 100, 2, 9, true);
         boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game",  GameSettings.GamePolicy.NOLIMIT , 300, 300, 2, 2, 9, true);
         assertTrue(gamecreated1);
@@ -140,10 +130,8 @@ public class LeaveGameTests extends ProjectTest {
         boolean leavedgame2 = this.leavegame("achiadg" , "YES", "achiadg-poker-ga\tme");
         assertFalse(leavedgame1);
         assertFalse(leavedgame2);
-        boolean closegame1 = this.closegame("achiadg-poker-game");
-        boolean closegame2 = this.closegame("hodbub-poker-game");
-        assertTrue(closegame1);
-        assertTrue(closegame2);
+        boolean closegame1 = this.leavegame("achiadg", "YES", "achiadg-poker-game");
+        boolean closegame2 = this.leavegame("hodbub","YES","hodbub-poker-game");
         logoutUsers();
         deleteUsers();
     }
@@ -155,6 +143,15 @@ public class LeaveGameTests extends ProjectTest {
         boolean useraddedgame4 = this.joinexistinggame("achiadg" , "hodbub-poker-game",false);
     }
 
+    public void leaveGames() {
+        boolean closegame1 = this.leavegame("achiadg", "YES", "achiadg-poker-game");
+        boolean closegame2 = this.leavegame("hodbub","YES","hodbub-poker-game");
+        boolean closegame3 = this.leavegame("hodbub" ,"YES", "achiadg-poker-game");
+        boolean closegame4 = this.leavegame("rotemw" , "YES","achiadg-poker-game");
+        boolean closegame5 = this.leavegame("ronenbu" , "YES","hodbub-poker-game");
+        boolean closegame6 = this.leavegame("achiadg" , "YES","hodbub-poker-game");
+    }
+
     public void deleteUsers() {
         boolean deleteUser1 = this.deleteUser("achiadg");
         boolean deleteUser2 = this.deleteUser("hodbub");
@@ -162,13 +159,6 @@ public class LeaveGameTests extends ProjectTest {
         boolean deleteUser4 = this.deleteUser("ronenbu");
     }
 
-    public  void setUserLeague()
-    {
-        boolean leaguechanged1 = this.setuserleague("hodbub","achiadg", 4);
-        boolean leaguechanged2 = this.setuserleague("hodbub","hodbub", 4);
-        boolean leaguechanged3 = this.setuserleague("hodbub","rotemw", 4);
-        boolean leaguechanged4 = this.setuserleague("hodbub","ronenbu", 4);
-    }
 
 
     public void logoutUsers() {

@@ -36,10 +36,8 @@ public class FindAllAvailableGamesToJoinTests extends ProjectTest {
         assertTrue(gamesfound2);
         assertTrue(gamesfound3);
         assertTrue(gamesfound4);
-        boolean closegame1 = this.closegame("achiadg-poker-game");
-        boolean closegame2 = this.closegame("hodbub-poker-game");
-        assertTrue(closegame1);
-        assertTrue(closegame2);
+        boolean closegame1 = this.leavegame("achiadg", "YES", "achiadg-poker-game");
+        boolean closegame2 = this.leavegame("hodbub","YES","hodbub-poker-game");
         logoutUsers();
         deleteUsers();
     }
@@ -63,12 +61,16 @@ public class FindAllAvailableGamesToJoinTests extends ProjectTest {
         assertFalse(gamesfound2);
         assertFalse(gamesfound3);
         assertFalse(gamesfound4);
-        boolean closegame1 = this.closegame("achiadg-poker-game");
-        boolean closegame2 = this.closegame("hodbub-poker-game");
-        assertTrue(closegame1);
-        assertTrue(closegame2);
+        leaveGames();
         logoutUsers();
         deleteUsers();
+    }
+
+    public void leaveGames() {
+        boolean closegame1 = this.leavegame("achiadg", "YES", "achiadg-poker-game");
+        boolean closegame2 = this.leavegame("hodbub","YES","hodbub-poker-game");
+        boolean closegame4 = this.leavegame("rotemw" , "YES","hodbub-poker-game");
+        boolean closegame5 = this.leavegame("ronenbu" , "YES","hodbub-poker-game");
     }
 
     private void usersJoinsGames() {
