@@ -37,10 +37,7 @@ public class SpectateActiveGameTests extends ProjectTest {
         assertTrue(spectategameisvalid2);
         assertTrue(spectategameisvalid3);
         assertTrue(spectategameisvalid4);
-        boolean closegame1 = this.closegame("achiadg-poker-game");
-        boolean closegame2 = this.closegame("hodbub-poker-game");
-        assertTrue(closegame1);
-        assertTrue(closegame2);
+        leaveGames();
         logoutUsers();
         deleteUsers();
     }
@@ -64,10 +61,8 @@ public class SpectateActiveGameTests extends ProjectTest {
         assertFalse(spectategameisvalid2);
         assertFalse(spectategameisvalid3);
         assertFalse(spectategameisvalid4);
-        boolean closegame1 = this.closegame("achiadg-poker-game");
-        boolean closegame2 = this.closegame("hodbub-poker-game");
-        assertTrue(closegame1);
-        assertTrue(closegame2);
+        boolean closegame1 = this.leavegame("achiadg", "YES", "achiadg-poker-game");
+        boolean closegame2 = this.leavegame("hodbub","YES","hodbub-poker-game");
         logoutUsers();
         deleteUsers();
     }
@@ -91,10 +86,8 @@ public class SpectateActiveGameTests extends ProjectTest {
         assertFalse(spectategameisvalid2);
         assertFalse(spectategameisvalid3);
         assertFalse(spectategameisvalid4);
-        boolean closegame1 = this.closegame("achiadg-poker-game");
-        boolean closegame2 = this.closegame("hodbub-poker-game");
-        assertTrue(closegame1);
-        assertTrue(closegame2);
+        boolean closegame1 = this.leavegame("achiadg", "YES", "achiadg-poker-game");
+        boolean closegame2 = this.leavegame("hodbub","YES","hodbub-poker-game");
         logoutUsers();
         deleteUsers();
     }
@@ -111,8 +104,7 @@ public class SpectateActiveGameTests extends ProjectTest {
         assertTrue(gamecreated1);
         boolean spectategameisvalid1 = this.spectateactivegame("achiadg" , "SELECT * FROM USERS WHERE username = achiadg-poker-game",true);
         assertFalse(spectategameisvalid1);
-        boolean closegame1 = this.closegame("hodbub-poker-game");
-        assertTrue(closegame1);
+        boolean closegame2 = this.leavegame("hodbub","YES","hodbub-poker-game");
         logoutUsers();
         deleteUsers();
     }
@@ -166,4 +158,14 @@ public class SpectateActiveGameTests extends ProjectTest {
         boolean useradded3 = this.registerUser("rotemw","rotemwald123","waldr@gmail.com",LocalDate.of(1991,11,26),null);
         boolean useradded4 = this.registerUser("ronenbu","ronenbu123","butirevr@gmail.com",LocalDate.of(1991,4,26),null);
     }
+
+    public void leaveGames() {
+        boolean closegame1 = this.leavegame("achiadg", "YES", "achiadg-poker-game");
+        boolean closegame2 = this.leavegame("hodbub","YES","hodbub-poker-game");
+        boolean closegame3 = this.leavegame("hodbub" ,"YES", "achiadg-poker-game");
+        boolean closegame4 = this.leavegame("rotemw" , "YES","achiadg-poker-game");
+        boolean closegame5 = this.leavegame("ronenbu" , "YES","hodbub-poker-game");
+        boolean closegame6 = this.leavegame("achiadg" , "YES","hodbub-poker-game");
+    }
+
 }

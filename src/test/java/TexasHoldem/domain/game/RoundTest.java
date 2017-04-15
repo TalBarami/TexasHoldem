@@ -1,19 +1,25 @@
 package TexasHoldem.domain.game;
 
+import TexasHoldem.domain.game.card.Card;
+import TexasHoldem.domain.game.card.Rank;
+import TexasHoldem.domain.game.card.Suit;
 import TexasHoldem.domain.game.participants.Player;
 import TexasHoldem.domain.user.LeagueManager;
 import TexasHoldem.domain.user.User;
-import org.apache.commons.lang3.tuple.Pair;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.lang.reflect.Method;
 import java.time.LocalDate;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 /**
  * Created by RotemWald on 11/04/2017.
@@ -21,28 +27,52 @@ import java.util.Map;
 public class RoundTest {
     Round round1;
 
-    public RoundTest() {
-        setRound1();
+    @Test
+    public void round1_testPaySmallAndBigBlind() throws Exception {
+        int smallBlindAmount = 5;
+        int bigBlindAmount = 10;
+
+        User user1 = new User("waldr", "1234", "waldr@post.bgu.ac.il", LocalDate.now(), null);
+        User user2 = new User("hodbub", "1234", "hobdud@post.bgu.ac.il", LocalDate.now(), null);
+        User user3 = new User("achiadg", "1234", "achiadg@post.bgu.ac.il", LocalDate.now(), null);
+
+        Player player1 = new Player(user1, 100, 100);
+        Player player2 = new Player(user2, 100, 100);
+        Player player3 = new Player(user3, 100, 100);
+
+        List<Player> playerList1 = new LinkedList<Player>();
+        playerList1.add(player1);
+        playerList1.add(player2);
+        playerList1.add(player3);
+
+        GameSettings settings1 = new GameSettings("Game1", GameSettings.GamePolicy.NOLIMIT, 100, 10, 5, 100, 2, 9, false);
+        Game game1 = new Game(settings1, user1, new LeagueManager());
+        Round round1 = new Round(playerList1, settings1, 0);
+
+        Player smallPlayer = round1.getSmallPlayer();
+        Player bigPlayer = round1.getBigPlayer();
+        int smallPlayerOldChipAmount = smallPlayer.getChipsAmount();
+        int bigPlayerOldChipAmount = bigPlayer.getChipsAmount();
+
+        Method method = Round.class.getDeclaredMethod("paySmallAndBigBlind", null);
+        method.setAccessible(true);
+        method.invoke(round1, null);
+
+        Assert.assertTrue(smallPlayer.getChipsAmount() == smallPlayerOldChipAmount - smallBlindAmount);
+        Assert.assertTrue(bigPlayer.getChipsAmount() == bigPlayerOldChipAmount - bigBlindAmount);
     }
 
-    @Before
-    public void setUp() throws Exception {
-    }
-
-    @After
-    public void tearDown() throws Exception {
-    }
-
-    public void setRound1() {
+    @Test
+    public void round1_testPlayPreFlopRound() throws Exception {
         User user1 = new User("waldr", "1234", "waldr@post.bgu.ac.il", LocalDate.now(), null);
         User user2 = new User("hodbub", "1234", "hobdud@post.bgu.ac.il", LocalDate.now(), null);
         User user3 = new User("achiadg", "1234", "achiadg@post.bgu.ac.il", LocalDate.now(), null);
         User user4 = new User("ronenb", "1234", "ronenb@post.bgu.ac.il", LocalDate.now(), null);
 
-        Player player1 = new Player(user1, 100, 100);
-        Player player2 = new Player(user2, 100, 100);
-        Player player3 = new Player(user3, 100, 100);
-        Player player4 = new Player(user4, 100, 100);
+        Player player1 = mock(Player.class);
+        Player player2 = mock(Player.class);
+        Player player3 = mock(Player.class);
+        Player player4 = mock(Player.class);
 
         List<Player> playerList1 = new LinkedList<Player>();
         playerList1.add(player1);
@@ -54,154 +84,287 @@ public class RoundTest {
         Game game1 = new Game(settings1, user1, new LeagueManager());
         Round round1 = new Round(playerList1, settings1, 0);
 
-        this.round1 = round1;
+        when(player1.chooseAction(any())).thenReturn(GameActions.FOLD);
+        when(player2.chooseAction(any())).thenReturn(GameActions.FOLD);
+        when(player3.chooseAction(any())).thenReturn(GameActions.FOLD);
+        when(player4.chooseAction(any())).thenReturn(GameActions.FOLD);
+
+        when(player1.getUser()).thenReturn(user1);
+        when(player2.getUser()).thenReturn(user2);
+        when(player3.getUser()).thenReturn(user3);
+        when(player4.getUser()).thenReturn(user4);
+
+        double dealerOldRealCurrency = player1.getUser().getBalance();
+        double smallPlayerOldRealCurrency = player2.getUser().getBalance();
+        double bigPlayerOldRealCurrency = player3.getUser().getBalance();
+        double lastPlayerOldRealCurrency = player4.getUser().getBalance();
+
+        round1.setRoundActive(true);
+        Method method = Round.class.getDeclaredMethod("playPreFlopRound", null);
+        method.setAccessible(true);
+        method.invoke(round1, null);
+
+        Assert.assertTrue(round1.getPotAmount() == 0);
+        Assert.assertTrue(round1.getActivePlayers().size() == 1);
+
+        Assert.assertTrue(player1.getUser().getBalance() == dealerOldRealCurrency);
+        Assert.assertTrue(player2.getUser().getBalance() == smallPlayerOldRealCurrency);
+        Assert.assertTrue(player3.getUser().getBalance() == bigPlayerOldRealCurrency);
+        Assert.assertTrue(player4.getUser().getBalance() == lastPlayerOldRealCurrency);
     }
 
     @Test
-    public void round1_testDealCards() throws Exception {
-        round1.runDealCards();
+    public void round1_testPlayFlopOrTurnRound() throws Exception {
+        User user1 = new User("waldr", "1234", "waldr@post.bgu.ac.il", LocalDate.now(), null);
+        User user2 = new User("hodbub", "1234", "hobdud@post.bgu.ac.il", LocalDate.now(), null);
+        User user3 = new User("achiadg", "1234", "achiadg@post.bgu.ac.il", LocalDate.now(), null);
+        User user4 = new User("ronenb", "1234", "ronenb@post.bgu.ac.il", LocalDate.now(), null);
 
-        for (Player p : round1.getActivePlayers()) {
-            Assert.assertTrue(p.getCards().size() == 2);
-        }
-    }
+        Player player1 = mock(Player.class);
+        Player player2 = mock(Player.class);
+        Player player3 = mock(Player.class);
+        Player player4 = mock(Player.class);
 
-    public void round1_testPaySmallAndBigBlind() throws Exception {
-        int smallBlindAmount = 5;
-        int bigBlindAmount = 10;
+        List<Player> playerList1 = new LinkedList<Player>();
+        playerList1.add(player1);
+        playerList1.add(player2);
+        playerList1.add(player3);
+        playerList1.add(player4);
 
-        Player smallPlayer = round1.getSmallPlayer();
-        Player bigPlayer = round1.getBigPlayer();
-        int smallPlayerOldChipAmount = smallPlayer.getChipsAmount();
-        int bigPlayerOldChipAmount = bigPlayer.getChipsAmount();
+        GameSettings settings1 = new GameSettings("Game1", GameSettings.GamePolicy.NOLIMIT, 100, 10, 5, 100, 2, 9, false);
+        Game game1 = new Game(settings1, user1, new LeagueManager());
+        Round round1 = new Round(playerList1, settings1, 0);
 
-        round1.runPaySmallAndBigBlind();
+        round1.initLastPlayer();
 
-        Assert.assertTrue(smallPlayer.getChipsAmount() == smallPlayerOldChipAmount - smallBlindAmount);
-        Assert.assertTrue(bigPlayer.getChipsAmount() == bigPlayerOldChipAmount - bigBlindAmount);
-    }
+        when(player1.chooseAction(any())).thenReturn(GameActions.CHECK);
+        when(player2.chooseAction(any())).thenReturn(GameActions.CHECK);
+        when(player3.chooseAction(any())).thenReturn(GameActions.CHECK);
+        when(player4.chooseAction(any())).thenReturn(GameActions.CHECK);
 
-    public void round1_testPlayPreFlopRound() throws Exception {
-        Map<Player, List<Pair<GameActions, Integer>>> playerDecisions = new HashMap<Player, List<Pair<GameActions, Integer>>>();
+        when(player1.getUser()).thenReturn(user1);
+        when(player2.getUser()).thenReturn(user2);
+        when(player3.getUser()).thenReturn(user3);
+        when(player4.getUser()).thenReturn(user4);
 
-        Player dealer = round1.getCurrentDealerPlayer();
-        Player smallPlayer = round1.getSmallPlayer();
-        Player bigPlayer = round1.getBigPlayer();
-        Player lastPlayer = round1.getActivePlayers().stream().filter(p -> p != dealer && p != smallPlayer && p != bigPlayer).findFirst().get();
+        round1.setRoundActive(true);
+        Method method = Round.class.getDeclaredMethod("playFlopOrTurnRound", null);
+        method.setAccessible(true);
+        method.invoke(round1, null);
 
-        double dealerOldRealCurrency = dealer.getUser().getBalance();
-        double smallPlayerOldRealCurrency = smallPlayer.getUser().getBalance();
-        double bigPlayerOldRealCurrency = bigPlayer.getUser().getBalance();
-        double lastPlayerOldRealCurrency = lastPlayer.getUser().getBalance();
+        verify(player1).chooseAction(any());
+        verify(player2).chooseAction(any());
+        verify(player3).chooseAction(any());
+        verify(player4).chooseAction(any());
 
-        List<Pair<GameActions, Integer>> dealerDecisionList = new LinkedList<Pair<GameActions, Integer>>();
-        List<Pair<GameActions, Integer>> smallPlayerDecisionList = new LinkedList<Pair<GameActions, Integer>>();
-        List<Pair<GameActions, Integer>> bigPlayerDecisionList = new LinkedList<Pair<GameActions, Integer>>();
-        List<Pair<GameActions, Integer>> lastPlayerDecisionList = new LinkedList<Pair<GameActions, Integer>>();
-
-        dealerDecisionList.add(Pair.of(GameActions.CALL, null));
-        smallPlayerDecisionList.add(Pair.of(GameActions.CALL, null));
-        bigPlayerDecisionList.add(Pair.of(GameActions.CHECK, null));
-        lastPlayerDecisionList.add(Pair.of(GameActions.CALL, null));
-
-        playerDecisions.put(dealer, dealerDecisionList);
-        playerDecisions.put(smallPlayer, smallPlayerDecisionList);
-        playerDecisions.put(bigPlayer, bigPlayerDecisionList);
-        playerDecisions.put(lastPlayer, lastPlayerDecisionList);
-
-        round1.runPlayPreFlopRound(playerDecisions);
-
-        Assert.assertTrue(round1.getPotAmount() == 40);
+        Assert.assertTrue(round1.getPotAmount() == 0);
         Assert.assertTrue(round1.getActivePlayers().size() == 4);
-        Assert.assertTrue(round1.getActivePlayers().stream().allMatch(p -> p.getChipsAmount() == 90));
-
-        Assert.assertTrue(dealer.getUser().getBalance() == dealerOldRealCurrency);
-        Assert.assertTrue(smallPlayer.getUser().getBalance() == smallPlayerOldRealCurrency);
-        Assert.assertTrue(bigPlayer.getUser().getBalance() == bigPlayerOldRealCurrency);
-        Assert.assertTrue(lastPlayer.getUser().getBalance() == lastPlayerOldRealCurrency);
     }
 
-    public void round1_testPlayFlopRound() {
-        Map<Player, List<Pair<GameActions, Integer>>> playerDecisions = new HashMap<Player, List<Pair<GameActions, Integer>>>();
+    @Test
+    public void round1_testPlayRiverRound() throws Exception {
+        User user1 = new User("waldr", "1234", "waldr@post.bgu.ac.il", LocalDate.now(), null);
+        User user2 = new User("hodbub", "1234", "hobdud@post.bgu.ac.il", LocalDate.now(), null);
+        User user3 = new User("achiadg", "1234", "achiadg@post.bgu.ac.il", LocalDate.now(), null);
+        User user4 = new User("ronenb", "1234", "ronenb@post.bgu.ac.il", LocalDate.now(), null);
 
-        Player dealer = round1.getCurrentDealerPlayer();
-        Player smallPlayer = round1.getSmallPlayer();
-        Player bigPlayer = round1.getBigPlayer();
-        Player lastPlayer = round1.getActivePlayers().stream().filter(p -> p != dealer && p != smallPlayer && p != bigPlayer).findFirst().get();
+        Player player1 = mock(Player.class);
+        Player player2 = mock(Player.class);
+        Player player3 = mock(Player.class);
+        Player player4 = mock(Player.class);
 
-        double dealerOldRealCurrency = dealer.getUser().getBalance();
-        double smallPlayerOldRealCurrency = smallPlayer.getUser().getBalance();
-        double bigPlayerOldRealCurrency = bigPlayer.getUser().getBalance();
-        double lastPlayerOldRealCurrency = lastPlayer.getUser().getBalance();
+        List<Player> playerList1 = new LinkedList<Player>();
+        playerList1.add(player1);
+        playerList1.add(player2);
+        playerList1.add(player3);
+        playerList1.add(player4);
 
-        List<Pair<GameActions, Integer>> dealerDecisionList = new LinkedList<Pair<GameActions, Integer>>();
-        List<Pair<GameActions, Integer>> smallPlayerDecisionList = new LinkedList<Pair<GameActions, Integer>>();
-        List<Pair<GameActions, Integer>> bigPlayerDecisionList = new LinkedList<Pair<GameActions, Integer>>();
-        List<Pair<GameActions, Integer>> lastPlayerDecisionList = new LinkedList<Pair<GameActions, Integer>>();
+        GameSettings settings1 = new GameSettings("Game1", GameSettings.GamePolicy.NOLIMIT, 100, 10, 5, 100, 2, 9, false);
+        Game game1 = new Game(settings1, user1, new LeagueManager());
+        Round round1 = new Round(playerList1, settings1, 0);
 
-        dealerDecisionList.add(Pair.of(GameActions.CALL, null));
-        smallPlayerDecisionList.add(Pair.of(GameActions.RAISE, 10));
-        bigPlayerDecisionList.add(Pair.of(GameActions.CALL, null));
-        lastPlayerDecisionList.add(Pair.of(GameActions.FOLD, null));
+        when(player1.chooseAction(any())).thenReturn(GameActions.RAISE);
+        when(player2.chooseAction(any())).thenReturn(GameActions.RAISE).thenReturn(GameActions.CALL);
+        when(player3.chooseAction(any())).thenReturn(GameActions.FOLD);
+        when(player4.chooseAction(any())).thenReturn(GameActions.CALL).thenReturn(GameActions.FOLD);
 
-        playerDecisions.put(dealer, dealerDecisionList);
-        playerDecisions.put(smallPlayer, smallPlayerDecisionList);
-        playerDecisions.put(bigPlayer, bigPlayerDecisionList);
-        playerDecisions.put(lastPlayer, lastPlayerDecisionList);
+        when(player2.getLastBetSinceCardOpen()).thenReturn(0).thenReturn(0).thenReturn(10);
 
-        round1.runPreStartOfNewTurn();
-        round1.runPlayFlopRound(playerDecisions);
+        when(player2.chooseAmountToRaise(any(int.class))).thenReturn(10);
+        when(player2.payChips(10)).thenReturn(10).thenReturn(10);
+        when(player4.payChips(10)).thenReturn(10);
+        when(player1.chooseAmountToRaise(any(int.class))).thenReturn(20);
+        when(player1.payChips(20)).thenReturn(20);
 
-        Assert.assertTrue(round1.getPotAmount() == 70);
-        Assert.assertTrue(round1.getActivePlayers().size() == 3);
-        Assert.assertTrue(dealer.getChipsAmount() == 80);
-        Assert.assertTrue(smallPlayer.getChipsAmount() == 80);
-        Assert.assertTrue(bigPlayer.getChipsAmount() == 80);
-        Assert.assertTrue(lastPlayer.getChipsAmount() == 90);
+        when(player1.getUser()).thenReturn(user1);
+        when(player2.getUser()).thenReturn(user2);
+        when(player3.getUser()).thenReturn(user3);
+        when(player4.getUser()).thenReturn(user4);
 
-        Assert.assertTrue(dealer.getUser().getBalance() == dealerOldRealCurrency);
-        Assert.assertTrue(smallPlayer.getUser().getBalance() == smallPlayerOldRealCurrency);
-        Assert.assertTrue(bigPlayer.getUser().getBalance() == bigPlayerOldRealCurrency);
-        Assert.assertTrue(lastPlayer.getUser().getBalance() == lastPlayerOldRealCurrency);
-    }
+        double dealerOldRealCurrency = player1.getUser().getBalance();
+        double smallPlayerOldRealCurrency = player2.getUser().getBalance();
+        double bigPlayerOldRealCurrency = player3.getUser().getBalance();
+        double lastPlayerOldRealCurrency = player4.getUser().getBalance();
 
-    public void round1_runPlayRiverRound() {
-        Map<Player, List<Pair<GameActions, Integer>>> playerDecisions = new HashMap<Player, List<Pair<GameActions, Integer>>>();
+        round1.setRoundActive(true);
+        round1.initLastPlayer();
+        Method method = Round.class.getDeclaredMethod("playRiverRound", null);
+        method.setAccessible(true);
+        method.invoke(round1, null);
 
-        Player dealer = round1.getCurrentDealerPlayer();
-        Player smallPlayer = round1.getSmallPlayer();
-        Player bigPlayer = round1.getBigPlayer();
-
-        double dealerOldRealCurrency = dealer.getUser().getBalance();
-        double smallPlayerOldRealCurrency = smallPlayer.getUser().getBalance();
-        double bigPlayerOldRealCurrency = bigPlayer.getUser().getBalance();
-
-        List<Pair<GameActions, Integer>> dealerDecisionList = new LinkedList<Pair<GameActions, Integer>>();
-        List<Pair<GameActions, Integer>> smallPlayerDecisionList = new LinkedList<Pair<GameActions, Integer>>();
-        List<Pair<GameActions, Integer>> bigPlayerDecisionList = new LinkedList<Pair<GameActions, Integer>>();
-
-        smallPlayerDecisionList.add(Pair.of(GameActions.CHECK, null));
-        bigPlayerDecisionList.add(Pair.of(GameActions.RAISE, 10));
-        dealerDecisionList.add(Pair.of(GameActions.RAISE, 20));
-        smallPlayerDecisionList.add(Pair.of(GameActions.FOLD, null));
-        bigPlayerDecisionList.add(Pair.of(GameActions.RAISE, 30));
-        dealerDecisionList.add(Pair.of(GameActions.CALL, null));
-
-        playerDecisions.put(dealer, dealerDecisionList);
-        playerDecisions.put(smallPlayer, smallPlayerDecisionList);
-        playerDecisions.put(bigPlayer, bigPlayerDecisionList);
-
-        round1.runPreStartOfNewTurn();
-        round1.runPlayRiverRound(playerDecisions);
-
-        Assert.assertTrue(round1.getPotAmount() == 220);
+        Assert.assertTrue(round1.getPotAmount() == 50);
         Assert.assertTrue(round1.getActivePlayers().size() == 2);
-        Assert.assertTrue(dealer.getChipsAmount() == 20);
-        Assert.assertTrue(smallPlayer.getChipsAmount() == 50);
-        Assert.assertTrue(bigPlayer.getChipsAmount() == 20);
 
-        Assert.assertTrue(dealer.getUser().getBalance() == dealerOldRealCurrency);
-        Assert.assertTrue(smallPlayer.getUser().getBalance() == smallPlayerOldRealCurrency);
-        Assert.assertTrue(bigPlayer.getUser().getBalance() == bigPlayerOldRealCurrency);
+        verify(player1).payChips(20);
+        verify(player2, times(2)).payChips(10);
+        verify(player4).payChips(10);
+
+        Assert.assertTrue(player1.getUser().getBalance() == dealerOldRealCurrency);
+        Assert.assertTrue(player2.getUser().getBalance() == smallPlayerOldRealCurrency);
+        Assert.assertTrue(player3.getUser().getBalance() == bigPlayerOldRealCurrency);
+        Assert.assertTrue(player4.getUser().getBalance() == lastPlayerOldRealCurrency);
+    }
+
+    @Test
+    public void round1_testCalculateWinner_oneWinner() throws Exception {
+        User user1 = new User("waldr", "1234", "waldr@post.bgu.ac.il", LocalDate.now(), null);
+        User user2 = new User("hodbub", "1234", "hobdud@post.bgu.ac.il", LocalDate.now(), null);
+
+        Player player1 = mock(Player.class);
+        Player player2 = mock(Player.class);
+
+        List<Player> playerList1 = new LinkedList<Player>();
+        playerList1.add(player1);
+        playerList1.add(player2);
+
+        GameSettings settings1 = new GameSettings("Game1", GameSettings.GamePolicy.NOLIMIT, 100, 10, 5, 100, 2, 9, false);
+        Game game1 = new Game(settings1, user1, new LeagueManager());
+        Round round1 = new Round(playerList1, settings1, 0);
+
+        Set<Card> player1CardSet = new HashSet<Card>();
+        Set<Card> player2CardSet = new HashSet<Card>();
+
+        player1CardSet.add(new Card(Rank.NINE, Suit.DIAMOND));
+        player1CardSet.add(new Card(Rank.TEN, Suit.DIAMOND));
+        player2CardSet.add(new Card(Rank.ACE, Suit.HEART));
+        player2CardSet.add(new Card(Rank.KING, Suit.HEART));
+
+        when(player1.getCards()).thenReturn(player1CardSet);
+        when(player2.getCards()).thenReturn(player2CardSet);
+
+        List<Card> openedCards = new LinkedList<Card>();
+        openedCards.add(new Card(Rank.JACK, Suit.SPADE));
+        openedCards.add(new Card(Rank.QUEEN, Suit.SPADE));
+        openedCards.add(new Card(Rank.KING, Suit.CLUB));
+        openedCards.add(new Card(Rank.ACE, Suit.DIAMOND));
+        openedCards.add(new Card(Rank.FOUR, Suit.SPADE));
+
+        when(player1.getTotalAmountPayedInRound()).thenReturn(50, 50, 50, 50, 50, 0);
+        when(player2.getTotalAmountPayedInRound()).thenReturn(50, 50, 50, 0);
+
+        round1.setOpenedCards(openedCards);
+        Method method = Round.class.getDeclaredMethod("calculateWinner", null);
+        method.setAccessible(true);
+        method.invoke(round1, null);
+
+        verify(player1).addChips(100);
+    }
+
+    @Test
+    public void round1_testCalculateWinner_twoWinnersSplitPot() throws Exception {
+        User user1 = new User("waldr", "1234", "waldr@post.bgu.ac.il", LocalDate.now(), null);
+        User user2 = new User("hodbub", "1234", "hobdud@post.bgu.ac.il", LocalDate.now(), null);
+
+        Player player1 = mock(Player.class);
+        Player player2 = mock(Player.class);
+
+        List<Player> playerList1 = new LinkedList<Player>();
+        playerList1.add(player1);
+        playerList1.add(player2);
+
+        GameSettings settings1 = new GameSettings("Game1", GameSettings.GamePolicy.NOLIMIT, 100, 10, 5, 100, 2, 9, false);
+        Game game1 = new Game(settings1, user1, new LeagueManager());
+        Round round1 = new Round(playerList1, settings1, 0);
+
+        Set<Card> player1CardSet = new HashSet<Card>();
+        Set<Card> player2CardSet = new HashSet<Card>();
+
+        player1CardSet.add(new Card(Rank.NINE, Suit.DIAMOND));
+        player1CardSet.add(new Card(Rank.TEN, Suit.DIAMOND));
+        player2CardSet.add(new Card(Rank.NINE, Suit.HEART));
+        player2CardSet.add(new Card(Rank.TEN, Suit.HEART));
+
+        when(player1.getCards()).thenReturn(player1CardSet);
+        when(player2.getCards()).thenReturn(player2CardSet);
+
+        List<Card> openedCards = new LinkedList<Card>();
+        openedCards.add(new Card(Rank.JACK, Suit.SPADE));
+        openedCards.add(new Card(Rank.QUEEN, Suit.SPADE));
+        openedCards.add(new Card(Rank.KING, Suit.CLUB));
+        openedCards.add(new Card(Rank.ACE, Suit.DIAMOND));
+        openedCards.add(new Card(Rank.FOUR, Suit.SPADE));
+
+        when(player1.getTotalAmountPayedInRound()).thenReturn(50, 50, 50, 50, 50, 0);
+        when(player2.getTotalAmountPayedInRound()).thenReturn(50, 50, 50, 0);
+
+        round1.setOpenedCards(openedCards);
+        Method method = Round.class.getDeclaredMethod("calculateWinner", null);
+        method.setAccessible(true);
+        method.invoke(round1, null);
+
+        verify(player1).addChips(50);
+        verify(player1).addChips(50);
+    }
+
+    @Test
+    public void round1_testCalculateWinner_twoWinnersDifferentAmount() throws Exception {
+        User user1 = new User("waldr", "1234", "waldr@post.bgu.ac.il", LocalDate.now(), null);
+
+        Player player1 = mock(Player.class);
+        Player player2 = mock(Player.class);
+        Player player3 = mock(Player.class);
+
+        List<Player> playerList1 = new LinkedList<Player>();
+        playerList1.add(player1);
+        playerList1.add(player2);
+        playerList1.add(player3);
+
+        GameSettings settings1 = new GameSettings("Game1", GameSettings.GamePolicy.NOLIMIT, 100, 10, 5, 100, 2, 9, false);
+        Game game1 = new Game(settings1, user1, new LeagueManager());
+        Round round1 = new Round(playerList1, settings1, 0);
+
+        Set<Card> player1CardSet = new HashSet<Card>();
+        Set<Card> player2CardSet = new HashSet<Card>();
+        Set<Card> player3CardSet = new HashSet<Card>();
+
+        player1CardSet.add(new Card(Rank.NINE, Suit.DIAMOND));
+        player1CardSet.add(new Card(Rank.TEN, Suit.DIAMOND));
+        player2CardSet.add(new Card(Rank.KING, Suit.HEART));
+        player2CardSet.add(new Card(Rank.SEVEN, Suit.HEART));
+        player3CardSet.add(new Card(Rank.ACE, Suit.CLUB));
+        player3CardSet.add(new Card(Rank.EIGHT, Suit.CLUB));
+
+        when(player1.getCards()).thenReturn(player1CardSet);
+        when(player2.getCards()).thenReturn(player2CardSet).thenReturn(player2CardSet);
+        when(player3.getCards()).thenReturn(player3CardSet).thenReturn(player3CardSet);
+
+        List<Card> openedCards = new LinkedList<Card>();
+        openedCards.add(new Card(Rank.JACK, Suit.SPADE));
+        openedCards.add(new Card(Rank.QUEEN, Suit.SPADE));
+        openedCards.add(new Card(Rank.KING, Suit.CLUB));
+        openedCards.add(new Card(Rank.ACE, Suit.DIAMOND));
+        openedCards.add(new Card(Rank.FOUR, Suit.SPADE));
+
+        when(player1.getTotalAmountPayedInRound()).thenReturn(20, 20, 20, 20, 20, 0);
+        when(player2.getTotalAmountPayedInRound()).thenReturn(50, 50, 50, 30, 30, 0);
+        when(player3.getTotalAmountPayedInRound()).thenReturn(50, 50, 50, 30, 30, 30, 30, 30, 0);
+
+        round1.setOpenedCards(openedCards);
+        Method method = Round.class.getDeclaredMethod("calculateWinner", null);
+        method.setAccessible(true);
+        method.invoke(round1, null);
+
+        verify(player1).addChips(60);
+        verify(player3).addChips(60);
     }
 }

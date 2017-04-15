@@ -36,17 +36,16 @@ public class RealBridge implements Bridge {
     public boolean searchUser(String username)
     {
         try {
-            if(service.getUser(username) != null)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+                if(service.getUser(username) != null){
+                  return true;
+                }
+                else{
+                  return false;
+                }
         } catch (InvalidArgumentException e) {
             return false;
         }
+        return true;
     }
 
     public  boolean deleteUser(String username)
@@ -176,6 +175,7 @@ public class RealBridge implements Bridge {
     }
 
     public boolean leavegame(String username, String choise, String gamename) {
+        service.leaveGame();
         return true;
     }
 
@@ -188,7 +188,14 @@ public class RealBridge implements Bridge {
     }
 
     public boolean searchavailablegamestojoin(String username) {
-        return true;
+        if(service.findAvailableGames(username).size() != 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public boolean playturn(String username,String gamename , String action) {

@@ -102,7 +102,7 @@ public class ProxyBridge implements Bridge {
     }
 
     public boolean leavegame(String username, String choise, String gamename) {
-        return true;
+        return  real.leavegame(username,choise, gamename);
     }
 
     public boolean replaynonactivegame(String username, String gamename) {
@@ -114,7 +114,7 @@ public class ProxyBridge implements Bridge {
     }
 
     public boolean searchavailablegamestojoin(String username) {
-        return true;
+       return real.searchavailablegamestojoin(username);
     }
 
     public boolean playturn(String username,String gamename , String action) {

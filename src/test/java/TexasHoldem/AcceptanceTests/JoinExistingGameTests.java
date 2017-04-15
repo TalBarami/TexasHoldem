@@ -36,10 +36,7 @@ public class JoinExistingGameTests extends ProjectTest {
         assertTrue(useraddedgame2);
         assertTrue(useraddedgame3);
         assertTrue(useraddedgame4);
-        boolean closegame1 = this.closegame("achiadg-poker-game");
-        boolean closegame2 = this.closegame("hodbub-poker-game");
-        assertTrue(closegame1);
-        assertTrue(closegame2);
+        leaveGames();
         logoutUsers();
         deleteUsers();
     }
@@ -58,8 +55,9 @@ public class JoinExistingGameTests extends ProjectTest {
         assertTrue(useraddedgame1);
         assertTrue(useraddedgame2);
         assertFalse(useraddedgame3);
-        boolean closegame1 = this.closegame("achiadg-poker-game");
-        assertTrue(closegame1);
+        boolean closegame1 = this.leavegame("achiadg", "YES", "achiadg-poker-game");
+        boolean closegame2 = this.leavegame("hodbub","YES","achiadg-poker-game");
+        boolean closegame3 = this.leavegame("rotemw","YES","achiadg-poker-game");
         logoutUsers();
         deleteUsers();
     }
@@ -76,8 +74,7 @@ public class JoinExistingGameTests extends ProjectTest {
         boolean useraddedgame2 = this.joinexistinggame("rotemw" , "achiadg-poker-game",false);
         assertFalse(useraddedgame1);
         assertFalse(useraddedgame2);
-        boolean closegame1 = this.closegame("achiadg-poker-game");
-        assertTrue(closegame1);
+        boolean closegame1 = this.leavegame("achiadg", "YES", "achiadg-poker-game");
         logoutUsers();
         deleteUsers();
     }
@@ -96,8 +93,10 @@ public class JoinExistingGameTests extends ProjectTest {
         assertTrue(useraddedgame1);
         assertTrue(useraddedgame2);
         assertTrue(useraddedgame3);
-        boolean closegame1 = this.closegame("achiadg-poker-game");
-        assertTrue(closegame1);
+        boolean closegame1 = this.leavegame("achiadg", "YES", "achiadg-poker-game");
+        boolean closegame2 = this.leavegame("hodbub","YES","achiadg-poker-game");
+        boolean closegame3 = this.leavegame("rotemw","YES","achiadg-poker-game");
+        boolean closegame4 = this.leavegame("ronenbu","YES","achiadg-poker-game");
         logoutUsers();
         deleteUsers();
     }
@@ -111,14 +110,20 @@ public class JoinExistingGameTests extends ProjectTest {
         boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GameSettings.GamePolicy.NOLIMIT , 20000, 90000, 100, 2, 4, true);
         assertTrue(gamecreated1);
         boolean useraddedgame1 = this.joinexistinggame("hodbub" , "SELECT * FROM GAMES WHERE GAMENAME = achiad-poker-game",false);
-        //todo : failing of not the right problem , it's failing because there is no game with the given name, not because of sql injection.
         assertFalse(useraddedgame1);
-        boolean closegame1 = this.closegame("achiadg-poker-game");
-        assertTrue(closegame1);
+        boolean closegame1 = this.leavegame("achiadg", "YES", "achiadg-poker-game");
         logoutUsers();
         deleteUsers();
     }
 
+    public void leaveGames() {
+        boolean closegame1 = this.leavegame("achiadg", "YES", "achiadg-poker-game");
+        boolean closegame2 = this.leavegame("hodbub","YES","hodbub-poker-game");
+        boolean closegame3 = this.leavegame("hodbub" ,"YES", "achiadg-poker-game");
+        boolean closegame4 = this.leavegame("rotemw" , "YES","achiadg-poker-game");
+        boolean closegame5 = this.leavegame("ronenbu" , "YES","hodbub-poker-game");
+        boolean closegame6 = this.leavegame("rotemw" , "YES","hodbub-poker-game");
+    }
 
     public void deleteUsers() {
         boolean deleteUser1 = this.deleteUser("achiadg");
