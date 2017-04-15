@@ -152,9 +152,8 @@ public class GameCenter {
         List<Game> activeGames = gamesDb.getActiveGames();
         return activeGames.stream()
                 .filter(game -> game.getLeague() == user.getCurrLeague() &&
-                        /*(!game.realMoneyGame() && (game.getBuyInPolicy() <= user.getBalance())) &&*/
                         (game.realMoneyGame() || (!game.realMoneyGame() && game.isActive() && (game.getBuyInPolicy() <= user.getBalance()))) &&
-                        game.getPlayers().size() <= game.getMaximalAmountOfPlayers())
+                        game.getPlayers().size() < game.getMaximalAmountOfPlayers())
                 .collect(Collectors.toList());
     }
 

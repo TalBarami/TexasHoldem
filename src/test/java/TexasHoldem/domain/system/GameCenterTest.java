@@ -3,7 +3,6 @@ package TexasHoldem.domain.system;
 import TexasHoldem.common.Exceptions.*;
 import TexasHoldem.domain.game.Game;
 import TexasHoldem.domain.game.GameSettings;
-import TexasHoldem.domain.user.LeagueManager;
 import TexasHoldem.domain.user.User;
 import org.junit.After;
 import org.junit.Assert;
@@ -18,9 +17,6 @@ import static TexasHoldem.domain.game.GameSettings.GamePolicy.LIMIT;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
-/**
- * Created by RonenB on 4/14/2017.
- */
 public class GameCenterTest {
     private GameCenter gc;
     private LocalDate now;
@@ -50,7 +46,7 @@ public class GameCenterTest {
         tournamentGameSettings =new GameSettings("tournamentTest",LIMIT,100,100,100,100,2,4,true);
         tournamentGameSettings2 =new GameSettings("tournamentTest2",LIMIT,100,100,2000,100,2,4,false);
         realMoneyGameSettings =new GameSettings("realMoneyTest",LIMIT,100,100,100,0,2,4,false);
-        realMoneyGameSettings2 =new GameSettings("realMoneyTest2",LIMIT,100,100,100,0,2,4,true);
+        realMoneyGameSettings2 =new GameSettings("realMoneyTest2",LIMIT,100,100,100,0,2,2,true);
     }
 
     @After
@@ -404,6 +400,7 @@ public class GameCenterTest {
     public void findAvailableGames() throws Exception {
         gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
         gc.registerUser(testUser2,testUser2Pass,testUser2Email,now,null);
+        gc.registerUser(testUser3,testUser3Pass,testUser3Email,now,null);
 
         gc.depositMoney(testUser1,100000000);
 
@@ -431,10 +428,54 @@ public class GameCenterTest {
         games=gc.findAvailableGames(testUser2);
         assertThat(games.size(),is(4));
         assertTrue(games.contains(g2));
+
+        games=gc.findAvailableGames(testUser3);
+        assertThat(games.size(),is(2));
+        assertTrue(games.contains(g3));
+        assertTrue(games.contains(g4));
+
+        gc.joinGame(testUser2,realMoneyGameSettings2.getName(),false);
+        games=gc.findAvailableGames(testUser3);
+        assertThat(games.size(),is(1));
+        assertTrue(games.contains(g3));
     }
 
     @Test
     public void findSpectateableGames() throws Exception {
-    }
+        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
+        gc.depositMoney(testUser1,100000000);
 
+        List<Game> games=gc.findSpectateableGames();
+        assertThat(games.size(),is(0));
+
+
+        gc.createGame(testUser1,tournamentGameSettings);
+        Game g1=gc.getGameByName(tournamentGameSettings.getName());
+
+        games=gc.findSpectateableGames();
+        assertThat(games.size(),is(1));
+        assertTrue(games.contains(g1));
+
+        gc.createGame(testUser1,tournamentGameSettings2);
+        Game g2=gc.getGameByName(tournamentGameSettings2.getName());
+
+        games=gc.findSpectateableGames();
+        assertThat(games.size(),is(1));
+        assertTrue(games.contains(g1));
+
+        gc.createGame(testUser1,realMoneyGameSettings);
+        Game g3=gc.getGameByName(realMoneyGameSettings.getName());
+
+        games=gc.findSpectateableGames();
+        assertThat(games.size(),is(1));
+        assertTrue(games.contains(g1));
+
+        gc.createGame(testUser1,realMoneyGameSettings2);
+        Game g4=gc.getGameByName(realMoneyGameSettings2.getName());
+
+        games=gc.findSpectateableGames();
+        assertThat(games.size(),is(2));
+        assertTrue(games.contains(g1));
+        assertTrue(games.contains(g4));
+    }
 }
