@@ -12,8 +12,8 @@ import java.time.LocalDate;
  */
 public interface IUsers {
     void addUser(User user) throws InvalidArgumentException;
-    void editUser(String oldUser, String newUser, String pass, String email, LocalDate date) throws InvalidArgumentException;
-    User verifyCredentials(String userName,String password) throws LoginException;
+    void editUser(String oldUser, String newUser, String pass, String email, LocalDate date) throws InvalidArgumentException, EntityDoesNotExistsException;
+    User verifyCredentials(String userName,String password) throws LoginException, EntityDoesNotExistsException;
     User getUserByUserName(String userName);
     void deleteUser(String username) throws EntityDoesNotExistsException;
 }

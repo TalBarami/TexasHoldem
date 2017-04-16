@@ -23,7 +23,10 @@ public class Users implements IUsers {
         _userList.put(user.getUsername(),user);
     }
 
-    public void editUser(String oldUser, String newUser, String pass, String email, LocalDate date) throws InvalidArgumentException {
+    public void editUser(String oldUser, String newUser, String pass, String email, LocalDate date) throws InvalidArgumentException, EntityDoesNotExistsException {
+        if(!userNameExists(oldUser))
+            throw new EntityDoesNotExistsException(String.format("'%s' doesn't exist in the system.",oldUser));
+
         User user=getUserByUserName(oldUser);
         String oldEmail=user.getEmail();
         if((!oldUser.equals(newUser)) || (!oldEmail.equals(email)))
@@ -37,6 +40,9 @@ public class Users implements IUsers {
             user.setEmail(email);
         if(!user.getDateOfBirth().isEqual(date))
             user.setDateOfBirth(date);
+
+        _userList.remove(oldUser);
+        _userList.put(user.getUsername(),user);
     }
 
     public void deleteUser(String username) throws EntityDoesNotExistsException {
@@ -95,10 +101,10 @@ public class Users implements IUsers {
     }
 
 
-    public User verifyCredentials(String userName,String password) throws LoginException {
+    public User verifyCredentials(String userName,String password) throws LoginException, EntityDoesNotExistsException {
         User user=getUserByUserName(userName);
         if(user == null)
-            throw new LoginException("User name doesn't exist in the system");
+            throw new EntityDoesNotExistsException(String.format("'%s' doesn't exist in the system.",userName));
         else if(!password.equals(user.getPassword()))
             throw new LoginException("Wrong password.");
         return user;

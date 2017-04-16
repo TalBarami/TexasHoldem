@@ -61,4 +61,12 @@ public class GameSettings {
     public boolean tournamentMode(){
         return getChipPolicy()!= 0;
     }
+
+    public void setMaximalPlayers(int amount){
+        playerRange=Pair.of(playerRange.getLeft(),amount);
+    }
+
+    public void setMinimalPlayers(int amount){
+        playerRange=Pair.of(amount,playerRange.getRight());
+    }
 }

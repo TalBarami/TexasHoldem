@@ -36,8 +36,13 @@ public class RealBridge implements Bridge {
     public boolean searchUser(String username)
     {
         try {
-            service.getUser(username);
-        }catch (InvalidArgumentException e){
+                if(service.getUser(username) != null){
+                  return true;
+                }
+                else{
+                  return false;
+                }
+        } catch (InvalidArgumentException e) {
             return false;
         }
         return true;
@@ -49,7 +54,7 @@ public class RealBridge implements Bridge {
             service.deleteUser(username);
         }catch (EntityDoesNotExistsException e){
             return false;
-        }catch (InvalidArgumentException e){
+        } catch (InvalidArgumentException e) {
             return false;
         }
         return true;
@@ -61,7 +66,9 @@ public class RealBridge implements Bridge {
             service.login(username,password);
         }catch ( LoginException e){
             return false;
-        }catch ( InvalidArgumentException e){
+        } catch (InvalidArgumentException e) {
+            return false;
+        } catch (EntityDoesNotExistsException e) {
             return false;
         }
         return true;
@@ -71,7 +78,7 @@ public class RealBridge implements Bridge {
     {
         try {
             service.logout(username);
-        }catch (InvalidArgumentException e){
+        } catch (InvalidArgumentException e) {
             return false;
         }
         return true;
@@ -83,6 +90,8 @@ public class RealBridge implements Bridge {
             service.editProfile(oldusername,newusername,  password, email, date);
         }catch (InvalidArgumentException e){
             return false;
+        } catch (EntityDoesNotExistsException e) {
+            e.printStackTrace();
         }
         return true;
     }
@@ -93,7 +102,7 @@ public class RealBridge implements Bridge {
             service.deposit(username,amounttoadd);
         }catch (ArgumentNotInBoundsException e){
             return false;
-        }catch (InvalidArgumentException e){
+        } catch (InvalidArgumentException e) {
             return false;
         }
         return true;

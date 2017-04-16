@@ -101,4 +101,8 @@ public class Games implements IGames {
     private int getNewGameId() {
         return _newGameId++;
     }
+
+    public boolean isArchived(Game g){
+        return archivedGames.contains(g);
+    }
 }

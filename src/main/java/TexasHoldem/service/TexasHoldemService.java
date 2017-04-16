@@ -34,7 +34,7 @@ public class TexasHoldemService {
         gameCenter.deleteUser(username);
     }
 
-    public void login(String username,String pass) throws LoginException, InvalidArgumentException {
+    public void login(String username,String pass) throws LoginException, InvalidArgumentException, EntityDoesNotExistsException {
         verifyStrings(username);
         gameCenter.login(username, pass);
     }
@@ -44,7 +44,7 @@ public class TexasHoldemService {
         gameCenter.logout(username);
     }
 
-    public void editProfile(String originalUserName,String newUserName, String pass,String email, LocalDate date) throws InvalidArgumentException {
+    public void editProfile(String originalUserName,String newUserName, String pass,String email, LocalDate date) throws InvalidArgumentException, EntityDoesNotExistsException {
         verifyStrings(originalUserName, newUserName, pass, email);
         verifyObjects(date);
         gameCenter.editProfile(originalUserName, newUserName, pass, email, date);
