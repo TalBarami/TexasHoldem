@@ -36,16 +36,12 @@ public class RealBridge implements Bridge {
     public boolean searchUser(String username)
     {
         try {
-                if(service.getUser(username) != null){
-                  return true;
-                }
-                else{
-                  return false;
-                }
-        } catch (InvalidArgumentException e) {
-            return false;
-        }
-        return true;
+            if(service.getUser(username) != null)
+              return true;
+            else
+              return false;
+        }catch (InvalidArgumentException e){
+            return false;}
     }
 
     public  boolean deleteUser(String username)
