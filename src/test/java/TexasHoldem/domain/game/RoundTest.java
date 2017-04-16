@@ -190,10 +190,10 @@ public class RoundTest {
 
         when(player2.getLastBetSinceCardOpen()).thenReturn(0).thenReturn(0).thenReturn(10);
 
-        when(player2.chooseAmountToRaise(any(int.class))).thenReturn(10);
+        when(player2.chooseAmountToRaise(any(int.class), any(int.class))).thenReturn(10);
         when(player2.payChips(10)).thenReturn(10).thenReturn(10);
         when(player4.payChips(10)).thenReturn(10);
-        when(player1.chooseAmountToRaise(any(int.class))).thenReturn(20);
+        when(player1.chooseAmountToRaise(any(int.class), any(int.class))).thenReturn(20);
         when(player1.payChips(20)).thenReturn(20);
 
         when(player1.getUser()).thenReturn(user1);

@@ -149,7 +149,7 @@ public class Round {
 
             switch (chosenAction) {
                 case RAISE:
-                    int amountToRaise = currentPlayer.chooseAmountToRaise(chipsToCall * 2);
+                    int amountToRaise = currentPlayer.chooseAmountToRaise(chipsToCall * 2, getMaxAmountToRaise());
                     playerRaiseTurn(amountToRaise);
                     break;
                 case CHECK:
@@ -165,6 +165,18 @@ public class Round {
         }
 
         initLastPlayer();
+    }
+
+    private int getMaxAmountToRaise() {
+        if (gameSettings.getGameType() == GameSettings.GamePolicy.LIMIT) {
+            return gameSettings.getGameTypeLimit();
+        }
+        else if (gameSettings.getGameType() == GameSettings.GamePolicy.POTLIMIT) {
+            return potAmount;
+        }
+        else {
+            return -1; // Represents infinity amount
+        }
     }
 
     private void playPreFlopRound() {
