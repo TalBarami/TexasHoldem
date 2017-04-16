@@ -45,8 +45,10 @@ public class Player extends Participant{
                 logger.error("amount to add to player cannot be negative");
             }
         }
-        else
+        else {
             chipsAmount += amount;
+            logger.info("Player {} earned {} chips", this.getUser().getUsername(), amount);
+        }
     }
 
     public int payChips(int amount) {
@@ -68,6 +70,7 @@ public class Player extends Participant{
                 lastBetSinceCardOpen += amount;
                 totalAmountPayedInRound += amount;
 
+                logger.info("Player {} payed {} chips", this.getUser().getUsername(), amount);
                 return amount;
             }
 
@@ -77,6 +80,7 @@ public class Player extends Participant{
                 int amountToReturn = chipsAmount;
                 chipsAmount = 0;
 
+                logger.info("Player {} payed {} chips", this.getUser().getUsername(), amountToReturn);
                 return amountToReturn;
             }
         }
