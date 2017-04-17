@@ -97,16 +97,12 @@ public class GameTest {
     @Test
     public void startNewRound() throws Exception {
         Game game=new Game(tournamentGameSettings,testUser1,leagueManager);
-        try {
-            game.startNewRound();
-            fail("expected exception was not thrown.");
-        } catch(Exception e) {}
 
         assertThat(game.getRounds().size(),is(0));
         game.joinGameAsPlayer(testUser2);
         game.joinGameAsPlayer(testUser3);
         assertThat(game.getDealerIndex(),is(0));
-        game.startNewRound(); //todo : delete later when start round will be working (else loop and waiting).
+        game.startGame(); //todo : delete later when start round will be working (else loop and waiting).
         assertThat(game.getDealerIndex(),is(1));
         assertThat(game.getRounds().size(),is(1));
     }

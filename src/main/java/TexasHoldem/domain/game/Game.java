@@ -21,14 +21,16 @@ public class Game {
     private List<Spectator> spectators;
     private int dealerIndex;
     private LeagueManager leagueManager;
+    private boolean isActive;
 
     public Game(GameSettings settings, User creator, LeagueManager leagueManager){
-        this.rounds=new ArrayList<>();
-        this.players=new ArrayList<>();
         this.settings=settings;
-        this.leagueManager = leagueManager;
+        players=new ArrayList<>();
+        rounds=new ArrayList<>();
         spectators= new ArrayList<>();
         dealerIndex=0;
+        this.leagueManager = leagueManager;
+        isActive=true;
         //Automatically the creator is added to the room.
         logger.info("A new game '{}' created by the user {}.",getName(),creator.getUsername());
         addPlayer(creator);
@@ -47,17 +49,42 @@ public class Game {
         logger.info("'{}' has joined the game '{}' as spectator.", user.getUsername(),getName());
     }
 
-    //todo: handle differently if its tournamnet or not .
-    public void startNewRound() throws Exception {
-        if(players.size()< getMinimalAmountOfPlayer())
+    public void startGame(){
+        /*if(players.size()< getMinimalAmountOfPlayer())
             throw new Exception(String.format("Can't start round, minimal amount for a new round is %d, but currently there are only %d players.",
-                    getMinimalAmountOfPlayer(),players.size()));
-        else{
-            Round rnd=new Round(players,settings,dealerIndex);
-            dealerIndex=dealerIndex++%players.size();
-            rounds.add(rnd);
-            logger.info("A new round in game '{}' has started.", getName());
-            rnd.startRound();
+                    getMinimalAmountOfPlayer(),players.size()));*/
+        if(realMoneyGame())
+            playMoneyGame();
+        else
+            playTournament();
+    }
+
+    private void playMoneyGame(){
+        while(!canBeArchived()){
+            if(canStart()){
+                Round rnd=new Round(players,settings,dealerIndex);
+                dealerIndex=(dealerIndex+1)%players.size();
+                rounds.add(rnd);
+                logger.info("A new money round in game '{}' has started.", getName());
+                rnd.startRound();
+            }
+        }
+    }
+
+    private void playTournament(){
+        while(!canBeArchived()){
+            if(canStart()){
+                Round rnd=new Round(players,settings,dealerIndex);
+                dealerIndex=(dealerIndex+1)%players.size();
+                rounds.add(rnd);
+                logger.info("A new tournament round in game '{}' has started.", getName());
+                setIsActive(false); //lock game so new players cant join.
+                rnd.startRound();
+            }
+            if(!isActive() && isTournamentEnded()){
+                resetDealerIndex();
+                setIsActive(true);
+            }
         }
     }
 
@@ -108,12 +135,10 @@ public class Game {
         return (realMoneyGame()) ? 1 : settings.getBuyInPolicy()/settings.getChipPolicy();
 
     }
-    // todo : think what to do with this flag, when to flip to false\true
     public boolean isActive(){
-        return players.size() != 0;
+        return isActive;
     }
 
-    // todo :needed?
     public void setGameId(int gameId){
         this.id=gameId;
     }
@@ -169,4 +194,22 @@ public class Game {
     public boolean canBeArchived(){
         return players.isEmpty();
     }
+
+    private void setIsActive(boolean selection){
+        isActive = selection;
+    }
+
+    private boolean canStart(){
+        return players.size()>=getMinimalAmountOfPlayer();
+    }
+
+    private void resetDealerIndex(){
+        dealerIndex=0;
+    }
+
+    private boolean isTournamentEnded(){
+        // amount of players in the room is 1 and he won the whole 'pot'.
+        return (players.size() == 1) && (players.get(0).getChipsAmount() == getMinimalAmountOfPlayer() * settings.getChipPolicy());
+    }
+
 }
