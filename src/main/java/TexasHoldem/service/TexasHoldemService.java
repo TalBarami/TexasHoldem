@@ -24,7 +24,7 @@ public class TexasHoldemService {
 
     public void register(String username, String pass, String email, LocalDate date, BufferedImage img) throws InvalidArgumentException {
         verifyStrings(username, pass, email);
-        verifyObjects(date, img);
+        verifyObjects(date);
 
         gameCenter.registerUser(username, pass, email, date, img);
     }
