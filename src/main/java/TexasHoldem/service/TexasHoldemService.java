@@ -6,6 +6,7 @@ import TexasHoldem.domain.game.Game;
 import TexasHoldem.domain.game.GameSettings;
 import TexasHoldem.domain.system.GameCenter;
 import TexasHoldem.domain.user.User;
+import org.apache.commons.lang3.NotImplementedException;
 
 import javax.security.auth.login.LoginException;
 import java.awt.image.BufferedImage;
@@ -78,16 +79,17 @@ public class TexasHoldemService {
         gameCenter.joinGame(username, gameName, true);
     }
 
-    public void leaveGame(){
-
+    public void leaveGame(String username, String gameName) throws GameException {
+        verifyStrings(username, gameName);
+        gameCenter.leaveGame(username, gameName);
     }
 
     public void replayGame(){
-
+        throw new NotImplementedException("");
     }
 
     public void saveTurns(){
-
+        throw new NotImplementedException("");
     }
 
     public List<Game> findAvailableGames(String username){
