@@ -3,6 +3,7 @@ package TexasHoldem.service;
 import TexasHoldem.common.Exceptions.*;
 import TexasHoldem.common.SystemUtils;
 import TexasHoldem.domain.game.Game;
+import TexasHoldem.domain.game.GamePolicy;
 import TexasHoldem.domain.game.GameSettings;
 import TexasHoldem.domain.system.GameCenter;
 import TexasHoldem.domain.user.User;
@@ -62,7 +63,7 @@ public class TexasHoldemService {
         return gameCenter.getUser(username);
     }
 
-    public void createGame(String creatorUsername, String gameName, GameSettings.GamePolicy policy, int limit, int minBet, int buyInPolicy, int chipPolicy,
+    public void createGame(String creatorUsername, String gameName, GamePolicy policy, int limit, int minBet, int buyInPolicy, int chipPolicy,
                            int minPlayerAmount, int maxPlayerAmount, boolean specAccept) throws NoBalanceForBuyInException, InvalidArgumentException, ArgumentNotInBoundsException {
         verifyStrings(creatorUsername, gameName);
         verifyPositiveNumbers(limit, minBet, buyInPolicy, chipPolicy, minPlayerAmount, maxPlayerAmount);
@@ -98,6 +99,38 @@ public class TexasHoldemService {
 
     public List<Game> findSpectatableGames(){
         return gameCenter.findSpectateableGames();
+    }
+
+    public List<Game> findGamesByUsername(String username){
+        return gameCenter.findGamesByUsername(username);
+    }
+
+    public List<Game> findGamesByPotSize(int potSize){
+        return gameCenter.findGamesByPotSize(potSize);
+    }
+
+    public List<Game> findGamesByGamePolicy(GamePolicy policy){
+        return gameCenter.findGamesByGamePolicy(policy);
+    }
+
+    public List<Game> findGamesByMaximumBuyIn(int maximumBuyIn){
+        return gameCenter.findGamesByMaximumBuyIn(maximumBuyIn);
+    }
+
+    public List<Game> findGamesByChipPolicy(int chipPolicy){
+        return gameCenter.findGamesByChipPolicy(chipPolicy);
+    }
+
+    public List<Game> findGamesByMinimumBet(int minimumBet){
+        return gameCenter.findGamesByMinimumBet(minimumBet);
+    }
+
+    public List<Game> findGamesByMinimumPlayers(int minimumPlayers){
+        return gameCenter.findGamesByMinimumPlayers(minimumPlayers);
+    }
+
+    public List<Game> findGamesByMaximumPlayers(int maximumPlayers){
+        return gameCenter.findGamesByMaximumPlayers(maximumPlayers);
     }
 
     private void verifyStrings(String ... strings) throws InvalidArgumentException {

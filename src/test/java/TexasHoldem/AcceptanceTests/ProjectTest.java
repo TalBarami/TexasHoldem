@@ -1,12 +1,12 @@
 package TexasHoldem.AcceptanceTests;
 
+import TexasHoldem.domain.game.GamePolicy;
 import junit.framework.TestCase;
 
 import java.time.LocalDate;
-import TexasHoldem.domain.game.GameSettings;
 import java.awt.image.BufferedImage;
 import java.util.List;
-import org.joda.time.DateTime;
+
 /**
  * Created by אחיעד on 05/04/2017.
  */
@@ -48,7 +48,7 @@ public abstract class ProjectTest extends TestCase{
         return bridge.addbalancetouserwallet(username, amounttoadd);
     }
 
-    public boolean createnewgame(String username,String gamename, GameSettings.GamePolicy policy, int buyin, int chippolicy, int minimumbet, int minplayers, int maxplayers, boolean spectateisvalid) {
+    public boolean createnewgame(String username, String gamename, GamePolicy policy, int buyin, int chippolicy, int minimumbet, int minplayers, int maxplayers, boolean spectateisvalid) {
         return bridge.createnewgame(username,gamename, policy, buyin, chippolicy, minimumbet, minplayers, maxplayers, spectateisvalid);
     }
 

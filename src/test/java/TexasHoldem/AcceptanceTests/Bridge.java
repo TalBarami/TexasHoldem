@@ -1,11 +1,12 @@
 package TexasHoldem.AcceptanceTests;
 
-import org.joda.time.DateTime;
+import TexasHoldem.domain.game.GamePolicy;
+
 import java.time.LocalDate;
 
 import java.awt.image.BufferedImage;
 import java.util.List;
-import TexasHoldem.domain.game.GameSettings;
+
 /**
  * Created by אחיעד on 05/04/2017.
  */
@@ -26,7 +27,7 @@ public interface Bridge {
 
     boolean addbalancetouserwallet(String username,int amounttoadd);
 
-    boolean createnewgame(String username,String gamename, GameSettings.GamePolicy policy, int buyin, int chippolicy, int minimumbet, int minplayers, int maxplayers, boolean spectateisvalid);
+    boolean createnewgame(String username, String gamename, GamePolicy policy, int buyin, int chippolicy, int minimumbet, int minplayers, int maxplayers, boolean spectateisvalid);
 
     boolean closegame(String gamename);
 

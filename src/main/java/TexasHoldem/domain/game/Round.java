@@ -5,7 +5,6 @@ import TexasHoldem.domain.game.card.Dealer;
 import TexasHoldem.domain.game.hand.Hand;
 import TexasHoldem.domain.game.hand.HandCalculator;
 import TexasHoldem.domain.game.participants.Player;
-import javafx.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -170,10 +169,10 @@ public class Round {
     }
 
     private int getMaxAmountToRaise() {
-        if (gameSettings.getGameType() == GameSettings.GamePolicy.LIMIT) {
+        if (gameSettings.getGameType() == GamePolicy.LIMIT) {
             return gameSettings.getGameTypeLimit();
         }
-        else if (gameSettings.getGameType() == GameSettings.GamePolicy.POTLIMIT) {
+        else if (gameSettings.getGameType() == GamePolicy.POTLIMIT) {
             return potAmount;
         }
         else {

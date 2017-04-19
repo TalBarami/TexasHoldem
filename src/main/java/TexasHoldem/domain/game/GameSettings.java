@@ -3,9 +3,6 @@ package TexasHoldem.domain.game;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class GameSettings {
-    public enum GamePolicy {
-        LIMIT, NOLIMIT, POTLIMIT
-    }
 
     private String name;
     private GamePolicy gameType;

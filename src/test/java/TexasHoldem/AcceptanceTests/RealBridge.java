@@ -1,14 +1,14 @@
 package TexasHoldem.AcceptanceTests;
 
 import TexasHoldem.common.Exceptions.*;
-import org.joda.time.DateTime;
+import TexasHoldem.domain.game.GamePolicy;
 
 import java.awt.image.BufferedImage;
 import java.time.LocalDate;
 import java.util.List;
 
 import TexasHoldem.service.TexasHoldemService;
-import TexasHoldem.domain.game.GameSettings;
+
 import javax.security.auth.login.LoginException;
 
 /**
@@ -104,7 +104,7 @@ public class RealBridge implements Bridge {
         return true;
     }
 
-    public boolean createnewgame(String username, String gamename, GameSettings.GamePolicy policy, int buyin, int chippolicy, int minimumbet, int minplayers, int maxplayers, boolean spectateisvalid) {
+    public boolean createnewgame(String username, String gamename, GamePolicy policy, int buyin, int chippolicy, int minimumbet, int minplayers, int maxplayers, boolean spectateisvalid) {
         try {
             service.createGame(username,gamename,policy,0,minimumbet,buyin,chippolicy,minplayers,maxplayers,spectateisvalid);
         }catch (NoBalanceForBuyInException e){

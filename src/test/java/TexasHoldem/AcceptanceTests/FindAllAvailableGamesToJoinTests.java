@@ -1,11 +1,11 @@
 package TexasHoldem.AcceptanceTests;
 
-import org.joda.time.DateTime;
+import TexasHoldem.domain.game.GamePolicy;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.time.LocalDate;
-import TexasHoldem.domain.game.GameSettings;
+
 /**
  * Created by אחיעד on 08/04/2017.
  */
@@ -24,8 +24,8 @@ public class FindAllAvailableGamesToJoinTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
-        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GameSettings.GamePolicy.NOLIMIT , 10000, 10000, 100, 2, 5, true);
-        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game",  GameSettings.GamePolicy.NOLIMIT , 300, 300, 2, 2, 5, false);
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GamePolicy.NOLIMIT , 10000, 10000, 100, 2, 5, true);
+        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game",  GamePolicy.NOLIMIT , 300, 300, 2, 2, 5, false);
         assertTrue(gamecreated1);
         assertTrue(gamecreated2);
         boolean gamesfound1 = this.searchavailablegamestojoin("achiadg");
@@ -48,8 +48,8 @@ public class FindAllAvailableGamesToJoinTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
-        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GameSettings.GamePolicy.NOLIMIT , 100000, 10000, 100, 2, 5, true);
-        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game",  GameSettings.GamePolicy.NOLIMIT , 300, 400, 2, 2, 3, false);
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GamePolicy.NOLIMIT , 100000, 10000, 100, 2, 5, true);
+        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game",  GamePolicy.NOLIMIT , 300, 400, 2, 2, 3, false);
         assertTrue(gamecreated1);
         assertTrue(gamecreated2);
         usersJoinsGames();

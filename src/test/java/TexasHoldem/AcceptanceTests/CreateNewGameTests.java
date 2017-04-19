@@ -1,13 +1,13 @@
 package TexasHoldem.AcceptanceTests;
 
 
-import org.joda.time.DateTime;
+import TexasHoldem.domain.game.GamePolicy;
 import org.junit.Before;
 import org.junit.Test;
 
 
 import java.time.LocalDate;
-import TexasHoldem.domain.game.GameSettings;
+
 /**
  * Created by אחיעד on 08/04/2017.
  */
@@ -32,8 +32,8 @@ public class CreateNewGameTests extends ProjectTest {
         boolean addedbalance2 = this.addbalancetouserwallet("hodbub",1000);
         assertTrue(addedbalance1);
         assertTrue(addedbalance2);
-        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", GameSettings.GamePolicy.NOLIMIT , 10000, 10000, 100, 2, 9, true);
-        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", GameSettings.GamePolicy.NOLIMIT , 300, 300, 2, 2, 9, false);
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", GamePolicy.NOLIMIT , 10000, 10000, 100, 2, 9, true);
+        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", GamePolicy.NOLIMIT , 300, 300, 2, 2, 9, false);
         boolean closegame1 = this.leavegame("achiadg", "YES", "achiadg-poker-game");
         boolean closegame2 = this.leavegame("hodbub","YES","hodbub-poker-game");
         assertTrue(gamecreated1);
@@ -59,8 +59,8 @@ public class CreateNewGameTests extends ProjectTest {
         boolean addedbalance2 = this.addbalancetouserwallet("hodbub",1000);
         assertTrue(addedbalance1);
         assertTrue(addedbalance2);
-        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GameSettings.GamePolicy.NOLIMIT, 10000, 10000, 100, 2, 9, true);
-        boolean gamecreated2 = this.createnewgame("hodbub","achiadg-poker-game", GameSettings.GamePolicy.NOLIMIT  , 300, 300, 2, 2, 9, false);
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GamePolicy.NOLIMIT, 10000, 10000, 100, 2, 9, true);
+        boolean gamecreated2 = this.createnewgame("hodbub","achiadg-poker-game", GamePolicy.NOLIMIT  , 300, 300, 2, 2, 9, false);
         assertTrue(gamecreated1);
         assertFalse(gamecreated2);
         boolean closegame1 = this.leavegame("achiadg", "YES", "achiadg-poker-game");
@@ -85,8 +85,8 @@ public class CreateNewGameTests extends ProjectTest {
         boolean addedbalance2 = this.addbalancetouserwallet("hodbub",1000);
         assertTrue(addedbalance1);
         assertTrue(addedbalance2);
-        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", GameSettings.GamePolicy.NOLIMIT , 10000, 10000, 100, 1, 9, true);
-        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", GameSettings.GamePolicy.POTLIMIT , 300, 300, 2, 2, 12, false);
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", GamePolicy.NOLIMIT , 10000, 10000, 100, 1, 9, true);
+        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", GamePolicy.POTLIMIT , 300, 300, 2, 2, 12, false);
         assertFalse(gamecreated1);
         assertFalse(gamecreated2);
         boolean userloggedout1 = this.logout("achiadg");
@@ -105,7 +105,7 @@ public class CreateNewGameTests extends ProjectTest {
         assertTrue(userloggedin1);
         boolean addedbalance1 = this.addbalancetouserwallet("achiadg",20000);
         assertTrue(addedbalance1);
-        boolean gamecreated1 = this.createnewgame("achiadg",null, GameSettings.GamePolicy.POTLIMIT, 10000, 10000, 100, 2, 9, true);
+        boolean gamecreated1 = this.createnewgame("achiadg",null, GamePolicy.POTLIMIT, 10000, 10000, 100, 2, 9, true);
         assertFalse(gamecreated1);
         boolean userloggedout1 = this.logout("achiadg");
         boolean deleteUser1 = this.deleteUser("achiadg");
@@ -120,7 +120,7 @@ public class CreateNewGameTests extends ProjectTest {
         assertTrue(userloggedin1);
         boolean addedbalance1 = this.addbalancetouserwallet("achiadg",20000);
         assertTrue(addedbalance1);
-        boolean gamecreated1 = this.createnewgame("achiadg","achiad-poker-game", GameSettings.GamePolicy.POTLIMIT , 21000, 10000, 100, 2, 9, true);
+        boolean gamecreated1 = this.createnewgame("achiadg","achiad-poker-game", GamePolicy.POTLIMIT , 21000, 10000, 100, 2, 9, true);
         assertFalse(gamecreated1);
         boolean userloggedout1 = this.logout("achiadg");
         boolean deleteUser1 = this.deleteUser("achiadg");
@@ -140,10 +140,10 @@ public class CreateNewGameTests extends ProjectTest {
         boolean addedbalance2 = this.addbalancetouserwallet("hodbub",1000);
         assertTrue(addedbalance1);
         assertTrue(addedbalance2);
-        boolean gamecreated1 = this.createnewgame("achiadg", "achiadg-poke\tr-game", GameSettings.GamePolicy.POTLIMIT , 10000, 10000, 100, 1, 9, true);
-        boolean gamecreated2 = this.createnewgame("achiadg","a\rchiad-poker-game", GameSettings.GamePolicy.POTLIMIT , 300, 300, 2, 2, 12, false);
-        boolean gamecreated3 = this.createnewgame("hodbub","new-p\\\noker-game", GameSettings.GamePolicy.POTLIMIT , 10000, 10000, 100, 1, 9, true);
-        boolean gamecreated4 = this.createnewgame("hodbub","fun-poker-gam\\\re", GameSettings.GamePolicy.POTLIMIT , 300, 300, 2, 2, 12, false);
+        boolean gamecreated1 = this.createnewgame("achiadg", "achiadg-poke\tr-game", GamePolicy.POTLIMIT , 10000, 10000, 100, 1, 9, true);
+        boolean gamecreated2 = this.createnewgame("achiadg","a\rchiad-poker-game", GamePolicy.POTLIMIT , 300, 300, 2, 2, 12, false);
+        boolean gamecreated3 = this.createnewgame("hodbub","new-p\\\noker-game", GamePolicy.POTLIMIT , 10000, 10000, 100, 1, 9, true);
+        boolean gamecreated4 = this.createnewgame("hodbub","fun-poker-gam\\\re", GamePolicy.POTLIMIT , 300, 300, 2, 2, 12, false);
         assertFalse(gamecreated1);
         assertFalse(gamecreated2);
         assertFalse(gamecreated3);
@@ -164,7 +164,7 @@ public class CreateNewGameTests extends ProjectTest {
         assertTrue(userloggedin1);
         boolean addedbalance1 = this.addbalancetouserwallet("achiadg",20000);
         assertTrue(addedbalance1);
-        boolean gamecreated1 = this.createnewgame("achiadg","SELECT * FROM GAMES WHERE GAMENAME = achiad-poker-game", GameSettings.GamePolicy.POTLIMIT , 10000, 10000, 100, 1, 9, true);
+        boolean gamecreated1 = this.createnewgame("achiadg","SELECT * FROM GAMES WHERE GAMENAME = achiad-poker-game", GamePolicy.POTLIMIT , 10000, 10000, 100, 1, 9, true);
         assertFalse(gamecreated1);
         boolean userloggedout1 = this.logout("achiadg");
         boolean deleteUser1 = this.deleteUser("achiadg");

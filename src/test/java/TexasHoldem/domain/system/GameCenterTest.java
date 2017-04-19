@@ -13,7 +13,7 @@ import javax.security.auth.login.LoginException;
 import java.time.LocalDate;
 import java.util.List;
 
-import static TexasHoldem.domain.game.GameSettings.GamePolicy.LIMIT;
+import static TexasHoldem.domain.game.GamePolicy.LIMIT;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 

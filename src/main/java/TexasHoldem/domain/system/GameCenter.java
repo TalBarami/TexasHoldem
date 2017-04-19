@@ -6,6 +6,7 @@ import TexasHoldem.data.games.IGames;
 import TexasHoldem.data.users.IUsers;
 import TexasHoldem.data.users.Users;
 import TexasHoldem.domain.game.Game;
+import TexasHoldem.domain.game.GamePolicy;
 import TexasHoldem.domain.game.GameSettings;
 import TexasHoldem.domain.game.participants.Participant;
 import TexasHoldem.domain.user.User;
@@ -159,10 +160,39 @@ public class GameCenter {
     }
 
     public List<Game> findSpectateableGames(){
-        List<Game> activeGames = gamesDb.getActiveGames();
-        return activeGames.stream()
-                .filter(Game::canBeSpectated)
-                .collect(Collectors.toList());
+        return gamesDb.getActiveGamesBySpectationAllowed(true);
+    }
+
+    public List<Game> findGamesByUsername(String username) {
+        return gamesDb.getActiveGamesByPlayerName(username);
+    }
+
+    public List<Game> findGamesByPotSize(int potSize) {
+        return gamesDb.getActiveGamesByPotSize(potSize);
+    }
+
+    public List<Game> findGamesByGamePolicy(GamePolicy policy) {
+        return gamesDb.getActiveGamesByGamePolicy(policy);
+    }
+
+    public List<Game> findGamesByMaximumBuyIn(int maximumBuyIn) {
+        return gamesDb.getActiveGamesByMaximumBuyInAmount(maximumBuyIn);
+    }
+
+    public List<Game> findGamesByChipPolicy(int chipPolicy) {
+        return gamesDb.getActiveGamesByChipPolicyAmount(chipPolicy);
+    }
+
+    public List<Game> findGamesByMinimumBet(int minimumBet) {
+        return gamesDb.getActiveGamesByMinimumBetAmount(minimumBet);
+    }
+
+    public List<Game> findGamesByMinimumPlayers(int minimumPlayers) {
+        return gamesDb.getActiveGamesByMinimumPlayersAmount(minimumPlayers);
+    }
+
+    public List<Game> findGamesByMaximumPlayers(int maximumPlayers) {
+        return gamesDb.getActiveGamesByMaximumPlayersAmount(maximumPlayers);
     }
 
     private void handleJoinGameAsPlayer(Game game,User user) throws LeaguesDontMatchException, GameIsFullException, NoBalanceForBuyInException {

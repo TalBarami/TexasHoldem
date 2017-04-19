@@ -2,7 +2,7 @@ package TexasHoldem.data.games;
 
 import TexasHoldem.common.Exceptions.InvalidArgumentException;
 import TexasHoldem.domain.game.Game;
-import TexasHoldem.domain.game.GameSettings;
+import TexasHoldem.domain.game.GamePolicy;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,7 +58,7 @@ public class Games implements IGames {
         return searchActiveGame(g -> g.getLastRound().getPotAmount() >= potSize);
     }
 
-    public LinkedList<Game> getActiveGamesByGamePolicy(GameSettings.GamePolicy policy) {
+    public LinkedList<Game> getActiveGamesByGamePolicy(GamePolicy policy) {
         return searchActiveGame(g -> g.getSettings().getGameType() == policy);
     }
 
@@ -74,8 +74,14 @@ public class Games implements IGames {
         return searchActiveGame(g -> g.getSettings().getChipPolicy() <= chipPolicyAmount);
     }
 
-    public LinkedList<Game> getActiveGamesByActivePlayersAmount(int playersAmount) {
-        return searchActiveGame(g -> g.getPlayers().size() <= playersAmount && g.getPlayers().size() < g.getSettings().getPlayerRange().getRight());
+    public LinkedList<Game> getActiveGamesByMinimumPlayersAmount(int minimumPlayersAmount) {
+        return searchActiveGame(g -> g.getPlayers().size() >= minimumPlayersAmount &&
+                g.getPlayers().size() < g.getSettings().getPlayerRange().getRight());
+    }
+
+    public LinkedList<Game> getActiveGamesByMaximumPlayersAmount(int maximumPlayersAmount) {
+        return searchActiveGame(g -> g.getPlayers().size() <= maximumPlayersAmount &&
+                g.getPlayers().size() < g.getSettings().getPlayerRange().getRight());
     }
 
     public LinkedList<Game> getActiveGamesBySpectationAllowed(boolean spectationAllowed) {

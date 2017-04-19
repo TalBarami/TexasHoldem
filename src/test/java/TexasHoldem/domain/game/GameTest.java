@@ -4,7 +4,7 @@ import TexasHoldem.domain.game.participants.Player;
 import TexasHoldem.domain.game.participants.Spectator;
 import TexasHoldem.domain.user.LeagueManager;
 import TexasHoldem.domain.user.User;
-import static TexasHoldem.domain.game.GameSettings.GamePolicy.*;
+import static TexasHoldem.domain.game.GamePolicy.*;
 
 import org.junit.*;
 

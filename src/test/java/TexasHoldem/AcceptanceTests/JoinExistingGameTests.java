@@ -1,7 +1,6 @@
 package TexasHoldem.AcceptanceTests;
 
-import TexasHoldem.domain.game.GameSettings;
-import org.joda.time.DateTime;
+import TexasHoldem.domain.game.GamePolicy;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,8 +23,8 @@ public class JoinExistingGameTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
-        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GameSettings.GamePolicy.NOLIMIT, 10000, 10000, 100, 2, 9, true);
-        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", GameSettings.GamePolicy.NOLIMIT , 300, 300, 2, 2, 9, false);
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GamePolicy.NOLIMIT, 10000, 10000, 100, 2, 9, true);
+        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", GamePolicy.NOLIMIT , 300, 300, 2, 2, 9, false);
         assertTrue(gamecreated1);
         assertTrue(gamecreated2);
         boolean useraddedgame1 = this.joinexistinggame("hodbub" , "achiadg-poker-game",false);
@@ -47,7 +46,7 @@ public class JoinExistingGameTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
-        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", GameSettings.GamePolicy.NOLIMIT , 10000, 10000, 100, 2, 3, true);
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", GamePolicy.NOLIMIT , 10000, 10000, 100, 2, 3, true);
         assertTrue(gamecreated1);
         boolean useraddedgame1 = this.joinexistinggame("hodbub" , "achiadg-poker-game",false);
         boolean useraddedgame2 = this.joinexistinggame("rotemw" , "achiadg-poker-game",false);
@@ -68,7 +67,7 @@ public class JoinExistingGameTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
-        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GameSettings.GamePolicy.NOLIMIT , 43000, 10000, 100, 2, 3, true);
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GamePolicy.NOLIMIT , 43000, 10000, 100, 2, 3, true);
         assertTrue(gamecreated1);
         boolean useraddedgame1 = this.joinexistinggame("hodbub" , "achiadg-poker-game",false);
         boolean useraddedgame2 = this.joinexistinggame("rotemw" , "achiadg-poker-game",false);
@@ -85,7 +84,7 @@ public class JoinExistingGameTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
-        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GameSettings.GamePolicy.NOLIMIT , 5000, 10000, 100, 2, 6, true);
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GamePolicy.NOLIMIT , 5000, 10000, 100, 2, 6, true);
         assertTrue(gamecreated1);
         boolean useraddedgame1 = this.joinexistinggame("hodbub" , "achiadg-poker-game",false);
         boolean useraddedgame2 = this.joinexistinggame("rotemw" , "achiadg-poker-game",false);
@@ -107,7 +106,7 @@ public class JoinExistingGameTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
-        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GameSettings.GamePolicy.NOLIMIT , 20000, 90000, 100, 2, 4, true);
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GamePolicy.NOLIMIT , 20000, 90000, 100, 2, 4, true);
         assertTrue(gamecreated1);
         boolean useraddedgame1 = this.joinexistinggame("hodbub" , "SELECT * FROM GAMES WHERE GAMENAME = achiad-poker-game",false);
         assertFalse(useraddedgame1);
