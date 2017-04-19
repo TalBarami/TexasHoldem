@@ -107,6 +107,7 @@ public class GameCenter {
         Game game=new Game(settings,creator,leagueManager);
         gamesDb.addGame(game);
         game.startGame();
+        //archive game (returned when teh gam ecan be archived)
     }
 
     public void joinGame(String userName, String gameName, boolean asSpectator) throws InvalidArgumentException, CantSpeactateThisRoomException,

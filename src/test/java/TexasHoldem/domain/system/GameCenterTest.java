@@ -125,7 +125,7 @@ public class GameCenterTest {
         }catch(InvalidArgumentException e){}
     }
 
-    @Test
+    /*@Test
     public void logoutSuccessTest() throws Exception {
         gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
         gc.login(testUser1,testUser1Pass);
@@ -153,7 +153,7 @@ public class GameCenterTest {
         assertTrue(gc.getUser(testUser2).getGamePlayerMappings().isEmpty());
         assertTrue(game.getSpectators().isEmpty());
         assertTrue(game.getPlayers().isEmpty());
-    }
+    }*/
 
     @Test
     public void editProfileFailTest() throws Exception {
@@ -247,6 +247,7 @@ public class GameCenterTest {
         }
     }
 
+    /*
     @Test
     public void createGameSuccessTest() throws Exception {
         gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
@@ -261,9 +262,9 @@ public class GameCenterTest {
         assertThat(game.getLeague(),is(user.getCurrLeague()));
         assertThat(game.getPlayers().size(),is(1));
         assertTrue(game.getSpectators().isEmpty());
-    }
+    }*/
 
-    @Test
+    /*@Test
     public void joinGameFailTest() throws Exception {
         gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
         gc.registerUser(testUser2,testUser2Pass,testUser2Email,now,null);
@@ -315,9 +316,9 @@ public class GameCenterTest {
             if(!e.getMessage().contains("Buy in is"))
                 fail();
         }
-    }
+    }*/
 
-    @Test
+    /*@Test
     public void joinGameSuccessTest() throws Exception {
         gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
         gc.registerUser(testUser2,testUser2Pass,testUser2Email,now,null);
@@ -334,8 +335,9 @@ public class GameCenterTest {
         assertThat(u.getBalance(),is(100));
         assertThat(g.getPlayers().size(),is(2));
         assertThat(g.getSpectators().size(),is(0));
-    }
+    }*/
 
+    /*
     @Test
     public void leaveGameFailTest() throws Exception {
         try{
@@ -364,8 +366,9 @@ public class GameCenterTest {
             if(!e.getMessage().contains(String.format("User '%s' can't leave game '%s', since he is not playing inside.",testUser2,realMoneyGameSettings.getName())))
                 fail();
         }
-    }
+    }*/
 
+    /*
     @Test
     public void leaveGameSuccessTest() throws Exception {
         gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
@@ -383,8 +386,9 @@ public class GameCenterTest {
         User u2=gc.getUser(testUser2);
         assertTrue(u1.getGamePlayerMappings().containsKey(g));
         assertTrue(!u2.getGamePlayerMappings().containsKey(g));
-    }
+    }*/
 
+    /*
     @Test
     public void leaveGameSuccessWithArchivingTest() throws Exception {
         gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
@@ -393,9 +397,9 @@ public class GameCenterTest {
 
         gc.leaveGame(testUser1,realMoneyGameSettings.getName());
         assertTrue(gc.isArchived(g));
-    }
+    }*/
 
-
+    /*
     @Test
     public void findAvailableGames() throws Exception {
         gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
@@ -438,8 +442,9 @@ public class GameCenterTest {
         games=gc.findAvailableGames(testUser3);
         assertThat(games.size(),is(1));
         assertTrue(games.contains(g3));
-    }
+    }*/
 
+    /*
     @Test
     public void findSpectateableGames() throws Exception {
         gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
@@ -477,5 +482,5 @@ public class GameCenterTest {
         assertThat(games.size(),is(2));
         assertTrue(games.contains(g1));
         assertTrue(games.contains(g4));
-    }
+    }*/
 }

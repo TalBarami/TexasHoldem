@@ -10,9 +10,11 @@ import org.junit.*;
 
 import java.time.LocalDate;
 
+import static junit.framework.Assert.assertTrue;
 import static junit.framework.TestCase.fail;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertFalse;
 
 public class GameTest {
 
@@ -66,7 +68,7 @@ public class GameTest {
         Game game=new Game(realMoneyGameSettings,testUser1,null);
         int previousUserBalance=testUser2.getBalance();
         assertThat(game.getPlayers().size(),is(1));//Creator automatically joins the game
-        Assert.assertFalse(testUser2.getGamePlayerMappings().containsKey(game));
+        assertFalse(testUser2.getGamePlayerMappings().containsKey(game));
         game.joinGameAsPlayer(testUser2);
         assertThat(game.getPlayers().size(),is(2));
         assertThat(testUser2.getBalance(),is(previousUserBalance));
@@ -80,7 +82,7 @@ public class GameTest {
         int previousUserBalance=testUser2.getBalance();
         assertThat(game.getPlayers().size(),is(1));//Creator automatically joins the game
         Assert.assertTrue(game.getSpectators().isEmpty());
-        Assert.assertFalse(testUser2.getGamePlayerMappings().containsKey(game));
+        assertFalse(testUser2.getGamePlayerMappings().containsKey(game));
         game.joinGameAsSpectator(testUser2);
         assertThat(game.getPlayers().size(),is(1));
         assertThat(game.getSpectators().size(),is(1));
@@ -88,10 +90,10 @@ public class GameTest {
         assertThat(testUser2.getBalance(),is(previousUserBalance));
         Assert.assertTrue(testUser2.getGamePlayerMappings().containsKey(game));
 
-        Assert.assertFalse(game.isFull());
+        assertFalse(game.isFull());
         game.joinGameAsSpectator(testUser3);
         game.joinGameAsSpectator(testUser4);
-        Assert.assertFalse(game.isFull());
+        assertFalse(game.isFull());
     }
 
     @Test
@@ -131,10 +133,10 @@ public class GameTest {
     @Test
     public void isFullTest() throws Exception {
         Game game=new Game(tournamentGameSettings,testUser1,null);
-        Assert.assertFalse(game.isFull());
+        assertFalse(game.isFull());
         game.joinGameAsPlayer(testUser2);
         game.joinGameAsPlayer(testUser3);
-        Assert.assertFalse(game.isFull());
+        assertFalse(game.isFull());
         game.joinGameAsPlayer(testUser4);
         Assert.assertTrue(game.isFull());
     }
@@ -145,19 +147,27 @@ public class GameTest {
         Assert.assertTrue(game.canBeSpectated());
 
         game=new Game(realMoneyGameSettings,testUser1,null);
-        Assert.assertFalse(game.canBeSpectated());
+        assertFalse(game.canBeSpectated());
     }
 
     @Test
     public void realMoneyGame() throws Exception {
         Game game=new Game(tournamentGameSettings,testUser1,null);
-        Assert.assertFalse(game.realMoneyGame());
+        assertFalse(game.realMoneyGame());
 
         game=new Game(realMoneyGameSettings,testUser1,null);
-        Assert.assertTrue(game.realMoneyGame());
+        assertTrue(game.realMoneyGame());
     }
 
     @Test
     public void isActive() throws Exception {
+        Game game=new Game(realMoneyGameSettings,testUser1,leagueManager);
+        assertTrue(game.isActive());
+
+        game=new Game(tournamentGameSettings,testUser1,leagueManager);
+        assertTrue(game.isActive());
+
+        game.removeParticipant(game.getPlayers().get(0));
+        assertFalse(game.isActive());
     }
 }
