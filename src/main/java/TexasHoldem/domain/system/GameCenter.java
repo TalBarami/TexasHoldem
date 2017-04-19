@@ -227,4 +227,17 @@ public class GameCenter {
     public boolean isArchived(Game g){
         return gamesDb.isArchived(g);
     }
+
+    public void setUserLeague(String username, int league) throws NoPermissionException {
+        if(!usersDb.getHighestBalance().getUsername().equalsIgnoreCase(username))
+            throw new NoPermissionException("User must have the highest balance.");
+        User user = getUser(username);
+        leagueManager.moveUserToLeague(user, league);
+    }
+
+    public void setLeagueCriteria(String username, int criteria) throws NoPermissionException {
+        if(!usersDb.getHighestBalance().getUsername().equalsIgnoreCase(username))
+            throw new NoPermissionException("User must have the highest balance.");
+        leagueManager.setCriteriaToMovingLeague(criteria);
+    }
 }

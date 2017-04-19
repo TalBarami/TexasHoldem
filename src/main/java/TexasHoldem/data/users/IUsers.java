@@ -15,5 +15,6 @@ public interface IUsers {
     void editUser(String oldUser, String newUser, String pass, String email, LocalDate date) throws InvalidArgumentException, EntityDoesNotExistsException;
     User verifyCredentials(String userName,String password) throws LoginException, EntityDoesNotExistsException;
     User getUserByUserName(String userName);
+    User getHighestBalance();
     void deleteUser(String username) throws EntityDoesNotExistsException;
 }

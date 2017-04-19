@@ -6,8 +6,10 @@ import TexasHoldem.domain.user.User;
 
 import javax.security.auth.login.LoginException;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -70,6 +72,12 @@ public class Users implements IUsers {
 
     public User getUserByUserName(String userName){
         return _userList.get(userName);
+    }
+
+    @Override
+    public User getHighestBalance() {
+        Optional<User> opt = _userList.values().stream().max(Comparator.comparingInt(User::getBalance));
+        return opt.orElse(null);
     }
 
     private void verifyUserNameAndEmail(String oldUser,String oldEmail,String newName,String newEmail) throws InvalidArgumentException {

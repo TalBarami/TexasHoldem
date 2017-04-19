@@ -93,7 +93,8 @@ public class TexasHoldemService {
         throw new NotImplementedException("");
     }
 
-    public List<Game> findAvailableGames(String username){
+    public List<Game> findAvailableGames(String username) throws InvalidArgumentException {
+        verifyStrings(username);
         return gameCenter.findAvailableGames(username);
     }
 
@@ -101,7 +102,8 @@ public class TexasHoldemService {
         return gameCenter.findSpectateableGames();
     }
 
-    public List<Game> findGamesByUsername(String username){
+    public List<Game> findGamesByUsername(String username) throws InvalidArgumentException {
+        verifyStrings(username);
         return gameCenter.findGamesByUsername(username);
     }
 
@@ -109,7 +111,8 @@ public class TexasHoldemService {
         return gameCenter.findGamesByPotSize(potSize);
     }
 
-    public List<Game> findGamesByGamePolicy(GamePolicy policy){
+    public List<Game> findGamesByGamePolicy(GamePolicy policy) throws InvalidArgumentException {
+        verifyObjects(policy);
         return gameCenter.findGamesByGamePolicy(policy);
     }
 
@@ -132,6 +135,15 @@ public class TexasHoldemService {
     public List<Game> findGamesByMaximumPlayers(int maximumPlayers){
         return gameCenter.findGamesByMaximumPlayers(maximumPlayers);
     }
+
+    public void setUserLeague(String username, int league) throws NoPermissionException {
+        gameCenter.setUserLeague(username, league);
+    }
+
+    public void setLeagueCriteria(String username, int league) throws NoPermissionException {
+        gameCenter.setLeagueCriteria(username, league);
+    }
+
 
     private void verifyStrings(String ... strings) throws InvalidArgumentException {
         if(SystemUtils.hasNullOrEmptyOrSpecialChars(strings))
