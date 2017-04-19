@@ -153,7 +153,8 @@ public class GameCenter {
         return activeGames.stream()
                 .filter(game -> game.getLeague() == user.getCurrLeague() &&
                         (game.realMoneyGame() || (!game.realMoneyGame() && game.isActive() && (game.getBuyInPolicy() <= user.getBalance()))) &&
-                        game.getPlayers().size() < game.getMaximalAmountOfPlayers())
+                        game.getPlayers().size() < game.getMaximalAmountOfPlayers() &&
+                        !user.getGamePlayerMappings().containsKey(game))
                 .collect(Collectors.toList());
     }
 
