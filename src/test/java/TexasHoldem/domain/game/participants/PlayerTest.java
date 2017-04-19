@@ -5,6 +5,7 @@ import TexasHoldem.domain.user.User;
 import org.junit.Assert;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -28,7 +29,7 @@ public class PlayerTest {
         Player player1 = new Player(user1, 0, 0);
 
         player1.addChips(10);
-        Assert.assertTrue(player1.getChipsAmount() == 100);
+        assertEquals(0, player1.getChipsAmount());
         verify(user1).deposit(10, false);
     }
 

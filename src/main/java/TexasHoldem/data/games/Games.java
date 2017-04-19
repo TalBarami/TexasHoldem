@@ -75,13 +75,11 @@ public class Games implements IGames {
     }
 
     public LinkedList<Game> getActiveGamesByMinimumPlayersAmount(int minimumPlayersAmount) {
-        return searchActiveGame(g -> g.getPlayers().size() >= minimumPlayersAmount &&
-                g.getPlayers().size() < g.getSettings().getPlayerRange().getRight());
+        return searchActiveGame(g -> g.getSettings().getPlayerRange().getLeft() == minimumPlayersAmount);
     }
 
     public LinkedList<Game> getActiveGamesByMaximumPlayersAmount(int maximumPlayersAmount) {
-        return searchActiveGame(g -> g.getPlayers().size() <= maximumPlayersAmount &&
-                g.getPlayers().size() < g.getSettings().getPlayerRange().getRight());
+        return searchActiveGame(g -> g.getSettings().getPlayerRange().getRight() == maximumPlayersAmount);
     }
 
     public LinkedList<Game> getActiveGamesBySpectationAllowed(boolean spectationAllowed) {
