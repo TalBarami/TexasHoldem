@@ -23,7 +23,6 @@ public class SpectateActiveGameTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
-        setUserLeague();
         boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GamePolicy.NOLIMIT , 10000, 10000, 100, 2, 9, true);
         boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game",  GamePolicy.NOLIMIT , 300, 300, 2, 2, 9, true);
         assertTrue(gamecreated1);
@@ -47,7 +46,6 @@ public class SpectateActiveGameTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
-        setUserLeague();
         boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GamePolicy.NOLIMIT , 10000, 10000, 100, 2, 9, false);
         boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game",  GamePolicy.NOLIMIT , 300, 300, 2, 2, 9, false);
         assertTrue(gamecreated1);
@@ -72,7 +70,6 @@ public class SpectateActiveGameTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
-        setUserLeague();
         boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GamePolicy.NOLIMIT , 10000, 10000, 100, 2, 9, true);
         boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game",  GamePolicy.NOLIMIT , 300, 300, 2, 2, 9, true);
         assertTrue(gamecreated1);
@@ -98,7 +95,6 @@ public class SpectateActiveGameTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
-        setUserLeague();
         boolean gamecreated1 = this.createnewgame("hodbub","hodbub-poker-game",  GamePolicy.NOLIMIT , 300, 300, 2, 2, 9, true);
         assertTrue(gamecreated1);
         boolean spectategameisvalid1 = this.spectateactivegame("achiadg" , "SELECT * FROM USERS WHERE username = achiadg-poker-game",true);
@@ -142,13 +138,6 @@ public class SpectateActiveGameTests extends ProjectTest {
         boolean userloggedin4 = this.login("ronenbu","ronenbu123");
     }
 
-    public  void setUserLeague()
-    {
-        boolean leaguechanged1 = this.setuserleague("hodbub","achiadg", 4);
-        boolean leaguechanged2 = this.setuserleague("hodbub","hodbub", 4);
-        boolean leaguechanged3 = this.setuserleague("hodbub","rotemw", 4);
-        boolean leaguechanged4 = this.setuserleague("hodbub","ronenbu", 4);
-    }
 
     public void registerUsers()
     {

@@ -41,7 +41,7 @@ public class SearchGamesTests extends ProjectTest {
         deleteUsers();
     }
 
-   @Test
+/*   @Test
     public void testSearchGamesByPotSize()
     {
         registerUsers();
@@ -51,15 +51,15 @@ public class SearchGamesTests extends ProjectTest {
         usersJoinsGames();
         boolean gamesfound1 = this.searchgamebypotsize(0);
         assertTrue(gamesfound1);
-    /*    boolean playedturn1 = this.playturnraise("achiadg" , "achiadg-poker-game","RAISE",400);
+    *//*    boolean playedturn1 = this.playturnraise("achiadg" , "achiadg-poker-game","RAISE",400);
         boolean playedturn2 = this.playturnraise("hodbub" , "hodbub-poker-game","RAISE",6);
         boolean gamesfound2 = this.searchgamebypotsize(400);
         assertTrue(gamesfound2);
         boolean gamesfound3 = this.searchgamebypotsize(6);
-        assertTrue(gamesfound3);*/
+        assertTrue(gamesfound3);*//*
         logoutUsers();
         deleteUsers();
-    }
+    }*/
 
     @Test
     public void testSearchGamesByTypePolicy()

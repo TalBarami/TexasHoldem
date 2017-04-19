@@ -47,7 +47,7 @@ public class LeaveGameTests extends ProjectTest {
 
 
 
-/*    @Test
+   @Test
     public void testLeaveGameValidGameWithOneUser()
     {
         registerUsers();
@@ -63,7 +63,7 @@ public class LeaveGameTests extends ProjectTest {
         assertTrue(leavedgame2);
         logoutUsers();
         deleteUsers();
-    }*/
+    }
 
     @Test
     public void testLeaveGameValidGameHeIsNotAbleTo()
@@ -116,14 +116,6 @@ public class LeaveGameTests extends ProjectTest {
         boolean useraddedgame4 = this.joinexistinggame("achiadg" , "hodbub-poker-game",false);
     }
 
-    public void leaveGames() {
-        boolean closegame1 = this.leavegame("achiadg", "YES", "achiadg-poker-game");
-        boolean closegame2 = this.leavegame("hodbub","YES","hodbub-poker-game");
-        boolean closegame3 = this.leavegame("hodbub" ,"YES", "achiadg-poker-game");
-        boolean closegame4 = this.leavegame("rotemw" , "YES","achiadg-poker-game");
-        boolean closegame5 = this.leavegame("ronenbu" , "YES","hodbub-poker-game");
-        boolean closegame6 = this.leavegame("achiadg" , "YES","hodbub-poker-game");
-    }
 
     public void deleteUsers() {
         boolean deleteUser1 = this.deleteUser("achiadg");
