@@ -4,14 +4,17 @@ package TexasHoldem.common;
  * Created by Tal on 05/04/2017.
  */
 public class SystemUtils {
-    private static final String[] invalidChars = {"\n", "\r", "\t"};
     public static boolean hasNullOrEmptyOrSpecialChars(String ... strings){
         for(String s : strings){
-            if(s == null || s.isEmpty())
+            if(s == null || s.isEmpty()) {
                 return true;
-            for(String c : invalidChars)
-                if(s.contains(c))
-                    return true;
+            }
+            char[] chars = s.toCharArray();
+            for(char c : chars){
+                if(c < 32 || c > 126){
+                    return false;
+                }
+            }
         }
         return false;
     }
