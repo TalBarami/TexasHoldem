@@ -31,6 +31,10 @@ public class HandCalculator {
     }
 
     public static Hand getHand(List<Card> cards){
+        if(cards.size() != 7) {
+            logger.error("Hand size is not 7. received: {}.", cards);
+            throw new HandException();
+        }
         logger.debug("Received a set of the following cards: {}", cards);
         Card[][] possibleHands = getPossibleHands(cards);
         Optional<Hand> optHand = Arrays.stream(possibleHands)
