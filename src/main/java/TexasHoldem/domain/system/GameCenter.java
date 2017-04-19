@@ -107,7 +107,8 @@ public class GameCenter {
         settings.setLeagueCriteria(creator.getCurrLeague());
         Game game=new Game(settings,creator,leagueManager);
         gamesDb.addGame(game);
-        //todo : what about the 'activeGames' field?  delete\leave ( and add the game to the list)?
+        //game.startGame(); todo : causing loop for now, waiting for threads.
+        //gamesDb.archiveGame(game); todo: archive game (returned when the gamec an be archived)
     }
 
     public void joinGame(String userName, String gameName, boolean asSpectator) throws InvalidArgumentException, CantSpeactateThisRoomException,

@@ -366,6 +366,7 @@ public class GameCenterTest {
         }
     }
 
+
     @Test
     public void leaveGameSuccessTest() throws Exception {
         gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
@@ -439,6 +440,7 @@ public class GameCenterTest {
         assertThat(games.size(),is(1));
         assertTrue(games.contains(g3));
     }
+
 
     @Test
     public void findSpectateableGames() throws Exception {
