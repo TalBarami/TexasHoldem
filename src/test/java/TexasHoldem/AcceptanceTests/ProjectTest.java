@@ -64,8 +64,8 @@ public abstract class ProjectTest extends TestCase{
         return bridge.searchgamebyplayername(username);
     }
 
-    public boolean searchgamebytypepolicy(String type) {
-        return bridge.searchgamebytypepolicy(type);
+    public boolean searchgamebytypepolicy(GamePolicy policy) {
+        return bridge.searchgamebytypepolicy(policy);
     }
 
     public boolean searchgamebybuyin(int buyin) {

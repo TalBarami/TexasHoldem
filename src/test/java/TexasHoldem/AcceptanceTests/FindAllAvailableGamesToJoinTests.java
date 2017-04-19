@@ -48,6 +48,7 @@ public class FindAllAvailableGamesToJoinTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
+        boolean addedbalance1 = this.addbalancetouserwallet("achiadg",200000);
         boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GamePolicy.NOLIMIT , 100000, 10000, 100, 2, 5, true);
         boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game",  GamePolicy.NOLIMIT , 300, 400, 2, 2, 3, false);
         assertTrue(gamecreated1);

@@ -35,7 +35,7 @@ public interface Bridge {
 
     boolean searchgamebyplayername(String username);
 
-    boolean searchgamebytypepolicy(String type);
+    boolean searchgamebytypepolicy(GamePolicy policy);
 
     boolean searchgamebybuyin(int buyin);
 

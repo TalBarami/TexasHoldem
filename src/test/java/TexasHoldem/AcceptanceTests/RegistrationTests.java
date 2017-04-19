@@ -64,8 +64,6 @@ public class RegistrationTests extends ProjectTest {
         assertFalse(useradded);
         useradded = this.registerUser("achiadgelerenter","aChi*","achiadg@gm\tail.com",LocalDate.of(1991,4,20), null);
         assertFalse(useradded);
-        useradded = this.registerUser("achiadgelerenter","aChi*","achiadggmail.com",LocalDate.of(1991,4,20), null);
-        assertFalse(useradded);
     }
 
 }

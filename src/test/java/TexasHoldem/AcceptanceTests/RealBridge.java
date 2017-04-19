@@ -1,6 +1,7 @@
 package TexasHoldem.AcceptanceTests;
 
 import TexasHoldem.common.Exceptions.*;
+import TexasHoldem.domain.game.Game;
 import TexasHoldem.domain.game.GamePolicy;
 
 import java.awt.image.BufferedImage;
@@ -139,39 +140,100 @@ public class RealBridge implements Bridge {
     }
 
     public boolean searchgamebyplayername(String username) {
-        return true;
+        if(service.findGamesByUsername(username).size() != 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
-    public boolean searchgamebytypepolicy(String type) {
-        return true;
+    public boolean searchgamebytypepolicy(GamePolicy policy) {
+        if(service.findGamesByGamePolicy(policy).size() != 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public boolean searchgamebybuyin(int buyin) {
-        return true;
+        List<Game> games =service.findGamesByMaximumBuyIn(buyin);
+        if(games.size() != 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public boolean searchgamebychippolicy(int chippolicy) {
-        return true;
+        if(service.findGamesByChipPolicy(chippolicy).size() != 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public boolean searchgamebyminbet(int minbet) {
-        return true;
+        if(service.findGamesByMinimumBet(minbet).size() != 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public boolean searchgamebyminplayers(int numplayers) {
-        return true;
+        if(service.findGamesByMinimumPlayers(numplayers).size() != 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public boolean searchgamebymaxplayers(int numplayers) {
-        return true;
+        if(service.findGamesByMaximumPlayers(numplayers).size() != 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public boolean searchgamebyspectateisvalid(boolean spectatingavailable) {
-        return true;
+        if(service.findSpectatableGames().size() != 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public boolean leavegame(String username, String choise, String gamename) {
-        service.leaveGame();
+        try {
+            service.leaveGame(username, gamename);
+        }catch (GameException e){
+            return false;
+        }
         return true;
     }
 

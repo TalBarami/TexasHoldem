@@ -23,7 +23,6 @@ public class PlayTurnTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
-        setUserLeague();
         createGames();
         usersJoinsGames();
         boolean playedturn1 = this.playturn("achiadg" ,"achiadg-poker-game", "CHECK");
@@ -38,10 +37,7 @@ public class PlayTurnTests extends ProjectTest {
         assertTrue(playedturn4);
         assertTrue(playedturn5);
         assertTrue(playedturn6);
-        boolean closegame1 = this.closegame("achiadg-poker-game");
-        boolean closegame2 = this.closegame("hodbub-poker-game");
-        assertTrue(closegame1);
-        assertTrue(closegame2);
+        leaveGames();
         logoutUsers();
         deleteUsers();
     }
@@ -53,7 +49,6 @@ public class PlayTurnTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
-        setUserLeague();
         createGames();
         usersJoinsGames();
         boolean playedturn1 = this.playturnraise("achiadg" , "achiadg-poker-game", "RAISE", 400);
@@ -68,10 +63,7 @@ public class PlayTurnTests extends ProjectTest {
         assertTrue(playedturn4);
         assertFalse(playedturn5);
         assertFalse(playedturn6);
-        boolean closegame1 = this.closegame("achiadg-poker-game");
-        boolean closegame2 = this.closegame("hodbub-poker-game");
-        assertTrue(closegame1);
-        assertTrue(closegame2);
+        leaveGames();
         logoutUsers();
         deleteUsers();
     }
@@ -82,7 +74,6 @@ public class PlayTurnTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
-        setUserLeague();
         createGames();
         usersJoinsGames();
         boolean playedturn1 = this.playturn("achiadg" ,"achiadg-poker-game", "CHE\nCK");
@@ -97,10 +88,7 @@ public class PlayTurnTests extends ProjectTest {
         assertFalse(playedturn4);
         assertFalse(playedturn5);
         assertFalse(playedturn6);
-        boolean closegame1 = this.closegame("achiadg-poker-game");
-        boolean closegame2 = this.closegame("hodbub-poker-game");
-        assertTrue(closegame1);
-        assertTrue(closegame2);
+        leaveGames();
         logoutUsers();
         deleteUsers();
     }
@@ -111,15 +99,11 @@ public class PlayTurnTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
-        setUserLeague();
         createGames();
         usersJoinsGames();
         boolean playedturn1 = this.playturn("achiadg" , "achiadg-poker-game", "SELECT * FROM USERS");
         assertFalse(playedturn1);
-        boolean closegame1 = this.closegame("achiadg-poker-game");
-        boolean closegame2 = this.closegame("hodbub-poker-game");
-        assertTrue(closegame1);
-        assertTrue(closegame2);
+        leaveGames();
         logoutUsers();
         deleteUsers();
     }
@@ -152,17 +136,6 @@ public class PlayTurnTests extends ProjectTest {
         boolean userloggedout4 = this.logout("ronenbu");
     }
 
-
-
-    public  void setUserLeague()
-    {
-        boolean leaguechanged1 = this.setuserleague("hodbub","achiadg", 4);
-        boolean leaguechanged2 = this.setuserleague("hodbub","hodbub", 4);
-        boolean leaguechanged3 = this.setuserleague("hodbub","rotemw", 4);
-        boolean leaguechanged4 = this.setuserleague("hodbub","ronenbu", 4);
-    }
-
-
     public void addBalance() {
         boolean addedbalance1 = this.addbalancetouserwallet("achiadg",20000);
         boolean addedbalance2 = this.addbalancetouserwallet("hodbub",40000);
@@ -186,6 +159,15 @@ public class PlayTurnTests extends ProjectTest {
         boolean useradded2 = this.registerUser("hodbub","hBublil1308","hod.bub@gmail.com",LocalDate.of(1991,8,28),null);
         boolean useradded3 = this.registerUser("rotemw","rotemwald123","waldr@gmail.com",LocalDate.of(1991,11,26),null);
         boolean useradded4 = this.registerUser("ronenbu","ronenbu123","butirevr@gmail.com",LocalDate.of(1991,4,26),null);
+    }
+
+    public void leaveGames() {
+        boolean closegame1 = this.leavegame("achiadg", "YES", "achiadg-poker-game");
+        boolean closegame2 = this.leavegame("hodbub","YES","hodbub-poker-game");
+        boolean closegame3 = this.leavegame("rotemw" , "YES","achiadg-poker-game");
+        boolean closegame4 = this.leavegame("ronenbu" , "YES","hodbub-poker-game");
+        boolean closegame5 = this.leavegame("achiadg", "YES", "hodbub-poker-game");
+        boolean closegame6 = this.leavegame("hodbub","YES","achiadg-poker-game");
     }
 
 }

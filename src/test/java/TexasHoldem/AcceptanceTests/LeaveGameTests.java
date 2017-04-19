@@ -45,35 +45,9 @@ public class LeaveGameTests extends ProjectTest {
         deleteUsers();
     }
 
-    @Test
-    public void testLeaveGameValidGameWithNoEnsurens()
-    {
-        registerUsers();
-        loginUsers();
-        addBalance();
-        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GamePolicy.NOLIMIT , 10000, 10000, 100, 2, 9, true);
-        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game",  GamePolicy.NOLIMIT , 300, 300, 2, 2, 9, true);
-        assertTrue(gamecreated1);
-        assertTrue(gamecreated2);
-        usersJoinsGames();
-        boolean leavedgame1 = this.leavegame("hodbub" , "NO", "achiadg-poker-game");
-        boolean leavedgame2 = this.leavegame("achiadg" , "NO", "hodbub-poker-game");
-        boolean leavedgame3 = this.leavegame("rotemw" , "NO", "achiadg-poker-game");
-        boolean leavedgame4 = this.leavegame("ronenbu" , "NO", "hodbub-poker-game");
-        assertFalse(leavedgame1);
-        assertFalse(leavedgame2);
-        assertFalse(leavedgame3);
-        assertFalse(leavedgame4);
-        leaveGames();
-        boolean closegame1 = this.closegame("achiadg-poker-game");
-        boolean closegame2 = this.closegame("hodbub-poker-game");
-        assertTrue(closegame1);
-        assertTrue(closegame2);
-        logoutUsers();
-        deleteUsers();
-    }
 
-    @Test
+
+/*    @Test
     public void testLeaveGameValidGameWithOneUser()
     {
         registerUsers();
@@ -89,7 +63,7 @@ public class LeaveGameTests extends ProjectTest {
         assertTrue(leavedgame2);
         logoutUsers();
         deleteUsers();
-    }
+    }*/
 
     @Test
     public void testLeaveGameValidGameHeIsNotAbleTo()

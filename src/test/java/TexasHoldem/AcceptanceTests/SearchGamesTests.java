@@ -23,7 +23,6 @@ public class SearchGamesTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
-        setUserLeague();
         boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GamePolicy.NOLIMIT , 10000, 10000, 100, 2, 9, true);
         boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game",  GamePolicy.NOLIMIT , 300, 300, 2, 2, 9, false);
         assertTrue(gamecreated1);
@@ -36,21 +35,18 @@ public class SearchGamesTests extends ProjectTest {
         assertTrue(gamesfound2);
         assertFalse(gamesfound3);
         assertFalse(gamesfound4);
-        boolean closegame1 = this.closegame("achiadg-poker-game");
-        boolean closegame2 = this.closegame("hodbub-poker-game");
-        assertTrue(closegame1);
-        assertTrue(closegame2);
+        boolean closegame1 = this.leavegame("achiadg", "YES", "achiadg-poker-game");
+        boolean closegame2 = this.leavegame("hodbub","YES","hodbub-poker-game");
         logoutUsers();
         deleteUsers();
     }
 
-    @Test
+/*    @Test
     public void testSearchGamesByPotSize()
     {
         registerUsers();
         loginUsers();
         addBalance();
-        setUserLeague();
         createGames();
         usersJoinsGames();
         boolean gamesfound1 = this.searchgamebypotsize(0);
@@ -67,7 +63,7 @@ public class SearchGamesTests extends ProjectTest {
         assertTrue(closegame2);
         logoutUsers();
         deleteUsers();
-    }
+    }*/
 
     @Test
     public void testSearchGamesByTypePolicy()
@@ -75,21 +71,18 @@ public class SearchGamesTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
-        setUserLeague();
         boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", GamePolicy.NOLIMIT, 10000, 10000, 100, 2, 9, true);
         boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game",  GamePolicy.NOLIMIT , 300, 300, 2, 2, 9, false);
         assertTrue(gamecreated1);
         assertTrue(gamecreated2);
-        boolean gamesfound1 = this.searchgamebytypepolicy("limit");
-        boolean gamesfound2 = this.searchgamebytypepolicy("no limit");
-        boolean gamesfound3 = this.searchgamebytypepolicy("pot limit");
-        assertTrue(gamesfound1);
+        boolean gamesfound1 = this.searchgamebytypepolicy(GamePolicy.LIMIT);
+        boolean gamesfound2 = this.searchgamebytypepolicy(GamePolicy.NOLIMIT);
+        boolean gamesfound3 = this.searchgamebytypepolicy(GamePolicy.POTLIMIT);
+        assertFalse(gamesfound1);
         assertTrue(gamesfound2);
         assertFalse(gamesfound3);
-        boolean closegame1 = this.closegame("achiadg-poker-game");
-        boolean closegame2 = this.closegame("hodbub-poker-game");
-        assertTrue(closegame1);
-        assertTrue(closegame2);
+        boolean closegame1 = this.leavegame("achiadg", "YES", "achiadg-poker-game");
+        boolean closegame2 = this.leavegame("hodbub","YES","hodbub-poker-game");
         logoutUsers();
         deleteUsers();
     }
@@ -100,23 +93,20 @@ public class SearchGamesTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
-        setUserLeague();
         boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", GamePolicy.NOLIMIT , 10000, 10000, 100, 2, 9, true);
         boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game",  GamePolicy.NOLIMIT , 300, 300, 2, 2, 9, false);
         assertTrue(gamecreated1);
         assertTrue(gamecreated2);
         boolean gamesfound1 = this.searchgamebybuyin(10000);
         boolean gamesfound2 = this.searchgamebybuyin(300);
-        boolean gamesfound3 = this.searchgamebybuyin(679);
-        boolean gamesfound4 = this.searchgamebybuyin(456);
+        boolean gamesfound3 = this.searchgamebybuyin(100);
+        boolean gamesfound4 = this.searchgamebybuyin(149);
         assertTrue(gamesfound1);
         assertTrue(gamesfound2);
         assertFalse(gamesfound3);
         assertFalse(gamesfound4);
-        boolean closegame1 = this.closegame("achiadg-poker-game");
-        boolean closegame2 = this.closegame("hodbub-poker-game");
-        assertTrue(closegame1);
-        assertTrue(closegame2);
+        boolean closegame1 = this.leavegame("achiadg", "YES", "achiadg-poker-game");
+        boolean closegame2 = this.leavegame("hodbub","YES","hodbub-poker-game");
         logoutUsers();
         deleteUsers();
     }
@@ -127,7 +117,6 @@ public class SearchGamesTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
-        setUserLeague();
         boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GamePolicy.NOLIMIT , 10000, 10000, 100, 2, 9, true);
         boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game",  GamePolicy.NOLIMIT , 300, 300, 2, 2, 9, false);
         assertTrue(gamecreated1);
@@ -140,10 +129,8 @@ public class SearchGamesTests extends ProjectTest {
         assertTrue(gamesfound2);
         assertFalse(gamesfound3);
         assertFalse(gamesfound4);
-        boolean closegame1 = this.closegame("achiadg-poker-game");
-        boolean closegame2 = this.closegame("hodbub-poker-game");
-        assertTrue(closegame1);
-        assertTrue(closegame2);
+        boolean closegame1 = this.leavegame("achiadg", "YES", "achiadg-poker-game");
+        boolean closegame2 = this.leavegame("hodbub","YES","hodbub-poker-game");
         logoutUsers();
         deleteUsers();
     }
@@ -154,7 +141,6 @@ public class SearchGamesTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
-        setUserLeague();
         boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GamePolicy.NOLIMIT , 10000, 10000, 100, 2, 9, true);
         boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game",  GamePolicy.NOLIMIT , 300, 300, 2, 3, 9, false);
         assertTrue(gamecreated1);
@@ -167,10 +153,8 @@ public class SearchGamesTests extends ProjectTest {
         assertTrue(gamesfound2);
         assertFalse(gamesfound3);
         assertFalse(gamesfound4);
-        boolean closegame1 = this.closegame("achiadg-poker-game");
-        boolean closegame2 = this.closegame("hodbub-poker-game");
-        assertTrue(closegame1);
-        assertTrue(closegame2);
+        boolean closegame1 = this.leavegame("achiadg", "YES", "achiadg-poker-game");
+        boolean closegame2 = this.leavegame("hodbub","YES","hodbub-poker-game");
         logoutUsers();
         deleteUsers();
     }
@@ -181,7 +165,6 @@ public class SearchGamesTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
-        setUserLeague();
         boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GamePolicy.NOLIMIT , 10000, 10000, 100, 2, 9, true);
         boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game",  GamePolicy.NOLIMIT , 300, 300, 2, 2, 9, false);
         assertTrue(gamecreated1);
@@ -194,10 +177,8 @@ public class SearchGamesTests extends ProjectTest {
         assertTrue(gamesfound2);
         assertFalse(gamesfound3);
         assertFalse(gamesfound4);
-        boolean closegame1 = this.closegame("achiadg-poker-game");
-        boolean closegame2 = this.closegame("hodbub-poker-game");
-        assertTrue(closegame1);
-        assertTrue(closegame2);
+        boolean closegame1 = this.leavegame("achiadg", "YES", "achiadg-poker-game");
+        boolean closegame2 = this.leavegame("hodbub","YES","hodbub-poker-game");
         logoutUsers();
         deleteUsers();
     }
@@ -208,7 +189,6 @@ public class SearchGamesTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
-        setUserLeague();
         boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GamePolicy.NOLIMIT , 10000, 10000, 100, 2, 9, true);
         boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game",  GamePolicy.NOLIMIT , 300, 300, 2, 3, 8, false);
         assertTrue(gamecreated1);
@@ -221,10 +201,8 @@ public class SearchGamesTests extends ProjectTest {
         assertTrue(gamesfound2);
         assertFalse(gamesfound3);
         assertFalse(gamesfound4);
-        boolean closegame1 = this.closegame("achiadg-poker-game");
-        boolean closegame2 = this.closegame("hodbub-poker-game");
-        assertTrue(closegame1);
-        assertTrue(closegame2);
+        boolean closegame1 = this.leavegame("achiadg", "YES", "achiadg-poker-game");
+        boolean closegame2 = this.leavegame("hodbub","YES","hodbub-poker-game");
         logoutUsers();
         deleteUsers();
     }
@@ -235,15 +213,11 @@ public class SearchGamesTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
-        setUserLeague();
         boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GamePolicy.NOLIMIT , 10000, 10000, 100, 2, 9, true);
         assertTrue(gamecreated1);
         boolean gamesfound1 = this.searchgamebyspectateisvalid(true);
-        boolean gamesfound2 = this.searchgamebyspectateisvalid(false);
         assertTrue(gamesfound1);
-        assertFalse(gamesfound2);
-        boolean closegame1 = this.closegame("achiadg-poker-game");
-        assertTrue(closegame1);
+        boolean closegame1 = this.leavegame("achiadg", "YES", "achiadg-poker-game");
         logoutUsers();
         deleteUsers();
     }
@@ -255,13 +229,6 @@ public class SearchGamesTests extends ProjectTest {
         boolean deleteUser4 = this.deleteUser("ronenbu");
     }
 
-    public  void setUserLeague()
-    {
-        boolean leaguechanged1 = this.setuserleague("hodbub","achiadg", 4);
-        boolean leaguechanged2 = this.setuserleague("hodbub","hodbub", 4);
-        boolean leaguechanged3 = this.setuserleague("hodbub","rotemw", 4);
-        boolean leaguechanged4 = this.setuserleague("hodbub","ronenbu", 4);
-    }
 
 
     public void logoutUsers() {

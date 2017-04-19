@@ -71,35 +71,35 @@ public class ProxyBridge implements Bridge {
     }
 
     public boolean searchgamebyplayername(String username) {
-        return true;
+        return real.searchavailablegamestojoin(username);
     }
 
-    public boolean searchgamebytypepolicy(String type) {
-        return true;
+    public boolean searchgamebytypepolicy(GamePolicy policy) {
+        return real.searchgamebytypepolicy(policy);
     }
 
     public boolean searchgamebybuyin(int buyin) {
-        return true;
+        return real.searchgamebybuyin(buyin);
     }
 
     public boolean searchgamebychippolicy(int chippolicy) {
-        return true;
+        return real.searchgamebychippolicy(chippolicy);
     }
 
     public boolean searchgamebyminbet(int minbet) {
-        return true;
+        return real.searchgamebyminbet(minbet);
     }
 
     public boolean searchgamebyminplayers(int numplayers) {
-        return true;
+        return real.searchgamebyminplayers(numplayers);
     }
 
     public boolean searchgamebymaxplayers(int numplayers) {
-        return true;
+        return real.searchgamebymaxplayers(numplayers);
     }
 
     public boolean searchgamebyspectateisvalid(boolean spectatingavailable) {
-        return true;
+        return real.searchgamebyspectateisvalid(spectatingavailable);
     }
 
     public boolean leavegame(String username, String choise, String gamename) {
