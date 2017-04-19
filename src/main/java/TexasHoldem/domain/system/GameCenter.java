@@ -236,6 +236,7 @@ public class GameCenter {
     }
 
     public void setUserLeague(String admin, String username, int league) throws NoPermissionException {
+        User ad = usersDb.getHighestBalance();
         if(!usersDb.getHighestBalance().getUsername().equalsIgnoreCase(admin))
             throw new NoPermissionException("User must have the highest balance.");
         User user = getUser(username);

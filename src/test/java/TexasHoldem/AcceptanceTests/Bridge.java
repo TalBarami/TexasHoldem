@@ -29,7 +29,6 @@ public interface Bridge {
 
     boolean createnewgame(String username, String gamename, GamePolicy policy, int buyin, int chippolicy, int minimumbet, int minplayers, int maxplayers, boolean spectateisvalid);
 
-    boolean closegame(String gamename);
 
     boolean joinexistinggame(String username, String gamename, boolean spec);
 
@@ -76,4 +75,6 @@ public interface Bridge {
     boolean setcriteriatomoveleague(String adminname, int criteria);
 
     boolean spectateactivegame(String username, String gamename, boolean spec);
+
+    boolean moveuserleague(String admin, String username, int league);
 }

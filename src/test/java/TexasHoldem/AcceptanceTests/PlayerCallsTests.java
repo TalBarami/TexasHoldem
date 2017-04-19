@@ -1,3 +1,4 @@
+/*
 package TexasHoldem.AcceptanceTests;
 
 import TexasHoldem.domain.game.GamePolicy;
@@ -6,9 +7,11 @@ import org.junit.Test;
 
 import java.time.LocalDate;
 
+*/
 /**
  * Created by אחיעד on 08/04/2017.
- */
+ *//*
+
 public class PlayerCallsTests extends ProjectTest {
 
     @Before
@@ -113,3 +116,4 @@ public class PlayerCallsTests extends ProjectTest {
     }
 
 }
+*/
