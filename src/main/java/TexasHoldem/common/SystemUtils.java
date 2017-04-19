@@ -12,7 +12,7 @@ public class SystemUtils {
             char[] chars = s.toCharArray();
             for(char c : chars){
                 if(c < 32 || c > 126){
-                    return false;
+                    return true;
                 }
             }
         }
