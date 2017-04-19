@@ -140,7 +140,8 @@ public class RealBridge implements Bridge {
     }
 
     public boolean searchgamebyplayername(String username) {
-        if(service.findGamesByUsername(username).size() != 0)
+        List<Game> games = service.findGamesByUsername(username);
+        if(games.size() != 0)
         {
             return true;
         }

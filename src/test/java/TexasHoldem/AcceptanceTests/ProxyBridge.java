@@ -71,7 +71,7 @@ public class ProxyBridge implements Bridge {
     }
 
     public boolean searchgamebyplayername(String username) {
-        return real.searchavailablegamestojoin(username);
+        return real.searchgamebyplayername(username);
     }
 
     public boolean searchgamebytypepolicy(GamePolicy policy) {

@@ -123,8 +123,8 @@ public class SearchGamesTests extends ProjectTest {
         assertTrue(gamecreated2);
         boolean gamesfound1 = this.searchgamebychippolicy(10000);
         boolean gamesfound2 = this.searchgamebychippolicy(300);
-        boolean gamesfound3 = this.searchgamebychippolicy(679);
-        boolean gamesfound4 = this.searchgamebychippolicy(456);
+        boolean gamesfound3 = this.searchgamebychippolicy(214);
+        boolean gamesfound4 = this.searchgamebychippolicy(5);
         assertTrue(gamesfound1);
         assertTrue(gamesfound2);
         assertFalse(gamesfound3);
@@ -166,7 +166,7 @@ public class SearchGamesTests extends ProjectTest {
         loginUsers();
         addBalance();
         boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GamePolicy.NOLIMIT , 10000, 10000, 100, 2, 9, true);
-        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game",  GamePolicy.NOLIMIT , 300, 300, 2, 2, 9, false);
+        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game",  GamePolicy.NOLIMIT , 300, 300, 2, 3, 9, false);
         assertTrue(gamecreated1);
         assertTrue(gamecreated2);
         boolean gamesfound1 = this.searchgamebyminplayers(2);
