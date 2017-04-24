@@ -144,10 +144,10 @@ public class LeaguesTests extends ProjectTest {
         usersJoinsGames();
         leavegame();
         addBalance();
-        boolean leaguechanged5 = this.moveuserleague("achiadg","achiadg", 2);
-        boolean leaguechanged6 = this.moveuserleague("rotemw","hodbub", 2);
-        boolean leaguechanged7 = this.moveuserleague("ronenbu","rotemw", 2);
-        boolean leaguechanged8 = this.moveuserleague("hodbub","ronenbu", 2);
+        boolean leaguechanged5 = this.moveuserleague("achiadg","achiadg", 3);
+        boolean leaguechanged6 = this.moveuserleague("rotemw","hodbub", 3);
+        boolean leaguechanged7 = this.moveuserleague("ronenbu","rotemw", 3);
+        boolean leaguechanged8 = this.moveuserleague("hodbub","ronenbu", 3);
         assertFalse(leaguechanged5);
         assertFalse(leaguechanged6);
         assertFalse(leaguechanged7);

@@ -97,7 +97,7 @@ public class SpectateActiveGameTests extends ProjectTest {
         addBalance();
         boolean gamecreated1 = this.createnewgame("hodbub","hodbub-poker-game",  GamePolicy.NOLIMIT , 300, 300, 2, 2, 9, true);
         assertTrue(gamecreated1);
-        boolean spectategameisvalid1 = this.spectateactivegame("achiadg" , "SELECT * FROM USERS WHERE username = achiadg-poker-game",true);
+        boolean spectategameisvalid1 = this.spectateactivegame("achiadg" , "achiadg-poker-game ; SELECT * FROM USERS WHERE username = achiadg-poker-game",true);
         assertFalse(spectategameisvalid1);
         boolean closegame2 = this.leavegame("hodbub","YES","hodbub-poker-game");
         logoutUsers();

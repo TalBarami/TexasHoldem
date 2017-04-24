@@ -164,7 +164,7 @@ public class CreateNewGameTests extends ProjectTest {
         assertTrue(userloggedin1);
         boolean addedbalance1 = this.addbalancetouserwallet("achiadg",20000);
         assertTrue(addedbalance1);
-        boolean gamecreated1 = this.createnewgame("achiadg","SELECT * FROM GAMES WHERE GAMENAME = achiad-poker-game", GamePolicy.POTLIMIT , 10000, 10000, 100, 1, 9, true);
+        boolean gamecreated1 = this.createnewgame("achiadg","achiad-poker-game ; SELECT * FROM GAMES WHERE GAMENAME = achiad-poker-game", GamePolicy.POTLIMIT , 10000, 10000, 100, 1, 9, true);
         assertFalse(gamecreated1);
         boolean userloggedout1 = this.logout("achiadg");
         boolean deleteUser1 = this.deleteUser("achiadg");

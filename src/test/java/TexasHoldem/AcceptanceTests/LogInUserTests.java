@@ -84,7 +84,7 @@ public class LogInUserTests extends ProjectTest {
     public void testLogInPasswordSqlInjection()
     {
         boolean useradded1 = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com",LocalDate.of(1991,4,20),null);
-        boolean userloggedin1 = this.login("achiadg","aChi12#* SELECT * FROM Users");
+        boolean userloggedin1 = this.login("achiadg","aChi12#* ; SELECT * FROM Users");
         assertFalse(userloggedin1);
         boolean deleteUser1 = this.deleteUser("achiadg");
         assertTrue(deleteUser1);
