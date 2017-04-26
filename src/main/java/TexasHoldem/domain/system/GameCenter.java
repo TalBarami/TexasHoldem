@@ -107,7 +107,8 @@ public class GameCenter {
         settings.setLeagueCriteria(creator.getCurrLeague());
         Game game=new Game(settings,creator,leagueManager);
         gamesDb.addGame(game);
-        //todo : what about the 'activeGames' field?  delete\leave ( and add the game to the list)?
+        //game.startGame(); todo : causing loop for now, waiting for threads.
+        //gamesDb.archiveGame(game); todo: archive game (returned when the gamec an be archived)
     }
 
     public void joinGame(String userName, String gameName, boolean asSpectator) throws InvalidArgumentException, CantSpeactateThisRoomException,
@@ -235,6 +236,7 @@ public class GameCenter {
     }
 
     public void setUserLeague(String admin, String username, int league) throws NoPermissionException {
+        User ad = usersDb.getHighestBalance();
         if(!usersDb.getHighestBalance().getUsername().equalsIgnoreCase(admin))
             throw new NoPermissionException("User must have the highest balance.");
         User user = getUser(username);

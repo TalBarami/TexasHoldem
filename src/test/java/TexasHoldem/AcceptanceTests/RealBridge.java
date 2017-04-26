@@ -118,9 +118,6 @@ public class RealBridge implements Bridge {
         return true;
     }
 
-    public boolean closegame(String gamename) {
-        return true;
-    }
 
     public boolean joinexistinggame(String username, String gamename, boolean spec) {
         try {
@@ -140,7 +137,12 @@ public class RealBridge implements Bridge {
     }
 
     public boolean searchgamebyplayername(String username) {
-        List<Game> games = service.findGamesByUsername(username);
+        List<Game> games = null;
+        try {
+            games = service.findGamesByUsername(username);
+        } catch (InvalidArgumentException e) {
+            e.printStackTrace();
+        }
         if(games.size() != 0)
         {
             return true;
@@ -152,7 +154,13 @@ public class RealBridge implements Bridge {
     }
 
     public boolean searchgamebytypepolicy(GamePolicy policy) {
-        if(service.findGamesByGamePolicy(policy).size() != 0)
+        List<Game> games = null;
+        try {
+            games = service.findGamesByGamePolicy(policy);
+        } catch (InvalidArgumentException e) {
+            e.printStackTrace();
+        }
+        if(games.size() != 0)
         {
             return true;
         }
@@ -247,7 +255,13 @@ public class RealBridge implements Bridge {
     }
 
     public boolean searchavailablegamestojoin(String username) {
-        if(service.findAvailableGames(username).size() != 0)
+        List<Game> games = null;
+        try {
+            games = service.findAvailableGames(username);
+        } catch (InvalidArgumentException e) {
+            e.printStackTrace();
+        }
+        if(games.size() != 0)
         {
             return true;
         }
@@ -282,14 +296,33 @@ public class RealBridge implements Bridge {
     }
 
     public boolean setuserleague(String adminname, String username, int league) {
+            try {
+                service.setDefaultLeague(adminname, league);
+            } catch (NoPermissionException e) {
+                e.printStackTrace();
+                return false;
+            }
         return true;
     }
 
     public boolean searchgamebypotsize(int pot) {
-        return true;
+        if(service.findGamesByPotSize(pot).size() != 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public boolean setcriteriatomoveleague(String adminname, int criteria) {
+        try {
+            service.setLeagueCriteria(adminname, criteria);
+        } catch (NoPermissionException e) {
+            e.printStackTrace();
+            return false;
+        }
         return true;
     }
 
@@ -306,6 +339,17 @@ public class RealBridge implements Bridge {
         }catch (  CantSpeactateThisRoomException e){
             return false;
         }catch (   NoBalanceForBuyInException e){
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean moveuserleague(String admin, String username, int league) {
+        try {
+            service.setUserLeague(admin, username, league );
+        } catch (NoPermissionException e) {
+            e.printStackTrace();
             return false;
         }
         return true;

@@ -23,8 +23,6 @@ import static org.mockito.Mockito.*;
  * Created by RotemWald on 11/04/2017.
  */
 public class RoundTest {
-    Round round1;
-
     @Test
     public void round1_testPaySmallAndBigBlind() throws Exception {
         int smallBlindAmount = 5;
@@ -247,6 +245,9 @@ public class RoundTest {
         player2CardSet.add(new Card(Rank.ACE, Suit.HEART));
         player2CardSet.add(new Card(Rank.KING, Suit.HEART));
 
+        when(player1.getUser()).thenReturn(user1);
+        when(player2.getUser()).thenReturn(user2);
+
         when(player1.getCards()).thenReturn(player1CardSet);
         when(player2.getCards()).thenReturn(player2CardSet);
 
@@ -292,6 +293,9 @@ public class RoundTest {
         player2CardSet.add(new Card(Rank.NINE, Suit.HEART));
         player2CardSet.add(new Card(Rank.TEN, Suit.HEART));
 
+        when(player1.getUser()).thenReturn(user1);
+        when(player2.getUser()).thenReturn(user2);
+
         when(player1.getCards()).thenReturn(player1CardSet);
         when(player2.getCards()).thenReturn(player2CardSet);
 
@@ -317,6 +321,8 @@ public class RoundTest {
     @Test
     public void round1_testCalculateWinner_twoWinnersDifferentAmount() throws Exception {
         User user1 = new User("waldr", "1234", "waldr@post.bgu.ac.il", LocalDate.now(), null);
+        User user2 = new User("hodbub", "1234", "hobdud@post.bgu.ac.il", LocalDate.now(), null);
+        User user3 = new User("achiadg", "1234", "achiadg@post.bgu.ac.il", LocalDate.now(), null);
 
         Player player1 = mock(Player.class);
         Player player2 = mock(Player.class);
@@ -341,6 +347,10 @@ public class RoundTest {
         player2CardSet.add(new Card(Rank.SEVEN, Suit.HEART));
         player3CardSet.add(new Card(Rank.ACE, Suit.CLUB));
         player3CardSet.add(new Card(Rank.EIGHT, Suit.CLUB));
+
+        when(player1.getUser()).thenReturn(user1);
+        when(player2.getUser()).thenReturn(user2);
+        when(player3.getUser()).thenReturn(user3);
 
         when(player1.getCards()).thenReturn(player1CardSet);
         when(player2.getCards()).thenReturn(player2CardSet).thenReturn(player2CardSet);

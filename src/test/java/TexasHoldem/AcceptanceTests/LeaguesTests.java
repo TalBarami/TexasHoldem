@@ -34,10 +34,6 @@ public class LeaguesTests extends ProjectTest {
         createGames();
         usersJoinsGames();
         leavegame();
-        boolean closegame1 = this.closegame("achiadg-poker-game");
-        boolean closegame2 = this.closegame("hodbub-poker-game");
-        assertTrue(closegame1);
-        assertTrue(closegame2);
         logoutUsers();
         deleteUsers();
     }
@@ -49,18 +45,14 @@ public class LeaguesTests extends ProjectTest {
         loginUsers();
         addBalance();
         setUserLeague();
+        createGames();
+        usersJoinsGames();
+        leavegame();
         boolean criteriachanged1 = this.setcriteriatomoveleague("hodbub", 2000);
         assertTrue(criteriachanged1);
         addBalance2();
         boolean criteriachanged2 = this.setcriteriatomoveleague("achiadg", 3000);
         assertTrue(criteriachanged2);
-        createGames();
-        usersJoinsGames();
-        leavegame();
-        boolean closegame1 = this.closegame("achiadg-poker-game");
-        boolean closegame2 = this.closegame("hodbub-poker-game");
-        assertTrue(closegame1);
-        assertTrue(closegame2);
         logoutUsers();
         deleteUsers();
     }
@@ -79,18 +71,14 @@ public class LeaguesTests extends ProjectTest {
         usersJoinsGames();
         leavegame();
         addBalance();
-        boolean leaguechanged1 = this.setuserleague("hodbub","achiadg", 2);
-        boolean leaguechanged2 = this.setuserleague("hodbub","hodbub", 2);
-        boolean leaguechanged3 = this.setuserleague("hodbub","rotemw", 2);
-        boolean leaguechanged4 = this.setuserleague("hodbub","ronenbu", 2);
+        boolean leaguechanged1 = this.moveuserleague("hodbub","achiadg", 2);
+        boolean leaguechanged2 = this.moveuserleague("hodbub","hodbub", 2);
+        boolean leaguechanged3 = this.moveuserleague("hodbub","rotemw", 2);
+        boolean leaguechanged4 = this.moveuserleague("hodbub","ronenbu", 2);
         assertTrue(leaguechanged1);
         assertTrue(leaguechanged2);
         assertTrue(leaguechanged3);
         assertTrue(leaguechanged4);
-        boolean closegame1 = this.closegame("achiadg-poker-game");
-        boolean closegame2 = this.closegame("hodbub-poker-game");
-        assertTrue(closegame1);
-        assertTrue(closegame2);
         logoutUsers();
         deleteUsers();
     }
@@ -112,10 +100,6 @@ public class LeaguesTests extends ProjectTest {
         createGames();
         usersJoinsGames();
         leavegame();
-        boolean closegame1 = this.closegame("achiadg-poker-game");
-        boolean closegame2 = this.closegame("hodbub-poker-game");
-        assertTrue(closegame1);
-        assertTrue(closegame2);
         logoutUsers();
         deleteUsers();
     }
@@ -129,16 +113,12 @@ public class LeaguesTests extends ProjectTest {
         setUserLeague();
         boolean criteriachanged1 = this.setcriteriatomoveleague("achiadg", 2000);
         assertFalse(criteriachanged1);
-        addBalance2();
-        boolean criteriachanged2 = this.setcriteriatomoveleague("hodbub", 3000);
-        assertFalse(criteriachanged2);
         createGames();
         usersJoinsGames();
         leavegame();
-        boolean closegame1 = this.closegame("achiadg-poker-game");
-        boolean closegame2 = this.closegame("hodbub-poker-game");
-        assertTrue(closegame1);
-        assertTrue(closegame2);
+        addBalance2();
+        boolean criteriachanged2 = this.setcriteriatomoveleague("hodbub", 3000);
+        assertFalse(criteriachanged2);
         logoutUsers();
         deleteUsers();
     }
@@ -152,41 +132,36 @@ public class LeaguesTests extends ProjectTest {
         setUserLeague();
         boolean criteriachanged1 = this.setcriteriatomoveleague("hodbub", 2000);
         assertTrue(criteriachanged1);
+        boolean leaguechanged1 = this.moveuserleague("hodbub","achiadg", 2);
+        boolean leaguechanged2 = this.moveuserleague("hodbub","hodbub", 2);
+        boolean leaguechanged3 = this.moveuserleague("hodbub","rotemw", 2);
+        boolean leaguechanged4 = this.moveuserleague("hodbub","ronenbu", 2);
+        assertTrue(leaguechanged1);
+        assertTrue(leaguechanged2);
+        assertTrue(leaguechanged3);
+        assertTrue(leaguechanged4);
         createGames();
         usersJoinsGames();
         leavegame();
-        boolean leaguechanged1 = this.setuserleague("hodbub","achiadg", 2);
-        boolean leaguechanged2 = this.setuserleague("hodbub","hodbub", 2);
-        boolean leaguechanged3 = this.setuserleague("hodbub","rotemw", 2);
-        boolean leaguechanged4 = this.setuserleague("hodbub","ronenbu", 2);
-        assertFalse(leaguechanged1);
-        assertFalse(leaguechanged2);
-        assertFalse(leaguechanged3);
-        assertFalse(leaguechanged4);
-        boolean leaguechanged5 = this.setuserleague("achiadg","achiadg", 2);
-        boolean leaguechanged6 = this.setuserleague("rotemw","hodbub", 2);
-        boolean leaguechanged7 = this.setuserleague("ronenbu","rotemw", 2);
-        boolean leaguechanged8 = this.setuserleague("hodbub","ronenbu", 2);
+        addBalance();
+        boolean leaguechanged5 = this.moveuserleague("achiadg","achiadg", 3);
+        boolean leaguechanged6 = this.moveuserleague("rotemw","hodbub", 3);
+        boolean leaguechanged7 = this.moveuserleague("ronenbu","rotemw", 3);
+        boolean leaguechanged8 = this.moveuserleague("hodbub","ronenbu", 3);
         assertFalse(leaguechanged5);
         assertFalse(leaguechanged6);
         assertFalse(leaguechanged7);
         assertTrue(leaguechanged8);
-        boolean closegame1 = this.closegame("achiadg-poker-game");
-        boolean closegame2 = this.closegame("hodbub-poker-game");
-        assertTrue(closegame1);
-        assertTrue(closegame2);
         logoutUsers();
         deleteUsers();
     }
 
-
-
     private void leavegame()
     {
-        boolean leavedgame1 = this.leavegame("hodbub" , "YES", "achiadg-poker-game");
-        boolean leavedgame2 = this.leavegame("achiadg" , "YES", "hodbub-poker-game");
-        boolean leavedgame3 = this.leavegame("rotemw" , "YES", "achiadg-poker-game");
-        boolean leavedgame4 = this.leavegame("ronenbu" , "YES", "hodbub-poker-game");
+        boolean leavedgame1 = this.leavegame("hodbub" , "YES", "hodbub-poker-game");
+        boolean leavedgame2 = this.leavegame("achiadg" , "YES", "achiadg-poker-game");
+        boolean leavedgame5 = this.leavegame("rotemw" , "YES", "achiadg-poker-game");
+        boolean leavedgame6 = this.leavegame("ronenbu" , "YES", "hodbub-poker-game");
     }
 
 
@@ -199,15 +174,13 @@ public class LeaguesTests extends ProjectTest {
 
     private void createGames()
     {
-        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GamePolicy.NOLIMIT , 100, 10000, 100, 2, 9, true);
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GamePolicy.NOLIMIT , 300, 10000, 100, 2, 9, true);
         boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game",  GamePolicy.NOLIMIT , 300, 300, 2, 2, 9, true);
     }
 
     private void usersJoinsGames() {
-        boolean useraddedgame1 = this.joinexistinggame("hodbub" , "achiadg-poker-game", false);
         boolean useraddedgame2 = this.joinexistinggame("rotemw" , "achiadg-poker-game", false);
         boolean useraddedgame3 = this.joinexistinggame("ronenbu" , "hodbub-poker-game", false);
-        boolean useraddedgame4 = this.joinexistinggame("achiadg" , "hodbub-poker-game", false);
     }
 
     private void deleteUsers() {

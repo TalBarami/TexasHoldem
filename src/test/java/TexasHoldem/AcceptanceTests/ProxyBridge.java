@@ -62,9 +62,6 @@ public class ProxyBridge implements Bridge {
         return real.createnewgame(username, gamename, policy, buyin,chippolicy, minimumbet,  minplayers, maxplayers, spectateisvalid);
     }
 
-    public boolean closegame(String gamename) {
-        return true;
-    }
 
     public boolean joinexistinggame(String username, String gamename, boolean spec) {
        return real.joinexistinggame(username, gamename,spec);
@@ -143,20 +140,25 @@ public class ProxyBridge implements Bridge {
     }
 
     public boolean setuserleague(String adminname, String username, int league) {
-        return true;
+        return real.setuserleague(adminname, username, league);
     }
 
     public boolean searchgamebypotsize(int pot) {
-        return true;
+        return real.searchgamebypotsize(pot);
     }
 
     public boolean setcriteriatomoveleague(String adminname, int criteria) {
-        return true;
+        return real.setcriteriatomoveleague(adminname, criteria);
     }
 
     @Override
     public boolean spectateactivegame(String username, String gamename, boolean spec) {
         return real.spectateactivegame(username,gamename, spec);
+    }
+
+    @Override
+    public boolean moveuserleague(String admin, String username, int league) {
+        return real.moveuserleague(admin, username, league);
     }
 
 }

@@ -108,7 +108,7 @@ public class JoinExistingGameTests extends ProjectTest {
         addBalance();
         boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GamePolicy.NOLIMIT , 20000, 90000, 100, 2, 4, true);
         assertTrue(gamecreated1);
-        boolean useraddedgame1 = this.joinexistinggame("hodbub" , "SELECT * FROM GAMES WHERE GAMENAME = achiad-poker-game",false);
+        boolean useraddedgame1 = this.joinexistinggame("hodbub" , "achiad-poker-game ; SELECT * FROM GAMES WHERE GAMENAME = achiad-poker-game",false);
         assertFalse(useraddedgame1);
         boolean closegame1 = this.leavegame("achiadg", "YES", "achiadg-poker-game");
         logoutUsers();

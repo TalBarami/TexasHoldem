@@ -52,10 +52,6 @@ public abstract class ProjectTest extends TestCase{
         return bridge.createnewgame(username,gamename, policy, buyin, chippolicy, minimumbet, minplayers, maxplayers, spectateisvalid);
     }
 
-    public boolean closegame(String gamename) {
-        return bridge.closegame(gamename);
-    }
-
     public boolean joinexistinggame(String username, String gamename, boolean spec) {
         return bridge.joinexistinggame(username, gamename, spec);
     }
@@ -147,5 +143,9 @@ public abstract class ProjectTest extends TestCase{
 
     public boolean spectateactivegame(String username, String gamename, boolean spec) {
         return bridge.spectateactivegame(username, gamename, spec);
+    }
+
+    public boolean moveuserleague(String admin, String username, int league) {
+        return bridge.moveuserleague(admin, username,league);
     }
 }

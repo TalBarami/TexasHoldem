@@ -1,3 +1,4 @@
+/*
 package TexasHoldem.AcceptanceTests;
 
 import TexasHoldem.domain.game.GamePolicy;
@@ -8,9 +9,11 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+*/
 /**
  * Created by אחיעד on 08/04/2017.
- */
+ *//*
+
 public class SaveFavoriteTurns extends ProjectTest {
 
     @Before
@@ -115,3 +118,4 @@ public class SaveFavoriteTurns extends ProjectTest {
         boolean useradded4 = this.registerUser("ronenbu","ronenbu123","butirevr@gmail.com",LocalDate.of(1991,4,26),null);
     }
 }
+*/
