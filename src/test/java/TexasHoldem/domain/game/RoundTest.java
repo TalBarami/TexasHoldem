@@ -17,7 +17,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 /**
@@ -202,6 +201,10 @@ public class RoundTest {
         Assert.assertTrue(round1.getPotAmount() == 50);
         Assert.assertTrue(round1.getActivePlayers().size() == 2);
         Assert.assertTrue(round1.isRoundActive() == true);
+
+        verify(player4, times(2)).payChips(10);
+        verify(player3).payChips(20);
+        verify(player2).payChips(10);
     }
 
     @Test
