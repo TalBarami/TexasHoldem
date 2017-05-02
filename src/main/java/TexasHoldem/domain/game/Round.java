@@ -1,5 +1,6 @@
 package TexasHoldem.domain.game;
 
+import TexasHoldem.domain.events.MoveEvent;
 import TexasHoldem.domain.game.card.Card;
 import TexasHoldem.domain.game.card.Dealer;
 import TexasHoldem.domain.game.hand.Hand;
@@ -29,6 +30,7 @@ public class Round {
     private int potAmount;
     private List<Card> openedCards;
     private Player currentDealerPlayer;
+    private RoundState currentState;
 
     public Round(List<Player> players, GameSettings settings, int dealerIndex) {
         this.gameSettings = settings;
@@ -39,6 +41,7 @@ public class Round {
         this.chipsToCall = gameSettings.getMinBet();
         this.potAmount = 0;
         this.openedCards = new ArrayList<Card>();
+        this.currentState = RoundState.PREFLOP;
 
         int startingPlayerIndex = (dealerIndex + 3) % activePlayers.size();
         this.currentPlayer = activePlayers.get(startingPlayerIndex);
@@ -52,33 +55,10 @@ public class Round {
 
     public void startRound() {
         setRoundActive(true);
-
         dealer.deal(activePlayers);
         paySmallAndBigBlind();
-        playPreFlopRound();
 
-        if (activePlayers.size() > 1) {
-            chipsToCall = 0;
-            initPlayersLastBetSinceCardOpen();
-            playFlopOrTurnRound();
-        }
-        if (activePlayers.size() > 1) {
-            chipsToCall = 0;
-            initPlayersLastBetSinceCardOpen();
-            playFlopOrTurnRound();
-        }
-        if (activePlayers.size() > 1) {
-            chipsToCall = 0;
-            initPlayersLastBetSinceCardOpen();
-            playRiverRound();
-        }
-        if (activePlayers.size() > 1) {
-            chipsToCall = 0;
-            initPlayersLastBetSinceCardOpen();
-            endRound();
-        }
-
-        logger.info("Round finished.");
+        // TODO :: Call communication layer to send currentPlayer a message which requests him to play
     }
 
     public void notifyPlayerExited(Player player) {
@@ -138,20 +118,13 @@ public class Round {
         logger.info("Big blind payed by {}", bigPlayer.getUser().getUsername());
     }
 
-    private void playRoundFlow() {
-        boolean isLastPlayerPlayed = false;
-
-        while (!isLastPlayerPlayed && isRoundActive) {
-            GameActions chosenAction;
-            chosenAction = currentPlayer.chooseAction(calculateTurnOptions());
-
-            if (currentPlayer == lastPlayer && chosenAction != GameActions.RAISE)
-                isLastPlayerPlayed = true;
+    public void playTurnOfPlayer(MoveEvent playerMoveEvent) {
+        if (isRoundActive) {
+            GameActions chosenAction = playerMoveEvent.getEventAction();
 
             switch (chosenAction) {
                 case RAISE:
-                    int amountToRaise = currentPlayer.chooseAmountToRaise(chipsToCall * 2, getMaxAmountToRaise());
-                    playerRaiseTurn(amountToRaise);
+                    playerRaiseTurn(playerMoveEvent.getAmountToRaise());
                     break;
                 case CHECK:
                     playerCheckTurn();
@@ -163,9 +136,90 @@ public class Round {
                     playerCallTurn();
                     break;
             }
+
+            if (isLastPlayerPlayed(playerMoveEvent)) {
+                endFlow();
+            } else {
+                // TODO :: Call communication layer to send currentPlayer a message which requests him to play
+            }
+        }
+    }
+
+    private void endFlow() {
+        initLastPlayer();
+
+        if (isRoundActive) {
+            chipsToCall = 0;
+            initPlayersLastBetSinceCardOpen();
+
+            switch (currentState) {
+                case PREFLOP:
+                    endPreFlopFlow();
+                    break;
+                case FLOP:
+                    endFlopFlow();
+                    break;
+                case TURN:
+                    endTurnFlow();
+                    break;
+                case RIVER:
+                    endRiverFlow();
+                    break;
+            }
+        }
+    }
+
+    private void endRiverFlow() {
+        chipsToCall = 0;
+        initPlayersLastBetSinceCardOpen();
+        endRound();
+
+        logger.info("Round finished.");
+    }
+
+    private void endTurnFlow() {
+        endFlopOrTurnFlow();
+        currentState = RoundState.RIVER;
+        startNewFlow();
+    }
+
+    private void endFlopFlow() {
+        endFlopOrTurnFlow();
+        currentState = RoundState.TURN;
+        startNewFlow();
+    }
+
+    private void endPreFlopFlow() {
+        openedCards.addAll(dealer.open(3));
+        logger.info("Cards opened are: ");
+
+        for (Card c : openedCards) {
+            logger.info("{} , ", c);
         }
 
-        initLastPlayer();
+        currentState = RoundState.FLOP;
+        startNewFlow();
+    }
+
+    private void startNewFlow() {
+        int dealerIndex = activePlayers.indexOf(currentDealerPlayer);
+        int newCurrentPlayerIndex = (dealerIndex + 1) % (activePlayers.size());
+        currentPlayer = activePlayers.get(newCurrentPlayerIndex);
+
+        // TODO :: Call communication layer to send currentPlayer a message which requests him to play
+    }
+
+    private void endFlopOrTurnFlow() {
+        openedCards.addAll(dealer.open(1));
+        logger.info("Cards opened are: ");
+
+        for (Card c : openedCards) {
+            logger.info("{} , ", c);
+        }
+    }
+
+    private boolean isLastPlayerPlayed(MoveEvent playerMoveEvent) {
+        return (playerMoveEvent.getEventInitiator() == lastPlayer && playerMoveEvent.getEventAction() != GameActions.RAISE);
     }
 
     private int getMaxAmountToRaise() {
@@ -180,44 +234,13 @@ public class Round {
         }
     }
 
-    private void playPreFlopRound() {
-        playRoundFlow();
-
-        openedCards.addAll(dealer.open(3));
-        logger.info("Cards opened are: ");
-
-        for (Card c : openedCards) {
-            logger.info("{} , ", c);
-        }
-    }
-
-    private void playFlopOrTurnRound() {
-        int dealerIndex = activePlayers.indexOf(currentDealerPlayer);
-        int newCurrentPlayerIndex = (dealerIndex + 1) % (activePlayers.size());
-        currentPlayer = activePlayers.get(newCurrentPlayerIndex);
-
-        playRoundFlow();
-        openedCards.addAll(dealer.open(1));
-        logger.info("Cards opened are: ");
-
-        for (Card c : openedCards) {
-            logger.info("{} , ", c);
-        }
-    }
-
-    private void playRiverRound() {
-        int dealerIndex = activePlayers.indexOf(currentDealerPlayer);
-        int newCurrentPlayerIndex = (dealerIndex + 1) % (activePlayers.size());
-        currentPlayer = activePlayers.get(newCurrentPlayerIndex);
-
-        playRoundFlow();
-    }
-
     private void playerRaiseTurn(int amountToRaise) {
         int currentPlayerIndex = activePlayers.indexOf(currentPlayer);
         int nextPlayerIndex = (currentPlayerIndex + 1) % (activePlayers.size());
-
         int lastBet = currentPlayer.getLastBetSinceCardOpen();
+
+        // We assume amount to raise includes the last bet, so
+        // we need to add to the pot the difference between them
         potAmount += currentPlayer.payChips(amountToRaise - lastBet);
         logger.info("Player {} raised {}$", currentPlayer.getUser().getUsername(), amountToRaise);
 
@@ -424,5 +447,13 @@ public class Round {
         int bigBlindPlayerIndex = (dealerIndex + 2) % activePlayers.size();
 
         return activePlayers.get(bigBlindPlayerIndex);
+    }
+
+    public RoundState getCurrentState() {
+        return currentState;
+    }
+
+    public void setCurrentState(RoundState currentState) {
+        this.currentState = currentState;
     }
 }
