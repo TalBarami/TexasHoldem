@@ -219,7 +219,7 @@ public class Round {
     }
 
     private boolean isLastPlayerPlayed(MoveEvent playerMoveEvent) {
-        return (currentPlayer == lastPlayer && playerMoveEvent.getEventAction() != GameActions.RAISE);
+        return (playerMoveEvent.getEventInitiator() == lastPlayer && playerMoveEvent.getEventAction() != GameActions.RAISE);
     }
 
     private int getMaxAmountToRaise() {
@@ -447,5 +447,13 @@ public class Round {
         int bigBlindPlayerIndex = (dealerIndex + 2) % activePlayers.size();
 
         return activePlayers.get(bigBlindPlayerIndex);
+    }
+
+    public RoundState getCurrentState() {
+        return currentState;
+    }
+
+    public void setCurrentState(RoundState currentState) {
+        this.currentState = currentState;
     }
 }

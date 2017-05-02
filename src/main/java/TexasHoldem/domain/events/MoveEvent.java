@@ -14,7 +14,7 @@ public class MoveEvent extends GameEvent {
     private GameActions eventAction;
     private int amountToRaise;
 
-    public MoveEvent(DateTime eventTime, Round round, Player eventInitiator, GameActions eventAction, int amountToRaise) {
+    public MoveEvent(Round round, Player eventInitiator, GameActions eventAction, int amountToRaise) {
         super(DateTime.now());
         this.round = round;
         this.eventInitiator = eventInitiator;
