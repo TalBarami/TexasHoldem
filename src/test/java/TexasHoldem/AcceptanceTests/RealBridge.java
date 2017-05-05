@@ -27,7 +27,7 @@ public class RealBridge implements Bridge {
     public boolean registerUser(String username, String password, String email, LocalDate dateTime, BufferedImage img)
     {
         try {
-            service.register(username, password, email, dateTime, img);
+            service.userService().register(username, password, email, dateTime, img);
         }catch (InvalidArgumentException e){
             return false;
         }
@@ -37,7 +37,7 @@ public class RealBridge implements Bridge {
     public boolean searchUser(String username)
     {
         try {
-            if(service.getUser(username) != null)
+            if(service.userService().getUser(username) != null)
               return true;
             else
               return false;
@@ -48,7 +48,7 @@ public class RealBridge implements Bridge {
     public  boolean deleteUser(String username)
     {
         try {
-            service.deleteUser(username);
+            service.userService().deleteUser(username);
         }catch (EntityDoesNotExistsException e){
             return false;
         } catch (InvalidArgumentException e) {
@@ -60,7 +60,7 @@ public class RealBridge implements Bridge {
     public boolean login(String username, String password)
     {
         try {
-            service.login(username,password);
+            service.userService().login(username,password);
         }catch ( LoginException e){
             return false;
         } catch (InvalidArgumentException e) {
@@ -74,7 +74,7 @@ public class RealBridge implements Bridge {
     public boolean logout(String username)
     {
         try {
-            service.logout(username);
+            service.userService().logout(username);
         } catch (InvalidArgumentException e) {
             return false;
         }
@@ -84,7 +84,7 @@ public class RealBridge implements Bridge {
     @Override
     public boolean editUserName(String oldusername, String newusername, String password, String email, LocalDate date) {
         try {
-            service.editProfile(oldusername,newusername,  password, email, date);
+            service.userService().editProfile(oldusername,newusername,  password, email, date);
         }catch (InvalidArgumentException e){
             return false;
         } catch (EntityDoesNotExistsException e) {
@@ -96,7 +96,7 @@ public class RealBridge implements Bridge {
 
     public boolean addbalancetouserwallet(String username, int amounttoadd) {
         try {
-            service.deposit(username,amounttoadd);
+            service.userService().deposit(username,amounttoadd);
         }catch (ArgumentNotInBoundsException e){
             return false;
         } catch (InvalidArgumentException e) {
@@ -107,7 +107,7 @@ public class RealBridge implements Bridge {
 
     public boolean createnewgame(String username, String gamename, GamePolicy policy, int buyin, int chippolicy, int minimumbet, int minplayers, int maxplayers, boolean spectateisvalid) {
         try {
-            service.createGame(username,gamename,policy,0,minimumbet,buyin,chippolicy,minplayers,maxplayers,spectateisvalid);
+            service.gameService().createGame(username,gamename,policy,0,minimumbet,buyin,chippolicy,minplayers,maxplayers,spectateisvalid);
         }catch (NoBalanceForBuyInException e){
             return false;
         }catch (  InvalidArgumentException e){
@@ -121,7 +121,7 @@ public class RealBridge implements Bridge {
 
     public boolean joinexistinggame(String username, String gamename, boolean spec) {
         try {
-            service.joinGame(username, gamename,spec);
+            service.gameService().joinGame(username, gamename,spec);
         }catch (GameIsFullException e){
             return false;
         }catch (  InvalidArgumentException e){
@@ -139,7 +139,7 @@ public class RealBridge implements Bridge {
     public boolean searchgamebyplayername(String username) {
         List<Game> games = null;
         try {
-            games = service.findGamesByUsername(username);
+            games = service.searchService().findGamesByUsername(username);
         } catch (InvalidArgumentException e) {
             e.printStackTrace();
         }
@@ -156,7 +156,7 @@ public class RealBridge implements Bridge {
     public boolean searchgamebytypepolicy(GamePolicy policy) {
         List<Game> games = null;
         try {
-            games = service.findGamesByGamePolicy(policy);
+            games = service.searchService().findGamesByGamePolicy(policy);
         } catch (InvalidArgumentException e) {
             e.printStackTrace();
         }
@@ -171,7 +171,7 @@ public class RealBridge implements Bridge {
     }
 
     public boolean searchgamebybuyin(int buyin) {
-        List<Game> games =service.findGamesByMaximumBuyIn(buyin);
+        List<Game> games =service.searchService().findGamesByMaximumBuyIn(buyin);
         if(games.size() != 0)
         {
             return true;
@@ -183,7 +183,7 @@ public class RealBridge implements Bridge {
     }
 
     public boolean searchgamebychippolicy(int chippolicy) {
-        if(service.findGamesByChipPolicy(chippolicy).size() != 0)
+        if(service.searchService().findGamesByChipPolicy(chippolicy).size() != 0)
         {
             return true;
         }
@@ -194,7 +194,7 @@ public class RealBridge implements Bridge {
     }
 
     public boolean searchgamebyminbet(int minbet) {
-        if(service.findGamesByMinimumBet(minbet).size() != 0)
+        if(service.searchService().findGamesByMinimumBet(minbet).size() != 0)
         {
             return true;
         }
@@ -205,7 +205,7 @@ public class RealBridge implements Bridge {
     }
 
     public boolean searchgamebyminplayers(int numplayers) {
-        if(service.findGamesByMinimumPlayers(numplayers).size() != 0)
+        if(service.searchService().findGamesByMinimumPlayers(numplayers).size() != 0)
         {
             return true;
         }
@@ -216,7 +216,7 @@ public class RealBridge implements Bridge {
     }
 
     public boolean searchgamebymaxplayers(int numplayers) {
-        if(service.findGamesByMaximumPlayers(numplayers).size() != 0)
+        if(service.searchService().findGamesByMaximumPlayers(numplayers).size() != 0)
         {
             return true;
         }
@@ -227,7 +227,7 @@ public class RealBridge implements Bridge {
     }
 
     public boolean searchgamebyspectateisvalid(boolean spectatingavailable) {
-        if(service.findSpectatableGames().size() != 0)
+        if(service.searchService().findSpectatableGames().size() != 0)
         {
             return true;
         }
@@ -239,7 +239,7 @@ public class RealBridge implements Bridge {
 
     public boolean leavegame(String username, String choise, String gamename) {
         try {
-            service.leaveGame(username, gamename);
+            service.gameService().leaveGame(username, gamename);
         }catch (GameException e){
             return false;
         }
@@ -257,7 +257,7 @@ public class RealBridge implements Bridge {
     public boolean searchavailablegamestojoin(String username) {
         List<Game> games = null;
         try {
-            games = service.findAvailableGames(username);
+            games = service.searchService().findAvailableGames(username);
         } catch (InvalidArgumentException e) {
             e.printStackTrace();
         }
@@ -282,7 +282,7 @@ public class RealBridge implements Bridge {
 
     public boolean setuserleague(String adminname, String username, int league) {
             try {
-                service.setDefaultLeague(adminname, league);
+                service.leagueService().setDefaultLeague(adminname, league);
             } catch (NoPermissionException e) {
                 e.printStackTrace();
                 return false;
@@ -291,7 +291,7 @@ public class RealBridge implements Bridge {
     }
 
     public boolean searchgamebypotsize(int pot) {
-        if(service.findGamesByPotSize(pot).size() != 0)
+        if(service.searchService().findGamesByPotSize(pot).size() != 0)
         {
             return true;
         }
@@ -303,7 +303,7 @@ public class RealBridge implements Bridge {
 
     public boolean setcriteriatomoveleague(String adminname, int criteria) {
         try {
-            service.setLeagueCriteria(adminname, criteria);
+            service.leagueService().setLeagueCriteria(adminname, criteria);
         } catch (NoPermissionException e) {
             e.printStackTrace();
             return false;
@@ -314,16 +314,8 @@ public class RealBridge implements Bridge {
 
     public boolean spectateactivegame(String username, String gamename, boolean spec) {
         try {
-            service.spectateGame(username, gamename,spec);
-        }catch (GameIsFullException e){
-            return false;
-        }catch (  InvalidArgumentException e){
-            return false;
-        }catch (  LeaguesDontMatchException e){
-            return false;
-        }catch (  CantSpeactateThisRoomException e){
-            return false;
-        }catch (   NoBalanceForBuyInException e){
+            service.gameService().spectateGame(username, gamename,spec);
+        }catch (GameIsFullException | NoBalanceForBuyInException | LeaguesDontMatchException | InvalidArgumentException | CantSpeactateThisRoomException e){
             return false;
         }
         return true;
@@ -332,7 +324,7 @@ public class RealBridge implements Bridge {
 
     public boolean moveuserleague(String admin, String username, int league) {
         try {
-            service.setUserLeague(admin, username, league );
+            service.leagueService().setUserLeague(admin, username, league );
         } catch (NoPermissionException e) {
             e.printStackTrace();
             return false;
@@ -345,23 +337,27 @@ public class RealBridge implements Bridge {
 
     }
 
-
+    // FIXME: Add try / catch if necessary & remove redundant argument "amount".
     public boolean playcall(String username, String gamename, int amount) {
+        service.gameService().playCall(username, gamename);
         return true;
     }
 
-
+    // FIXME: Add try / catch if necessary & remove redundant argument "amount".
     public boolean playcheck(String username, String gamename, int amount) {
+        service.gameService().playCheck(username, gamename);
         return true;
     }
 
-
+    // FIXME: Add try / catch if necessary.
     public boolean playraise(String username, String gamename, int amount) {
+        service.gameService().playRaise(username, gamename, amount);
         return true;
     }
 
-
+    // FIXME: Add try / catch if necessary & remove redundant argument "amount".
     public boolean playfold(String username, String gamename, int amount) {
+        service.gameService().playFold(username, gamename);
         return true;
     }
 }
