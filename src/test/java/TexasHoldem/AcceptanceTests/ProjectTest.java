@@ -105,9 +105,6 @@ public abstract class ProjectTest extends TestCase{
         return bridge.searchavailablegamestojoin(username);
     }
 
-    public boolean playturn(String username, String gamename, String action) {
-        return bridge.playturn(username,gamename, action);
-    }
 
     public int getPotSize(String gamename) {
         return bridge.getPotSize(gamename);
@@ -115,22 +112,6 @@ public abstract class ProjectTest extends TestCase{
 
     public int getPlayerbalance(String username, String gamename) {
         return  bridge.getPlayerbalance(username, gamename);
-    }
-
-    public boolean playturnraise(String username, String gamename, String action, int amounttoraise) {
-        return bridge.playturnraise(username,gamename, action,amounttoraise);
-    }
-
-    public int getnumofround(String gamename) {
-        return bridge.getnumofround(gamename);
-    }
-
-    public int getnumofplayersinround(String gamename, int numofround) {
-        return  bridge.getnumofplayersinround(gamename,  numofround);
-    }
-
-    public boolean searchgamebypotsize(int pot) {
-        return bridge.searchgamebypotsize( pot);
     }
 
     public boolean setuserleague(String adminname, String username, int newleague) {
@@ -147,5 +128,25 @@ public abstract class ProjectTest extends TestCase{
 
     public boolean moveuserleague(String admin, String username, int league) {
         return bridge.moveuserleague(admin, username,league);
+    }
+
+    public void startgame(String gamename) {
+        bridge.startgame(gamename);
+    }
+
+    public boolean playcall(String username, String gamename, int amount) {
+        return bridge.playcall(username, gamename, amount);
+    }
+
+    public boolean playcheck(String username, String gamename, int amount) {
+        return bridge.playcheck( username, gamename,amount);
+    }
+
+    public boolean playraise(String username, String gamename, int amount) {
+        return bridge.playraise(username, gamename, amount);
+    }
+
+    public boolean playfold(String username, String gamename, int amount) {
+        return bridge.playfold(username, gamename, amount);
     }
 }

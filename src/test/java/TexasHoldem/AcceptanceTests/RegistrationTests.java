@@ -66,4 +66,11 @@ public class RegistrationTests extends ProjectTest {
         assertFalse(useradded);
     }
 
+    @Test
+    public void testRegisterInValidUserEmpty()
+    {
+        boolean useradded = this.registerUser("","aChi12#*","achiadg@gmail.com",LocalDate.of(1991,4,20), null);
+        assertFalse(useradded);
+    }
+
 }

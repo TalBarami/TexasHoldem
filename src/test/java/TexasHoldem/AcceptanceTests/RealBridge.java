@@ -271,10 +271,6 @@ public class RealBridge implements Bridge {
         }
     }
 
-    public boolean playturn(String username,String gamename , String action) {
-        return true;
-    }
-
     public int getPotSize(String gamename) {
         return -1;
     }
@@ -283,17 +279,6 @@ public class RealBridge implements Bridge {
         return -1;
     }
 
-    public boolean playturnraise(String username, String gamename, String action, int amounttoraise) {
-        return true;
-    }
-
-    public int getnumofround(String gamename) {
-        return -1;
-    }
-
-    public int getnumofplayersinround(String gamename, int numofround) {
-        return -1;
-    }
 
     public boolean setuserleague(String adminname, String username, int league) {
             try {
@@ -326,7 +311,7 @@ public class RealBridge implements Bridge {
         return true;
     }
 
-    @Override
+
     public boolean spectateactivegame(String username, String gamename, boolean spec) {
         try {
             service.spectateGame(username, gamename,spec);
@@ -344,7 +329,7 @@ public class RealBridge implements Bridge {
         return true;
     }
 
-    @Override
+
     public boolean moveuserleague(String admin, String username, int league) {
         try {
             service.setUserLeague(admin, username, league );
@@ -352,6 +337,31 @@ public class RealBridge implements Bridge {
             e.printStackTrace();
             return false;
         }
+        return true;
+    }
+
+
+    public void startgame(String gamename) {
+
+    }
+
+
+    public boolean playcall(String username, String gamename, int amount) {
+        return true;
+    }
+
+
+    public boolean playcheck(String username, String gamename, int amount) {
+        return true;
+    }
+
+
+    public boolean playraise(String username, String gamename, int amount) {
+        return true;
+    }
+
+
+    public boolean playfold(String username, String gamename, int amount) {
         return true;
     }
 }

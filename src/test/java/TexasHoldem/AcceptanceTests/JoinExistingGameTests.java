@@ -41,6 +41,29 @@ public class JoinExistingGameTests extends ProjectTest {
     }
 
     @Test
+    public void testJoinExistingGameInValidGameName()
+    {
+        registerUsers();
+        loginUsers();
+        addBalance();
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GamePolicy.NOLIMIT, 10000, 10000, 100, 2, 9, true);
+        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", GamePolicy.NOLIMIT , 300, 300, 2, 2, 9, false);
+        assertTrue(gamecreated1);
+        assertTrue(gamecreated2);
+        boolean useraddedgame1 = this.joinexistinggame("hodbub" , "",false);
+        boolean useraddedgame2 = this.joinexistinggame("rotemw" , "ach\niadg-poker-game",false);
+        boolean useraddedgame3 = this.joinexistinggame("ronenbu" , "rotemw-poker-game",false);
+        boolean useraddedgame4 = this.joinexistinggame("rotemw" , "ronenbu-poker-game",false);
+        assertFalse(useraddedgame1);
+        assertFalse(useraddedgame2);
+        assertFalse(useraddedgame3);
+        assertFalse(useraddedgame4);
+        leaveGames();
+        logoutUsers();
+        deleteUsers();
+    }
+
+    @Test
     public void testJoinExistingGameThatIsFull()
     {
         registerUsers();

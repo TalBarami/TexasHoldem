@@ -56,17 +56,9 @@ public interface Bridge {
 
     boolean searchavailablegamestojoin(String username);
 
-    boolean playturn(String username, String gamename ,String action);
-
     int getPotSize(String gamename);
 
     int getPlayerbalance(String username, String gamename);
-
-    boolean playturnraise(String username, String gamename, String action, int amounttoraise);
-
-    int getnumofround(String gamename);
-
-    int getnumofplayersinround(String gamename, int numofround);
 
     boolean setuserleague(String adminname, String username, int league);
 
@@ -77,4 +69,14 @@ public interface Bridge {
     boolean spectateactivegame(String username, String gamename, boolean spec);
 
     boolean moveuserleague(String admin, String username, int league);
+
+    void startgame(String gamename);
+
+    boolean playcall(String username, String gamename, int amount);
+
+    boolean playcheck(String username, String gamename, int amount);
+
+    boolean playraise(String username, String gamename, int amount);
+
+    boolean playfold(String username, String gamename, int amount);
 }

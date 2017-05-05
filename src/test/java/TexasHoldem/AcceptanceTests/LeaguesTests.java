@@ -57,7 +57,6 @@ public class LeaguesTests extends ProjectTest {
         deleteUsers();
     }
 
-
     @Test
     public void testMoveUserBetweenLeaguesValid()
     {

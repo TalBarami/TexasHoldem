@@ -157,6 +157,60 @@ public class CreateNewGameTests extends ProjectTest {
     }
 
     @Test
+    public void testCreateNewGameThatOneCharInGamePreferencesIsIllegalMore()
+    {
+        boolean useradded1 = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com",LocalDate.of(1991,4,20),null);
+        boolean useradded2 = this.registerUser("hodbub","hBublil1308","hod.bub@gmail.com",LocalDate.of(1991,8,28),null);
+        boolean userloggedin1 = this.login("achiadg","aChi12#*");
+        boolean userloggedin2 = this.login("hodbub","hBublil1308");
+        assertTrue(userloggedin1);
+        assertTrue(userloggedin2);
+        boolean addedbalance1 = this.addbalancetouserwallet("achiadg", 20000);
+        boolean addedbalance2 = this.addbalancetouserwallet("hodbub",1000);
+        assertTrue(addedbalance1);
+        assertTrue(addedbalance2);
+        boolean gamecreated1 = this.createnewgame("achiadg", "achiadg-poker-game\n", GamePolicy.POTLIMIT , 10000, 10000, 100, 1, 9, true);
+        boolean gamecreated2 = this.createnewgame("achiadg","a\rchiad-poker-game\r", GamePolicy.POTLIMIT , 300, 300, 2, 2, 12, false);
+        boolean gamecreated3 = this.createnewgame("hodbub","new-p\\\noker-game\n", GamePolicy.POTLIMIT , 10000, 10000, 100, 1, 9, true);
+        boolean gamecreated4 = this.createnewgame("hodbub","fun-poker-gam\\\re\\", GamePolicy.POTLIMIT , 300, 300, 2, 2, 12, false);
+        assertFalse(gamecreated1);
+        assertFalse(gamecreated2);
+        assertFalse(gamecreated3);
+        assertFalse(gamecreated4);
+        boolean userloggedout1 = this.logout("achiadg");
+        boolean userloggedout2 = this.logout("hodbub");
+        boolean deleteUser1 = this.deleteUser("achiadg");
+        boolean deleteUser2 = this.deleteUser("hodbub");
+        assertTrue(deleteUser1);
+        assertTrue(deleteUser2);
+    }
+
+    @Test
+    public void testCreateNewGameThatIsEmpty()
+    {
+        boolean useradded1 = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com",LocalDate.of(1991,4,20),null);
+        boolean useradded2 = this.registerUser("hodbub","hBublil1308","hod.bub@gmail.com",LocalDate.of(1991,8,28),null);
+        boolean userloggedin1 = this.login("achiadg","aChi12#*");
+        boolean userloggedin2 = this.login("hodbub","hBublil1308");
+        assertTrue(userloggedin1);
+        assertTrue(userloggedin2);
+        boolean addedbalance1 = this.addbalancetouserwallet("achiadg", 20000);
+        boolean addedbalance2 = this.addbalancetouserwallet("hodbub",1000);
+        assertTrue(addedbalance1);
+        assertTrue(addedbalance2);
+        boolean gamecreated1 = this.createnewgame("achiadg", "", GamePolicy.POTLIMIT , 10000, 10000, 100, 1, 9, true);
+        boolean gamecreated2 = this.createnewgame("hodbub","", GamePolicy.POTLIMIT , 10000, 10000, 100, 1, 9, true);
+        assertFalse(gamecreated1);
+        assertFalse(gamecreated2);
+        boolean userloggedout1 = this.logout("achiadg");
+        boolean userloggedout2 = this.logout("hodbub");
+        boolean deleteUser1 = this.deleteUser("achiadg");
+        boolean deleteUser2 = this.deleteUser("hodbub");
+        assertTrue(deleteUser1);
+        assertTrue(deleteUser2);
+    }
+
+    @Test
     public void testCreateNewGameWithSqlInjection()
     {
         boolean useradded1 = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com",LocalDate.of(1991,4,20),null);
