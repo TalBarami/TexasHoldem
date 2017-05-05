@@ -65,6 +65,30 @@ public class SpectateActiveGameTests extends ProjectTest {
     }
 
     @Test
+    public void testSpectateActiveInValidGameNotExist()
+    {
+        registerUsers();
+        loginUsers();
+        addBalance();
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GamePolicy.NOLIMIT , 10000, 10000, 100, 2, 9, false);
+        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game",  GamePolicy.NOLIMIT , 300, 300, 2, 2, 9, false);
+        assertTrue(gamecreated1);
+        assertTrue(gamecreated2);
+        boolean spectategameisvalid1 = this.spectateactivegame("hodbub" , "achiadg-poker-game",true);
+        boolean spectategameisvalid2 = this.spectateactivegame("achiadg" , "hodbub-poker-game",true);
+        boolean spectategameisvalid3 = this.spectateactivegame("rotemw" , "rotemw-poker-game",true);
+        boolean spectategameisvalid4 = this.spectateactivegame("ronenbu" , "ronenbu-poker-game",true);
+        assertFalse(spectategameisvalid1);
+        assertFalse(spectategameisvalid2);
+        assertFalse(spectategameisvalid3);
+        assertFalse(spectategameisvalid4);
+        boolean closegame1 = this.leavegame("achiadg", "YES", "achiadg-poker-game");
+        boolean closegame2 = this.leavegame("hodbub","YES","hodbub-poker-game");
+        logoutUsers();
+        deleteUsers();
+    }
+
+    @Test
     public void testSpectateActiveInValidGameName()
     {
         registerUsers();

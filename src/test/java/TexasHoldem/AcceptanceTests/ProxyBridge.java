@@ -115,29 +115,14 @@ public class ProxyBridge implements Bridge {
        return real.searchavailablegamestojoin(username);
     }
 
-    public boolean playturn(String username,String gamename , String action) {
-        return true;
-    }
-
     public int getPotSize(String gamename) {
-        return -1;
+        return real.getPotSize(gamename);
     }
 
     public int getPlayerbalance(String username, String gamename) {
-        return -1;
+        return real.getPlayerbalance(username, gamename);
     }
 
-    public boolean playturnraise(String username, String gamename, String action, int amounttoraise) {
-        return true;
-    }
-
-    public int getnumofround(String gamename) {
-        return -1;
-    }
-
-    public int getnumofplayersinround(String gamename, int numofround) {
-        return -1;
-    }
 
     public boolean setuserleague(String adminname, String username, int league) {
         return real.setuserleague(adminname, username, league);
@@ -159,6 +144,31 @@ public class ProxyBridge implements Bridge {
     @Override
     public boolean moveuserleague(String admin, String username, int league) {
         return real.moveuserleague(admin, username, league);
+    }
+
+    @Override
+    public void startgame(String gamename) {
+       real.startgame(gamename);
+    }
+
+    @Override
+    public boolean playcall(String username, String gamename, int amount) {
+        return real.playcall(username, gamename, amount);
+    }
+
+    @Override
+    public boolean playcheck(String username, String gamename, int amount) {
+        return real.playcheck(username, gamename, amount);
+    }
+
+    @Override
+    public boolean playraise(String username, String gamename, int amount) {
+        return real.playraise(username, gamename, amount);
+    }
+
+    @Override
+    public boolean playfold(String username, String gamename, int amount) {
+        return real.playfold(username, gamename, amount);
     }
 
 }

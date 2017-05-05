@@ -1,4 +1,4 @@
-/*
+
 package TexasHoldem.AcceptanceTests;
 
 import TexasHoldem.domain.game.GamePolicy;
@@ -7,10 +7,10 @@ import org.junit.Test;
 
 import java.time.LocalDate;
 
-*/
+
 /**
  * Created by אחיעד on 08/04/2017.
- *//*
+ */
 
 public class PlayerCallsTests extends ProjectTest {
 
@@ -25,29 +25,43 @@ public class PlayerCallsTests extends ProjectTest {
         registerUsers();
         loginUsers();
         addBalance();
-        setUserLeague();
         createGames();
         usersJoinsGames();
+        this.startgame("achiadg-poker-game");
+        boolean playerplayed1 = this.playcall("ronenbu", "achiadg-poker-game", 0);
+        boolean playerplayed2 = this.playcall("achiadg", "achiadg-poker-game", 0);
+        boolean playerplayed3 = this.playcall("hodbub", "achiadg-poker-game", 0);
+        boolean playerplayed4 = this.playcheck("rotemw", "achiadg-poker-game", 0);
         int potsize1 = this.getPotSize("achiadg-poker-game");
-        int potsize2 = this.getPotSize("hodbub-poker-game");
-        int playerbalance1 = this.getPlayerbalance("hodbub" , "achiadg-poker-game");
-        int playerbalance2 = this.getPlayerbalance("ronenbu" , "hodbub-poker-game");
-        boolean playedturn1 = this.playturnraise("achiadg" , "achiadg-poker-game","RAISE",400);
-        boolean playedturn2 = this.playturnraise("hodbub" , "hodbub-poker-game","RAISE",6);
-        boolean playedturn3 = this.playturn("hodbub" , "achiadg-poker-game","CALL");
-        boolean playedturn4 = this.playturn("ronenbu" , "hodbub-poker-game","CALL");
+        int playerbalance1 = this.getPlayerbalance("rotemw","achiadg-poker-game");
+        boolean playedturn1 = this.playraise("hodbub", "achiadg-poker-game", 300);
+        boolean playedturn2 = this.playcall("rotemw", "achiadg-poker-game", 0);
         int potsize3 = this.getPotSize("achiadg-poker-game");
-        int potsize4 = this.getPotSize("hodbub-poker-game");
-        int playerbalance3 = this.getPlayerbalance("hodbub" , "achiadg-poker-game");
-        int playerbalance4 = this.getPlayerbalance("ronenbu" , "hodbub-poker-game");
-        assertEquals(potsize1 + 800,potsize3 );
-        assertEquals(potsize2 + 12,potsize4 );
-        assertEquals(playerbalance1,playerbalance3 - 400);
-        assertEquals(playerbalance2,playerbalance4 - 6);
-        boolean closegame1 = this.closegame("achiadg-poker-game");
-        boolean closegame2 = this.closegame("hodbub-poker-game");
-        assertTrue(closegame1);
-        assertTrue(closegame2);
+        int playerbalance3 = this.getPlayerbalance("rotemw" ,"achiadg-poker-game");
+        assertEquals(potsize1,potsize3 - 600);
+        assertEquals(playerbalance1,playerbalance3 + 300);
+        leaveGames();
+        logoutUsers();
+        deleteUsers();
+    }
+
+    @Test
+    public void testPlayerCallsInValidCharecters() {
+        registerUsers();
+        loginUsers();
+        addBalance();
+        createGames();
+        usersJoinsGames();
+        this.startgame("achiadg-poker-game");
+        boolean playerplayed1 = this.playcall("ronenbu", "achiadg-poker-game", 0);
+        boolean playerplayed2 = this.playcall("achiadg", "achiadg-poker-game", 0);
+        boolean playerplayed3 = this.playcall("hodbub", "achiadg-poker-game", 0);
+        boolean playerplayed4 = this.playcheck("rotemw", "achiadg-poker-game", 0);
+        boolean playedturn1 = this.playraise("hodbub", "achiadg-poker-game", 300);
+        boolean playedturn2 = this.playcall("rotemw", "achiadg-p\noker-game", 0);
+        assertTrue(playedturn1);
+        assertFalse(playedturn2);
+        leaveGames();
         logoutUsers();
         deleteUsers();
     }
@@ -56,14 +70,19 @@ public class PlayerCallsTests extends ProjectTest {
     private void createGames()
     {
         boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GamePolicy.NOLIMIT , 10000, 10000, 100, 2, 9, true);
-        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game",  GamePolicy.NOLIMIT , 300, 300, 2, 2, 9, true);
+    }
+
+    public void leaveGames() {
+        boolean closegame1 = this.leavegame("achiadg", "YES", "achiadg-poker-game");
+        boolean closegame2 = this.leavegame("rotemw" , "YES","achiadg-poker-game");
+        boolean closegame3 = this.leavegame("ronenbu" , "YES","achiadg-poker-game");
+        boolean closegame4 = this.leavegame("hodbub","YES","achiadg-poker-game");
     }
 
     private void usersJoinsGames() {
         boolean useraddedgame1 = this.joinexistinggame("hodbub" , "achiadg-poker-game",false);
         boolean useraddedgame2 = this.joinexistinggame("rotemw" , "achiadg-poker-game",false);
-        boolean useraddedgame3 = this.joinexistinggame("ronenbu" , "hodbub-poker-game",false);
-        boolean useraddedgame4 = this.joinexistinggame("achiadg" , "hodbub-poker-game",false);
+        boolean useraddedgame3 = this.joinexistinggame("ronenbu" , "achiadg-poker-game",false);
     }
 
     public void deleteUsers() {
@@ -116,4 +135,4 @@ public class PlayerCallsTests extends ProjectTest {
     }
 
 }
-*/
+

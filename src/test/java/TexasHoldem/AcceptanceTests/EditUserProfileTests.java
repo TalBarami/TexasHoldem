@@ -88,6 +88,19 @@ public class EditUserProfileTests extends ProjectTest {
             assertFalse(userfound);
         }
 
+    @Test
+    public void testEditPasswordEmpty()
+    {
+        boolean useradded = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com",LocalDate.of(1991,4,20),null);
+        assertTrue(useradded);
+        boolean useredited = this.editUserName("achiadg", "achiadg","", "achiadg@gmail.com",LocalDate.of(1991,4,20));
+        assertFalse(useredited);
+        boolean deleteUser1 = this.deleteUser("achiadg");
+        assertTrue(deleteUser1);
+        boolean userfound = this.searchUser("achiadg");
+        assertFalse(userfound);
+    }
+
         @Test
         public void testEditEmailNoValid()
         {
@@ -100,6 +113,19 @@ public class EditUserProfileTests extends ProjectTest {
             boolean userfound = this.searchUser("achiadg");
             assertFalse(userfound);
         }
+
+    @Test
+    public void testEditEmailEmpty()
+    {
+        boolean useradded = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com",LocalDate.of(1991,4,20),null);
+        assertTrue(useradded);
+        boolean useredited = this.editUserName("achiadg", "achiadg","aChi12#*","",LocalDate.of(1991,4,20));
+        assertFalse(useredited);
+        boolean deleteUser1 = this.deleteUser("achiadg");
+        assertTrue(deleteUser1);
+        boolean userfound = this.searchUser("achiadg");
+        assertFalse(userfound);
+    }
 
 
 }

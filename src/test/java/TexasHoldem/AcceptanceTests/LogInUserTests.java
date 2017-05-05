@@ -51,12 +51,42 @@ public class LogInUserTests extends ProjectTest {
     }
 
     @Test
+    public void testLogInInvalidUserEmpty()
+    {
+        boolean useradded1 = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com", LocalDate.of(1991,4,20),null);
+        boolean useradded2 = this.registerUser("hodbub","hBublil1308","hod.bub@gmail.com",LocalDate.of(1991,8,28),null);
+        boolean userloggedin1 = this.login("","aChi12#*");
+        boolean userloggedin2 = this.login("","hBublil1308");
+        assertFalse(userloggedin1);
+        assertFalse(userloggedin2);
+        boolean deleteUser1 = this.deleteUser("achiadg");
+        boolean deleteUser2 = this.deleteUser("hodbub");
+        assertTrue(deleteUser1);
+        assertTrue(deleteUser2);
+    }
+
+    @Test
     public void testLogInInvalidPassword()
     {
         boolean useradded1 = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com", LocalDate.of(1991,4,20),null);
         boolean useradded2 = this.registerUser("hodbub","hBublil1308","hod.bub@gmail.com",LocalDate.of(1991,8,28),null);
         boolean userloggedin1 = this.login("achiadg","ronen1");
         boolean userloggedin2 = this.login("hodbub","hBublil13085678");
+        assertFalse(userloggedin1);
+        assertFalse(userloggedin2);
+        boolean deleteUser1 = this.deleteUser("achiadg");
+        boolean deleteUser2 = this.deleteUser("hodbub");
+        assertTrue(deleteUser1);
+        assertTrue(deleteUser2);
+    }
+
+    @Test
+    public void testLogInInvalidPasswordEmpty()
+    {
+        boolean useradded1 = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com", LocalDate.of(1991,4,20),null);
+        boolean useradded2 = this.registerUser("hodbub","hBublil1308","hod.bub@gmail.com",LocalDate.of(1991,8,28),null);
+        boolean userloggedin1 = this.login("achiadg","");
+        boolean userloggedin2 = this.login("hodbub","");
         assertFalse(userloggedin1);
         assertFalse(userloggedin2);
         boolean deleteUser1 = this.deleteUser("achiadg");
@@ -79,6 +109,8 @@ public class LogInUserTests extends ProjectTest {
         assertTrue(deleteUser1);
         assertTrue(deleteUser2);
     }
+
+
 
     @Test
     public void testLogInPasswordSqlInjection()
