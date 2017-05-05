@@ -118,7 +118,13 @@ public class Round {
         logger.info("Big blind payed by {}", bigPlayer.getUser().getUsername());
     }
 
-    public void playTurnOfPlayer(MoveEvent playerMoveEvent) {
+    public void playTurnOfPlayer(MoveEvent playerMoveEvent) throws IllegalArgumentException{
+        if(currentPlayer != playerMoveEvent.getEventInitiator())
+            throw new IllegalArgumentException("This is not your turn");
+
+        if(!calculateTurnOptions().contains(playerMoveEvent.getEventAction()))
+            throw new IllegalArgumentException("Your move is Invalid");
+
         if (isRoundActive) {
             GameActions chosenAction = playerMoveEvent.getEventAction();
 
@@ -455,5 +461,9 @@ public class Round {
 
     public void setCurrentState(RoundState currentState) {
         this.currentState = currentState;
+    }
+
+    public void setChipsToCall(int chipsToCall) {
+        this.chipsToCall = chipsToCall;
     }
 }

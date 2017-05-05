@@ -132,6 +132,7 @@ public class RoundTest {
 
         round1.setRoundActive(true);
         round1.setCurrentState(RoundState.PREFLOP);
+        round1.setChipsToCall(0);
 
         when(player1.getUser()).thenReturn(user1);
         when(player2.getUser()).thenReturn(user2);
@@ -175,7 +176,7 @@ public class RoundTest {
         round1.setCurrentState(RoundState.RIVER);
 
         // Player 4 is the first player
-        MoveEvent me4 = new MoveEvent(round1, player4, GameActions.RAISE, 10);
+        MoveEvent me4 = new MoveEvent(round1, player4, GameActions.CALL, 0);
         MoveEvent me1 = new MoveEvent(round1, player1, GameActions.FOLD, 0);
         MoveEvent me2 = new MoveEvent(round1, player2, GameActions.CALL, 0);
         MoveEvent me3 = new MoveEvent(round1, player3, GameActions.RAISE, 20);
@@ -185,9 +186,10 @@ public class RoundTest {
         when(player1.getUser()).thenReturn(user1);
         when(player2.getUser()).thenReturn(user2);
         when(player3.getUser()).thenReturn(user3);
+        when(player3.getChipsAmount()).thenReturn(90);
         when(player4.getUser()).thenReturn(user4);
-        when(player4.getLastBetSinceCardOpen()).thenReturn(0).thenReturn(10);
         when(player4.payChips(10)).thenReturn(10).thenReturn(10);
+        when(player4.getLastBetSinceCardOpen()).thenReturn(0).thenReturn(0).thenReturn(10).thenReturn(10);
         when(player2.payChips(10)).thenReturn(10);
         when(player3.payChips(20)).thenReturn(20);
 
