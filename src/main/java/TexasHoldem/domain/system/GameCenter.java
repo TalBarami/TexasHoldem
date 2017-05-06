@@ -38,7 +38,7 @@ public class GameCenter {
     public void registerUser(String userName, String pass, String email, LocalDate date, BufferedImage img) throws InvalidArgumentException {
         User newUser = new User(userName,pass,email,date,img);
         usersDb.addUser(newUser);
-        leagueManager.addNewUserToLegue(newUser);
+        leagueManager.addNewUserToLeague(newUser);
         logger.info("{} registered to the system as a new user.",userName);
     }
 
@@ -229,23 +229,23 @@ public class GameCenter {
         return gamesDb.isArchived(g);
     }
 
-    public void setDefaultLeague(String admin, int league) throws NoPermissionException {
-        if(!usersDb.getHighestBalance().getUsername().equalsIgnoreCase(admin))
-            throw new NoPermissionException("User must have the highest balance.");
-        leagueManager.setDefaultLeagueForNewUsers(league);
-    }
+//    public void setDefaultLeague(String admin, int league) throws NoPermissionException {
+//        if(!usersDb.getHighestBalance().getUsername().equalsIgnoreCase(admin))
+//            throw new NoPermissionException("User must have the highest balance.");
+//        leagueManager.setDefaultLeagueForNewUsers(league);
+//    }
 
-    public void setUserLeague(String admin, String username, int league) throws NoPermissionException {
-        User ad = usersDb.getHighestBalance();
-        if(!usersDb.getHighestBalance().getUsername().equalsIgnoreCase(admin))
-            throw new NoPermissionException("User must have the highest balance.");
-        User user = getUser(username);
-        leagueManager.moveUserToLeague(user, league);
-    }
-
-    public void setLeagueCriteria(String admin, int criteria) throws NoPermissionException {
-        if(!usersDb.getHighestBalance().getUsername().equalsIgnoreCase(admin))
-            throw new NoPermissionException("User must have the highest balance.");
-        leagueManager.setCriteriaToMovingLeague(criteria);
-    }
+//    public void setUserLeague(String admin, String username, int league) throws NoPermissionException {
+//        User ad = usersDb.getHighestBalance();
+//        if(!usersDb.getHighestBalance().getUsername().equalsIgnoreCase(admin))
+//            throw new NoPermissionException("User must have the highest balance.");
+//        User user = getUser(username);
+//        leagueManager.moveUserToLeague(user, league);
+//    }
+//
+//    public void setLeagueCriteria(String admin, int criteria) throws NoPermissionException {
+//        if(!usersDb.getHighestBalance().getUsername().equalsIgnoreCase(admin))
+//            throw new NoPermissionException("User must have the highest balance.");
+//        leagueManager.setCriteriaToMovingLeague(criteria);
+//    }
 }

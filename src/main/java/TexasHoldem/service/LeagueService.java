@@ -13,15 +13,15 @@ public class LeagueService {
         this.gameCenter = gameCenter;
     }
 
-    public void setDefaultLeague(String admin, int league) throws NoPermissionException {
-        gameCenter.setDefaultLeague(admin, league);
-    }
-
-    public void setUserLeague(String admin, String username, int league) throws NoPermissionException {
-        gameCenter.setUserLeague(admin, username, league);
-    }
-
-    public void setLeagueCriteria(String username, int league) throws NoPermissionException {
-        gameCenter.setLeagueCriteria(username, league);
-    }
+//    public void setDefaultLeague(String admin, int league) throws NoPermissionException {
+//        gameCenter.setDefaultLeague(admin, league);
+//    }
+//
+//    public void setUserLeague(String admin, String username, int league) throws NoPermissionException {
+//        gameCenter.setUserLeague(admin, username, league);
+//    }
+//
+//    public void setLeagueCriteria(String username, int league) throws NoPermissionException {
+//        gameCenter.setLeagueCriteria(username, league);
+//    }
 }

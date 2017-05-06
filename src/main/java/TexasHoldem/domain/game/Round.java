@@ -99,6 +99,7 @@ public class Round {
         }
 
         initPlayersTotalAmountPayedInRound();
+        updatePlayersGamesPlayed();
         setRoundActive(false);
     }
 
@@ -387,6 +388,11 @@ public class Round {
         for (Player p : activePlayers) {
             p.setLastBetSinceCardOpen(0);
         }
+    }
+
+    private void updatePlayersGamesPlayed() {
+        for(int i = 0; i < originalPlayersInRound.size(); i++)
+            originalPlayersInRound.get(i).updateGamesPlayed();
     }
 
     public void setOpenedCards(List<Card> openedCards) {

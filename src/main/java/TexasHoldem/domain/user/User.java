@@ -21,6 +21,7 @@ public class User {
 
     private int amountEarnedInLeague;
     private int currLeague;
+    private int numOfGamesPlayed;
 
     private User(){}
 
@@ -31,9 +32,10 @@ public class User {
         this.wallet = new Wallet();
         this.amountEarnedInLeague = 0;
         this.email = email;
-        dateOfBirth = date;
-        img = image;
-        gameMapping =new HashMap<>();
+        this.dateOfBirth = date;
+        this.img = image;
+        this.gameMapping = new HashMap<>();
+        this.numOfGamesPlayed = 0;
     }
 
     public void deposit(int amount, boolean selfDeposit) throws ArgumentNotInBoundsException {
@@ -165,5 +167,13 @@ public class User {
 
     public void setImg(BufferedImage img) {
         this.img = img;
+    }
+
+    public int getNumOfGamesPlayed() {
+        return numOfGamesPlayed;
+    }
+
+    public void updateGamesPlayed() {
+        this.numOfGamesPlayed++;
     }
 }

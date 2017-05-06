@@ -136,4 +136,8 @@ public class Player extends Participant{
     public void removeFromGame(Game g){
         g.removeParticipant(this);
     }
+
+    public void updateGamesPlayed(){
+        user.updateGamesPlayed();
+    }
 }
