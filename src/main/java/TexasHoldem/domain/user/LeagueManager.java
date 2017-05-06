@@ -6,25 +6,32 @@ package TexasHoldem.domain.user;
  */
 public class LeagueManager {
     private int criteriaToMovingLeague = 10;
-    private int defaultLeagueForNewUsers = 1;
+    private int defaultLeagueForNewUsers = 0; //represent unknown league can play in each game
+    private int numOfGamesNewPlayerNeedPlayToChangeLeague = 10;
     private int maxLeague;
 
     public LeagueManager() {
-        maxLeague = 1;
+        maxLeague = 0;
     }
 
-    public void addNewUserToLegue(User user){
+    public void addNewUserToLeague(User user){
         putUserInLeague(user, defaultLeagueForNewUsers);
     }
 
+    //can also relegate
     public void updateUserLeague(User user)
     {
-        if(user.getAmountEarnedInLeague() >= criteriaToMovingLeague)
+        if(isLeagueNeedsToUpdate(user))
         {
             int newLeagueForUser = user.getCurrLeague() + user.getAmountEarnedInLeague()/criteriaToMovingLeague;
             newLeagueForUser = checkIfLegalLeague(newLeagueForUser);
             putUserInLeague(user, newLeagueForUser);
         }
+    }
+
+    private boolean isLeagueNeedsToUpdate(User user) {
+        return (Math.abs(user.getAmountEarnedInLeague()) >= criteriaToMovingLeague && user.getCurrLeague() != 0) ||
+                (user.getCurrLeague() == 0 && user.getNumOfGamesPlayed() == numOfGamesNewPlayerNeedPlayToChangeLeague);
     }
 
     private void putUserInLeague(User user, int newLeagueForUser) {
@@ -42,32 +49,32 @@ public class LeagueManager {
         user.setCurrLeague(0);
     }
 
-    public void moveUserToLeague(User userToMove, int newLeague){
-        putUserInLeague(userToMove, newLeague);
-    }
-
     private int checkIfLegalLeague(int newLeagueForUser) {
         return ((newLeagueForUser < 1) ? 1 : newLeagueForUser);
     }
 
-    public boolean checkIfHasPermissions(User user){
-        return user.getCurrLeague() == maxLeague;
-    }
-
-
     public int getCriteriaToMovingLeague() {
         return criteriaToMovingLeague;
-    }
-
-    public void setCriteriaToMovingLeague(int criteriaToMovingLeague) {
-        this.criteriaToMovingLeague = criteriaToMovingLeague;
     }
 
     public int getDefaultLeagueForNewUsers() {
         return defaultLeagueForNewUsers;
     }
 
-    public void setDefaultLeagueForNewUsers(int defaultLeagueForNewUsers) {
-        this.defaultLeagueForNewUsers = defaultLeagueForNewUsers;
+    public int getNumOfGamesNewPlayerNeedPlayToChangeLeague() {
+        return numOfGamesNewPlayerNeedPlayToChangeLeague;
     }
+
+//    public void moveUserToLeague(User userToMove, int newLeague){
+//        putUserInLeague(userToMove, newLeague);
+//    }
+//    public boolean checkIfHasPermissions(User user){
+//        return user.getCurrLeague() == maxLeague;
+//    }
+//    public void setCriteriaToMovingLeague(int criteriaToMovingLeague) {
+//        this.criteriaToMovingLeague = criteriaToMovingLeague;
+//    }
+//    public void setDefaultLeagueForNewUsers(int defaultLeagueForNewUsers) {
+//        this.defaultLeagueForNewUsers = defaultLeagueForNewUsers;
+//    }
 }

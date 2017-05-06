@@ -281,12 +281,12 @@ public class RealBridge implements Bridge {
 
 
     public boolean setuserleague(String adminname, String username, int league) {
-            try {
-                service.leagueService().setDefaultLeague(adminname, league);
-            } catch (NoPermissionException e) {
-                e.printStackTrace();
-                return false;
-            }
+//            try {
+//                service.leagueService().setDefaultLeague(adminname, league);
+//            } catch (NoPermissionException e) {
+//                e.printStackTrace();
+//                return false;
+//            }
         return true;
     }
 
@@ -302,12 +302,12 @@ public class RealBridge implements Bridge {
     }
 
     public boolean setcriteriatomoveleague(String adminname, int criteria) {
-        try {
-            service.leagueService().setLeagueCriteria(adminname, criteria);
-        } catch (NoPermissionException e) {
-            e.printStackTrace();
-            return false;
-        }
+//        try {
+//            service.leagueService().setLeagueCriteria(adminname, criteria);
+//        } catch (NoPermissionException e) {
+//            e.printStackTrace();
+//            return false;
+//        }
         return true;
     }
 
@@ -323,12 +323,12 @@ public class RealBridge implements Bridge {
 
 
     public boolean moveuserleague(String admin, String username, int league) {
-        try {
-            service.leagueService().setUserLeague(admin, username, league );
-        } catch (NoPermissionException e) {
-            e.printStackTrace();
-            return false;
-        }
+//        try {
+//            service.leagueService().setUserLeague(admin, username, league );
+//        } catch (NoPermissionException e) {
+//            e.printStackTrace();
+//            return false;
+//        }
         return true;
     }
 
