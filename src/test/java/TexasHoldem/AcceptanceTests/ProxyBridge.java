@@ -103,13 +103,9 @@ public class ProxyBridge implements Bridge {
         return  real.leavegame(username,choise, gamename);
     }
 
-    public boolean replaynonactivegame(String username, String gamename) {
+   /* public boolean replaynonactivegame(String username, String gamename) {
         return true;
-    }
-
-    public boolean saveturns(String username, String gamename, List<String> turns) {
-        return true;
-    }
+    }*/
 
     public boolean searchavailablegamestojoin(String username) {
        return real.searchavailablegamestojoin(username);
@@ -124,27 +120,27 @@ public class ProxyBridge implements Bridge {
     }
 
 
-    public boolean setuserleague(String adminname, String username, int league) {
+   /* public boolean setuserleague(String adminname, String username, int league) {
         return real.setuserleague(adminname, username, league);
-    }
+    }*/
 
     public boolean searchgamebypotsize(int pot) {
         return real.searchgamebypotsize(pot);
     }
 
-    public boolean setcriteriatomoveleague(String adminname, int criteria) {
+   /* public boolean setcriteriatomoveleague(String adminname, int criteria) {
         return real.setcriteriatomoveleague(adminname, criteria);
-    }
+    } */
 
     @Override
     public boolean spectateactivegame(String username, String gamename, boolean spec) {
         return real.spectateactivegame(username,gamename, spec);
     }
 
-    @Override
+  /*  @Override
     public boolean moveuserleague(String admin, String username, int league) {
         return real.moveuserleague(admin, username, league);
-    }
+     } */
 
     @Override
     public void startgame(String gamename) {
@@ -169,6 +165,11 @@ public class ProxyBridge implements Bridge {
     @Override
     public boolean playfold(String username, String gamename, int amount) {
         return real.playfold(username, gamename, amount);
+    }
+
+    @Override
+    public int getuserleague(String username) {
+        return real.getuserleague(username);
     }
 
 }

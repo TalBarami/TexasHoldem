@@ -27,7 +27,6 @@ public class UserService {
     public void register(String username, String pass, String email, LocalDate date, BufferedImage img) throws InvalidArgumentException {
         verifyStrings(username, pass, email);
         verifyObjects(date);
-
         gameCenter.registerUser(username, pass, email, date, img);
     }
 
@@ -56,6 +55,10 @@ public class UserService {
         verifyStrings(username);
         verifyPositiveNumbers(amount);
         gameCenter.depositMoney(username, amount);
+    }
+
+    public int getUserLeague(String username) throws InvalidArgumentException {
+        return getUser(username).getCurrLeague();
     }
 
     public User getUser(String username) throws InvalidArgumentException {

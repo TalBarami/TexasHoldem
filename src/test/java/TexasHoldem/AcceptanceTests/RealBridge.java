@@ -246,13 +246,9 @@ public class RealBridge implements Bridge {
         return true;
     }
 
-    public boolean replaynonactivegame(String username, String gamename) {
+ /*   public boolean replaynonactivegame(String username, String gamename) {
         return true;
-    }
-
-    public boolean saveturns(String username, String gamename, List<String> turns) {
-        return true;
-    }
+    } */
 
     public boolean searchavailablegamestojoin(String username) {
         List<Game> games = null;
@@ -280,7 +276,7 @@ public class RealBridge implements Bridge {
     }
 
 
-    public boolean setuserleague(String adminname, String username, int league) {
+ /*   public boolean setuserleague(String adminname, String username, int league) {
 //            try {
 //                service.leagueService().setDefaultLeague(adminname, league);
 //            } catch (NoPermissionException e) {
@@ -288,7 +284,7 @@ public class RealBridge implements Bridge {
 //                return false;
 //            }
         return true;
-    }
+    } */
 
     public boolean searchgamebypotsize(int pot) {
         if(service.searchService().findGamesByPotSize(pot).size() != 0)
@@ -301,7 +297,7 @@ public class RealBridge implements Bridge {
         }
     }
 
-    public boolean setcriteriatomoveleague(String adminname, int criteria) {
+  /*  public boolean setcriteriatomoveleague(String adminname, int criteria) {
 //        try {
 //            service.leagueService().setLeagueCriteria(adminname, criteria);
 //        } catch (NoPermissionException e) {
@@ -309,10 +305,10 @@ public class RealBridge implements Bridge {
 //            return false;
 //        }
         return true;
-    }
+    } */
 
 
-    public boolean spectateactivegame(String username, String gamename, boolean spec) {
+   public boolean spectateactivegame(String username, String gamename, boolean spec) {
         try {
             service.gameService().spectateGame(username, gamename,spec);
         }catch (GameIsFullException | NoBalanceForBuyInException | LeaguesDontMatchException | InvalidArgumentException | CantSpeactateThisRoomException e){
@@ -322,7 +318,7 @@ public class RealBridge implements Bridge {
     }
 
 
-    public boolean moveuserleague(String admin, String username, int league) {
+  /*  public boolean moveuserleague(String admin, String username, int league) {
 //        try {
 //            service.leagueService().setUserLeague(admin, username, league );
 //        } catch (NoPermissionException e) {
@@ -330,7 +326,7 @@ public class RealBridge implements Bridge {
 //            return false;
 //        }
         return true;
-    }
+    } */
 
 
     public void startgame(String gamename) {
@@ -359,5 +355,14 @@ public class RealBridge implements Bridge {
     public boolean playfold(String username, String gamename, int amount) {
         service.gameService().playFold(username, gamename);
         return true;
+    }
+
+    @Override
+    public int getuserleague(String username) {
+        try {
+            return service.userService().getUserLeague(username);
+        } catch (InvalidArgumentException e) {
+           return -1;
+        }
     }
 }

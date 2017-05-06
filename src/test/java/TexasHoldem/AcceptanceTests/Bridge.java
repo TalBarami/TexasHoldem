@@ -50,9 +50,7 @@ public interface Bridge {
     
     boolean leavegame(String username, String choise, String gamename);
 
-    boolean replaynonactivegame(String username, String gamename);
-
-    boolean saveturns(String username, String gamename, List<String> turns);
+  /*  boolean replaynonactivegame(String username, String gamename); */
 
     boolean searchavailablegamestojoin(String username);
 
@@ -60,15 +58,15 @@ public interface Bridge {
 
     int getPlayerbalance(String username, String gamename);
 
-    boolean setuserleague(String adminname, String username, int league);
+  /*  boolean setuserleague(String adminname, String username, int league); */
 
     boolean searchgamebypotsize(int pot);
 
-    boolean setcriteriatomoveleague(String adminname, int criteria);
+  /*  boolean setcriteriatomoveleague(String adminname, int criteria); */
 
     boolean spectateactivegame(String username, String gamename, boolean spec);
 
-    boolean moveuserleague(String admin, String username, int league);
+   /* boolean moveuserleague(String admin, String username, int league); */
 
     void startgame(String gamename);
 
@@ -79,4 +77,6 @@ public interface Bridge {
     boolean playraise(String username, String gamename, int amount);
 
     boolean playfold(String username, String gamename, int amount);
+
+    int getuserleague(String username);
 }

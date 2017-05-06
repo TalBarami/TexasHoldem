@@ -93,13 +93,10 @@ public abstract class ProjectTest extends TestCase{
         return bridge.leavegame(username, choise, gamename);
     }
 
-    public boolean replaynonactivegame(String username, String gamename) {
+  /*  public boolean replaynonactivegame(String username, String gamename) {
         return bridge.replaynonactivegame(username,gamename);
-    }
+    } */
 
-    public boolean saveturns(String username, String gamename, List<String> turns) {
-        return bridge.saveturns(username,gamename,turns);
-    }
 
     public boolean searchavailablegamestojoin(String username) {
         return bridge.searchavailablegamestojoin(username);
@@ -114,21 +111,21 @@ public abstract class ProjectTest extends TestCase{
         return  bridge.getPlayerbalance(username, gamename);
     }
 
-    public boolean setuserleague(String adminname, String username, int newleague) {
+  /*  public boolean setuserleague(String adminname, String username, int newleague) {
         return bridge.setuserleague(adminname, username,newleague);
-    }
+    } */
 
-    public boolean setcriteriatomoveleague(String adminname, int criteria) {
+  /*  public boolean setcriteriatomoveleague(String adminname, int criteria) {
         return bridge.setcriteriatomoveleague(adminname,criteria);
-    }
+    } */
 
     public boolean spectateactivegame(String username, String gamename, boolean spec) {
         return bridge.spectateactivegame(username, gamename, spec);
     }
 
-    public boolean moveuserleague(String admin, String username, int league) {
+  /*  public boolean moveuserleague(String admin, String username, int league) {
         return bridge.moveuserleague(admin, username,league);
-    }
+    } */
 
     public void startgame(String gamename) {
         bridge.startgame(gamename);
@@ -148,5 +145,9 @@ public abstract class ProjectTest extends TestCase{
 
     public boolean playfold(String username, String gamename, int amount) {
         return bridge.playfold(username, gamename, amount);
+    }
+
+    public int getuserleague(String username) {
+        return bridge.getuserleague(username);
     }
 }

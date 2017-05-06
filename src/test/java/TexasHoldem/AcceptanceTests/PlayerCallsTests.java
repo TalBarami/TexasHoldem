@@ -101,14 +101,6 @@ public class PlayerCallsTests extends ProjectTest {
     }
 
 
-    public  void setUserLeague()
-    {
-        boolean leaguechanged1 = this.setuserleague("hodbub","achiadg", 4);
-        boolean leaguechanged2 = this.setuserleague("hodbub","hodbub", 4);
-        boolean leaguechanged3 = this.setuserleague("hodbub","rotemw", 4);
-        boolean leaguechanged4 = this.setuserleague("hodbub","ronenbu", 4);
-    }
-
     public void addBalance() {
         boolean addedbalance1 = this.addbalancetouserwallet("achiadg",20000);
         boolean addedbalance2 = this.addbalancetouserwallet("hodbub",40000);

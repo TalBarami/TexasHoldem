@@ -12,14 +12,14 @@ public class TexasHoldemService {
     private GameService gameService;
     private UserService userService;
     private SearchService searchService;
-    private LeagueService leagueService;
+   // private LeagueService leagueService;
 
     public TexasHoldemService(){
         gameCenter = new GameCenter();
         gameService = new GameService(gameCenter);
         userService = new UserService(gameCenter);
         searchService = new SearchService(gameCenter);
-        leagueService = new LeagueService(gameCenter);
+     //   leagueService = new LeagueService(gameCenter);
     }
 
     public GameService gameService(){
@@ -34,9 +34,10 @@ public class TexasHoldemService {
         return searchService;
     }
 
-    public LeagueService leagueService(){
+   /* public LeagueService leagueService(){
         return leagueService;
     }
+    */
 
     static void verifyStrings(String... strings) throws InvalidArgumentException {
         if(SystemUtils.hasNullOrEmptyOrSpecialChars(strings))

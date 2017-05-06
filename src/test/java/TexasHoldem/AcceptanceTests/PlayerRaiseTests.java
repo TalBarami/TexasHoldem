@@ -84,16 +84,6 @@ public class PlayerRaiseTests extends ProjectTest {
         boolean useraddedgame3 = this.joinexistinggame("ronenbu" , "achiadg-poker-game",false);
     }
 
-    public  void setUserLeague()
-    {
-        boolean leaguechanged1 = this.setuserleague("hodbub","achiadg", 4);
-        boolean leaguechanged2 = this.setuserleague("hodbub","hodbub", 4);
-        boolean leaguechanged3 = this.setuserleague("hodbub","rotemw", 4);
-        boolean leaguechanged4 = this.setuserleague("hodbub","ronenbu", 4);
-    }
-
-
-
     public void deleteUsers() {
         boolean deleteUser1 = this.deleteUser("achiadg");
         boolean deleteUser2 = this.deleteUser("hodbub");

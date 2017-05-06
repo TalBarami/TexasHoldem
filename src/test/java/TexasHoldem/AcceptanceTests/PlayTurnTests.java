@@ -111,6 +111,268 @@ public class PlayTurnTests extends ProjectTest {
     }
 
     @Test
+    public void testPlayTurnUserLeagueUpdated()
+    {
+        registerUsers();
+        loginUsers();
+        addBalance();
+        for(int i = 1; i <= 10; i++)
+        {
+            createGames();
+            usersJoinsGames();
+            this.startgame("achiadg-poker-game");
+            boolean playerplayed1 = this.playcall("ronenbu", "achiadg-poker-game", 0);
+            boolean playerplayed2 = this.playcall("achiadg", "achiadg-poker-game", 0);
+            boolean playerplayed3 = this.playcall("hodbub", "achiadg-poker-game", 0);
+            boolean playerplayed4 = this.playcheck("rotemw", "achiadg-poker-game", 0);
+            assertTrue(playerplayed1);
+            assertTrue(playerplayed2);
+            assertTrue(playerplayed3);
+            assertTrue(playerplayed4);
+            boolean playerplayed5 = this.playcheck("hodbub", "achiadg-poker-game", 0);
+            boolean playerplayed6 = this.playcheck("rotemw", "achiadg-poker-game", 0);
+            boolean playerplayed7 = this.playraise("ronenbu", "achiadg-poker-game", 1);
+            boolean playerplayed8 = this.playfold("achiadg", "achiadg-poker-game", 0);
+            assertTrue(playerplayed5);
+            assertFalse(playerplayed6);
+            assertTrue(playerplayed7);
+            assertFalse(playerplayed8);
+            boolean playerplayed9 = this.playfold("hodbub", "achiadg-poker-game", 0);
+            boolean playerplayed10 = this.playcall("rotemw", "achiadg-poker-game", 0);
+            assertTrue(playerplayed9);
+            assertTrue(playerplayed10);
+            boolean playerplayed11 = this.playraise("rotemw", "achiadg-poker-game", 300);
+            boolean playerplayed12 = this.playfold("ronenbu", "achiadg-poker-game", 0);
+            assertTrue(playerplayed11);
+            assertTrue(playerplayed12);
+            leaveGames();
+        }
+        logoutUsers();
+        deleteUsers();
+        int userleague = this.getuserleague("rotemw");
+        assertEquals(userleague, 1);
+    }
+
+    @Test
+    public void testPlayTurnUserLeagueNoUpdated()
+    {
+        registerUsers();
+        loginUsers();
+        addBalance();
+        for(int i = 1; i <= 9; i++)
+        {
+            createGames();
+            usersJoinsGames();
+            this.startgame("achiadg-poker-game");
+            boolean playerplayed1 = this.playcall("ronenbu", "achiadg-poker-game", 0);
+            boolean playerplayed2 = this.playcall("achiadg", "achiadg-poker-game", 0);
+            boolean playerplayed3 = this.playcall("hodbub", "achiadg-poker-game", 0);
+            boolean playerplayed4 = this.playcheck("rotemw", "achiadg-poker-game", 0);
+            assertTrue(playerplayed1);
+            assertTrue(playerplayed2);
+            assertTrue(playerplayed3);
+            assertTrue(playerplayed4);
+            boolean playerplayed5 = this.playcheck("hodbub", "achiadg-poker-game", 0);
+            boolean playerplayed6 = this.playcheck("rotemw", "achiadg-poker-game", 0);
+            boolean playerplayed7 = this.playraise("ronenbu", "achiadg-poker-game", 1);
+            boolean playerplayed8 = this.playfold("achiadg", "achiadg-poker-game", 0);
+            assertTrue(playerplayed5);
+            assertFalse(playerplayed6);
+            assertTrue(playerplayed7);
+            assertFalse(playerplayed8);
+            boolean playerplayed9 = this.playfold("hodbub", "achiadg-poker-game", 0);
+            boolean playerplayed10 = this.playcall("rotemw", "achiadg-poker-game", 0);
+            assertTrue(playerplayed9);
+            assertTrue(playerplayed10);
+            boolean playerplayed11 = this.playraise("rotemw", "achiadg-poker-game", 300);
+            boolean playerplayed12 = this.playfold("ronenbu", "achiadg-poker-game", 0);
+            assertTrue(playerplayed11);
+            assertTrue(playerplayed12);
+            leaveGames();
+        }
+        logoutUsers();
+        deleteUsers();
+        int userleague1 = this.getuserleague("achiadg");
+        int userleague2 = this.getuserleague("hodbub");
+        int userleague3 = this.getuserleague("ronenbu");
+        assertEquals(userleague1, 0);
+        assertEquals(userleague2, 0);
+        assertEquals(userleague3, 0);
+    }
+
+    @Test
+    public void testPlayTurnUserLeagueUpdateTwoLeagues()
+    {
+        registerUsers();
+        loginUsers();
+        addBalance();
+        for(int i = 1; i <= 10; i++)
+        {
+            createGames();
+            usersJoinsGames();
+            this.startgame("achiadg-poker-game");
+            boolean playerplayed1 = this.playcall("ronenbu", "achiadg-poker-game", 0);
+            boolean playerplayed2 = this.playcall("achiadg", "achiadg-poker-game", 0);
+            boolean playerplayed3 = this.playcall("hodbub", "achiadg-poker-game", 0);
+            boolean playerplayed4 = this.playcheck("rotemw", "achiadg-poker-game", 0);
+            assertTrue(playerplayed1);
+            assertTrue(playerplayed2);
+            assertTrue(playerplayed3);
+            assertTrue(playerplayed4);
+            boolean playerplayed5 = this.playcheck("hodbub", "achiadg-poker-game", 0);
+            boolean playerplayed6 = this.playcheck("rotemw", "achiadg-poker-game", 0);
+            boolean playerplayed7 = this.playraise("ronenbu", "achiadg-poker-game", 2);
+            boolean playerplayed8 = this.playfold("achiadg", "achiadg-poker-game", 0);
+            assertTrue(playerplayed5);
+            assertFalse(playerplayed6);
+            assertTrue(playerplayed7);
+            assertFalse(playerplayed8);
+            boolean playerplayed9 = this.playfold("hodbub", "achiadg-poker-game", 0);
+            boolean playerplayed10 = this.playcall("rotemw", "achiadg-poker-game", 0);
+            assertTrue(playerplayed9);
+            assertTrue(playerplayed10);
+            boolean playerplayed11 = this.playraise("rotemw", "achiadg-poker-game", 300);
+            boolean playerplayed12 = this.playfold("ronenbu", "achiadg-poker-game", 0);
+            assertTrue(playerplayed11);
+            assertTrue(playerplayed12);
+            leaveGames();
+        }
+        logoutUsers();
+        deleteUsers();
+        int userleague = this.getuserleague("rotemw");
+        assertEquals(userleague, 2);
+    }
+
+    @Test
+    public void testPlayTurnUserLeagueNoUpdatedLessThan10Games()
+    {
+        registerUsers();
+        loginUsers();
+        addBalance();
+        for(int i = 1; i <= 9; i++)
+        {
+            createGames();
+            usersJoinsGames();
+            this.startgame("achiadg-poker-game");
+            boolean playerplayed1 = this.playcall("ronenbu", "achiadg-poker-game", 0);
+            boolean playerplayed2 = this.playcall("achiadg", "achiadg-poker-game", 0);
+            boolean playerplayed3 = this.playcall("hodbub", "achiadg-poker-game", 0);
+            boolean playerplayed4 = this.playcheck("rotemw", "achiadg-poker-game", 0);
+            assertTrue(playerplayed1);
+            assertTrue(playerplayed2);
+            assertTrue(playerplayed3);
+            assertTrue(playerplayed4);
+            boolean playerplayed5 = this.playcheck("hodbub", "achiadg-poker-game", 0);
+            boolean playerplayed6 = this.playcheck("rotemw", "achiadg-poker-game", 0);
+            boolean playerplayed7 = this.playraise("ronenbu", "achiadg-poker-game", 15);
+            boolean playerplayed8 = this.playfold("achiadg", "achiadg-poker-game", 0);
+            assertTrue(playerplayed5);
+            assertFalse(playerplayed6);
+            assertTrue(playerplayed7);
+            assertFalse(playerplayed8);
+            boolean playerplayed9 = this.playfold("hodbub", "achiadg-poker-game", 0);
+            boolean playerplayed10 = this.playcall("rotemw", "achiadg-poker-game", 0);
+            assertTrue(playerplayed9);
+            assertTrue(playerplayed10);
+            boolean playerplayed11 = this.playraise("rotemw", "achiadg-poker-game", 300);
+            boolean playerplayed12 = this.playfold("ronenbu", "achiadg-poker-game", 0);
+            assertTrue(playerplayed11);
+            assertTrue(playerplayed12);
+            leaveGames();
+        }
+        logoutUsers();
+        deleteUsers();
+        int userleague = this.getuserleague("rotemw");
+        assertEquals(userleague, 0);
+    }
+
+    @Test
+    public void testPlayTurnUserLeagueNoUpdatedInvalidCharecters()
+    {
+        registerUsers();
+        loginUsers();
+        addBalance();
+        for(int i = 1; i <= 9; i++)
+        {
+            createGames();
+            usersJoinsGames();
+            this.startgame("achiadg-poker-game");
+            boolean playerplayed1 = this.playcall("ronenbu", "achiadg-poker-game", 0);
+            boolean playerplayed2 = this.playcall("achiadg", "achiadg-poker-game", 0);
+            boolean playerplayed3 = this.playcall("hodbub", "achiadg-poker-game", 0);
+            boolean playerplayed4 = this.playcheck("rotemw", "achiadg-poker-game", 0);
+            assertTrue(playerplayed1);
+            assertTrue(playerplayed2);
+            assertTrue(playerplayed3);
+            assertTrue(playerplayed4);
+            boolean playerplayed5 = this.playcheck("hodbub", "achiadg-poker-game", 0);
+            boolean playerplayed6 = this.playcheck("rotemw", "achiadg-poker-game", 0);
+            boolean playerplayed7 = this.playraise("ronenbu", "achiadg-poker-game", 15);
+            boolean playerplayed8 = this.playfold("achiadg", "achiadg-poker-game", 0);
+            assertTrue(playerplayed5);
+            assertFalse(playerplayed6);
+            assertTrue(playerplayed7);
+            assertFalse(playerplayed8);
+            boolean playerplayed9 = this.playfold("hodbub", "achiadg-poker-game", 0);
+            boolean playerplayed10 = this.playcall("rotemw", "achiadg-poker-game", 0);
+            assertTrue(playerplayed9);
+            assertTrue(playerplayed10);
+            boolean playerplayed11 = this.playraise("rotemw", "achiadg-poker-game", 300);
+            boolean playerplayed12 = this.playfold("ronenbu", "achiadg-poker-game", 0);
+            assertTrue(playerplayed11);
+            assertTrue(playerplayed12);
+            leaveGames();
+        }
+        logoutUsers();
+        deleteUsers();
+        int userleague = this.getuserleague("rotem\nw");
+        assertEquals(userleague, -1);
+    }
+
+    @Test
+    public void testPlayTurnUserLeagueWithEmptyUser()
+    {
+        registerUsers();
+        loginUsers();
+        addBalance();
+        for(int i = 1; i <= 9; i++)
+        {
+            createGames();
+            usersJoinsGames();
+            this.startgame("achiadg-poker-game");
+            boolean playerplayed1 = this.playcall("ronenbu", "achiadg-poker-game", 0);
+            boolean playerplayed2 = this.playcall("achiadg", "achiadg-poker-game", 0);
+            boolean playerplayed3 = this.playcall("hodbub", "achiadg-poker-game", 0);
+            boolean playerplayed4 = this.playcheck("rotemw", "achiadg-poker-game", 0);
+            assertTrue(playerplayed1);
+            assertTrue(playerplayed2);
+            assertTrue(playerplayed3);
+            assertTrue(playerplayed4);
+            boolean playerplayed5 = this.playcheck("hodbub", "achiadg-poker-game", 0);
+            boolean playerplayed6 = this.playcheck("rotemw", "achiadg-poker-game", 0);
+            boolean playerplayed7 = this.playraise("ronenbu", "achiadg-poker-game", 15);
+            boolean playerplayed8 = this.playfold("achiadg", "achiadg-poker-game", 0);
+            assertTrue(playerplayed5);
+            assertFalse(playerplayed6);
+            assertTrue(playerplayed7);
+            assertFalse(playerplayed8);
+            boolean playerplayed9 = this.playfold("hodbub", "achiadg-poker-game", 0);
+            boolean playerplayed10 = this.playcall("rotemw", "achiadg-poker-game", 0);
+            assertTrue(playerplayed9);
+            assertTrue(playerplayed10);
+            boolean playerplayed11 = this.playraise("rotemw", "achiadg-poker-game", 300);
+            boolean playerplayed12 = this.playfold("ronenbu", "achiadg-poker-game", 0);
+            assertTrue(playerplayed11);
+            assertTrue(playerplayed12);
+            leaveGames();
+        }
+        logoutUsers();
+        deleteUsers();
+        int userleague = this.getuserleague("");
+        assertEquals(userleague, -1);
+    }
+
+    @Test
     public void testPlayTurnInValidMove()
     {
         registerUsers();
