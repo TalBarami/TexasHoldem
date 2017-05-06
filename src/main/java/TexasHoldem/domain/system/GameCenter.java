@@ -229,6 +229,14 @@ public class GameCenter {
         return gamesDb.isArchived(g);
     }
 
+    public List<User> getAllUsersInList() {
+        return usersDb.getAllUsersInList();
+    }
+
+    public List<User> getUsersByLeague(int leagueNum) {
+        return  usersDb.getUsersByLeague(leagueNum);
+    }
+
 //    public void setDefaultLeague(String admin, int league) throws NoPermissionException {
 //        if(!usersDb.getHighestBalance().getUsername().equalsIgnoreCase(admin))
 //            throw new NoPermissionException("User must have the highest balance.");

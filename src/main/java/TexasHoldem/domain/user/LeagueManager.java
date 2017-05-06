@@ -1,6 +1,12 @@
 package TexasHoldem.domain.user;
 
 
+import TexasHoldem.domain.system.GameCenter;
+import TexasHoldem.domain.user.usersDistributions.DistributionAlgorithm;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by hod on 11/04/2017.
  */
@@ -43,6 +49,10 @@ public class LeagueManager {
     private void updateMaxLeagueIfNeed(int leagueNumber) {
         if(maxLeague < leagueNumber)
             maxLeague = leagueNumber;
+    }
+
+    public void redistributeUsersInLeagues(DistributionAlgorithm da) {
+        da.distibute(maxLeague);
     }
 
     public void removeUserFromLeague(User user){
