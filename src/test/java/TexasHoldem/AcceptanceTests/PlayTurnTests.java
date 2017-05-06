@@ -111,6 +111,104 @@ public class PlayTurnTests extends ProjectTest {
     }
 
     @Test
+    public void testPlayTurnInValidMove()
+    {
+        registerUsers();
+        loginUsers();
+        addBalance();
+        createGames();
+        usersJoinsGames();
+        this.startgame("achiadg-poker-game");
+        boolean playerplayed1 = this.playcall("ronenbu", "achiadg-poker-game", 0);
+        boolean playerplayed2 = this.playcall("achiadg", "achiadg-poker-game", 0);
+        boolean playerplayed3 = this.playcall("hodbub", "achiadg-poker-game", 0);
+        boolean playerplayed4 = this.playcheck("rotemw", "achiadg-poker-game", 0);
+        assertTrue(playerplayed1);
+        assertTrue(playerplayed2);
+        assertTrue(playerplayed3);
+        assertTrue(playerplayed4);
+        boolean playerplayed5 = this.playraise("hodbub", "achiadg-poker-game", 200);
+        boolean playerplayed6 = this.playcheck("rotemw", "achiadg-poker-game", 0);
+        assertTrue(playerplayed5);
+        assertFalse(playerplayed6);
+        leaveGames();
+        logoutUsers();
+        deleteUsers();
+    }
+
+    @Test
+    public void testPlayTurnInValidMoveSecondCards()
+    {
+        registerUsers();
+        loginUsers();
+        addBalance();
+        createGames();
+        usersJoinsGames();
+        this.startgame("achiadg-poker-game");
+        boolean playerplayed1 = this.playcall("ronenbu", "achiadg-poker-game", 0);
+        boolean playerplayed2 = this.playcall("achiadg", "achiadg-poker-game", 0);
+        boolean playerplayed3 = this.playcall("hodbub", "achiadg-poker-game", 0);
+        boolean playerplayed4 = this.playcheck("rotemw", "achiadg-poker-game", 0);
+        assertTrue(playerplayed1);
+        assertTrue(playerplayed2);
+        assertTrue(playerplayed3);
+        assertTrue(playerplayed4);
+        boolean playerplayed5 = this.playcheck("hodbub", "achiadg-poker-game", 0);
+        boolean playerplayed6 = this.playcheck("rotemw", "achiadg-poker-game", 0);
+        boolean playerplayed7 = this.playcheck("ronenbu", "achiadg-poker-game", 0);
+        boolean playerplayed8 = this.playcheck("achiadg", "achiadg-poker-game", 0);
+        assertTrue(playerplayed5);
+        assertTrue(playerplayed6);
+        assertTrue(playerplayed7);
+        assertTrue(playerplayed8);
+        boolean playerplayed9 = this.playraise("hodbub", "achiadg-poker-game", 1000);
+        boolean playerplayed10 = this.playcheck("rotemw", "achiadg-poker-game", 0);
+        assertTrue(playerplayed9);
+        assertTrue(playerplayed10);
+        leaveGames();
+        logoutUsers();
+        deleteUsers();
+    }
+
+    @Test
+    public void testPlayTurnInValidCharacters()
+    {
+        registerUsers();
+        loginUsers();
+        addBalance();
+        createGames();
+        usersJoinsGames();
+        this.startgame("achiadg-poker-game");
+        boolean playerplayed1 = this.playcall("ro\tnenbu", "achiadg-poker-game", 0);
+        boolean playerplayed2 = this.playcall("achiadg", "ac\rhiadg-poker-game", 0);
+        boolean playerplayed3 = this.playcall("hodbub", "achiadg-poker-g\name", 0);
+        boolean playerplayed4 = this.playcheck("r\rotemw", "achiadg-poker-game", 0);
+        assertFalse(playerplayed1);
+        assertFalse(playerplayed2);
+        assertFalse(playerplayed3);
+        assertFalse(playerplayed4);
+        leaveGames();
+        logoutUsers();
+        deleteUsers();
+    }
+
+    @Test
+    public void testPlayTurnSqlInjection()
+    {
+        registerUsers();
+        loginUsers();
+        addBalance();
+        createGames();
+        usersJoinsGames();
+        this.startgame("achiadg-poker-game");
+        boolean playerplayed1 = this.playcall("ronenbu", "achiadg-poker-game ; SELECT * FROM GAMES", 0);
+        assertFalse(playerplayed1);
+        leaveGames();
+        logoutUsers();
+        deleteUsers();
+    }
+
+    @Test
     public void testPlayTurnUserLeagueUpdated()
     {
         registerUsers();
@@ -372,103 +470,6 @@ public class PlayTurnTests extends ProjectTest {
         assertEquals(userleague, -1);
     }
 
-    @Test
-    public void testPlayTurnInValidMove()
-    {
-        registerUsers();
-        loginUsers();
-        addBalance();
-        createGames();
-        usersJoinsGames();
-        this.startgame("achiadg-poker-game");
-        boolean playerplayed1 = this.playcall("ronenbu", "achiadg-poker-game", 0);
-        boolean playerplayed2 = this.playcall("achiadg", "achiadg-poker-game", 0);
-        boolean playerplayed3 = this.playcall("hodbub", "achiadg-poker-game", 0);
-        boolean playerplayed4 = this.playcheck("rotemw", "achiadg-poker-game", 0);
-        assertTrue(playerplayed1);
-        assertTrue(playerplayed2);
-        assertTrue(playerplayed3);
-        assertTrue(playerplayed4);
-        boolean playerplayed5 = this.playraise("hodbub", "achiadg-poker-game", 200);
-        boolean playerplayed6 = this.playcheck("rotemw", "achiadg-poker-game", 0);
-        assertTrue(playerplayed5);
-        assertFalse(playerplayed6);
-        leaveGames();
-        logoutUsers();
-        deleteUsers();
-    }
-
-    @Test
-    public void testPlayTurnInValidMoveSecondCards()
-    {
-        registerUsers();
-        loginUsers();
-        addBalance();
-        createGames();
-        usersJoinsGames();
-        this.startgame("achiadg-poker-game");
-        boolean playerplayed1 = this.playcall("ronenbu", "achiadg-poker-game", 0);
-        boolean playerplayed2 = this.playcall("achiadg", "achiadg-poker-game", 0);
-        boolean playerplayed3 = this.playcall("hodbub", "achiadg-poker-game", 0);
-        boolean playerplayed4 = this.playcheck("rotemw", "achiadg-poker-game", 0);
-        assertTrue(playerplayed1);
-        assertTrue(playerplayed2);
-        assertTrue(playerplayed3);
-        assertTrue(playerplayed4);
-        boolean playerplayed5 = this.playcheck("hodbub", "achiadg-poker-game", 0);
-        boolean playerplayed6 = this.playcheck("rotemw", "achiadg-poker-game", 0);
-        boolean playerplayed7 = this.playcheck("ronenbu", "achiadg-poker-game", 0);
-        boolean playerplayed8 = this.playcheck("achiadg", "achiadg-poker-game", 0);
-        assertTrue(playerplayed5);
-        assertTrue(playerplayed6);
-        assertTrue(playerplayed7);
-        assertTrue(playerplayed8);
-        boolean playerplayed9 = this.playraise("hodbub", "achiadg-poker-game", 1000);
-        boolean playerplayed10 = this.playcheck("rotemw", "achiadg-poker-game", 0);
-        assertTrue(playerplayed9);
-        assertTrue(playerplayed10);
-        leaveGames();
-        logoutUsers();
-        deleteUsers();
-    }
-
-    @Test
-    public void testPlayTurnInValidCharacters()
-    {
-        registerUsers();
-        loginUsers();
-        addBalance();
-        createGames();
-        usersJoinsGames();
-        this.startgame("achiadg-poker-game");
-        boolean playerplayed1 = this.playcall("ro\tnenbu", "achiadg-poker-game", 0);
-        boolean playerplayed2 = this.playcall("achiadg", "ac\rhiadg-poker-game", 0);
-        boolean playerplayed3 = this.playcall("hodbub", "achiadg-poker-g\name", 0);
-        boolean playerplayed4 = this.playcheck("r\rotemw", "achiadg-poker-game", 0);
-        assertFalse(playerplayed1);
-        assertFalse(playerplayed2);
-        assertFalse(playerplayed3);
-        assertFalse(playerplayed4);
-        leaveGames();
-        logoutUsers();
-        deleteUsers();
-    }
-
-    @Test
-    public void testPlayTurnSqlInjection()
-    {
-        registerUsers();
-        loginUsers();
-        addBalance();
-        createGames();
-        usersJoinsGames();
-        this.startgame("achiadg-poker-game");
-        boolean playerplayed1 = this.playcall("ronenbu", "achiadg-poker-game ; SELECT * FROM GAMES", 0);
-        assertFalse(playerplayed1);
-        leaveGames();
-        logoutUsers();
-        deleteUsers();
-    }
 
     private void createGames()
     {
