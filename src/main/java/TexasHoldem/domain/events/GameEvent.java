@@ -1,18 +1,25 @@
 package TexasHoldem.domain.events;
 
+import TexasHoldem.domain.game.GameActions;
+import TexasHoldem.domain.game.participants.Participant;
+
 import org.joda.time.DateTime;
 
 /**
  * Created by user on 02/05/2017.
  */
-public abstract class GameEvent {
+public class GameEvent {
     private DateTime eventTime;
+    private Participant eventInitiator;
+    private GameActions eventAction;
 
-    public GameEvent(DateTime eventTime) {
-        this.eventTime = eventTime;
+    public GameEvent(Participant eventInitiator, GameActions action) {
+        this.eventTime = DateTime.now();
     }
 
     public DateTime getEventTime() {
         return eventTime;
     }
+    public Participant getEventInitiator(){return eventInitiator;}
+    public GameActions getEventAction(){return eventAction;}
 }

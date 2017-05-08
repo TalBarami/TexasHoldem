@@ -6,9 +6,11 @@ import TexasHoldem.data.games.IGames;
 import TexasHoldem.data.users.IUsers;
 import TexasHoldem.data.users.Users;
 import TexasHoldem.domain.game.Game;
+import TexasHoldem.domain.game.GameActions;
 import TexasHoldem.domain.game.GamePolicy;
 import TexasHoldem.domain.game.GameSettings;
 import TexasHoldem.domain.game.participants.Participant;
+import TexasHoldem.domain.game.participants.Player;
 import TexasHoldem.domain.user.User;
 import TexasHoldem.domain.user.LeagueManager;
 import org.slf4j.Logger;
@@ -90,9 +92,19 @@ public class GameCenter {
         logger.info("{} successfully deposited {} to it's wallet.",userName,amount);
     }
 
+    public void startGame(String userName,String gameName) throws GameException {
+        User user=getSpecificUserIfExist(userName);
+        Game game= getSpecificGameIfExist(gameName);
+        Player playerInGame=(Player)user.getGamePlayerMappings().get(game);
+        if(playerInGame==null)
+            throw new GameException(String.format("User '%s' is not currently playing in game '%s",userName,gameName));
+
+        game.startGame(playerInGame);
+    }
+
     //todo : service layer will catch exception if  game room already chosen or balance below buy in.
     public void createGame(String creatorUserName,GameSettings settings) throws InvalidArgumentException, NoBalanceForBuyInException, ArgumentNotInBoundsException {
-        User creator=usersDb.getUserByUserName(creatorUserName);
+        User creator=getSpecificUserIfExist(creatorUserName);
         int minPlayers=settings.getPlayerRange().getLeft();
         int maxPlayers=settings.getPlayerRange().getRight();
 
@@ -107,16 +119,10 @@ public class GameCenter {
         settings.setLeagueCriteria(creator.getCurrLeague());
         Game game=new Game(settings,creator,leagueManager);
         gamesDb.addGame(game);
-        //game.startGame(); todo : causing loop for now, waiting for threads.
-        //gamesDb.archiveGame(game); todo: archive game (returned when the gamec an be archived)
     }
 
-    public void joinGame(String userName, String gameName, boolean asSpectator) throws InvalidArgumentException, CantSpeactateThisRoomException,
-            NoBalanceForBuyInException, GameIsFullException, LeaguesDontMatchException {
-        List<Game> games = gamesDb.getActiveGamesByName(gameName);
-        if (games.isEmpty())
-            throw new InvalidArgumentException("There is no game in the system with selected name.");
-        Game toJoin = games.get(0);
+    public void joinGame(String userName, String gameName, boolean asSpectator) throws GameException {
+        Game toJoin = getSpecificGameIfExist(gameName);
         User user = usersDb.getUserByUserName(userName);
         if (asSpectator){
             if(!toJoin.canBeSpectated())
@@ -128,29 +134,25 @@ public class GameCenter {
     }
 
     public void leaveGame(String userName,String gameName) throws GameException {
-        User user=usersDb.getUserByUserName(userName);
-        if(user==null)
-            throw new InvalidArgumentException(String.format("User '%s' doesn't exist in the system.",userName));
+        User user=getSpecificUserIfExist(userName);
+        Game game= getSpecificGameIfExist(gameName);
 
-        if(gamesDb.getActiveGamesByName(gameName).isEmpty())
-            throw new InvalidArgumentException(String.format("Game '%s' doesn't exist in the system.",gameName));
-
-        Game game=gamesDb.getActiveGamesByName(gameName).get(0);
         if(!user.getGamePlayerMappings().containsKey(game))
             throw new GameException(String.format("User '%s' can't leave game '%s', since he is not playing inside.",userName,gameName));
 
-
-        user.getGamePlayerMappings().get(game).removeFromGame(game);
+        Participant participant=user.getGamePlayerMappings().get(game);
+        participant.removeFromGame(game);
         user.getGamePlayerMappings().remove(game);
+
         if(game.canBeArchived()){
             gamesDb.archiveGame(game); // todo : notify someway to spectators of the room that room is closed?
             logger.info("Game '{}' is archived, since all players left.",gameName);
+            game.addGameEvnet(participant, GameActions.CLOSED);
         }
-
     }
 
-    public List<Game> findAvailableGames(String username){
-        User user = usersDb.getUserByUserName(username);
+    public List<Game> findAvailableGames(String userName) throws InvalidArgumentException {
+        User user = getSpecificUserIfExist(userName);
         List<Game> activeGames = gamesDb.getActiveGames();
         return activeGames.stream()
                 .filter(game -> game.getLeague() == user.getCurrLeague() &&
@@ -196,18 +198,21 @@ public class GameCenter {
         return gamesDb.getActiveGamesByMaximumPlayersAmount(maximumPlayers);
     }
 
-    private void handleJoinGameAsPlayer(Game game,User user) throws LeaguesDontMatchException, GameIsFullException, NoBalanceForBuyInException {
+    private void handleJoinGameAsPlayer(Game game,User user) throws GameException {
         int gameLeague=game.getLeague();
         int usersLeague=user.getCurrLeague();
         int userBalance=user.getBalance();
         int buyInPolicy=game.getBuyInPolicy();
 
-        if(gameLeague != usersLeague)
+        if((usersLeague != 0) && (usersLeague != gameLeague))
             throw new LeaguesDontMatchException(String.format("Can't join game, user's league is %d ,while game's league is %d.",usersLeague,gameLeague));
         else if (game.isFull())
             throw new GameIsFullException("Can't join game as player because it's full.");
         else if(!game.realMoneyGame() && (userBalance < buyInPolicy))
             throw new NoBalanceForBuyInException(String.format("Buy in is %d, but user's balance is %d;",buyInPolicy,userBalance));
+        else if(!game.isActive()){
+            throw new GameException("Can't join game as player because tournament game is in progress");
+        }
 
         game.joinGameAsPlayer(user);
     }
@@ -229,12 +234,27 @@ public class GameCenter {
         return gamesDb.isArchived(g);
     }
 
+
+    private Game getSpecificGameIfExist(String gameName) throws InvalidArgumentException {
+        List<Game> games = gamesDb.getActiveGamesByName(gameName);
+        if (games.isEmpty())
+            throw new InvalidArgumentException(String.format("Game '%s' doesn't exist in the system.",gameName));
+        return games.get(0);
+    }
+
+    private User getSpecificUserIfExist(String userName) throws InvalidArgumentException {
+        User user=usersDb.getUserByUserName(userName);
+        if(user==null)
+            throw new InvalidArgumentException(String.format("User '%s' doesn't exist in the system.",userName));
+        return user;
+
     public List<User> getAllUsersInList() {
         return usersDb.getAllUsersInList();
     }
 
     public List<User> getUsersByLeague(int leagueNum) {
         return  usersDb.getUsersByLeague(leagueNum);
+
     }
 
 //    public void setDefaultLeague(String admin, int league) throws NoPermissionException {

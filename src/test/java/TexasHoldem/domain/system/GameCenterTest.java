@@ -273,7 +273,7 @@ public class GameCenterTest {
             gc.joinGame(testUser1,"fail",false);
             fail();
         }catch(InvalidArgumentException e){
-            if(!e.getMessage().equals("There is no game in the system with selected name."))
+            if(!e.getMessage().equals("Game 'fail' doesn't exist in the system."))
                 fail();
         }
 
