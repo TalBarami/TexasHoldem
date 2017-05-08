@@ -6,6 +6,7 @@ import TexasHoldem.domain.user.User;
 
 import javax.security.auth.login.LoginException;
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * Created by RotemWald on 4/5/2017.
@@ -17,4 +18,6 @@ public interface IUsers {
     User getUserByUserName(String userName);
     User getHighestBalance();
     void deleteUser(String username) throws EntityDoesNotExistsException;
+    List<User> getAllUsersInList();
+    List<User> getUsersByLeague(int leagueNum);
 }

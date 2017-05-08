@@ -234,6 +234,7 @@ public class GameCenter {
         return gamesDb.isArchived(g);
     }
 
+
     private Game getSpecificGameIfExist(String gameName) throws InvalidArgumentException {
         List<Game> games = gamesDb.getActiveGamesByName(gameName);
         if (games.isEmpty())
@@ -246,6 +247,14 @@ public class GameCenter {
         if(user==null)
             throw new InvalidArgumentException(String.format("User '%s' doesn't exist in the system.",userName));
         return user;
+
+    public List<User> getAllUsersInList() {
+        return usersDb.getAllUsersInList();
+    }
+
+    public List<User> getUsersByLeague(int leagueNum) {
+        return  usersDb.getUsersByLeague(leagueNum);
+
     }
 
 //    public void setDefaultLeague(String admin, int league) throws NoPermissionException {
