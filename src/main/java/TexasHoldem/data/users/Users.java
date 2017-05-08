@@ -6,10 +6,7 @@ import TexasHoldem.domain.user.User;
 
 import javax.security.auth.login.LoginException;
 import java.time.LocalDate;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -54,6 +51,11 @@ public class Users implements IUsers {
         _userList.remove(username);
     }
 
+    @Override
+    public List<User> getAllUsersInList() {
+        return new ArrayList(_userList.values());
+    }
+
     private boolean emailExists(String email){
         return getAllEmails().contains(email);
     }
@@ -66,7 +68,7 @@ public class Users implements IUsers {
         return _userList.values().stream().map(User::getEmail).collect(Collectors.toList());
     }
 
-    private List<String> getAllUserNames(){
+    public List<String> getAllUserNames(){
         return _userList.values().stream().map(User::getUsername).collect(Collectors.toList());
     }
 
@@ -117,5 +119,15 @@ public class Users implements IUsers {
             throw new LoginException("Wrong password.");
         return user;
     }
+
+    public List<User> getUsersByLeague(int leagueNum){
+        List<User> usersInLeague = new ArrayList<>();
+        for(User user : _userList.values()){
+            if(user.getCurrLeague() == leagueNum)
+                usersInLeague.add(user);
+        }
+        return usersInLeague;
+    }
+
 
 }
