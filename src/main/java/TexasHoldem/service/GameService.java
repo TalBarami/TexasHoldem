@@ -25,6 +25,12 @@ public class GameService {
         this.gameCenter = gameCenter;
     }
 
+    public void startGame(String username,String gameName) throws GameException {
+        verifyStrings(username,gameName);
+        gameCenter.startGame(username,gameName);
+    }
+
+
     public void createGame(String creatorUsername, String gameName, GamePolicy policy, int limit, int minBet, int buyInPolicy, int chipPolicy,
                            int minPlayerAmount, int maxPlayerAmount, boolean specAccept) throws NoBalanceForBuyInException, InvalidArgumentException, ArgumentNotInBoundsException {
         verifyStrings(creatorUsername, gameName);
@@ -32,12 +38,12 @@ public class GameService {
         gameCenter.createGame(creatorUsername, new GameSettings(gameName, policy, limit, minBet, buyInPolicy, chipPolicy, minPlayerAmount, maxPlayerAmount, specAccept));
     }
 
-    public void joinGame(String username, String gameName, boolean asSpectator) throws GameIsFullException, InvalidArgumentException, LeaguesDontMatchException, CantSpeactateThisRoomException, NoBalanceForBuyInException {
+    public void joinGame(String username, String gameName, boolean asSpectator) throws GameException {
         verifyStrings(username, gameName);
         gameCenter.joinGame(username, gameName, false);
     }
 
-    public void spectateGame(String username, String gameName, boolean asSpectator) throws GameIsFullException, InvalidArgumentException, LeaguesDontMatchException, CantSpeactateThisRoomException, NoBalanceForBuyInException {
+    public void spectateGame(String username, String gameName, boolean asSpectator) throws GameException {
         verifyStrings(username, gameName);
         gameCenter.joinGame(username, gameName, true);
     }

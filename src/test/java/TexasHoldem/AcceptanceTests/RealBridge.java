@@ -132,6 +132,8 @@ public class RealBridge implements Bridge {
             return false;
         }catch (   NoBalanceForBuyInException e){
             return false;
+        } catch (GameException e) {
+            return false;
         }
         return true;
     }
@@ -313,8 +315,10 @@ public class RealBridge implements Bridge {
             service.gameService().spectateGame(username, gamename,spec);
         }catch (GameIsFullException | NoBalanceForBuyInException | LeaguesDontMatchException | InvalidArgumentException | CantSpeactateThisRoomException e){
             return false;
+        } catch (GameException e) {
+            return false;
         }
-        return true;
+       return true;
     }
 
 

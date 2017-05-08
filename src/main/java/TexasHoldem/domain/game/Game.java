@@ -1,6 +1,8 @@
 package TexasHoldem.domain.game;
 
 import TexasHoldem.common.Exceptions.*;
+import TexasHoldem.domain.events.GameEvent;
+import TexasHoldem.domain.game.participants.Participant;
 import TexasHoldem.domain.user.LeagueManager;
 import TexasHoldem.domain.game.participants.Player;
 import TexasHoldem.domain.game.participants.Spectator;
@@ -22,15 +24,17 @@ public class Game {
     private int dealerIndex;
     private LeagueManager leagueManager;
     private boolean isActive;
+    private List<GameEvent> gameEvents;
 
     public Game(GameSettings settings, User creator, LeagueManager leagueManager){
         this.settings=settings;
-        players=new ArrayList<>();
-        rounds=new ArrayList<>();
-        spectators= new ArrayList<>();
-        dealerIndex=0;
+        this.players=new ArrayList<>();
+        this.rounds=new ArrayList<>();
+        this.spectators= new ArrayList<>();
+        this.gameEvents= new ArrayList<>();
+        this.dealerIndex=0;
         this.leagueManager = leagueManager;
-        isActive=true;
+        this.isActive=true;
         //Automatically the creator is added to the room.
         logger.info("A new game '{}' created by the user {}.",getName(),creator.getUsername());
         addPlayer(creator);
@@ -46,51 +50,38 @@ public class Game {
         Spectator spec=new Spectator(user);
         spectators.add(spec);
         user.addGameParticipant(this,spec);
+        addGameEvnet(spec,GameActions.ENTER);
         logger.info("'{}' has joined the game '{}' as spectator.", user.getUsername(),getName());
     }
 
-    public void startGame(){
-        /*if(players.size()< getMinimalAmountOfPlayer())
-            throw new Exception(String.format("Can't start round, minimal amount for a new round is %d, but currently there are only %d players.",
-                    getMinimalAmountOfPlayer(),players.size()));*/
-        if(realMoneyGame())
-            playMoneyGame();
-        else
-            playTournament();
-    }
+    public void startGame(Player initiator) throws GameException {
+        if (players.size() < getMinimalAmountOfPlayer())
+            throw new GameException(String.format("Can't start round, minimal amount for a new round is %d, but currently there are only %d players.",
+                    getMinimalAmountOfPlayer(), players.size()));
 
-    private void playMoneyGame(){
-        while(!canBeArchived()){
-            if(canStart()){
-                Round rnd=new Round(players,settings,dealerIndex);
-                dealerIndex=(dealerIndex+1)%players.size();
-                rounds.add(rnd);
-                logger.info("A new money round in game '{}' has started.", getName());
-                rnd.startRound();
-            }
+        addGameEvnet(initiator, GameActions.NEWROUND);
+        if (realMoneyGame()) {
+            logger.info("A new money round in game '{}' has started.", getName());
+            handleNewRound();
+        } else { //tournament
+            setIsActive(false);
+            logger.info("A new tournament round in game '{}' has started.", getName());
+            handleNewRound();
         }
     }
 
-    private void playTournament(){
-        while(!canBeArchived()){
-            if(canStart()){
-                Round rnd=new Round(players,settings,dealerIndex);
-                dealerIndex=(dealerIndex+1)%players.size();
-                rounds.add(rnd);
-                logger.info("A new tournament round in game '{}' has started.", getName());
-                setIsActive(false); //lock game so new players cant join.
-                rnd.startRound();
-            }
-            if(!isActive() && isTournamentEnded()){
-                resetDealerIndex();
-                setIsActive(true);
-            }
-        }
+
+    private void handleNewRound(){
+        Round rnd=new Round(players,settings,dealerIndex);
+        dealerIndex=(dealerIndex+1)%players.size();
+        rounds.add(rnd);
+        rnd.startRound();
     }
 
     public void removeParticipant(Spectator spectator){
-        logger.info("'{}' has stopped watching this game.", spectator.getUser().getUsername());
         spectators.remove(spectator);
+        addGameEvnet(spectator,GameActions.EXIT);
+        logger.info("'{}' has stopped watching this game.", spectator.getUser().getUsername());
     }
 
     public void removeParticipant(Player player){
@@ -105,6 +96,12 @@ public class Game {
         }
 
         leagueManager.updateUserLeague(player.getUser());
+
+        if(isTournamentAndEnded()){
+            handleEndTournament();
+        }
+
+        addGameEvnet(player,GameActions.EXIT);
     }
 
     public boolean isFull(){
@@ -124,6 +121,8 @@ public class Game {
 
         players.add(p);
         user.addGameParticipant(this,p);
+
+        addGameEvnet(p,GameActions.ENTER);
         logger.info("'{}' has joined the game '{}' as player.", user.getUsername(),getName());
     }
 
@@ -135,6 +134,7 @@ public class Game {
         return (realMoneyGame()) ? 1 : settings.getBuyInPolicy()/settings.getChipPolicy();
 
     }
+
     public boolean isActive(){
         return isActive;
     }
@@ -207,9 +207,18 @@ public class Game {
         dealerIndex=0;
     }
 
-    private boolean isTournamentEnded(){
+    private boolean isTournamentAndEnded(){
         // amount of players in the room is 1 and he won the whole 'pot'.
-        return (players.size() == 1) && (players.get(0).getChipsAmount() == getMinimalAmountOfPlayer() * settings.getChipPolicy());
+        return (!realMoneyGame() && (players.size() == 1) && (players.get(0).getChipsAmount() == getMinimalAmountOfPlayer() * settings.getChipPolicy()));
+    }
+
+    public void addGameEvnet(Participant initiator,GameActions eventAction){
+        this.gameEvents.add(new GameEvent(initiator,eventAction));
+    }
+
+    private void handleEndTournament(){
+        setIsActive(true);
+        resetDealerIndex();
     }
 
 }
