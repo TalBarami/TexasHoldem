@@ -56,6 +56,10 @@ public class Users implements IUsers {
         return new ArrayList(_userList.values());
     }
 
+    public Map<String, User> getUsersData() {
+        return _userList;
+    }
+
     private boolean emailExists(String email){
         return getAllEmails().contains(email);
     }
@@ -119,15 +123,4 @@ public class Users implements IUsers {
             throw new LoginException("Wrong password.");
         return user;
     }
-
-    public List<User> getUsersByLeague(int leagueNum){
-        List<User> usersInLeague = new ArrayList<>();
-        for(User user : _userList.values()){
-            if(user.getCurrLeague() == leagueNum)
-                usersInLeague.add(user);
-        }
-        return usersInLeague;
-    }
-
-
 }

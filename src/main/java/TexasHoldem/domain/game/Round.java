@@ -31,6 +31,7 @@ public class Round {
     private List<Card> openedCards;
     private Player currentDealerPlayer;
     private RoundState currentState;
+    private List<MoveEvent> eventList;
 
     public Round(List<Player> players, GameSettings settings, int dealerIndex) {
         this.gameSettings = settings;
@@ -42,6 +43,7 @@ public class Round {
         this.potAmount = 0;
         this.openedCards = new ArrayList<Card>();
         this.currentState = RoundState.PREFLOP;
+        this.eventList = new LinkedList<MoveEvent>();
 
         int startingPlayerIndex = (dealerIndex + 3) % activePlayers.size();
         this.currentPlayer = activePlayers.get(startingPlayerIndex);
@@ -127,6 +129,7 @@ public class Round {
             throw new IllegalArgumentException("Your move is Invalid");
 
         if (isRoundActive) {
+            eventList.add(playerMoveEvent);
             GameActions chosenAction = playerMoveEvent.getEventAction();
 
             switch (chosenAction) {

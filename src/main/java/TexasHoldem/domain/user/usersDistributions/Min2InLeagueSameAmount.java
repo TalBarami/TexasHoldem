@@ -10,14 +10,10 @@ import java.util.List;
  * Created by hod on 06/05/2017.
  */
 public class Min2InLeagueSameAmount implements DistributionAlgorithm {
-    private GameCenter gameCenter;
-
-    public Min2InLeagueSameAmount(GameCenter gameCenter){
-        this.gameCenter = gameCenter;
-    }
+    public Min2InLeagueSameAmount() { }
 
     @Override
-    public void distibute(int maxLeague){
+    public void distribute(int maxLeague){
         //TODO :: get game center as singletone
         int numOfUsersToCheck = gameCenter.getAllUsersInList().size();
         if(numOfUsersToCheck == 1)

@@ -19,5 +19,4 @@ public interface IUsers {
     User getHighestBalance();
     void deleteUser(String username) throws EntityDoesNotExistsException;
     List<User> getAllUsersInList();
-    List<User> getUsersByLeague(int leagueNum);
 }

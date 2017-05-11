@@ -1,7 +1,5 @@
 package TexasHoldem.domain.user;
 
-
-import TexasHoldem.domain.system.GameCenter;
 import TexasHoldem.domain.user.usersDistributions.DistributionAlgorithm;
 
 import java.util.ArrayList;
@@ -11,13 +9,16 @@ import java.util.List;
  * Created by hod on 11/04/2017.
  */
 public class LeagueManager {
+    public final static int defaultLeagueForNewUsers = 0; //represent unknown league can play in each game
+
     private int criteriaToMovingLeague = 10;
-    private int defaultLeagueForNewUsers = 0; //represent unknown league can play in each game
     private int numOfGamesNewPlayerNeedPlayToChangeLeague = 10;
     private int maxLeague;
+    private List<User> userList;
 
-    public LeagueManager() {
+    public LeagueManager(List<User> userList) {
         maxLeague = 0;
+        this.userList = userList;
     }
 
     public void addNewUserToLeague(User user){
@@ -52,7 +53,7 @@ public class LeagueManager {
     }
 
     public void redistributeUsersInLeagues(DistributionAlgorithm da) {
-        da.distibute(maxLeague);
+        da.distribute(maxLeague);
     }
 
     public void removeUserFromLeague(User user){
@@ -73,6 +74,19 @@ public class LeagueManager {
 
     public int getNumOfGamesNewPlayerNeedPlayToChangeLeague() {
         return numOfGamesNewPlayerNeedPlayToChangeLeague;
+    }
+
+    public List<User> getAllUsersInList() {
+        return userList;
+    }
+
+    public List<User> getUsersByLeague(int leagueNum) {
+        List<User> usersInLeague = new ArrayList<>();
+        for(User user : userList.values()){
+            if(user.getCurrLeague() == leagueNum)
+                usersInLeague.add(user);
+        }
+        return usersInLeague;
     }
 
 //    public void moveUserToLeague(User userToMove, int newLeague){

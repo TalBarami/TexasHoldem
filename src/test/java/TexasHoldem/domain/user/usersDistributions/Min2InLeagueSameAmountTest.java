@@ -1,7 +1,6 @@
 package TexasHoldem.domain.user.usersDistributions;
 
 import TexasHoldem.domain.system.GameCenter;
-import TexasHoldem.domain.user.User;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -27,7 +26,7 @@ public class Min2InLeagueSameAmountTest {
         gameCenter.registerUser("waldr", "1234", "waldr@post.bgu.ac.il", LocalDate.now(), null);
         gameCenter.registerUser("hodbub", "1234", "hobdud@post.bgu.ac.il", LocalDate.now(), null);
 
-        distribute.distibute(0);
+        distribute.distribute(0);
 
         assertEquals(0, gameCenter.getUser("waldr").getCurrLeague());
         assertEquals(0, gameCenter.getUser("hodbub").getCurrLeague());
@@ -42,7 +41,7 @@ public class Min2InLeagueSameAmountTest {
         gameCenter.registerUser("hodbub", "1234", "hobdud@post.bgu.ac.il", LocalDate.now(), null);
         gameCenter.getUser("hodbub").setCurrLeague(1);
 
-        distribute.distibute(1);
+        distribute.distribute(1);
 
         assertEquals(1, gameCenter.getUser("waldr").getCurrLeague());
         assertEquals(1, gameCenter.getUser("hodbub").getCurrLeague());
@@ -58,7 +57,7 @@ public class Min2InLeagueSameAmountTest {
         gameCenter.registerUser("achiadg", "1234", "achiadg@post.bgu.ac.il", LocalDate.now(), null);
         gameCenter.getUser("hodbub").setCurrLeague(1);
 
-        distribute.distibute(3);
+        distribute.distribute(3);
 
         assertEquals(3, gameCenter.getUser("waldr").getCurrLeague());
         assertEquals(3, gameCenter.getUser("hodbub").getCurrLeague());
@@ -77,7 +76,7 @@ public class Min2InLeagueSameAmountTest {
         gameCenter.registerUser("ronenb", "1234", "ronenb@post.bgu.ac.il", LocalDate.now(), null);
         gameCenter.getUser("hodbub").setCurrLeague(3);
 
-        distribute.distibute(3);
+        distribute.distribute(3);
 
         assertEquals(2, gameCenter.getUser("waldr").getCurrLeague());
         assertEquals(3, gameCenter.getUser("hodbub").getCurrLeague());
@@ -100,7 +99,7 @@ public class Min2InLeagueSameAmountTest {
         gameCenter.getUser("hodbub").setCurrLeague(3);
         gameCenter.getUser("achiadg").setCurrLeague(2);
 
-        distribute.distibute(3);
+        distribute.distribute(3);
 
         assertEquals(2, gameCenter.getUser("waldr").getCurrLeague());
         assertEquals(3, gameCenter.getUser("hodbub").getCurrLeague());
@@ -125,7 +124,7 @@ public class Min2InLeagueSameAmountTest {
         gameCenter.getUser("achiadg").setCurrLeague(3);
         gameCenter.getUser("talb").setCurrLeague(3);
 
-        distribute.distibute(3);
+        distribute.distribute(3);
 
         assertEquals(2, gameCenter.getUser("waldr").getCurrLeague());
         assertEquals(3, gameCenter.getUser("hodbub").getCurrLeague());
@@ -153,7 +152,7 @@ public class Min2InLeagueSameAmountTest {
         gameCenter.getUser("talb").setCurrLeague(2);
         gameCenter.getUser("ronenb").setCurrLeague(1);
 
-        distribute.distibute(3);
+        distribute.distribute(3);
 
         assertEquals(2, gameCenter.getUser("waldr").getCurrLeague());
         assertEquals(3, gameCenter.getUser("hodbub").getCurrLeague());
@@ -181,7 +180,7 @@ public class Min2InLeagueSameAmountTest {
         gameCenter.getUser("achiadg").setCurrLeague(1);
         gameCenter.getUser("talb").setCurrLeague(2);
 
-        distribute.distibute(2);
+        distribute.distribute(2);
 
         assertEquals(0, gameCenter.getUser("waldr").getCurrLeague());
         assertEquals(2, gameCenter.getUser("hodbub").getCurrLeague());
