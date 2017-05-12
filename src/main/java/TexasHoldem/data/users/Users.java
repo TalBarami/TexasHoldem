@@ -2,9 +2,9 @@ package TexasHoldem.data.users;
 
 import TexasHoldem.common.Exceptions.EntityDoesNotExistsException;
 import TexasHoldem.common.Exceptions.InvalidArgumentException;
+import TexasHoldem.common.Exceptions.LoginException;
 import TexasHoldem.domain.user.User;
 
-import javax.security.auth.login.LoginException;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
