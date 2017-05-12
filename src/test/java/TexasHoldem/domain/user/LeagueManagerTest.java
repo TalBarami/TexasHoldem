@@ -1,13 +1,8 @@
 package TexasHoldem.domain.user;
 
-import TexasHoldem.domain.game.Round;
-import TexasHoldem.domain.user.LeagueManager;
-import TexasHoldem.domain.user.User;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.lang.reflect.Method;
 
 import static org.junit.Assert.*;
 

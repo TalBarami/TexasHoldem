@@ -18,11 +18,11 @@ public class Min2InLeagueSameAmountTest {
     @Before
     public void setUp() throws Exception {
         gameCenter = new GameCenter();
-        distribute = new Min2InLeagueSameAmount(gameCenter);
+        distribute = new Min2InLeagueSameAmount(gameCenter.getUserDbWindowForDistributionAlgorithm());
     }
 
     @Test
-    public void distibute_2NewUsersShouldStayThere() throws Exception {
+    public void distribute_2NewUsersShouldStayThere() throws Exception {
         gameCenter.registerUser("waldr", "1234", "waldr@post.bgu.ac.il", LocalDate.now(), null);
         gameCenter.registerUser("hodbub", "1234", "hobdud@post.bgu.ac.il", LocalDate.now(), null);
 
@@ -36,7 +36,7 @@ public class Min2InLeagueSameAmountTest {
     }
 
     @Test
-    public void distibute_2Users2Leagues() throws Exception {
+    public void distribute_2Users2Leagues() throws Exception {
         gameCenter.registerUser("waldr", "1234", "waldr@post.bgu.ac.il", LocalDate.now(), null);
         gameCenter.registerUser("hodbub", "1234", "hobdud@post.bgu.ac.il", LocalDate.now(), null);
         gameCenter.getUser("hodbub").setCurrLeague(1);
@@ -51,7 +51,7 @@ public class Min2InLeagueSameAmountTest {
     }
 
     @Test
-    public void distibute_3Users2Leagues() throws Exception {
+    public void distribute_3Users2Leagues() throws Exception {
         gameCenter.registerUser("waldr", "1234", "waldr@post.bgu.ac.il", LocalDate.now(), null);
         gameCenter.registerUser("hodbub", "1234", "hobdud@post.bgu.ac.il", LocalDate.now(), null);
         gameCenter.registerUser("achiadg", "1234", "achiadg@post.bgu.ac.il", LocalDate.now(), null);
@@ -69,7 +69,7 @@ public class Min2InLeagueSameAmountTest {
     }
 
     @Test
-    public void distibute_4Users2Leagues() throws Exception {
+    public void distribute_4Users2Leagues() throws Exception {
         gameCenter.registerUser("waldr", "1234", "waldr@post.bgu.ac.il", LocalDate.now(), null);
         gameCenter.registerUser("hodbub", "1234", "hobdud@post.bgu.ac.il", LocalDate.now(), null);
         gameCenter.registerUser("achiadg", "1234", "achiadg@post.bgu.ac.il", LocalDate.now(), null);
@@ -91,7 +91,7 @@ public class Min2InLeagueSameAmountTest {
     }
 
     @Test
-    public void distibute_4Users3Leagues() throws Exception {
+    public void distribute_4Users3Leagues() throws Exception {
         gameCenter.registerUser("waldr", "1234", "waldr@post.bgu.ac.il", LocalDate.now(), null);
         gameCenter.registerUser("hodbub", "1234", "hobdud@post.bgu.ac.il", LocalDate.now(), null);
         gameCenter.registerUser("achiadg", "1234", "achiadg@post.bgu.ac.il", LocalDate.now(), null);
@@ -114,7 +114,7 @@ public class Min2InLeagueSameAmountTest {
     }
 
     @Test
-    public void distibute_5Users2Leagues3InHigheLeague() throws Exception {
+    public void distribute_5Users2Leagues3InHigheLeague() throws Exception {
         gameCenter.registerUser("waldr", "1234", "waldr@post.bgu.ac.il", LocalDate.now(), null);
         gameCenter.registerUser("hodbub", "1234", "hobdud@post.bgu.ac.il", LocalDate.now(), null);
         gameCenter.registerUser("achiadg", "1234", "achiadg@post.bgu.ac.il", LocalDate.now(), null);
@@ -141,7 +141,7 @@ public class Min2InLeagueSameAmountTest {
     }
 
     @Test
-    public void distibute_5Users4LeaguesMix() throws Exception {
+    public void distribute_5Users4LeaguesMix() throws Exception {
         gameCenter.registerUser("waldr", "1234", "waldr@post.bgu.ac.il", LocalDate.now(), null);
         gameCenter.registerUser("hodbub", "1234", "hobdud@post.bgu.ac.il", LocalDate.now(), null);
         gameCenter.registerUser("achiadg", "1234", "achiadg@post.bgu.ac.il", LocalDate.now(), null);
@@ -168,7 +168,7 @@ public class Min2InLeagueSameAmountTest {
     }
 
     @Test
-    public void distibute_7Users3Leagues() throws Exception {
+    public void distribute_7Users3Leagues() throws Exception {
         gameCenter.registerUser("waldr", "1234", "waldr@post.bgu.ac.il", LocalDate.now(), null);
         gameCenter.registerUser("hodbub", "1234", "hobdud@post.bgu.ac.il", LocalDate.now(), null);
         gameCenter.registerUser("achiadg", "1234", "achiadg@post.bgu.ac.il", LocalDate.now(), null);

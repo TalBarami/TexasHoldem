@@ -4,6 +4,7 @@ import TexasHoldem.common.Exceptions.*;
 import TexasHoldem.data.games.Games;
 import TexasHoldem.data.games.IGames;
 import TexasHoldem.data.users.IUsers;
+import TexasHoldem.data.users.IUsersForDistributionAlgorithm;
 import TexasHoldem.data.users.Users;
 import TexasHoldem.domain.game.Game;
 import TexasHoldem.domain.game.GameActions;
@@ -35,7 +36,7 @@ public class GameCenter {
         loggedInUsers=new ArrayList<>();
         usersDb=new Users();
         gamesDb=new Games();
-        leagueManager = new LeagueManager(usersDb.getAllUsersInList());
+        leagueManager = new LeagueManager();
     }
 
     public void registerUser(String userName, String pass, String email, LocalDate date, BufferedImage img) throws InvalidArgumentException {
@@ -251,8 +252,11 @@ public class GameCenter {
     }
 
     public void redistributeUsersInLeagues(DistributionAlgorithm da) {
-        // Here we need to pass user list somehow..
         leagueManager.redistributeUsersInLeagues(da);
+    }
+
+    public IUsersForDistributionAlgorithm getUserDbWindowForDistributionAlgorithm() {
+        return (IUsersForDistributionAlgorithm)usersDb;
     }
 
 //    public void setDefaultLeague(String admin, int league) throws NoPermissionException {

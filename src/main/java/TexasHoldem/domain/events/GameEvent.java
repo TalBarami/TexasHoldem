@@ -15,6 +15,8 @@ public class GameEvent {
 
     public GameEvent(Participant eventInitiator, GameActions action) {
         this.eventTime = DateTime.now();
+        this.eventInitiator = eventInitiator;
+        this.eventAction = action;
     }
 
     public DateTime getEventTime() {

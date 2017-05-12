@@ -1,6 +1,6 @@
 package TexasHoldem.domain.user.usersDistributions;
 
-import TexasHoldem.domain.system.GameCenter;
+import TexasHoldem.data.users.IUsersForDistributionAlgorithm;
 import TexasHoldem.domain.user.User;
 
 import java.util.ArrayList;
@@ -10,12 +10,15 @@ import java.util.List;
  * Created by hod on 06/05/2017.
  */
 public class Min2InLeagueSameAmount implements DistributionAlgorithm {
-    public Min2InLeagueSameAmount() { }
+    private IUsersForDistributionAlgorithm userDbWindow;
+
+    public Min2InLeagueSameAmount(IUsersForDistributionAlgorithm userDbWindow) {
+        this.userDbWindow = userDbWindow;
+    }
 
     @Override
     public void distribute(int maxLeague){
-        //TODO :: get game center as singletone
-        int numOfUsersToCheck = gameCenter.getAllUsersInList().size();
+        int numOfUsersToCheck = userDbWindow.getAllUsersInList().size();
         if(numOfUsersToCheck == 1)
             return;
 
@@ -23,18 +26,18 @@ public class Min2InLeagueSameAmount implements DistributionAlgorithm {
         int numOfUsersInEachLeague = numOfUsersToCheck/numOfLeagues;
 
         for(int i = maxLeague; i > maxLeague - numOfLeagues; i--){
-            List<User> usersInLeague = gameCenter.getUsersByLeague(i);
+            List<User> usersInLeague = userDbWindow.getUsersByLeague(i);
             int numOfUsersInCurrLeague = getNumOfUsersInCurrLeague(numOfUsersToCheck, numOfLeagues, numOfUsersInEachLeague);
             numOfUsersToCheck -= numOfUsersInCurrLeague;
-            int diffrence = usersInLeague.size() - numOfUsersInCurrLeague;
+            int difference = usersInLeague.size() - numOfUsersInCurrLeague;
 
-            if(diffrence == 0)
+            if(difference == 0)
                 continue;
-            else if(diffrence > 0)
-                moveSomeUsersToLeague(usersInLeague, diffrence, i-1);
+            else if(difference > 0)
+                moveSomeUsersToLeague(usersInLeague, difference, i-1);
             else{
-                usersInLeague = findUsersToMoveToThisLeague(Math.abs(diffrence), i-1);
-                moveSomeUsersToLeague(usersInLeague, Math.abs(diffrence), i);
+                usersInLeague = findUsersToMoveToThisLeague(Math.abs(difference), i-1);
+                moveSomeUsersToLeague(usersInLeague, Math.abs(difference), i);
             }
         }
     }
@@ -52,7 +55,7 @@ public class Min2InLeagueSameAmount implements DistributionAlgorithm {
 
     private int getNumOfUsersInCurrLeague(int numOfUsers, int numOfLeagues, int numOfUsersInEachLeague) {
         //checks if this league can have one more player in it so numOfLeagus will stay the same
-        if((numOfUsers - (numOfUsersInEachLeague + 1))/numOfUsersInEachLeague == numOfLeagues-1)
+        if(numOfUsers > numOfUsersInEachLeague && (numOfUsers - (numOfUsersInEachLeague + 1))/numOfUsersInEachLeague == numOfLeagues-1)
             return numOfUsersInEachLeague+1;
         return numOfUsersInEachLeague;
     }
@@ -67,7 +70,7 @@ public class Min2InLeagueSameAmount implements DistributionAlgorithm {
         List<User> usersToMove = new ArrayList<>();
         int leagueToLook = leagueToStartLooking;
         while (usersToMove.size() < numOfUsersTofind){
-            usersToMove.addAll(gameCenter.getUsersByLeague(leagueToLook));
+            usersToMove.addAll(userDbWindow.getUsersByLeague(leagueToLook));
             leagueToLook--;
         }
         return usersToMove;
