@@ -47,7 +47,9 @@ public class GameCenter {
     }
 
     public void deleteUser(String username) throws EntityDoesNotExistsException {
+        leagueManager.updateMaxLeagueUserDeleted(usersDb.getUserByUserName(username), usersDb.getAllUsersInList());
         usersDb.deleteUser(username);
+
         logger.info("{} deleted from the system.",username);
     }
 
