@@ -110,6 +110,8 @@ public class Player extends Participant{
     }
 
     public int getChipsAmount() {
+        if(chipPolicy == 0)
+            return user.getBalance();
         return chipsAmount;
     }
 

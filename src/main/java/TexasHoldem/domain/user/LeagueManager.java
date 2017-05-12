@@ -2,6 +2,8 @@ package TexasHoldem.domain.user;
 
 import TexasHoldem.domain.user.usersDistributions.DistributionAlgorithm;
 
+import java.util.List;
+
 /**
  * Created by hod on 11/04/2017.
  */
@@ -10,7 +12,7 @@ public class LeagueManager {
 
     private int criteriaToMovingLeague = 10;
     private int numOfGamesNewPlayerNeedPlayToChangeLeague = 10;
-    private int maxLeague;
+    private Integer maxLeague;
 
     public LeagueManager() {
         maxLeague = 0;
@@ -47,6 +49,24 @@ public class LeagueManager {
             maxLeague = leagueNumber;
     }
 
+    public void updateMaxLeagueUserDeleted(User userToDel, List<User> allUsersInList) {
+        synchronized (maxLeague) {
+            if(userToDel.getCurrLeague() == maxLeague){
+                maxLeague = findMaxLeagueInSystem(allUsersInList);
+            }
+        }
+    }
+
+    private Integer findMaxLeagueInSystem(List<User> allUsersInList) {
+        int max = 0;
+        for(User user: allUsersInList){
+            if(user.getCurrLeague() > maxLeague)
+                max = user.getCurrLeague();
+        }
+
+        return max;
+    }
+
     public void redistributeUsersInLeagues(DistributionAlgorithm da) {
         da.distribute(maxLeague);
     }
@@ -71,7 +91,15 @@ public class LeagueManager {
         return numOfGamesNewPlayerNeedPlayToChangeLeague;
     }
 
-//    public void moveUserToLeague(User userToMove, int newLeague){
+    public void setMaxLeague(int maxLeague) {
+        this.maxLeague = maxLeague;
+    }
+
+    public int getMaxLeague() {
+        return maxLeague;
+    }
+
+    //    public void moveUserToLeague(User userToMove, int newLeague){
 //        putUserInLeague(userToMove, newLeague);
 //    }
 //    public boolean checkIfHasPermissions(User user){
