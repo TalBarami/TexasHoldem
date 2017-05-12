@@ -1,7 +1,6 @@
 package TexasHoldem.domain.user.usersDistributions;
 
 import TexasHoldem.domain.system.GameCenter;
-import TexasHoldem.domain.user.User;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,15 +18,15 @@ public class Min2InLeagueSameAmountTest {
     @Before
     public void setUp() throws Exception {
         gameCenter = new GameCenter();
-        distribute = new Min2InLeagueSameAmount(gameCenter);
+        distribute = new Min2InLeagueSameAmount(gameCenter.getUserDbWindowForDistributionAlgorithm());
     }
 
     @Test
-    public void distibute_2NewUsersShouldStayThere() throws Exception {
+    public void distribute_2NewUsersShouldStayThere() throws Exception {
         gameCenter.registerUser("waldr", "1234", "waldr@post.bgu.ac.il", LocalDate.now(), null);
         gameCenter.registerUser("hodbub", "1234", "hobdud@post.bgu.ac.il", LocalDate.now(), null);
 
-        distribute.distibute(0);
+        distribute.distribute(0);
 
         assertEquals(0, gameCenter.getUser("waldr").getCurrLeague());
         assertEquals(0, gameCenter.getUser("hodbub").getCurrLeague());
@@ -37,12 +36,12 @@ public class Min2InLeagueSameAmountTest {
     }
 
     @Test
-    public void distibute_2Users2Leagues() throws Exception {
+    public void distribute_2Users2Leagues() throws Exception {
         gameCenter.registerUser("waldr", "1234", "waldr@post.bgu.ac.il", LocalDate.now(), null);
         gameCenter.registerUser("hodbub", "1234", "hobdud@post.bgu.ac.il", LocalDate.now(), null);
         gameCenter.getUser("hodbub").setCurrLeague(1);
 
-        distribute.distibute(1);
+        distribute.distribute(1);
 
         assertEquals(1, gameCenter.getUser("waldr").getCurrLeague());
         assertEquals(1, gameCenter.getUser("hodbub").getCurrLeague());
@@ -52,13 +51,13 @@ public class Min2InLeagueSameAmountTest {
     }
 
     @Test
-    public void distibute_3Users2Leagues() throws Exception {
+    public void distribute_3Users2Leagues() throws Exception {
         gameCenter.registerUser("waldr", "1234", "waldr@post.bgu.ac.il", LocalDate.now(), null);
         gameCenter.registerUser("hodbub", "1234", "hobdud@post.bgu.ac.il", LocalDate.now(), null);
         gameCenter.registerUser("achiadg", "1234", "achiadg@post.bgu.ac.il", LocalDate.now(), null);
         gameCenter.getUser("hodbub").setCurrLeague(1);
 
-        distribute.distibute(3);
+        distribute.distribute(3);
 
         assertEquals(3, gameCenter.getUser("waldr").getCurrLeague());
         assertEquals(3, gameCenter.getUser("hodbub").getCurrLeague());
@@ -70,14 +69,14 @@ public class Min2InLeagueSameAmountTest {
     }
 
     @Test
-    public void distibute_4Users2Leagues() throws Exception {
+    public void distribute_4Users2Leagues() throws Exception {
         gameCenter.registerUser("waldr", "1234", "waldr@post.bgu.ac.il", LocalDate.now(), null);
         gameCenter.registerUser("hodbub", "1234", "hobdud@post.bgu.ac.il", LocalDate.now(), null);
         gameCenter.registerUser("achiadg", "1234", "achiadg@post.bgu.ac.il", LocalDate.now(), null);
         gameCenter.registerUser("ronenb", "1234", "ronenb@post.bgu.ac.il", LocalDate.now(), null);
         gameCenter.getUser("hodbub").setCurrLeague(3);
 
-        distribute.distibute(3);
+        distribute.distribute(3);
 
         assertEquals(2, gameCenter.getUser("waldr").getCurrLeague());
         assertEquals(3, gameCenter.getUser("hodbub").getCurrLeague());
@@ -92,7 +91,7 @@ public class Min2InLeagueSameAmountTest {
     }
 
     @Test
-    public void distibute_4Users3Leagues() throws Exception {
+    public void distribute_4Users3Leagues() throws Exception {
         gameCenter.registerUser("waldr", "1234", "waldr@post.bgu.ac.il", LocalDate.now(), null);
         gameCenter.registerUser("hodbub", "1234", "hobdud@post.bgu.ac.il", LocalDate.now(), null);
         gameCenter.registerUser("achiadg", "1234", "achiadg@post.bgu.ac.il", LocalDate.now(), null);
@@ -100,7 +99,7 @@ public class Min2InLeagueSameAmountTest {
         gameCenter.getUser("hodbub").setCurrLeague(3);
         gameCenter.getUser("achiadg").setCurrLeague(2);
 
-        distribute.distibute(3);
+        distribute.distribute(3);
 
         assertEquals(2, gameCenter.getUser("waldr").getCurrLeague());
         assertEquals(3, gameCenter.getUser("hodbub").getCurrLeague());
@@ -115,7 +114,7 @@ public class Min2InLeagueSameAmountTest {
     }
 
     @Test
-    public void distibute_5Users2Leagues3InHigheLeague() throws Exception {
+    public void distribute_5Users2Leagues3InHigheLeague() throws Exception {
         gameCenter.registerUser("waldr", "1234", "waldr@post.bgu.ac.il", LocalDate.now(), null);
         gameCenter.registerUser("hodbub", "1234", "hobdud@post.bgu.ac.il", LocalDate.now(), null);
         gameCenter.registerUser("achiadg", "1234", "achiadg@post.bgu.ac.il", LocalDate.now(), null);
@@ -125,7 +124,7 @@ public class Min2InLeagueSameAmountTest {
         gameCenter.getUser("achiadg").setCurrLeague(3);
         gameCenter.getUser("talb").setCurrLeague(3);
 
-        distribute.distibute(3);
+        distribute.distribute(3);
 
         assertEquals(2, gameCenter.getUser("waldr").getCurrLeague());
         assertEquals(3, gameCenter.getUser("hodbub").getCurrLeague());
@@ -142,7 +141,7 @@ public class Min2InLeagueSameAmountTest {
     }
 
     @Test
-    public void distibute_5Users4LeaguesMix() throws Exception {
+    public void distribute_5Users4LeaguesMix() throws Exception {
         gameCenter.registerUser("waldr", "1234", "waldr@post.bgu.ac.il", LocalDate.now(), null);
         gameCenter.registerUser("hodbub", "1234", "hobdud@post.bgu.ac.il", LocalDate.now(), null);
         gameCenter.registerUser("achiadg", "1234", "achiadg@post.bgu.ac.il", LocalDate.now(), null);
@@ -153,7 +152,7 @@ public class Min2InLeagueSameAmountTest {
         gameCenter.getUser("talb").setCurrLeague(2);
         gameCenter.getUser("ronenb").setCurrLeague(1);
 
-        distribute.distibute(3);
+        distribute.distribute(3);
 
         assertEquals(2, gameCenter.getUser("waldr").getCurrLeague());
         assertEquals(3, gameCenter.getUser("hodbub").getCurrLeague());
@@ -169,7 +168,7 @@ public class Min2InLeagueSameAmountTest {
     }
 
     @Test
-    public void distibute_7Users3Leagues() throws Exception {
+    public void distribute_7Users3Leagues() throws Exception {
         gameCenter.registerUser("waldr", "1234", "waldr@post.bgu.ac.il", LocalDate.now(), null);
         gameCenter.registerUser("hodbub", "1234", "hobdud@post.bgu.ac.il", LocalDate.now(), null);
         gameCenter.registerUser("achiadg", "1234", "achiadg@post.bgu.ac.il", LocalDate.now(), null);
@@ -181,7 +180,7 @@ public class Min2InLeagueSameAmountTest {
         gameCenter.getUser("achiadg").setCurrLeague(1);
         gameCenter.getUser("talb").setCurrLeague(2);
 
-        distribute.distibute(2);
+        distribute.distribute(2);
 
         assertEquals(0, gameCenter.getUser("waldr").getCurrLeague());
         assertEquals(2, gameCenter.getUser("hodbub").getCurrLeague());

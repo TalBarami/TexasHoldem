@@ -1,18 +1,14 @@
 package TexasHoldem.domain.user;
 
-
-import TexasHoldem.domain.system.GameCenter;
 import TexasHoldem.domain.user.usersDistributions.DistributionAlgorithm;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by hod on 11/04/2017.
  */
 public class LeagueManager {
+    public final static int defaultLeagueForNewUsers = 0; //represent unknown league can play in each game
+
     private int criteriaToMovingLeague = 10;
-    private int defaultLeagueForNewUsers = 0; //represent unknown league can play in each game
     private int numOfGamesNewPlayerNeedPlayToChangeLeague = 10;
     private int maxLeague;
 
@@ -52,7 +48,7 @@ public class LeagueManager {
     }
 
     public void redistributeUsersInLeagues(DistributionAlgorithm da) {
-        da.distibute(maxLeague);
+        da.distribute(maxLeague);
     }
 
     public void removeUserFromLeague(User user){

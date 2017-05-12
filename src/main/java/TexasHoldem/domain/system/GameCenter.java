@@ -4,6 +4,7 @@ import TexasHoldem.common.Exceptions.*;
 import TexasHoldem.data.games.Games;
 import TexasHoldem.data.games.IGames;
 import TexasHoldem.data.users.IUsers;
+import TexasHoldem.data.users.IUsersForDistributionAlgorithm;
 import TexasHoldem.data.users.Users;
 import TexasHoldem.domain.game.Game;
 import TexasHoldem.domain.game.GameActions;
@@ -13,6 +14,7 @@ import TexasHoldem.domain.game.participants.Participant;
 import TexasHoldem.domain.game.participants.Player;
 import TexasHoldem.domain.user.User;
 import TexasHoldem.domain.user.LeagueManager;
+import TexasHoldem.domain.user.usersDistributions.DistributionAlgorithm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -204,7 +206,7 @@ public class GameCenter {
         int userBalance=user.getBalance();
         int buyInPolicy=game.getBuyInPolicy();
 
-        if((usersLeague != 0) && (usersLeague != gameLeague))
+        if((usersLeague != LeagueManager.defaultLeagueForNewUsers) && (usersLeague != gameLeague))
             throw new LeaguesDontMatchException(String.format("Can't join game, user's league is %d ,while game's league is %d.",usersLeague,gameLeague));
         else if (game.isFull())
             throw new GameIsFullException("Can't join game as player because it's full.");
@@ -243,18 +245,18 @@ public class GameCenter {
     }
 
     private User getSpecificUserIfExist(String userName) throws InvalidArgumentException {
-        User user=usersDb.getUserByUserName(userName);
-        if(user==null)
-            throw new InvalidArgumentException(String.format("User '%s' doesn't exist in the system.",userName));
+        User user = usersDb.getUserByUserName(userName);
+        if (user == null)
+            throw new InvalidArgumentException(String.format("User '%s' doesn't exist in the system.", userName));
         return user;
-
-    public List<User> getAllUsersInList() {
-        return usersDb.getAllUsersInList();
     }
 
-    public List<User> getUsersByLeague(int leagueNum) {
-        return  usersDb.getUsersByLeague(leagueNum);
+    public void redistributeUsersInLeagues(DistributionAlgorithm da) {
+        leagueManager.redistributeUsersInLeagues(da);
+    }
 
+    public IUsersForDistributionAlgorithm getUserDbWindowForDistributionAlgorithm() {
+        return (IUsersForDistributionAlgorithm)usersDb;
     }
 
 //    public void setDefaultLeague(String admin, int league) throws NoPermissionException {

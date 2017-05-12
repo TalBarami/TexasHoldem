@@ -10,7 +10,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
-public class Users implements IUsers {
+public class Users implements IUsers, IUsersForDistributionAlgorithm {
     private HashMap<String, User> _userList;
 
     public Users() {
@@ -49,11 +49,6 @@ public class Users implements IUsers {
             throw new EntityDoesNotExistsException("This user name is not registered in the system.");
         }
         _userList.remove(username);
-    }
-
-    @Override
-    public List<User> getAllUsersInList() {
-        return new ArrayList(_userList.values());
     }
 
     private boolean emailExists(String email){
@@ -120,7 +115,12 @@ public class Users implements IUsers {
         return user;
     }
 
-    public List<User> getUsersByLeague(int leagueNum){
+    @Override
+    public List<User> getAllUsersInList() {
+        return new ArrayList(_userList.values());
+    }
+
+    public List<User> getUsersByLeague(int leagueNum) {
         List<User> usersInLeague = new ArrayList<>();
         for(User user : _userList.values()){
             if(user.getCurrLeague() == leagueNum)
@@ -128,6 +128,4 @@ public class Users implements IUsers {
         }
         return usersInLeague;
     }
-
-
 }
