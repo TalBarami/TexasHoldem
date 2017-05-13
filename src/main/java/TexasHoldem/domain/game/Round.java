@@ -1,7 +1,7 @@
 package TexasHoldem.domain.game;
 
-import TexasHoldem.domain.events.GameEvent;
-import TexasHoldem.domain.events.MoveEvent;
+import TexasHoldem.domain.events.gameFlowEvents.MoveEvent;
+import TexasHoldem.domain.events.gameFlowEvents.GameEvent;
 import TexasHoldem.domain.game.card.Card;
 import TexasHoldem.domain.game.card.Dealer;
 import TexasHoldem.domain.game.hand.Hand;

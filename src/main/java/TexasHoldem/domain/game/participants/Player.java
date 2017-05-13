@@ -5,6 +5,7 @@ import TexasHoldem.domain.game.GameActions;
 import TexasHoldem.domain.game.Round;
 import TexasHoldem.domain.game.card.Card;
 import TexasHoldem.domain.game.Game;
+import TexasHoldem.domain.game.chat.Message;
 import TexasHoldem.domain.user.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

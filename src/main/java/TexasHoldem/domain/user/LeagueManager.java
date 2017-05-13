@@ -1,5 +1,8 @@
 package TexasHoldem.domain.user;
 
+import TexasHoldem.domain.events.chatEvents.MessageEvent;
+import TexasHoldem.domain.game.participants.Participant;
+import TexasHoldem.domain.game.participants.Player;
 import TexasHoldem.domain.user.usersDistributions.DistributionAlgorithm;
 
 import java.util.List;
@@ -10,8 +13,8 @@ import java.util.List;
 public class LeagueManager {
     public final static int defaultLeagueForNewUsers = 0; //represent unknown league can play in each game
 
-    private int criteriaToMovingLeague = 10;
-    private int numOfGamesNewPlayerNeedPlayToChangeLeague = 10;
+    private final int criteriaToMovingLeague = 10;
+    private final int numOfGamesNewPlayerNeedPlayToChangeLeague = 10;
     private Integer maxLeague;
 
     public LeagueManager() {

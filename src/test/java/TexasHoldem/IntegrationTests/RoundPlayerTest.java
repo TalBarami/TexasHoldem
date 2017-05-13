@@ -1,6 +1,6 @@
 package TexasHoldem.IntegrationTests;
 
-import TexasHoldem.domain.events.MoveEvent;
+import TexasHoldem.domain.events.gameFlowEvents.MoveEvent;
 import TexasHoldem.domain.game.*;
 import TexasHoldem.domain.game.card.Card;
 import TexasHoldem.domain.game.card.Rank;
@@ -84,9 +84,9 @@ public class RoundPlayerTest {
         Game game1 = new Game(settings1, user1, new LeagueManager());
         Round round1 = new Round(playerList1, settings1, 0);
 
-        MoveEvent me1 = new MoveEvent(round1, player1, GameActions.FOLD, 0);
-        MoveEvent me2 = new MoveEvent(round1, player2, GameActions.FOLD, 0);
-        MoveEvent me4 = new MoveEvent(round1, player4, GameActions.FOLD, 0);
+        MoveEvent me1 = new MoveEvent(player1, GameActions.FOLD, 0);
+        MoveEvent me2 = new MoveEvent(player2, GameActions.FOLD, 0);
+        MoveEvent me4 = new MoveEvent(player4, GameActions.FOLD, 0);
 
         round1.setRoundActive(true);
         round1.setCurrentState(RoundState.PREFLOP);
@@ -131,10 +131,10 @@ public class RoundPlayerTest {
         Game game1 = new Game(settings1, user1, new LeagueManager());
         Round round1 = new Round(playerList1, settings1, 0);
 
-        MoveEvent me1 = new MoveEvent(round1, player1, GameActions.CHECK, 0);
-        MoveEvent me2 = new MoveEvent(round1, player2, GameActions.CHECK, 0);
-        MoveEvent me3 = new MoveEvent(round1, player3, GameActions.CHECK, 0);
-        MoveEvent me4 = new MoveEvent(round1, player4, GameActions.CHECK, 0);
+        MoveEvent me1 = new MoveEvent(player1, GameActions.CHECK, 0);
+        MoveEvent me2 = new MoveEvent(player2, GameActions.CHECK, 0);
+        MoveEvent me3 = new MoveEvent(player3, GameActions.CHECK, 0);
+        MoveEvent me4 = new MoveEvent(player4, GameActions.CHECK, 0);
 
         round1.setRoundActive(true);
         round1.setCurrentState(RoundState.PREFLOP);
@@ -187,12 +187,12 @@ public class RoundPlayerTest {
         round1.setCurrentState(RoundState.RIVER);
 
         // Player 4 is the first player
-        MoveEvent me4 = new MoveEvent(round1, player4, GameActions.CALL, 0);
-        MoveEvent me1 = new MoveEvent(round1, player1, GameActions.FOLD, 0);
-        MoveEvent me2 = new MoveEvent(round1, player2, GameActions.CALL, 0);
-        MoveEvent me3 = new MoveEvent(round1, player3, GameActions.RAISE, 20);
-        MoveEvent me41 = new MoveEvent(round1, player4, GameActions.CALL, 0);
-        MoveEvent me21 = new MoveEvent(round1, player2, GameActions.FOLD, 0);
+        MoveEvent me4 = new MoveEvent(player4, GameActions.CALL, 0);
+        MoveEvent me1 = new MoveEvent(player1, GameActions.FOLD, 0);
+        MoveEvent me2 = new MoveEvent(player2, GameActions.CALL, 0);
+        MoveEvent me3 = new MoveEvent(player3, GameActions.RAISE, 20);
+        MoveEvent me41 = new MoveEvent(player4, GameActions.CALL, 0);
+        MoveEvent me21 = new MoveEvent(player2, GameActions.FOLD, 0);
 
         int oldChipsAmount4 = player4.getChipsAmount();
         int oldChipsAmount1 = player1.getChipsAmount();
