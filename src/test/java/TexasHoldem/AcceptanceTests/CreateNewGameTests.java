@@ -224,6 +224,4 @@ public class CreateNewGameTests extends ProjectTest {
         boolean deleteUser1 = this.deleteUser("achiadg");
         assertTrue(deleteUser1);
     }
-
-
 }

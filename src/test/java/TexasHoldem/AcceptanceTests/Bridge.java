@@ -29,7 +29,6 @@ public interface Bridge {
 
     boolean createnewgame(String username, String gamename, GamePolicy policy, int buyin, int chippolicy, int minimumbet, int minplayers, int maxplayers, boolean spectateisvalid);
 
-
     boolean joinexistinggame(String username, String gamename, boolean spec);
 
     boolean searchgamebyplayername(String username);

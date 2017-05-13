@@ -67,7 +67,6 @@ public class PlayerCallsTests extends ProjectTest {
         deleteUsers();
     }
 
-
     private void createGames()
     {
         boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GamePolicy.NOLIMIT , 10000, 10000, 100, 2, 9, true);
@@ -93,14 +92,12 @@ public class PlayerCallsTests extends ProjectTest {
         boolean deleteUser4 = this.deleteUser("ronenbu");
     }
 
-
     public void logoutUsers() {
         boolean userloggedout1 = this.logout("achiadg");
         boolean userloggedout2 = this.logout("hodbub");
         boolean userloggedout3 = this.logout("rotemw");
         boolean userloggedout4 = this.logout("ronenbu");
     }
-
 
     public void addBalance() {
         boolean addedbalance1 = this.addbalancetouserwallet("achiadg",20000);
@@ -109,15 +106,12 @@ public class PlayerCallsTests extends ProjectTest {
         boolean addedbalance4 = this.addbalancetouserwallet("ronenbu",30000);
     }
 
-
     public void loginUsers() {
         boolean userloggedin1 = this.login("achiadg","aChi12#*");
         boolean userloggedin2 = this.login("hodbub","hBublil1308");
         boolean userloggedin3 = this.login("rotemw","rotemwald123");
         boolean userloggedin4 = this.login("ronenbu","ronenbu123");
     }
-
-
 
     public void registerUsers()
     {

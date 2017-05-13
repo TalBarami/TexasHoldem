@@ -63,7 +63,6 @@ public class PlayerFoldsTests extends ProjectTest {
         deleteUsers();
     }
 
-
     private void createGames()
     {
         boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GamePolicy.NOLIMIT , 10000, 10000, 100, 2, 9, true);
@@ -96,9 +95,6 @@ public class PlayerFoldsTests extends ProjectTest {
         boolean userloggedout4 = this.logout("ronenbu");
     }
 
-
-
-
     public void addBalance() {
         boolean addedbalance1 = this.addbalancetouserwallet("achiadg",20000);
         boolean addedbalance2 = this.addbalancetouserwallet("hodbub",40000);
@@ -106,15 +102,12 @@ public class PlayerFoldsTests extends ProjectTest {
         boolean addedbalance4 = this.addbalancetouserwallet("ronenbu",30000);
     }
 
-
     public void loginUsers() {
         boolean userloggedin1 = this.login("achiadg","aChi12#*");
         boolean userloggedin2 = this.login("hodbub","hBublil1308");
         boolean userloggedin3 = this.login("rotemw","rotemwald123");
         boolean userloggedin4 = this.login("ronenbu","ronenbu123");
     }
-
-
 
     public void registerUsers()
     {
