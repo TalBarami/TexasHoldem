@@ -1,6 +1,7 @@
 package TexasHoldem.service;
 
 import TexasHoldem.common.Exceptions.*;
+import TexasHoldem.domain.events.GameEvent;
 import TexasHoldem.domain.events.MoveEvent;
 import TexasHoldem.domain.game.*;
 import TexasHoldem.domain.game.participants.Player;
@@ -8,8 +9,11 @@ import TexasHoldem.domain.system.GameCenter;
 import TexasHoldem.domain.user.User;
 import org.apache.commons.lang3.NotImplementedException;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static TexasHoldem.service.TexasHoldemService.verifyObjects;
 import static TexasHoldem.service.TexasHoldemService.verifyPositiveNumbers;
@@ -85,12 +89,14 @@ public class GameService {
         optPlayer.ifPresent(player -> currentRound.playTurnOfPlayer(new MoveEvent(currentRound, player, GameActions.RAISE, amount)));
     }
 
-    public void replayGame(){
-        throw new NotImplementedException("");
-    }
+    public List<GameEvent> replayGame(String gameName){
+        Game game = gameCenter.getGameByName(gameName);
 
-    public void saveTurns(){
-        throw new NotImplementedException("");
+        return Stream.concat(
+                    game.getGameEvents().stream(),
+                    game.getRounds().stream()
+                        .flatMap(r -> r.getEvents().stream()))
+                .sorted(Comparator.comparing(GameEvent::getEventTime))
+                .collect(Collectors.toList());
     }
-
 }

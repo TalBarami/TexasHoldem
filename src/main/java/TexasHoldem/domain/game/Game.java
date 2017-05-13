@@ -219,7 +219,11 @@ public class Game {
         this.gameEvents.add(new GameEvent(initiator,eventAction));
     }
 
-    private void handleEndTournament() {
+    public List<GameEvent> getGameEvents(){
+        return gameEvents;
+    }
+
+    private void handleEndTournament(){
         setIsActive(true);
         resetDealerIndex();
         try {
