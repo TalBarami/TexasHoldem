@@ -47,8 +47,11 @@ public class GameCenter {
     }
 
     public void deleteUser(String username) throws EntityDoesNotExistsException {
-        usersDb.deleteUser(username);
-        logger.info("{} deleted from the system.",username);
+        User toDelete=getSpecificUserIfExist(username);
+        leagueManager.updateMaxLeagueUserDeleted(toDelete, usersDb.getAllUsersInList());
+        usersDb.deleteUser(toDelete);
+
+        logger.info("'{}' deleted from the system.",username);
     }
 
     public User getUser(String username){
@@ -105,7 +108,7 @@ public class GameCenter {
     }
 
     //todo : service layer will catch exception if  game room already chosen or balance below buy in.
-    public void createGame(String creatorUserName,GameSettings settings) throws InvalidArgumentException, NoBalanceForBuyInException, ArgumentNotInBoundsException {
+    public void createGame(String creatorUserName,GameSettings settings) throws NoBalanceForBuyInException, ArgumentNotInBoundsException, EntityDoesNotExistsException, InvalidArgumentException {
         User creator=getSpecificUserIfExist(creatorUserName);
         int minPlayers=settings.getPlayerRange().getLeft();
         int maxPlayers=settings.getPlayerRange().getRight();
@@ -153,7 +156,7 @@ public class GameCenter {
         }
     }
 
-    public List<Game> findAvailableGames(String userName) throws InvalidArgumentException {
+    public List<Game> findAvailableGames(String userName) throws  EntityDoesNotExistsException {
         User user = getSpecificUserIfExist(userName);
         List<Game> activeGames = gamesDb.getActiveGames();
         return activeGames.stream()
@@ -200,6 +203,10 @@ public class GameCenter {
         return gamesDb.getActiveGamesByMaximumPlayersAmount(maximumPlayers);
     }
 
+    public Game findGameByName(String gameName) throws EntityDoesNotExistsException {
+       return getSpecificGameIfExist(gameName);
+    }
+
     private void handleJoinGameAsPlayer(Game game,User user) throws GameException {
         int gameLeague=game.getLeague();
         int usersLeague=user.getCurrLeague();
@@ -227,27 +234,25 @@ public class GameCenter {
         return loggedInUsers;
     }
 
-    public Game getGameByName(String gameName){
-        List<Game> games = gamesDb.getActiveGamesByName(gameName);
-        return games.isEmpty() ? null : games.get(0);
+    public Game getGameByName(String gameName) throws EntityDoesNotExistsException {
+        return getSpecificGameIfExist(gameName);
     }
 
     public boolean isArchived(Game g){
         return gamesDb.isArchived(g);
     }
 
-
-    private Game getSpecificGameIfExist(String gameName) throws InvalidArgumentException {
+    private Game getSpecificGameIfExist(String gameName) throws EntityDoesNotExistsException {
         List<Game> games = gamesDb.getActiveGamesByName(gameName);
         if (games.isEmpty())
-            throw new InvalidArgumentException(String.format("Game '%s' doesn't exist in the system.",gameName));
+            throw new EntityDoesNotExistsException(String.format("Game '%s' doesn't exist in the system.",gameName));
         return games.get(0);
     }
 
-    private User getSpecificUserIfExist(String userName) throws InvalidArgumentException {
+    private User getSpecificUserIfExist(String userName) throws EntityDoesNotExistsException {
         User user = usersDb.getUserByUserName(userName);
         if (user == null)
-            throw new InvalidArgumentException(String.format("User '%s' doesn't exist in the system.", userName));
+            throw new EntityDoesNotExistsException(String.format("User '%s' doesn't exist in the system.", userName));
         return user;
     }
 

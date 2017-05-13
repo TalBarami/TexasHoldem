@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import javax.security.auth.login.LoginException;
+import javax.swing.text.html.parser.Entity;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -251,7 +252,12 @@ public class GameCenterTest {
     public void createGameSuccessTest() throws Exception {
         gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
         gc.depositMoney(testUser1,tournamentGameSettings.getBuyInPolicy()+100);
-        assertNull(gc.getGameByName(tournamentGameSettings.getName()));
+        try{
+            assertNull(gc.getGameByName(tournamentGameSettings.getName()));
+            fail();
+        } catch(Exception e){}
+
+
 
         gc.createGame(testUser1,tournamentGameSettings);
         User user=gc.getUser(testUser1);
@@ -272,7 +278,7 @@ public class GameCenterTest {
         try{
             gc.joinGame(testUser1,"fail",false);
             fail();
-        }catch(InvalidArgumentException e){
+        }catch(EntityDoesNotExistsException e){
             if(!e.getMessage().equals("Game 'fail' doesn't exist in the system."))
                 fail();
         }
@@ -341,7 +347,7 @@ public class GameCenterTest {
         try{
             gc.leaveGame(testUser1,tournamentGameSettings.getName());
             fail();
-        }catch(InvalidArgumentException e){
+        }catch(EntityDoesNotExistsException e){
             if(!e.getMessage().contains(String.format("User '%s' doesn't exist in the system.",testUser1)))
                 fail();
         }
@@ -350,7 +356,7 @@ public class GameCenterTest {
         try{
             gc.leaveGame(testUser1,tournamentGameSettings.getName());
             fail();
-        }catch(InvalidArgumentException e){
+        }catch(EntityDoesNotExistsException e){
             if(!e.getMessage().contains(String.format("Game '%s' doesn't exist in the system.",tournamentGameSettings.getName())))
                 fail();
         }

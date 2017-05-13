@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Game {
 
@@ -223,6 +224,12 @@ public class Game {
     private void handleEndTournament(){
         setIsActive(true);
         resetDealerIndex();
+    }
+
+    public int getBalancaOfPlayer(String userName){
+        return getPlayers().stream()
+                .filter(player -> player.getUser().getUsername().equals(userName))
+                .collect(Collectors.toList()).get(0).getChipsAmount();
     }
 
 }

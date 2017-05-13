@@ -2,9 +2,9 @@ package TexasHoldem.data.users;
 
 import TexasHoldem.common.Exceptions.EntityDoesNotExistsException;
 import TexasHoldem.common.Exceptions.InvalidArgumentException;
+import TexasHoldem.common.Exceptions.LoginException;
 import TexasHoldem.domain.user.User;
 
-import javax.security.auth.login.LoginException;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -44,11 +44,8 @@ public class Users implements IUsers, IUsersForDistributionAlgorithm {
         _userList.put(user.getUsername(),user);
     }
 
-    public void deleteUser(String username) throws EntityDoesNotExistsException {
-        if(!_userList.containsKey(username)){
-            throw new EntityDoesNotExistsException("This user name is not registered in the system.");
-        }
-        _userList.remove(username);
+    public void deleteUser(User user) {
+        _userList.remove(user.getUsername());
     }
 
     private boolean emailExists(String email){
