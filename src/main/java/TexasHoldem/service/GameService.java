@@ -1,17 +1,20 @@
 package TexasHoldem.service;
 
 import TexasHoldem.common.Exceptions.*;
-import TexasHoldem.domain.events.MoveEvent;
+import TexasHoldem.domain.events.chatEvents.MessageEvent;
+import TexasHoldem.domain.events.chatEvents.WhisperEvent;
+import TexasHoldem.domain.events.gameFlowEvents.MoveEvent;
 import TexasHoldem.domain.game.*;
+import TexasHoldem.domain.game.chat.Message;
+import TexasHoldem.domain.game.participants.Participant;
 import TexasHoldem.domain.game.participants.Player;
 import TexasHoldem.domain.system.GameCenter;
 import TexasHoldem.domain.user.User;
-import org.apache.commons.lang3.NotImplementedException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static TexasHoldem.service.TexasHoldemService.verifyObjects;
 import static TexasHoldem.service.TexasHoldemService.verifyPositiveNumbers;
 import static TexasHoldem.service.TexasHoldemService.verifyStrings;
 
@@ -58,7 +61,7 @@ public class GameService {
         Round currentRound = gameCenter.getGameByName(gameName).getLastRound();
         User user = gameCenter.getUser(username);
         Optional<Player> optPlayer = currentRound.getActivePlayers().stream().filter(p -> p.getUser().equals(user)).findFirst();
-        optPlayer.ifPresent(player -> currentRound.playTurnOfPlayer(new MoveEvent(currentRound, player, GameActions.CALL, 0)));
+        optPlayer.ifPresent(player -> currentRound.playTurnOfPlayer(new MoveEvent(player, GameActions.CALL, 0)));
     }
 
     public void playCheck(String username, String gameName) throws InvalidArgumentException, EntityDoesNotExistsException {
@@ -66,7 +69,7 @@ public class GameService {
         Round currentRound = gameCenter.getGameByName(gameName).getLastRound();
         User user = gameCenter.getUser(username);
         Optional<Player> optPlayer = currentRound.getActivePlayers().stream().filter(p -> p.getUser().equals(user)).findFirst();
-        optPlayer.ifPresent(player -> currentRound.playTurnOfPlayer(new MoveEvent(currentRound, player, GameActions.CHECK, 0)));
+        optPlayer.ifPresent(player -> currentRound.playTurnOfPlayer(new MoveEvent(player, GameActions.CHECK, 0)));
     }
 
     public void playFold(String username, String gameName) throws InvalidArgumentException, EntityDoesNotExistsException {
@@ -74,7 +77,7 @@ public class GameService {
         Round currentRound = gameCenter.getGameByName(gameName).getLastRound();
         User user = gameCenter.getUser(username);
         Optional<Player> optPlayer = currentRound.getActivePlayers().stream().filter(p -> p.getUser().equals(user)).findFirst();
-        optPlayer.ifPresent(player -> currentRound.playTurnOfPlayer(new MoveEvent(currentRound, player, GameActions.FOLD, 0)));
+        optPlayer.ifPresent(player -> currentRound.playTurnOfPlayer(new MoveEvent(player, GameActions.FOLD, 0)));
     }
 
     public void playRaise(String username, String gameName, int amount) throws InvalidArgumentException, EntityDoesNotExistsException {
@@ -82,15 +85,42 @@ public class GameService {
         Round currentRound = gameCenter.getGameByName(gameName).getLastRound();
         User user = gameCenter.getUser(username);
         Optional<Player> optPlayer = currentRound.getActivePlayers().stream().filter(p -> p.getUser().equals(user)).findFirst();
-        optPlayer.ifPresent(player -> currentRound.playTurnOfPlayer(new MoveEvent(currentRound, player, GameActions.RAISE, amount)));
+        optPlayer.ifPresent(player -> currentRound.playTurnOfPlayer(new MoveEvent(player, GameActions.RAISE, amount)));
     }
 
-    public void replayGame(){
-        throw new NotImplementedException("");
+    public void sendMessage(String username, String gameName, String content) throws InvalidArgumentException, EntityDoesNotExistsException {
+        verifyStrings(username,gameName);
+        Game game = gameCenter.getGameByName(gameName);
+        User user = gameCenter.getUser(username);
+        List<Participant> allParInGame = new ArrayList<>();
+        allParInGame.addAll(game.getPlayers());
+        allParInGame.addAll(game.getSpectators());
+        Participant participant = allParInGame.stream().filter(p -> p.getUser().equals(user)).findFirst().get();
+        game.handleMessageFromParticipant(new MessageEvent(participant, new Message(content)));
     }
 
-    public void saveTurns(){
-        throw new NotImplementedException("");
+    public void sendWhisper(String username, String gameName, String content, String userNameToSend) throws InvalidArgumentException, EntityDoesNotExistsException, ArgumentNotInBoundsException {
+        verifyStrings(username,gameName);
+        Game game = gameCenter.getGameByName(gameName);
+        User user = gameCenter.getUser(username);
+        User userToSend = gameCenter.getUser(userNameToSend);
+        List<Participant> allParInGame = new ArrayList<>();
+        allParInGame.addAll(game.getPlayers());
+        allParInGame.addAll(game.getSpectators());
+        Participant participant = allParInGame.stream().filter(p -> p.getUser().equals(user)).findFirst().get();
+        Participant parToSendTo = allParInGame.stream().filter(p -> p.getUser().equals(userNameToSend)).findFirst().get();
+        game.handleWhisperFromParticipant(new WhisperEvent(participant, new Message(content), parToSendTo));
     }
+
+//    public List<GameEvent> replayGame(String gameName){
+//        Game game = gameCenter.getGameByName(gameName);
+//
+//        return Stream.concat(
+//                    game.getGameEvents().stream(),
+//                    game.getRounds().stream()
+//                        .flatMap(r -> r.getEvents().stream()))
+//                .sorted(Comparator.comparing(GameEvent::getEventTime))
+//                .collect(Collectors.toList());
+//    }
 
 }

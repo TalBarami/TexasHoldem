@@ -1,6 +1,7 @@
 package TexasHoldem.domain.game;
 
-import TexasHoldem.domain.events.MoveEvent;
+import TexasHoldem.domain.events.gameFlowEvents.MoveEvent;
+import TexasHoldem.domain.events.gameFlowEvents.GameEvent;
 import TexasHoldem.domain.game.card.Card;
 import TexasHoldem.domain.game.card.Dealer;
 import TexasHoldem.domain.game.hand.Hand;
@@ -32,7 +33,7 @@ public class Round {
     private List<Card> openedCards;
     private Player currentDealerPlayer;
     private RoundState currentState;
-    private List<MoveEvent> eventList;
+    private List<GameEvent> eventList;
 
     public Round(List<Player> players, GameSettings settings, int dealerIndex) {
         this.gameSettings = settings;
@@ -44,7 +45,7 @@ public class Round {
         this.potAmount = 0;
         this.openedCards = new ArrayList<Card>();
         this.currentState = RoundState.PREFLOP;
-        this.eventList = new LinkedList<MoveEvent>();
+        this.eventList = new ArrayList<>();
 
         int startingPlayerIndex = (dealerIndex + 3) % activePlayers.size();
         this.currentPlayer = activePlayers.get(startingPlayerIndex);
@@ -475,6 +476,10 @@ public class Round {
 
     public void setChipsToCall(int chipsToCall) {
         this.chipsToCall = chipsToCall;
+    }
+
+    public List<GameEvent> getEvents(){
+        return eventList;
     }
 
     public int getBalancaOfPlayer(String userName){

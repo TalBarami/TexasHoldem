@@ -1,5 +1,8 @@
 package TexasHoldem.domain.user;
 
+import TexasHoldem.domain.events.chatEvents.MessageEvent;
+import TexasHoldem.domain.game.participants.Participant;
+import TexasHoldem.domain.game.participants.Player;
 import TexasHoldem.domain.user.usersDistributions.DistributionAlgorithm;
 
 import java.util.List;
