@@ -130,9 +130,12 @@ public class Round {
         if(!calculateTurnOptions().contains(playerMoveEvent.getEventAction()))
             throw new IllegalArgumentException("Your move is Invalid");
 
+        boolean isLastPlayerPlayed = false;
         if (isRoundActive) {
             eventList.add(playerMoveEvent);
             GameActions chosenAction = playerMoveEvent.getEventAction();
+
+            isLastPlayerPlayed = isLastPlayerPlayed(playerMoveEvent);
 
             switch (chosenAction) {
                 case RAISE:
@@ -149,7 +152,7 @@ public class Round {
                     break;
             }
 
-            if (isLastPlayerPlayed(playerMoveEvent)) {
+            if (isLastPlayerPlayed) {
                 endFlow();
             } else {
                 // TODO :: Call communication layer to send currentPlayer a message which requests him to play
