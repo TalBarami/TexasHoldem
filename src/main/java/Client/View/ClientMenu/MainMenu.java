@@ -11,13 +11,15 @@ import java.awt.event.WindowEvent;
  * Created by User on 12/05/2017.
  */
 public class MainMenu extends JFrame {
-    private User user;
+    public User user;
+
+    private Profile profile;
 
     private JLabel label_name;
     private JLabel label_cash;
     private JLabel label_picture;
     private JPanel contentPane;
-    private JButton button_profile;
+    private JButton buttonProfile;
     private JLabel label_league;
     private JTable table1;
     private JButton createNewGameButton;
@@ -45,22 +47,23 @@ public class MainMenu extends JFrame {
         contentPane.registerKeyboardAction(e -> onExit(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
 
-        button_profile.addActionListener(e -> {
-            Profile p = new Profile();
-            setContentPane(p.contentPane);
+        buttonProfile.addActionListener(e -> {
+            onProfile();
         });
     }
 
     public void generateUserInformation(){
-        ImageIcon im = new ImageIcon(user.getImg().getScaledInstance(100, 100, 0));
+        ImageIcon icon = new ImageIcon(user.getImg().getScaledInstance(100, 100, 0));
         label_cash.setText(String.valueOf(user.getBalance()));
         label_name.setText(user.getUsername());
         label_picture.setText("");
-        label_picture.setIcon(im);
+        label_picture.setIcon(icon);
     }
 
     public void onProfile(){
-
+        if(profile == null)
+            profile = new Profile(this);
+        profile.init();
     }
 
     public void onCreateGame(){

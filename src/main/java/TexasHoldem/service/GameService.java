@@ -89,7 +89,7 @@ public class GameService {
         optPlayer.ifPresent(player -> currentRound.playTurnOfPlayer(new MoveEvent(currentRound, player, GameActions.RAISE, amount)));
     }
 
-    public List<GameEvent> replayGame(String gameName){
+    public List<GameEvent> replayGame(String gameName) throws EntityDoesNotExistsException {
         Game game = gameCenter.getGameByName(gameName);
 
         return Stream.concat(

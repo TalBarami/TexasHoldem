@@ -49,14 +49,7 @@ public class Register {
     }
 
     private void onBrowse(){
-        JFileChooser fileChooser = new JFileChooser();
-        FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                "JPG & GIF Images", "jpg", "gif");
-        fileChooser.setFileFilter(filter);
-        int returnVal = fileChooser.showOpenDialog(null);
-        if(returnVal == JFileChooser.APPROVE_OPTION) {
-            text_picture.setText(fileChooser.getSelectedFile().getPath());
-        }
+        ClientUtils.browseFile(text_picture);
     }
 
     private void createUIComponents() {
