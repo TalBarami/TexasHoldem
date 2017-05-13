@@ -14,12 +14,13 @@ public class MainMenu extends JFrame {
     public User user;
 
     private Profile profile;
+    private CreateGame createGame;
 
     private JLabel label_name;
     private JLabel label_cash;
     private JLabel label_picture;
     private JPanel contentPane;
-    private JButton buttonProfile;
+    private JButton profileButton;
     private JLabel label_league;
     private JTable table1;
     private JButton createNewGameButton;
@@ -47,9 +48,9 @@ public class MainMenu extends JFrame {
         contentPane.registerKeyboardAction(e -> onExit(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
 
-        buttonProfile.addActionListener(e -> {
-            onProfile();
-        });
+        profileButton.addActionListener(e -> onProfile());
+        createNewGameButton.addActionListener(e -> onCreateGame());
+        joinSelectedGameButton.addActionListener(e -> onJoinGame());
     }
 
     public void generateUserInformation(){
@@ -67,7 +68,9 @@ public class MainMenu extends JFrame {
     }
 
     public void onCreateGame(){
-
+        if(createGame == null)
+            createGame = new CreateGame(this);
+        createGame.init();
     }
 
     public void onJoinGame(){
