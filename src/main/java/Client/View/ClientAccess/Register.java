@@ -1,15 +1,14 @@
-package Client.View;
+package Client.View.ClientAccess;
 
-import net.sourceforge.jdatepicker.JDatePicker;
 import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
 import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
 import net.sourceforge.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import java.awt.event.*;
 
-public class Register extends JFrame {
+public class Register {
+    private Welcome ancestor;
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
@@ -23,41 +22,30 @@ public class Register extends JFrame {
     private JLabel Label_picture;
     private JTextField text_picture;
     private JButton button_picture;
-    private JDatePickerImpl JDatePickerImpl1;
+    private JDatePickerImpl datePicker_birthdate;
 
-    public Register() {
-        setContentPane(contentPane);
-        getRootPane().setDefaultButton(buttonOK);
+    public Register(Welcome ancestor) {
+        this.ancestor = ancestor;
 
         buttonOK.addActionListener(e -> onOK());
 
         buttonCancel.addActionListener(e -> onCancel());
 
         button_picture.addActionListener(e -> onBrowse());
+    }
 
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                onCancel();
-            }
-        });
-
-        contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-
+    public void init(){
+        ancestor.setContentPane(contentPane);
+        ancestor.getRootPane().setDefaultButton(buttonOK);
+        ancestor.revalidate();
     }
 
     private void onOK() {
         // add your code here
-        MainMenu mainMenu = new MainMenu();
-        mainMenu.pack();
-        mainMenu.setLocationRelativeTo(null);
-        mainMenu.setVisible(true);
-        dispose();
     }
 
     private void onCancel() {
-        // add your code here if necessary
-        dispose();
+        ancestor.init();
     }
 
     private void onBrowse(){
@@ -71,14 +59,9 @@ public class Register extends JFrame {
         }
     }
 
-    public void initialize() {
-        pack();
-        setVisible(true);
-    }
-
     private void createUIComponents() {
         UtilDateModel model = new UtilDateModel();
         JDatePanelImpl datePanel = new JDatePanelImpl(model);
-        JDatePickerImpl1 = new JDatePickerImpl(datePanel);
+        datePicker_birthdate = new JDatePickerImpl(datePanel);
     }
 }
