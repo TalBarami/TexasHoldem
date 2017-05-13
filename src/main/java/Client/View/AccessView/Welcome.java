@@ -1,8 +1,5 @@
-package Client.View.ClientAccess;
+package Client.View.AccessView;
 
-
-import Client.View.ClientAccess.Login;
-import Client.View.ClientAccess.Register;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -55,7 +52,7 @@ public class Welcome extends JFrame {
         revalidate();
     }
 
-    public void onExit(){
+    private void onExit(){
         dispose();
     }
 }

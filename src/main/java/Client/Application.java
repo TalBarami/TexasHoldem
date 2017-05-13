@@ -1,6 +1,6 @@
 package Client;
 
-import Client.View.ClientMenu.MainMenu;
+import Client.View.SystemView.MainMenu;
 import TexasHoldem.domain.user.User;
 
 import javax.imageio.ImageIO;
