@@ -55,4 +55,8 @@ public class TexasHoldemService {
         if(!SystemUtils.arePositive(ints))
             throw new InvalidArgumentException("Numeric values must be positive.");
     }
+
+    public GameCenter getGameCenter() {
+        return gameCenter;
+    }
 }
