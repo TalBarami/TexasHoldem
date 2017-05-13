@@ -152,7 +152,7 @@ public class GameCenter {
         if(game.canBeArchived()){
             gamesDb.archiveGame(game); // todo : notify someway to spectators of the room that room is closed?
             logger.info("Game '{}' is archived, since all players left.",gameName);
-            game.addGameEvnet(participant, GameActions.CLOSED);
+            game.addGameEvent(participant, GameActions.CLOSED);
         }
     }
 

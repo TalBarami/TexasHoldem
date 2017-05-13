@@ -128,14 +128,12 @@ public class SpectateActiveGameTests extends ProjectTest {
         deleteUsers();
     }
 
-
     public void deleteUsers() {
         boolean deleteUser1 = this.deleteUser("achiadg");
         boolean deleteUser2 = this.deleteUser("hodbub");
         boolean deleteUser3 = this.deleteUser("rotemw");
         boolean deleteUser4 = this.deleteUser("ronenbu");
     }
-
 
     public void logoutUsers() {
         boolean userloggedout1 = this.logout("achiadg");
@@ -144,9 +142,6 @@ public class SpectateActiveGameTests extends ProjectTest {
         boolean userloggedout4 = this.logout("ronenbu");
     }
 
-
-
-
     public void addBalance() {
         boolean addedbalance1 = this.addbalancetouserwallet("achiadg",20000);
         boolean addedbalance2 = this.addbalancetouserwallet("hodbub",40000);
@@ -154,14 +149,12 @@ public class SpectateActiveGameTests extends ProjectTest {
         boolean addedbalance4 = this.addbalancetouserwallet("ronenbu",30000);
     }
 
-
     public void loginUsers() {
         boolean userloggedin1 = this.login("achiadg","aChi12#*");
         boolean userloggedin2 = this.login("hodbub","hBublil1308");
         boolean userloggedin3 = this.login("rotemw","rotemwald123");
         boolean userloggedin4 = this.login("ronenbu","ronenbu123");
     }
-
 
     public void registerUsers()
     {

@@ -8,7 +8,6 @@ import java.awt.image.BufferedImage;
 import java.time.LocalDate;
 import java.util.List;
 
-import TexasHoldem.domain.game.Round;
 import TexasHoldem.service.TexasHoldemService;
 
 import javax.security.auth.login.LoginException;
@@ -289,7 +288,7 @@ public class RealBridge implements Bridge {
     public int getPlayerbalance(String username, String gamename) {
         try {
             Game g= service.searchService().findGameByName(gamename);
-            return g.getBalancaOfPlayer(username);
+            return g.getBalanceOfPlayer(username);
         } catch (EntityDoesNotExistsException e) {
             return -1;
         } catch (InvalidArgumentException e) {

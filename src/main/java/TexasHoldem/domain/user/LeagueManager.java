@@ -10,8 +10,8 @@ import java.util.List;
 public class LeagueManager {
     public final static int defaultLeagueForNewUsers = 0; //represent unknown league can play in each game
 
-    private int criteriaToMovingLeague = 10;
-    private int numOfGamesNewPlayerNeedPlayToChangeLeague = 10;
+    private final int criteriaToMovingLeague = 10;
+    private final int numOfGamesNewPlayerNeedPlayToChangeLeague = 10;
     private Integer maxLeague;
 
     public LeagueManager() {
