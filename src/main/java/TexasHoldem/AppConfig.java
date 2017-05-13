@@ -1,5 +1,7 @@
 package TexasHoldem;
 
+import TexasHoldem.service.GameService;
+import TexasHoldem.service.SearchService;
 import TexasHoldem.service.TexasHoldemService;
 import TexasHoldem.service.UserService;
 import org.springframework.context.annotation.Bean;
@@ -19,5 +21,15 @@ public class AppConfig {
     @Bean
     public UserService getUserServiceBean(){
         return service.userService();
+    }
+
+    @Bean
+    public GameService getGameServiceBean(){
+        return service.gameService();
+    }
+
+    @Bean
+    public SearchService getSearchServiceBean(){
+        return service.searchService();
     }
 }
