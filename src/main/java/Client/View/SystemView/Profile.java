@@ -1,6 +1,6 @@
-package Client.View.ClientMenu;
+package Client.View.SystemView;
 
-import Client.View.ClientAccess.ClientUtils;
+import Client.View.AccessView.ClientUtils;
 import TexasHoldem.domain.user.User;
 
 import javax.swing.*;

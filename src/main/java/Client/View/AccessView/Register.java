@@ -1,11 +1,10 @@
-package Client.View.ClientAccess;
+package Client.View.AccessView;
 
 import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
 import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
 import net.sourceforge.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Register {
     private Welcome ancestor;
