@@ -1,5 +1,6 @@
-package TexasHoldem.domain.events;
+package TexasHoldem.domain.events.gameFlowEvents;
 
+import TexasHoldem.domain.events.SystemEvent;
 import TexasHoldem.domain.game.GameActions;
 import TexasHoldem.domain.game.participants.Participant;
 
@@ -8,20 +9,13 @@ import org.joda.time.DateTime;
 /**
  * Created by user on 02/05/2017.
  */
-public class GameEvent {
-    private DateTime eventTime;
-    private Participant eventInitiator;
+public class GameEvent extends SystemEvent {
     private GameActions eventAction;
 
     public GameEvent(Participant eventInitiator, GameActions action) {
-        this.eventTime = DateTime.now();
-        this.eventInitiator = eventInitiator;
+        super(eventInitiator);
         this.eventAction = action;
     }
 
-    public DateTime getEventTime() {
-        return eventTime;
-    }
-    public Participant getEventInitiator(){return eventInitiator;}
     public GameActions getEventAction(){return eventAction;}
 }

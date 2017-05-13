@@ -1,6 +1,7 @@
 package TexasHoldem.domain.game.participants;
 
 import TexasHoldem.domain.game.Game;
+import TexasHoldem.domain.game.chat.Message;
 import TexasHoldem.domain.user.User;
 
 /**

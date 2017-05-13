@@ -1,7 +1,10 @@
 package TexasHoldem.domain.game;
 
 import TexasHoldem.common.Exceptions.*;
-import TexasHoldem.domain.events.GameEvent;
+import TexasHoldem.domain.events.chatEvents.MessageEvent;
+import TexasHoldem.domain.events.chatEvents.WhisperEvent;
+import TexasHoldem.domain.events.gameFlowEvents.GameEvent;
+import TexasHoldem.domain.game.chat.Message;
 import TexasHoldem.domain.game.participants.Participant;
 import TexasHoldem.domain.user.LeagueManager;
 import TexasHoldem.domain.game.participants.Player;
@@ -127,6 +130,41 @@ public class Game {
 
         addGameEvent(p,GameActions.ENTER);
         logger.info("'{}' has joined the game '{}' as player.", user.getUsername(),getName());
+    }
+
+    public void handleMessageFromParticipant(MessageEvent messageEvent){
+        Participant sender = messageEvent.getEventInitiator();
+        if(sender instanceof Player) {
+            sendMessageToPlayers(messageEvent.getContent());
+            sendMessageToAllSpectators(messageEvent.getContent());
+        }
+        else //he is a spectator
+            sendMessageToAllSpectators(messageEvent.getContent());
+    }
+
+    public void handleWhisperFromParticipant(WhisperEvent whisperEvent) throws ArgumentNotInBoundsException {
+        Participant sender = whisperEvent.getEventInitiator();
+        if(sender instanceof Player){
+            //TODO :: send the message
+            ;
+        }
+        else{
+            if(!(whisperEvent.getParticipantToSendTo() instanceof Spectator))
+                throw new ArgumentNotInBoundsException("spectator should send whispers only to other spectators");
+            else
+                //TODO :: send the message
+                ;
+        }
+    }
+
+    private void sendMessageToAllSpectators(Message content) {
+        for(int i = 0; i < spectators.size(); i++);
+        //TODO :: send the message to spectator
+    }
+
+    private void sendMessageToPlayers(Message content) {
+        for(int i = 0; i < players.size(); i++);
+        //TODO :: send the message to spectator
     }
 
     public boolean realMoneyGame(){
