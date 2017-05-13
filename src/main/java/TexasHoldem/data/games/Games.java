@@ -94,7 +94,7 @@ public class Games implements IGames {
         LinkedList<Game> result = new LinkedList<Game>();
 
         for (Game g : _games.values()) {
-            if (g.isActive() && p.test(g)) {
+            if (/*g.isActive() &&*/ p.test(g)) {
                 result.add(g);
             }
 

@@ -127,24 +127,24 @@ public abstract class ProjectTest extends TestCase{
         return bridge.moveuserleague(admin, username,league);
     } */
 
-    public void startgame(String gamename) {
-        bridge.startgame(gamename);
+    public boolean startgame(String userName,String gameName) {
+        return bridge.startgame(userName,gameName);
     }
 
-    public boolean playcall(String username, String gamename, int amount) {
-        return bridge.playcall(username, gamename, amount);
+    public boolean playcall(String username, String gamename) {
+        return bridge.playcall(username, gamename);
     }
 
-    public boolean playcheck(String username, String gamename, int amount) {
-        return bridge.playcheck( username, gamename,amount);
+    public boolean playcheck(String username, String gamename) {
+        return bridge.playcheck( username, gamename);
     }
 
     public boolean playraise(String username, String gamename, int amount) {
         return bridge.playraise(username, gamename, amount);
     }
 
-    public boolean playfold(String username, String gamename, int amount) {
-        return bridge.playfold(username, gamename, amount);
+    public boolean playfold(String username, String gamename) {
+        return bridge.playfold(username, gamename);
     }
 
     public int getuserleague(String username) {

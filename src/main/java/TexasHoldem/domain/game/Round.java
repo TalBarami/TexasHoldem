@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static TexasHoldem.domain.game.GameActions.*;
 
@@ -474,5 +475,11 @@ public class Round {
 
     public void setChipsToCall(int chipsToCall) {
         this.chipsToCall = chipsToCall;
+    }
+
+    public int getBalancaOfPlayer(String userName){
+        return getActivePlayers().stream()
+                .filter(player -> player.getUser().getUsername().equals(userName))
+                .collect(Collectors.toList()).get(0).getChipsAmount();
     }
 }
