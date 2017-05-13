@@ -143,18 +143,18 @@ public class ProxyBridge implements Bridge {
      } */
 
     @Override
-    public void startgame(String gamename) {
-       real.startgame(gamename);
+    public boolean startgame(String userName,String gameName) {
+       return real.startgame(userName,gameName);
     }
 
     @Override
-    public boolean playcall(String username, String gamename, int amount) {
-        return real.playcall(username, gamename, amount);
+    public boolean playcall(String username, String gamename) {
+        return real.playcall(username, gamename);
     }
 
     @Override
-    public boolean playcheck(String username, String gamename, int amount) {
-        return real.playcheck(username, gamename, amount);
+    public boolean playcheck(String username, String gamename) {
+        return real.playcheck(username, gamename);
     }
 
     @Override
@@ -163,8 +163,8 @@ public class ProxyBridge implements Bridge {
     }
 
     @Override
-    public boolean playfold(String username, String gamename, int amount) {
-        return real.playfold(username, gamename, amount);
+    public boolean playfold(String username, String gamename) {
+        return real.playfold(username, gamename);
     }
 
     @Override

@@ -17,7 +17,7 @@ public interface IUsers {
     User verifyCredentials(String userName,String password) throws LoginException, EntityDoesNotExistsException;
     User getUserByUserName(String userName);
     User getHighestBalance();
-    void deleteUser(String username) throws EntityDoesNotExistsException;
+    void deleteUser(User user) throws EntityDoesNotExistsException;
     List<User> getAllUsersInList();
     List<User> getUsersByLeague(int leagueNum);
 }

@@ -32,7 +32,7 @@ public class GameService {
 
 
     public void createGame(String creatorUsername, String gameName, GamePolicy policy, int limit, int minBet, int buyInPolicy, int chipPolicy,
-                           int minPlayerAmount, int maxPlayerAmount, boolean specAccept) throws NoBalanceForBuyInException, InvalidArgumentException, ArgumentNotInBoundsException {
+                           int minPlayerAmount, int maxPlayerAmount, boolean specAccept) throws NoBalanceForBuyInException, InvalidArgumentException, ArgumentNotInBoundsException, EntityDoesNotExistsException {
         verifyStrings(creatorUsername, gameName);
         verifyPositiveNumbers(limit, minBet, buyInPolicy, chipPolicy, minPlayerAmount, maxPlayerAmount);
         gameCenter.createGame(creatorUsername, new GameSettings(gameName, policy, limit, minBet, buyInPolicy, chipPolicy, minPlayerAmount, maxPlayerAmount, specAccept));
@@ -53,28 +53,32 @@ public class GameService {
         gameCenter.leaveGame(username, gameName);
     }
 
-    public void playCall(String username, String gameName){
+    public void playCall(String username, String gameName) throws InvalidArgumentException, EntityDoesNotExistsException {
+        verifyStrings(username,gameName);
         Round currentRound = gameCenter.getGameByName(gameName).getLastRound();
         User user = gameCenter.getUser(username);
         Optional<Player> optPlayer = currentRound.getActivePlayers().stream().filter(p -> p.getUser().equals(user)).findFirst();
         optPlayer.ifPresent(player -> currentRound.playTurnOfPlayer(new MoveEvent(currentRound, player, GameActions.CALL, 0)));
     }
 
-    public void playCheck(String username, String gameName){
+    public void playCheck(String username, String gameName) throws InvalidArgumentException, EntityDoesNotExistsException {
+        verifyStrings(username,gameName);
         Round currentRound = gameCenter.getGameByName(gameName).getLastRound();
         User user = gameCenter.getUser(username);
         Optional<Player> optPlayer = currentRound.getActivePlayers().stream().filter(p -> p.getUser().equals(user)).findFirst();
         optPlayer.ifPresent(player -> currentRound.playTurnOfPlayer(new MoveEvent(currentRound, player, GameActions.CHECK, 0)));
     }
 
-    public void playFold(String username, String gameName){
+    public void playFold(String username, String gameName) throws InvalidArgumentException, EntityDoesNotExistsException {
+        verifyStrings(username,gameName);
         Round currentRound = gameCenter.getGameByName(gameName).getLastRound();
         User user = gameCenter.getUser(username);
         Optional<Player> optPlayer = currentRound.getActivePlayers().stream().filter(p -> p.getUser().equals(user)).findFirst();
         optPlayer.ifPresent(player -> currentRound.playTurnOfPlayer(new MoveEvent(currentRound, player, GameActions.FOLD, 0)));
     }
 
-    public void playRaise(String username, String gameName, int amount){
+    public void playRaise(String username, String gameName, int amount) throws InvalidArgumentException, EntityDoesNotExistsException {
+        verifyStrings(username,gameName);
         Round currentRound = gameCenter.getGameByName(gameName).getLastRound();
         User user = gameCenter.getUser(username);
         Optional<Player> optPlayer = currentRound.getActivePlayers().stream().filter(p -> p.getUser().equals(user)).findFirst();

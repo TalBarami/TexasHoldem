@@ -68,15 +68,15 @@ public interface Bridge {
 
    /* boolean moveuserleague(String admin, String username, int league); */
 
-    void startgame(String gamename);
+    boolean startgame(String userName,String gameName);
 
-    boolean playcall(String username, String gamename, int amount);
+    boolean playcall(String username, String gamename);
 
-    boolean playcheck(String username, String gamename, int amount);
+    boolean playcheck(String username, String gamename);
 
     boolean playraise(String username, String gamename, int amount);
 
-    boolean playfold(String username, String gamename, int amount);
+    boolean playfold(String username, String gamename);
 
     int getuserleague(String username);
 }
