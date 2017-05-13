@@ -3,7 +3,7 @@ package TexasHoldem.communication.entities;
 /**
  * Created by user on 12/05/2017.
  */
-public class ClientLoginDetails {
+public class ClientUserDetails {
     String username;
     String password;
 

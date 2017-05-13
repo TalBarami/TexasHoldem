@@ -110,8 +110,6 @@ public class LogInUserTests extends ProjectTest {
         assertTrue(deleteUser2);
     }
 
-
-
     @Test
     public void testLogInPasswordSqlInjection()
     {

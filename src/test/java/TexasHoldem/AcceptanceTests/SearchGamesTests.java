@@ -245,8 +245,6 @@ public class SearchGamesTests extends ProjectTest {
         boolean deleteUser4 = this.deleteUser("ronenbu");
     }
 
-
-
     public void logoutUsers() {
         boolean userloggedout1 = this.logout("achiadg");
         boolean userloggedout2 = this.logout("hodbub");
@@ -254,16 +252,12 @@ public class SearchGamesTests extends ProjectTest {
         boolean userloggedout4 = this.logout("ronenbu");
     }
 
-
-
-
     public void addBalance() {
         boolean addedbalance1 = this.addbalancetouserwallet("achiadg",20000);
         boolean addedbalance2 = this.addbalancetouserwallet("hodbub",40000);
         boolean addedbalance3 = this.addbalancetouserwallet("rotemw",20000);
         boolean addedbalance4 = this.addbalancetouserwallet("ronenbu",30000);
     }
-
 
     public void loginUsers() {
         boolean userloggedin1 = this.login("achiadg","aChi12#*");

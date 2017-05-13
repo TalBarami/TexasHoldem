@@ -4,6 +4,7 @@ import TexasHoldem.common.Exceptions.*;
 import TexasHoldem.domain.events.chatEvents.MessageEvent;
 import TexasHoldem.domain.events.chatEvents.WhisperEvent;
 import TexasHoldem.domain.events.gameFlowEvents.MoveEvent;
+import TexasHoldem.domain.events.gameFlowEvents.GameEvent;
 import TexasHoldem.domain.game.*;
 import TexasHoldem.domain.game.chat.Message;
 import TexasHoldem.domain.game.participants.Participant;
@@ -12,8 +13,11 @@ import TexasHoldem.domain.system.GameCenter;
 import TexasHoldem.domain.user.User;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static TexasHoldem.service.TexasHoldemService.verifyPositiveNumbers;
 import static TexasHoldem.service.TexasHoldemService.verifyStrings;
@@ -111,16 +115,15 @@ public class GameService {
         Participant parToSendTo = allParInGame.stream().filter(p -> p.getUser().equals(userNameToSend)).findFirst().get();
         game.handleWhisperFromParticipant(new WhisperEvent(participant, new Message(content), parToSendTo));
     }
+  
+    public List<GameEvent> replayGame(String gameName){
+        Game game = gameCenter.getGameByName(gameName);
 
-//    public List<GameEvent> replayGame(String gameName){
-//        Game game = gameCenter.getGameByName(gameName);
-//
-//        return Stream.concat(
-//                    game.getGameEvents().stream(),
-//                    game.getRounds().stream()
-//                        .flatMap(r -> r.getEvents().stream()))
-//                .sorted(Comparator.comparing(GameEvent::getEventTime))
-//                .collect(Collectors.toList());
-//    }
-
+        return Stream.concat(
+                    game.getGameEvents().stream(),
+                    game.getRounds().stream()
+                        .flatMap(r -> r.getEvents().stream()))
+                .sorted(Comparator.comparing(GameEvent::getEventTime))
+                .collect(Collectors.toList());
+    }
 }
