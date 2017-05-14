@@ -15,6 +15,7 @@ import TexasHoldem.domain.game.participants.Player;
 import TexasHoldem.domain.user.User;
 import TexasHoldem.domain.user.LeagueManager;
 import TexasHoldem.domain.user.usersDistributions.DistributionAlgorithm;
+import TexasHoldem.domain.user.usersDistributions.Min2InLeagueSameAmount;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -256,8 +257,9 @@ public class GameCenter {
         return user;
     }
 
-    public void redistributeUsersInLeagues(DistributionAlgorithm da) {
-        leagueManager.redistributeUsersInLeagues(da);
+    public void redistributeUsersInLeagues() {
+        DistributionAlgorithm distributionAlgorithm = new Min2InLeagueSameAmount((IUsersForDistributionAlgorithm)usersDb);
+        leagueManager.redistributeUsersInLeagues(distributionAlgorithm);
     }
 
     public IUsersForDistributionAlgorithm getUserDbWindowForDistributionAlgorithm() {

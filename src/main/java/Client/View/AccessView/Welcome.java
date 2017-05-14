@@ -1,8 +1,5 @@
-package Client.View.ClientAccess;
+package Client.View.AccessView;
 
-
-import Client.View.ClientAccess.Login;
-import Client.View.ClientAccess.Register;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -17,7 +14,6 @@ public class Welcome extends JFrame {
 
     public Welcome() {
         setContentPane(contentPane);
-        //setModal(true);
         getRootPane().setDefaultButton(buttonLogin);
 
         buttonLogin.addActionListener(e -> onLogin());
@@ -51,11 +47,10 @@ public class Welcome extends JFrame {
     }
 
     public void init(){
-        setContentPane(contentPane);
-        revalidate();
+        ClientUtils.frameInit(this, contentPane);
     }
 
-    public void onExit(){
+    private void onExit(){
         dispose();
     }
 }
