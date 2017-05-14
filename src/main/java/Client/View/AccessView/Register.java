@@ -1,11 +1,10 @@
-package Client.View.ClientAccess;
+package Client.View.AccessView;
 
 import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
 import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
 import net.sourceforge.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Register {
     private Welcome ancestor;
@@ -35,9 +34,8 @@ public class Register {
     }
 
     public void init(){
-        ancestor.setContentPane(contentPane);
+        ClientUtils.frameInit(ancestor, contentPane);
         ancestor.getRootPane().setDefaultButton(buttonOK);
-        ancestor.revalidate();
     }
 
     private void onOK() {
@@ -49,14 +47,7 @@ public class Register {
     }
 
     private void onBrowse(){
-        JFileChooser fileChooser = new JFileChooser();
-        FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                "JPG & GIF Images", "jpg", "gif");
-        fileChooser.setFileFilter(filter);
-        int returnVal = fileChooser.showOpenDialog(null);
-        if(returnVal == JFileChooser.APPROVE_OPTION) {
-            text_picture.setText(fileChooser.getSelectedFile().getPath());
-        }
+        ClientUtils.browseFile(text_picture);
     }
 
     private void createUIComponents() {

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="Client.View.ClientAccess.Register">
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="Client.View.AccessView.Login">
   <grid id="cbd77" binding="contentPane" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="10" left="10" bottom="10" right="10"/>
     <constraints>
-      <xy x="48" y="54" width="436" height="345"/>
+      <xy x="48" y="54" width="436" height="297"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -49,7 +49,7 @@
           </grid>
         </children>
       </grid>
-      <grid id="e3588" layout-manager="GridLayoutManager" row-count="10" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="e3588" layout-manager="GridLayoutManager" row-count="4" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -57,16 +57,15 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="a1761" class="javax.swing.JLabel" binding="Label_username">
+          <component id="30b4a" class="javax.swing.JLabel" binding="Label_username">
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <labelFor value="6d0e6"/>
               <text value="Username:"/>
             </properties>
           </component>
-          <component id="6d0e6" class="javax.swing.JTextField" binding="text_name">
+          <component id="d30c4" class="javax.swing.JTextField" binding="Text_username">
             <constraints>
               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
@@ -74,78 +73,17 @@
             </constraints>
             <properties/>
           </component>
-          <component id="5eaf8" class="javax.swing.JLabel" binding="Label_password">
+          <component id="62a97" class="javax.swing.JLabel" binding="Label_password">
             <constraints>
               <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <labelFor value="e2750"/>
               <text value="Password:"/>
             </properties>
           </component>
-          <component id="98083" class="javax.swing.JLabel" binding="Label_email">
-            <constraints>
-              <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <labelFor value="34aa8"/>
-              <text value="E-mail:"/>
-            </properties>
-          </component>
-          <component id="34aa8" class="javax.swing.JTextField" binding="text_email">
-            <constraints>
-              <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                <preferred-size width="150" height="-1"/>
-              </grid>
-            </constraints>
-            <properties/>
-          </component>
-          <component id="e2750" class="javax.swing.JPasswordField" binding="text_password">
+          <component id="ad0d9" class="javax.swing.JPasswordField" binding="Text_password">
             <constraints>
               <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                <preferred-size width="150" height="-1"/>
-              </grid>
-            </constraints>
-            <properties/>
-          </component>
-          <component id="c63f9" class="javax.swing.JLabel" binding="Label_birthdate">
-            <constraints>
-              <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <text value="Birthday"/>
-            </properties>
-          </component>
-          <component id="8213b" class="javax.swing.JLabel" binding="Label_picture">
-            <constraints>
-              <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <labelFor value="ee6de"/>
-              <text value="Picture"/>
-            </properties>
-          </component>
-          <component id="ee6de" class="javax.swing.JTextField" binding="text_picture">
-            <constraints>
-              <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                <preferred-size width="150" height="-1"/>
-              </grid>
-            </constraints>
-            <properties>
-              <editable value="false"/>
-            </properties>
-          </component>
-          <component id="9c513" class="javax.swing.JButton" binding="button_picture">
-            <constraints>
-              <grid row="9" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <text value="Browse"/>
-            </properties>
-          </component>
-          <component id="ba5b0" class="net.sourceforge.jdatepicker.impl.JDatePickerImpl" binding="datePicker_birthdate" custom-create="true">
-            <constraints>
-              <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
               </grid>
             </constraints>
@@ -155,8 +93,4 @@
       </grid>
     </children>
   </grid>
-  <inspectionSuppressions>
-    <suppress inspection="NoLabelFor" id="ffae2"/>
-    <suppress inspection="NoLabelFor" id="93d81"/>
-  </inspectionSuppressions>
 </form>
