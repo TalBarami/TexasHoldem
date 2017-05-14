@@ -1,13 +1,13 @@
 package Client.view.access;
 
-import Client.common.exceptions.EntityDoesNotExistsException;
 import Client.common.exceptions.InvalidArgumentException;
+import Client.domain.SessionManager;
 import Client.view.ClientUtils;
+import Client.view.system.MainMenu;
 import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
 import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
 import net.sourceforge.jdatepicker.impl.UtilDateModel;
 
-import javax.security.auth.login.LoginException;
 import javax.swing.*;
 import java.awt.event.KeyEvent;
 
@@ -26,7 +26,7 @@ public class Register {
     private JLabel Label_picture;
     private JTextField text_picture;
     private JButton button_picture;
-    private JDatePickerImpl datePicker_birthdate;
+    private JDatePickerImpl datePicker_birthday;
 
     public Register(Welcome ancestor) {
         this.ancestor = ancestor;
@@ -47,7 +47,9 @@ public class Register {
 
     private void onOK() {
         try {
-            ancestor.sessionManager().register(text_name.getText(), new String(text_password.getPassword()), text_email.getText(), datePicker_birthdate.getJFormattedTextField().getText(), text_picture.getText());
+            SessionManager.getInstance().register(text_name.getText(), new String(text_password.getPassword()), text_email.getText(), datePicker_birthday.getJFormattedTextField().getText(), text_picture.getText());
+            MainMenu menu = new MainMenu();
+            ancestor.dispose();
         } catch (InvalidArgumentException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -64,6 +66,6 @@ public class Register {
     private void createUIComponents() {
         UtilDateModel model = new UtilDateModel();
         JDatePanelImpl datePanel = new JDatePanelImpl(model);
-        datePicker_birthdate = new JDatePickerImpl(datePanel);
+        datePicker_birthday = new JDatePickerImpl(datePanel);
     }
 }

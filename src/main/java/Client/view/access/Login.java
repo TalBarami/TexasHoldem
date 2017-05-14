@@ -2,7 +2,9 @@ package Client.view.access;
 
 import Client.common.exceptions.EntityDoesNotExistsException;
 import Client.common.exceptions.InvalidArgumentException;
+import Client.domain.SessionManager;
 import Client.view.ClientUtils;
+import Client.view.system.MainMenu;
 
 import javax.security.auth.login.LoginException;
 import javax.swing.*;
@@ -35,7 +37,9 @@ public class Login {
 
     private void onOK() {
         try {
-            ancestor.sessionManager().login(text_username.getText(), new String(text_password.getPassword()));
+            SessionManager.getInstance().login(text_username.getText(), new String(text_password.getPassword()));
+            MainMenu menu = new MainMenu();
+            ancestor.dispose();
         } catch (LoginException | EntityDoesNotExistsException | InvalidArgumentException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }

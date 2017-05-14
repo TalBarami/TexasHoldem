@@ -1,9 +1,10 @@
 package Client.view.system;
 
+import Client.communication.entities.ClientUserProfile;
+import Client.domain.SessionManager;
 import Client.view.ClientUtils;
 import Client.view.access.Welcome;
 import Client.view.game.Game;
-import TexasHoldem.domain.user.User;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -13,8 +14,7 @@ import java.util.List;
  * Created by User on 12/05/2017.
  */
 public class MainMenu extends JFrame {
-    public User user;
-    public List<Game> games;
+    private List<Game> games;
 
     private Profile profile;
     private CreateGame createGame;
@@ -36,11 +36,8 @@ public class MainMenu extends JFrame {
     private JButton spectateSelectedGameButton;
     private JCheckBox inactiveGamesCheckBox;
 
-    public MainMenu(User user) {
-        this.user = user;
+    public MainMenu() {
         init();
-
-        generateUserInformation();
 
         assignActionListeners();
     }
@@ -69,11 +66,12 @@ public class MainMenu extends JFrame {
     }
 
     private void generateUserInformation(){
-        ImageIcon icon = new ImageIcon(user.getImg().getScaledInstance(100, 100, 0));
-        label_cash.setText(String.valueOf(user.getBalance()));
+        ClientUserProfile user = SessionManager.getInstance().user();
+        /*ImageIcon icon = new ImageIcon(user.getImg().getScaledInstance(100, 100, 0));
+        label_cash.setText(String.valueOf(user.getBalance()));*/
         label_name.setText(user.getUsername());
         label_picture.setText("");
-        label_picture.setIcon(icon);
+        /*label_picture.setIcon(icon);*/
     }
 
     private void onProfile(){
@@ -124,12 +122,11 @@ public class MainMenu extends JFrame {
 
     public void init(){
         ClientUtils.frameInit(this, contentPane);
+        generateUserInformation();
     }
 
     private void onExit(){
-        for(Game game : games){
-            game.onExit();
-        }
         dispose();
     }
+
 }

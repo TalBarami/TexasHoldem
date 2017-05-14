@@ -1,7 +1,6 @@
 package Client.view.access;
 
 
-import Client.domain.user.SessionManager;
 import Client.view.ClientUtils;
 
 import javax.swing.*;
@@ -10,15 +9,12 @@ import java.awt.event.*;
 public class Welcome extends JFrame {
     private Login login;
     private Register register;
-    private SessionManager sessionManager;
 
     private JPanel contentPane;
     private JButton buttonLogin;
     private JButton buttonRegister;
 
     public Welcome() {
-        sessionManager = new SessionManager();
-
         init();
 
         getRootPane().setDefaultButton(buttonLogin);
@@ -63,9 +59,5 @@ public class Welcome extends JFrame {
 
     private void onExit(){
         dispose();
-    }
-
-    public SessionManager sessionManager(){
-        return sessionManager;
     }
 }

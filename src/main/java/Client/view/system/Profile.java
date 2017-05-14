@@ -1,7 +1,13 @@
 package Client.view.system;
 
+import Client.common.exceptions.EntityDoesNotExistsException;
+import Client.common.exceptions.InvalidArgumentException;
+import Client.communication.entities.ClientUserProfile;
+import Client.domain.SessionManager;
 import Client.view.ClientUtils;
-import TexasHoldem.domain.user.User;
+import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
+import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
+import net.sourceforge.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -21,8 +27,8 @@ public class Profile {
     private JPasswordField oldPasswordPasswordField;
     private JPasswordField newPasswordPasswordField;
     private JPasswordField repeatPasswordPasswordField;
-    private JTextField newEMailTextField;
-    private JTextField repeatEMailTextField;
+    private JTextField newEmailTextField;
+    private JTextField repeatEmailTextField;
     private JTextField newPictureTextField;
     private JButton buttonBrowse;
     private JLabel label_userPicture;
@@ -33,17 +39,18 @@ public class Profile {
     private JLabel label_league;
     private JLabel label_totalPlayed;
     private JLabel label_earned;
+    private JDatePickerImpl newBirthdayDatePicker;
 
     public Profile(MainMenu ancestor) {
         this.ancestor = ancestor;
 
         assignActionListeners();
 
-        generateUserInformation();
     }
 
     public void init(){
         ClientUtils.frameInit(ancestor, contentPane);
+        generateUserInformation();
         ancestor.getRootPane().setDefaultButton(buttonApply);
     }
 
@@ -56,28 +63,33 @@ public class Profile {
 
         newPasswordPasswordField.getDocument().addDocumentListener(textChangeListener());
         repeatPasswordPasswordField.getDocument().addDocumentListener(textChangeListener());
-        newEMailTextField.getDocument().addDocumentListener(textChangeListener());
-        repeatEMailTextField.getDocument().addDocumentListener(textChangeListener());
+        newEmailTextField.getDocument().addDocumentListener(textChangeListener());
+        repeatEmailTextField.getDocument().addDocumentListener(textChangeListener());
 
         contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
     }
 
     public void generateUserInformation(){
-        User user = ancestor.user;
-        ImageIcon icon = new ImageIcon(user.getImg().getScaledInstance(200, 200, 0));
+        ClientUserProfile user = SessionManager.getInstance().user();
+        /*ImageIcon icon = new ImageIcon(user.getImg().getScaledInstance(200, 200, 0));*/
         label_userPicture.setText("");
-        label_userPicture.setIcon(icon);
-        label_name.setText(label_name.getText() + user.getUsername());
-        label_birthday.setText(label_birthday.getText() + user.getDateOfBirth());
-        label_email.setText(label_email.getText() + user.getEmail());
-        label_cash.setText(label_cash.getText() + user.getBalance());
-        label_totalPlayed.setText(label_totalPlayed.getText() + user.getNumOfGamesPlayed());
-        label_league.setText(label_league.getText() + user.getCurrLeague());
-        label_earned.setText(label_earned.getText() + user.getAmountEarnedInLeague());
+        /*label_userPicture.setIcon(icon);*/
+        label_name.setText("Name: " + user.getUsername());
+        label_birthday.setText("Birthday: " + user.getDayOfBirth() + "/" + user.getMonthOfBirth() + "/" + user.getYearOfBirth());
+        label_email.setText("E-mail: " + user.getEmail());
+        label_cash.setText("Total cash: " + user.getBalance());
+        label_totalPlayed.setText("Games played: " + user.getNumOfGamesPlayed());
+        label_league.setText("League: " + user.getLeague());
+        label_earned.setText("Total earned in league: " + user.getAmountEarnedInLeague());
     }
 
     private void onApply() {
-        // add your code here
+        try {
+            SessionManager.getInstance().editProfile(new String(newPasswordPasswordField.getPassword()), newEmailTextField.getText(), newBirthdayDatePicker.getJFormattedTextField().getText(), newPictureTextField.getText());
+            ancestor.init();
+        } catch (InvalidArgumentException | EntityDoesNotExistsException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void onCancel() {
@@ -90,7 +102,7 @@ public class Profile {
 
     private void onTextChange(){
         if(Arrays.equals(newPasswordPasswordField.getPassword(), repeatPasswordPasswordField.getPassword()) &&
-                newEMailTextField.getText().equals(repeatEMailTextField.getText())){
+                newEmailTextField.getText().equals(repeatEmailTextField.getText())){
             buttonApply.setEnabled(true);
         } else {
             buttonApply.setEnabled(false);
@@ -114,5 +126,11 @@ public class Profile {
                 onTextChange();
             }
         };
+    }
+
+    private void createUIComponents() {
+        UtilDateModel model = new UtilDateModel();
+        JDatePanelImpl datePanel = new JDatePanelImpl(model);
+        newBirthdayDatePicker = new JDatePickerImpl(datePanel);
     }
 }

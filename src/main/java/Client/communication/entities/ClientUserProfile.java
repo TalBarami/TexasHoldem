@@ -11,11 +11,11 @@ public class ClientUserProfile {
     private int monthOfBirth;
     private int yearOfBirth;
     private int balance;
-    private int currLeague;
-    private int numOfGamesPlayed;
-    private int amountEarnedInLeague;
+    private int league;
+    private int gamesPlayed;
+    private int earnedInLeague;
 
-    public ClientUserProfile(String username, String password, String email, int dayOfBirth, int monthOfBirth, int yearOfBirth,int balance,int currleague,int numofgamesplayed,int amountearnedinleague) {
+    public ClientUserProfile(String username, String password, String email, int dayOfBirth, int monthOfBirth, int yearOfBirth,int balance,int league,int gamesPlayed,int earnedInLeague) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -23,9 +23,9 @@ public class ClientUserProfile {
         this.monthOfBirth = monthOfBirth;
         this.yearOfBirth = yearOfBirth;
         this.balance = balance;
-        this.amountEarnedInLeague = amountearnedinleague;
-        this.currLeague = currleague;
-        this.numOfGamesPlayed = numofgamesplayed;
+        this.earnedInLeague = earnedInLeague;
+        this.league = league;
+        this.gamesPlayed = gamesPlayed;
     }
 
     public ClientUserProfile() {
@@ -39,29 +39,30 @@ public class ClientUserProfile {
         this.balance = balance;
     }
 
-    public int getCurrleague() {
-        return currLeague;
+    public int getLeague() {
+        return league;
     }
 
-    public void setCurrleague(int currleague) {
-        this.currLeague = currleague;
+    public void setLeague(int league) {
+        this.league = league;
     }
 
-    public int getNumofgamesplayed() {
-        return numOfGamesPlayed;
+    public int getNumOfGamesPlayed() {
+        return gamesPlayed;
     }
 
-    public void setNumofgamesplayed(int numofgamesplayed) {
-        this.numOfGamesPlayed = numofgamesplayed;
+    public void setNumOfGamesPlayed(int numofgamesplayed) {
+        this.gamesPlayed = numofgamesplayed;
     }
 
-    public int getAmountearnedinleague() {
-        return amountEarnedInLeague;
+    public int getAmountEarnedInLeague() {
+        return earnedInLeague;
     }
 
-    public void setAmountearnedinleague(int amountearnedinleague) {
-        this.amountEarnedInLeague = amountearnedinleague;
+    public void setAmountEarnedInLeague(int amountearnedinleague) {
+        this.earnedInLeague = amountearnedinleague;
     }
+
     public String getUsername() {
         return username;
     }
