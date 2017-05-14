@@ -136,6 +136,7 @@ public class Round {
             GameActions chosenAction = playerMoveEvent.getEventAction();
 
             isLastPlayerPlayed = isLastPlayerPlayed(playerMoveEvent);
+
             switch (chosenAction) {
                 case RAISE:
                     playerRaiseTurn(playerMoveEvent.getAmountToRaise());

@@ -94,6 +94,17 @@ public class GameService {
         optPlayer.ifPresent(player -> currentRound.playTurnOfPlayer(new MoveEvent(player, GameActions.RAISE, amount)));
     }
 
+    public List<GameEvent> replayGame(String gameName) throws EntityDoesNotExistsException {
+        Game game = gameCenter.getGameByName(gameName);
+
+        return Stream.concat(
+                    game.getGameEvents().stream(),
+                    game.getRounds().stream()
+                        .flatMap(r -> r.getEvents().stream()))
+                .sorted(Comparator.comparing(GameEvent::getEventTime))
+                .collect(Collectors.toList());
+    }
+
     public void sendMessage(String username, String gameName, String content) throws InvalidArgumentException, EntityDoesNotExistsException {
         verifyStrings(username,gameName);
         Game game = gameCenter.getGameByName(gameName);
@@ -117,7 +128,7 @@ public class GameService {
         Participant parToSendTo = allParInGame.stream().filter(p -> p.getUser().equals(userNameToSend)).findFirst().get();
         game.handleWhisperFromParticipant(new WhisperEvent(participant, new Message(content), parToSendTo));
     }
-  
+
     public List<GameEvent> replayGame(String gameName) throws EntityDoesNotExistsException {
         Game game = gameCenter.getArchivedGames().stream().filter(g -> g.getName().equals(gameName)).findFirst().orElse(null);
         if(game==null)
@@ -130,4 +141,5 @@ public class GameService {
                 .sorted(Comparator.comparing(GameEvent::getEventTime))
                 .collect(Collectors.toList());
     }
+
 }

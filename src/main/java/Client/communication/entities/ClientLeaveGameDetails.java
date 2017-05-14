@@ -1,12 +1,11 @@
-package TexasHoldem.communication.entities;
+package Client.communication.entities;
 
 /**
  * Created by user on 13/05/2017.
  */
-public class ClientJoinGameDetails {
+public class ClientLeaveGameDetails {
     private String username;
     private String gameName;
-    private boolean isSpectating;
 
     public String getUsername() {
         return username;
@@ -22,13 +21,5 @@ public class ClientJoinGameDetails {
 
     public void setGameName(String gameName) {
         this.gameName = gameName;
-    }
-
-    public boolean isSpectating() {
-        return isSpectating;
-    }
-
-    public void setSpectating(boolean spectating) {
-        isSpectating = spectating;
     }
 }

@@ -186,7 +186,7 @@ public class RoundUserTest {
         Round round1 = new Round(playerList1, settings1, 0);
 
         round1.setRoundActive(true);
-        round1.setCurrentState(RoundState.RIVER);
+        round1.setCurrentState(RoundState.TURN);
 
         // Player 4 is the first player
         MoveEvent me4 = new MoveEvent(player4, GameActions.CALL, 0);

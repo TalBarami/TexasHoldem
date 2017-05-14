@@ -56,24 +56,59 @@ public class GameController {
     }
 
     @RequestMapping(method=PUT, value="/game/{roomname}")
-    public ResponseMessage joinGame(@PathVariable("roomname") String roomName, @RequestBody ClientJoinGameDetails joinDetails) throws GameException {
-        String gameName = joinDetails.getGameName();
+    public ResponseMessage handleGameEvent(@PathVariable("roomname") String roomName, @RequestBody ClientGameRequest gameRequest) throws GameException {
+        String gameName = gameRequest.getGamename();
 
         if (!roomName.equals(gameName)) {
             throw new InvalidArgumentException("Room name is not compatible with request data.");
         }
 
-        String userName = joinDetails.getUsername();
-        boolean isSpectating = joinDetails.isSpectating();
+        String userName = gameRequest.getUsername();
+        int actionToPerform = gameRequest.getAction();
+        int amountForAction = gameRequest.getAmount();
+        boolean spectateOption = gameRequest.getSpectating();
+        String messageContent = gameRequest.getMassage();
 
-        if (!isSpectating) {
-            gameService.joinGame(userName, gameName, isSpectating);
-            return new ResponseMessage("Join as player succeeded", null);
+        if (actionToPerform == 0) {
+            gameService.playCheck(userName,gameName);
+            return new ResponseMessage("Check succeeded", null);
         }
 
-        else {
-            gameService.spectateGame(userName, gameName, isSpectating);
-            return new ResponseMessage("Join as spectator succeeded", null);
+        else if(actionToPerform == 1){
+            gameService.playRaise(userName,gameName,amountForAction);
+            return new ResponseMessage("Raise succeeded", null);
+        }
+
+        else if(actionToPerform == 2){
+            gameService.playCall(userName,gameName);
+            return new ResponseMessage("Call succeeded", null);
+        }
+
+        else if(actionToPerform == 3){
+            gameService.playFold(userName,gameName);
+            return new ResponseMessage("Fold succeeded", null);
+        }
+
+        else if (actionToPerform == 4 && spectateOption == false)
+        {
+            gameService.joinGame(userName,gameName,spectateOption);
+            return new ResponseMessage("Join game succeeded", null);
+        }
+
+        else if(actionToPerform == 4 && spectateOption == true){
+            gameService.spectateGame(userName,gameName,spectateOption);
+            return new ResponseMessage("Spectate game succeeded", null);
+        }
+
+        else if(actionToPerform == 5) {
+            gameService.startGame(userName,gameName);
+            return new ResponseMessage("Start game succeeded", null);
+        }
+
+        else
+        {
+            gameService.sendMessage(userName,gameName,messageContent);
+            return new ResponseMessage("Massage sent successfully", null);
         }
     }
 

@@ -1,8 +1,7 @@
-package Client.View.ClientAccess;
+package Client.view.access;
 
 
-import Client.View.ClientAccess.Login;
-import Client.View.ClientAccess.Register;
+import Client.view.ClientUtils;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -16,10 +15,14 @@ public class Welcome extends JFrame {
     private JButton buttonRegister;
 
     public Welcome() {
-        setContentPane(contentPane);
-        //setModal(true);
+        init();
+
         getRootPane().setDefaultButton(buttonLogin);
 
+        assignActionListeners();
+    }
+
+    private void assignActionListeners(){
         buttonLogin.addActionListener(e -> onLogin());
 
         buttonRegister.addActionListener(e -> onRegister());
@@ -33,7 +36,7 @@ public class Welcome extends JFrame {
         });
 
         // call onExit() on ESCAPE
-        contentPane.registerKeyboardAction(e -> onExit(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        contentPane.registerKeyboardAction(e -> onExit(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
     }
 
     private void onLogin() {
@@ -51,11 +54,10 @@ public class Welcome extends JFrame {
     }
 
     public void init(){
-        setContentPane(contentPane);
-        revalidate();
+        ClientUtils.frameInit(this, contentPane);
     }
 
-    public void onExit(){
+    private void onExit(){
         dispose();
     }
 }
