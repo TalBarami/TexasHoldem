@@ -1,17 +1,20 @@
-package Client.View.SystemView;
+package Client.view.system;
 
-import Client.View.AccessView.ClientUtils;
-import Client.View.AccessView.Welcome;
-import TexasHoldem.domain.user.User;
+import Client.communication.entities.ClientUserProfile;
+import Client.domain.SessionManager;
+import Client.view.ClientUtils;
+import Client.view.access.Welcome;
+import Client.view.game.Game;
 
 import javax.swing.*;
 import java.awt.event.*;
+import java.util.List;
 
 /**
  * Created by User on 12/05/2017.
  */
 public class MainMenu extends JFrame {
-    public User user;
+    private List<Game> games;
 
     private Profile profile;
     private CreateGame createGame;
@@ -33,11 +36,8 @@ public class MainMenu extends JFrame {
     private JButton spectateSelectedGameButton;
     private JCheckBox inactiveGamesCheckBox;
 
-    public MainMenu(User user) {
-        this.user = user;
+    public MainMenu() {
         init();
-
-        generateUserInformation();
 
         assignActionListeners();
     }
@@ -55,21 +55,23 @@ public class MainMenu extends JFrame {
         searchTextField.addActionListener(e -> onSearchTextChange());
         onlyAvailableCheckBox.addActionListener(e -> onAvailableOnly());
 
+        contentPane.registerKeyboardAction(e -> onExit(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
+
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 onExit();
             }
         });
-        contentPane.registerKeyboardAction(e -> onExit(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
     }
 
     private void generateUserInformation(){
-        ImageIcon icon = new ImageIcon(user.getImg().getScaledInstance(100, 100, 0));
-        label_cash.setText(String.valueOf(user.getBalance()));
+        ClientUserProfile user = SessionManager.getInstance().user();
+        /*ImageIcon icon = new ImageIcon(user.getImg().getScaledInstance(100, 100, 0));
+        label_cash.setText(String.valueOf(user.getBalance()));*/
         label_name.setText(user.getUsername());
         label_picture.setText("");
-        label_picture.setIcon(icon);
+        /*label_picture.setIcon(icon);*/
     }
 
     private void onProfile(){
@@ -86,7 +88,8 @@ public class MainMenu extends JFrame {
     }
 
     private void onJoinGame(){
-
+        Game game = new Game();
+        game.init();
     }
 
     private void onSpectateGame(){
@@ -119,9 +122,11 @@ public class MainMenu extends JFrame {
 
     public void init(){
         ClientUtils.frameInit(this, contentPane);
+        generateUserInformation();
     }
 
     private void onExit(){
         dispose();
     }
+
 }

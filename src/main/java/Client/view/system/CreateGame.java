@@ -1,4 +1,4 @@
-package Client.View.SystemView;
+package Client.view.system;
 
 import TexasHoldem.domain.game.GamePolicy;
 
@@ -52,7 +52,7 @@ public class CreateGame extends JDialog {
             }
         });
 
-        contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
     }
 
     private void initComponents(){

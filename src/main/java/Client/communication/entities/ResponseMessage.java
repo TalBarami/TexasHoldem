@@ -1,6 +1,4 @@
-package TexasHoldem.communication.entities;
-
-import org.springframework.http.HttpStatus;
+package Client.communication.entities;
 
 /**
  * Created by user on 12/05/2017.

@@ -1,6 +1,5 @@
 package TexasHoldem;
 
-import TexasHoldem.domain.user.usersDistributions.Min2InLeagueSameAmount;
 import TexasHoldem.service.GameService;
 import TexasHoldem.service.SearchService;
 import TexasHoldem.service.TexasHoldemService;
@@ -28,7 +27,7 @@ public class AppConfig {
             public void run() {
                 service.getGameCenter().redistributeUsersInLeagues();
             }
-        }, 0, weekTime);
+        }, weekTime, weekTime);
     }
 
     @Bean

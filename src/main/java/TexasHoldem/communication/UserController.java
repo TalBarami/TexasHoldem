@@ -2,8 +2,13 @@ package TexasHoldem.communication;
 
 import TexasHoldem.common.Exceptions.EntityDoesNotExistsException;
 import TexasHoldem.common.Exceptions.InvalidArgumentException;
+import TexasHoldem.communication.converters.UserClientUserProfileConverter;
+import TexasHoldem.communication.entities.ClientGameDetails;
+import TexasHoldem.communication.entities.ClientGamePreferences;
 import TexasHoldem.communication.entities.ClientUserProfile;
 import TexasHoldem.communication.entities.ResponseMessage;
+import TexasHoldem.domain.game.Game;
+import TexasHoldem.domain.game.GamePolicy;
 import TexasHoldem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,10 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.awt.image.BufferedImage;
 import java.time.LocalDate;
+import java.util.LinkedList;
+import java.util.List;
 
-import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
-import static org.springframework.web.bind.annotation.RequestMethod.PUT;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 /**
  * Created by user on 12/05/2017.
@@ -66,5 +71,11 @@ public class UserController {
         // TODO :: Verify username and password
         service.deleteUser(userName);
         return new ResponseMessage("Delete user profile succeeded", null);
+    }
+
+    @RequestMapping(method = GET, value="/user/{username}")
+    public ResponseMessage getActiveGames(@PathVariable("username") String userName) throws InvalidArgumentException {
+        ClientUserProfile clientProfile = UserClientUserProfileConverter.convert(service.getUser(userName));
+        return new ResponseMessage<ClientUserProfile>("User received successfully", clientProfile);
     }
 }

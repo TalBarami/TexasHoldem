@@ -10,7 +10,7 @@ public class Wallet {
 
     public Wallet()
     {
-        balance = 0;
+        balance = 10000;
     }
 
     public int getBalance() {

@@ -1,4 +1,4 @@
-package Client.View.AccessView;
+package Client.view;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
