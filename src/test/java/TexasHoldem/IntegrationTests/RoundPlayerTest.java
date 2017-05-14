@@ -18,10 +18,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-//import static org.mockito.Mockito.*;
-//import static org.mockito.Mockito.verify;
-//import static org.mockito.Mockito.when;
-
 /**
  * Created by hod on 12/05/2017.
  */

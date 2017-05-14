@@ -85,7 +85,7 @@ public class Round {
         }
 
         activePlayers.remove(player);
-        logger.info("{} has left the game {} during a played round.", player.getUser().getUsername(), gameSettings.getName());
+        //logger.info("{} has left the game {} during a played round.", player.getUser().getUsername(), gameSettings.getName());
 
         if (activePlayers.size() == 1) {
             endRound();
@@ -130,10 +130,12 @@ public class Round {
         if(!calculateTurnOptions().contains(playerMoveEvent.getEventAction()))
             throw new IllegalArgumentException("Your move is Invalid");
 
+        boolean isLastPlayerPlayed = false;
         if (isRoundActive) {
             eventList.add(playerMoveEvent);
             GameActions chosenAction = playerMoveEvent.getEventAction();
 
+            isLastPlayerPlayed = isLastPlayerPlayed(playerMoveEvent);
             switch (chosenAction) {
                 case RAISE:
                     playerRaiseTurn(playerMoveEvent.getAmountToRaise());
@@ -149,7 +151,7 @@ public class Round {
                     break;
             }
 
-            if (isLastPlayerPlayed(playerMoveEvent)) {
+            if (isLastPlayerPlayed) {
                 endFlow();
             } else {
                 // TODO :: Call communication layer to send currentPlayer a message which requests him to play

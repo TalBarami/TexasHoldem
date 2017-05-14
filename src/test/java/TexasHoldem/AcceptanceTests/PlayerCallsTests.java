@@ -1,7 +1,6 @@
 
 package TexasHoldem.AcceptanceTests;
 
-import TexasHoldem.domain.game.Game;
 import TexasHoldem.domain.game.GamePolicy;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,12 +32,12 @@ public class PlayerCallsTests extends ProjectTest {
         boolean playerplayed2 = this.playcall("achiadg", "achiadg-poker-game");
         boolean playerplayed3 = this.playcall("hodbub", "achiadg-poker-game");
         boolean playerplayed4 = this.playcheck("rotemw", "achiadg-poker-game");
-        int potsize1 = this.getPotSize("achiadg-poker-game");
-        int playerbalance1 = this.getPlayerbalance("rotemw","achiadg-poker-game");
+        int potsize1 = this.getpotsize("achiadg-poker-game");
+        int playerbalance1 = this.getplayerbalance("rotemw","achiadg-poker-game");
         boolean playedturn1 = this.playraise("hodbub", "achiadg-poker-game", 300);
         boolean playedturn2 = this.playcall("rotemw", "achiadg-poker-game");
-        int potsize3 = this.getPotSize("achiadg-poker-game");
-        int playerbalance3 = this.getPlayerbalance("rotemw" ,"achiadg-poker-game");
+        int potsize3 = this.getpotsize("achiadg-poker-game");
+        int playerbalance3 = this.getplayerbalance("rotemw" ,"achiadg-poker-game");
         assertEquals(potsize1,potsize3 - 600);
         assertEquals(playerbalance1,playerbalance3 + 300);
         leaveGames();

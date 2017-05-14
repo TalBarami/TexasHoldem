@@ -1,5 +1,6 @@
 package TexasHoldem.AcceptanceTests;
 
+import TexasHoldem.domain.events.gameFlowEvents.GameEvent;
 import TexasHoldem.domain.game.GamePolicy;
 
 import java.time.LocalDate;
@@ -45,11 +46,11 @@ public interface Bridge {
 
     boolean searchgamebymaxplayers(int numplayers);
 
-    boolean searchgamebyspectateisvalid(boolean spectatingavailable);
+    boolean searchgamebyspectateisvalid();
     
     boolean leavegame(String username, String choise, String gamename);
 
-  /*  boolean replaynonactivegame(String username, String gamename); */
+    List<GameEvent> replaynonactivegame(String gamename);
 
     boolean searchavailablegamestojoin(String username);
 

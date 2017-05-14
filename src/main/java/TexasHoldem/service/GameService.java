@@ -12,6 +12,7 @@ import TexasHoldem.domain.game.participants.Player;
 import TexasHoldem.domain.system.GameCenter;
 import TexasHoldem.domain.user.User;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -86,6 +87,7 @@ public class GameService {
 
     public void playRaise(String username, String gameName, int amount) throws InvalidArgumentException, EntityDoesNotExistsException {
         verifyStrings(username,gameName);
+        verifyPositiveNumbers(amount);
         Round currentRound = gameCenter.getGameByName(gameName).getLastRound();
         User user = gameCenter.getUser(username);
         Optional<Player> optPlayer = currentRound.getActivePlayers().stream().filter(p -> p.getUser().equals(user)).findFirst();
@@ -115,10 +117,11 @@ public class GameService {
         Participant parToSendTo = allParInGame.stream().filter(p -> p.getUser().equals(userNameToSend)).findFirst().get();
         game.handleWhisperFromParticipant(new WhisperEvent(participant, new Message(content), parToSendTo));
     }
-
-    /*
-    public List<GameEvent> replayGame(String gameName){
-        Game game = gameCenter.getGameByName(gameName);
+  
+    public List<GameEvent> replayGame(String gameName) throws EntityDoesNotExistsException {
+        Game game = gameCenter.getArchivedGames().stream().filter(g -> g.getName().equals(gameName)).findFirst().orElse(null);
+        if(game==null)
+            throw new EntityDoesNotExistsException(String.format("There is no archived game with the name '%s'.",gameName));
 
         return Stream.concat(
                     game.getGameEvents().stream(),
@@ -127,5 +130,4 @@ public class GameService {
                 .sorted(Comparator.comparing(GameEvent::getEventTime))
                 .collect(Collectors.toList());
     }
-    */
 }

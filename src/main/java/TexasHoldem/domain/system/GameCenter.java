@@ -128,7 +128,11 @@ public class GameCenter {
 
     public void joinGame(String userName, String gameName, boolean asSpectator) throws GameException {
         Game toJoin = getSpecificGameIfExist(gameName);
-        User user = usersDb.getUserByUserName(userName);
+        User user = getSpecificUserIfExist(userName);
+
+        if(user.getGamePlayerMappings().containsKey(toJoin))
+            throw new GameException(String.format("User '%s' is already in game '%s'.", userName, gameName));
+
         if (asSpectator){
             if(!toJoin.canBeSpectated())
                 throw new CantSpeactateThisRoomException("Selected game can't be spectated due to it's settings.");
@@ -254,6 +258,10 @@ public class GameCenter {
         if (user == null)
             throw new EntityDoesNotExistsException(String.format("User '%s' doesn't exist in the system.", userName));
         return user;
+    }
+
+    public List<Game> getArchivedGames(){
+        return gamesDb.getArchivedGames();
     }
 
     public void redistributeUsersInLeagues(DistributionAlgorithm da) {

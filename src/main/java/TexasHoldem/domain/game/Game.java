@@ -54,7 +54,7 @@ public class Game {
 
     public void joinGameAsSpectator(User user){
         Spectator spec=new Spectator(user);
-        spectators.add(spec);
+        addSpectator(spec);
         user.addGameParticipant(this,spec);
         addGameEvent(spec,GameActions.ENTER);
         logger.info("'{}' has joined the game '{}' as spectator.", user.getUsername(),getName());
@@ -66,6 +66,7 @@ public class Game {
                     getMinimalAmountOfPlayer(), players.size()));
 
         addGameEvent(initiator, GameActions.NEWROUND);
+
         if (realMoneyGame()) {
             logger.info("A new money round in game '{}' has started.", getName());
             handleNewRound();
@@ -78,6 +79,7 @@ public class Game {
     }
 
     private void handleNewRound(){
+        initPlayersBeforeStartNewRound();
         Round rnd=new Round(players,settings,dealerIndex);
         dealerIndex=(dealerIndex+1)%players.size();
         rounds.add(rnd);
@@ -102,6 +104,7 @@ public class Game {
         }
 
         if(isTournamentAndEnded()){
+            logger.info("'{} has won the tournament in game {}.",players.get(0).getUser().getUsername(),getName());
             handleEndTournament();
         }
 
@@ -125,7 +128,7 @@ public class Game {
             logger.info("'{}' paid {} as entrance fee to game '{}'.",user.getUsername(),getBuyInPolicy(),getName());
         } catch (ArgumentNotInBoundsException ignored) {}//Do nothing, wont be exception because there is check in the callee.
 
-        players.add(p);
+        addPlayer(p);
         user.addGameParticipant(this,p);
 
         addGameEvent(p,GameActions.ENTER);
@@ -241,6 +244,8 @@ public class Game {
     }
 
     private boolean canStart(){
+        if(!realMoneyGame() && (numPlayersStarted>0 && numPlayersStarted<getMinimalAmountOfPlayer()))
+            return true;
         return players.size()>=getMinimalAmountOfPlayer();
     }
 
@@ -281,4 +286,21 @@ public class Game {
         players.get(0).getUser().deposit(numPlayersStarted * getBuyInPolicy(),false);
     }
 
+    public void addPlayer(Player p){
+        players.add(p);
+    }
+
+    public void addSpectator(Spectator s){
+        spectators.add(s);
+    }
+
+    public void initPlayersBeforeStartNewRound(){
+        for(Player p : players){
+            p.clearCards();
+            p.setLastBetSinceCardOpen(0);
+            p.setTotalAmountPayedInRound(0);
+        }
+    }
+
 }
+
