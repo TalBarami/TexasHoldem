@@ -10,19 +10,58 @@ public class ClientUserProfile {
     private int dayOfBirth;
     private int monthOfBirth;
     private int yearOfBirth;
+    private int balance;
+    private int currLeague;
+    private int numOfGamesPlayed;
+    private int amountEarnedInLeague;
 
-    public ClientUserProfile(String username, String password, String email, int dayOfBirth, int monthOfBirth, int yearOfBirth) {
+    public ClientUserProfile(String username, String password, String email, int dayOfBirth, int monthOfBirth, int yearOfBirth,int balance,int currleague,int numofgamesplayed,int amountearnedinleague) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.dayOfBirth = dayOfBirth;
         this.monthOfBirth = monthOfBirth;
         this.yearOfBirth = yearOfBirth;
+        this.balance = balance;
+        this.amountEarnedInLeague = amountearnedinleague;
+        this.currLeague = currleague;
+        this.numOfGamesPlayed = numofgamesplayed;
     }
 
     public ClientUserProfile() {
+
+    }
+    public int getBalance() {
+        return balance;
     }
 
+    public void setBalance(int balance) {
+        this.balance = balance;
+    }
+
+    public int getCurrleague() {
+        return currLeague;
+    }
+
+    public void setCurrleague(int currleague) {
+        this.currLeague = currleague;
+    }
+
+    public int getNumofgamesplayed() {
+        return numOfGamesPlayed;
+    }
+
+    public void setNumofgamesplayed(int numofgamesplayed) {
+        this.numOfGamesPlayed = numofgamesplayed;
+    }
+
+    public int getAmountearnedinleague() {
+        return amountEarnedInLeague;
+    }
+
+    public void setAmountearnedinleague(int amountearnedinleague) {
+        this.amountEarnedInLeague = amountearnedinleague;
+    }
     public String getUsername() {
         return username;
     }

@@ -10,6 +10,42 @@ public class ClientUserProfile {
     private int dayOfBirth;
     private int monthOfBirth;
     private int yearOfBirth;
+    private int balance;
+    private int currLeague;
+    private int numOfGamesPlayed;
+    private int amountEarnedInLeague;
+
+    public int getBalance() {
+        return balance;
+    }
+
+    public void setBalance(int balance) {
+        this.balance = balance;
+    }
+
+    public int getCurrleague() {
+        return currLeague;
+    }
+
+    public void setCurrleague(int currleague) {
+        this.currLeague = currleague;
+    }
+
+    public int getNumofgamesplayed() {
+        return numOfGamesPlayed;
+    }
+
+    public void setNumofgamesplayed(int numofgamesplayed) {
+        this.numOfGamesPlayed = numofgamesplayed;
+    }
+
+    public int getAmountearnedinleague() {
+        return amountEarnedInLeague;
+    }
+
+    public void setAmountearnedinleague(int amountearnedinleague) {
+        this.amountEarnedInLeague = amountearnedinleague;
+    }
 
     public String getUsername() {
         return username;
