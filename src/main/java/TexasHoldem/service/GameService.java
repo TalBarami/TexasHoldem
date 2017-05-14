@@ -94,6 +94,7 @@ public class GameService {
         optPlayer.ifPresent(player -> currentRound.playTurnOfPlayer(new MoveEvent(player, GameActions.RAISE, amount)));
     }
 
+    /*
     public List<GameEvent> replayGame(String gameName) throws EntityDoesNotExistsException {
         Game game = gameCenter.getGameByName(gameName);
 
@@ -104,6 +105,7 @@ public class GameService {
                 .sorted(Comparator.comparing(GameEvent::getEventTime))
                 .collect(Collectors.toList());
     }
+    */
 
     public void sendMessage(String username, String gameName, String content) throws InvalidArgumentException, EntityDoesNotExistsException {
         verifyStrings(username,gameName);
