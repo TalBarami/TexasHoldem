@@ -1,9 +1,16 @@
 package Client;
 
-import Client.View.ClientMenu.MainMenu;
+import Client.View.AccessView.Welcome;
+import Client.View.SystemView.MainMenu;
+import TexasHoldem.common.JsonSerializer;
+import TexasHoldem.communication.entities.ClientUserDetails;
+import TexasHoldem.communication.entities.ClientUserProfile;
+import TexasHoldem.communication.entities.ResponseMessage;
 import TexasHoldem.domain.user.User;
+import org.springframework.web.client.RestTemplate;
 
 import javax.imageio.ImageIO;
+import javax.xml.ws.Response;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -15,17 +22,11 @@ import java.time.LocalDate;
 public class Application {
     public static void main(String[] args) throws IOException {
         BufferedImage i = ImageIO.read(new File("C:\\Users\\User\\Desktop\\1.jpg"));
-        User user = new User("Tal", "1234", "talbaramii@gmail.com", LocalDate.now(), i);
-        MainMenu mainMenu = new MainMenu(user);
-        mainMenu.pack();
-        mainMenu.setSize(1000, 1000);
-        mainMenu.setLocationRelativeTo(null);
-        mainMenu.setVisible(true);
+        User user = new User("Tal", "1234", "talbaramii@gmail.com", LocalDate.now(), null);
 
-        /*Welcome w = new Welcome();
-        w.pack();
-        w.setSize(400, 400);
-        w.setLocationRelativeTo(null);
-        w.setVisible(true);*/
+        MainMenu mainMenu = new MainMenu(user);
+
+        //Welcome w = new Welcome();
+
     }
 }

@@ -1,4 +1,4 @@
-package Client.View.ClientAccess;
+package Client.View.AccessView;
 
 import javax.swing.*;
 
@@ -21,9 +21,8 @@ public class Login {
     }
 
     public void init(){
-        ancestor.setContentPane(contentPane);
+        ClientUtils.frameInit(ancestor, contentPane);
         ancestor.getRootPane().setDefaultButton(buttonOK);
-        ancestor.revalidate();
     }
 
     private void onOK() {
