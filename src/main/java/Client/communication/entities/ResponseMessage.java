@@ -3,20 +3,31 @@ package Client.communication.entities;
 /**
  * Created by user on 12/05/2017.
  */
-public class ResponseMessage {
+public class ResponseMessage<T> {
     String message;
-    Object data;
+    T data;
 
-    public ResponseMessage(String message, Object data) {
+    public ResponseMessage(String message, T data) {
         this.message = message;
         this.data = data;
+    }
+
+    public ResponseMessage() {
     }
 
     public String getMessage() {
         return message;
     }
 
-    public Object getData() {
+    public T getData() {
         return data;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public void setData(T data) {
+        this.data = data;
     }
 }

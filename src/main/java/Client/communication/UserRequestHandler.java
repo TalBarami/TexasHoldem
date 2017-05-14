@@ -73,7 +73,7 @@ public class UserRequestHandler {
 
         try {
             ResponseEntity<ResponseMessage> response = restTemplate.exchange(addr, HttpMethod.GET, null, ResponseMessage.class);
-            return (Client.communication.entities.ClientUserProfile)response.getBody().getData();
+            return (ClientUserProfile)response.getBody().getData();
         }
         catch (HttpStatusCodeException e) {
             throw new InvalidArgumentException(e.getMessage());

@@ -76,6 +76,6 @@ public class UserController {
     @RequestMapping(method = GET, value="/user/{username}")
     public ResponseMessage getActiveGames(@PathVariable("username") String userName) throws InvalidArgumentException {
         ClientUserProfile clientProfile = UserClientUserProfileConverter.convert(service.getUser(userName));
-        return new ResponseMessage("User received successfully", clientProfile);
+        return new ResponseMessage<ClientUserProfile>("User received successfully", clientProfile);
     }
 }

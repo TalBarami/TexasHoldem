@@ -1,11 +1,10 @@
 package Client.communication;
 
-import Client.common.exceptions.ArgumentNotInBoundsException;
-import Client.common.exceptions.EntityDoesNotExistsException;
-import Client.common.exceptions.InvalidArgumentException;
-import Client.common.exceptions.NoBalanceForBuyInException;
+import Client.common.exceptions.*;
 import Client.communication.entities.ClientGameDetails;
 import Client.communication.entities.ResponseMessage;
+import Client.communication.entities.ClientGameRequest;
+import TexasHoldem.communication.entities.ClientLeaveGameDetails;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -47,6 +46,30 @@ public class GameRequestHandler {
             else {
                 throw new NoBalanceForBuyInException(e.getMessage());
             }
+        }
+    }
+
+    public void requestGameEventSend(ClientGameRequest gameRequest) throws GameException {
+        String addr = serviceURI + "/" + gameRequest.getGamename();
+        HttpEntity<ClientGameRequest> request = new HttpEntity<>(gameRequest);
+
+        try {
+            ResponseEntity<ResponseMessage> response = restTemplate.exchange(addr, HttpMethod.PUT, request, ResponseMessage.class);
+        }
+        catch (HttpStatusCodeException e) {
+            throw new GameException(e.getMessage());
+        }
+    }
+
+    public void requestGameLeave(ClientLeaveGameDetails leaveGameDetails) throws GameException {
+        String addr = serviceURI + "/" + leaveGameDetails.getGameName();
+        HttpEntity<ClientLeaveGameDetails> request = new HttpEntity<>(leaveGameDetails);
+
+        try {
+            ResponseEntity<ResponseMessage> response = restTemplate.exchange(addr, HttpMethod.DELETE, request, ResponseMessage.class);
+        }
+        catch (HttpStatusCodeException e) {
+            throw new GameException(e.getMessage());
         }
     }
 }
