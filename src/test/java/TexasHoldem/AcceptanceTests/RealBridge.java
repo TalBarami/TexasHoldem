@@ -114,6 +114,8 @@ public class RealBridge implements Bridge {
             return false;
         }catch (  ArgumentNotInBoundsException e){
             return false;
+        } catch (EntityDoesNotExistsException e) {
+            return false;
         }
         return true;
     }
@@ -257,7 +259,9 @@ public class RealBridge implements Bridge {
         try {
             games = service.searchService().findAvailableGames(username);
         } catch (InvalidArgumentException e) {
-            e.printStackTrace();
+            return false;
+        } catch (EntityDoesNotExistsException e) {
+            return false;
         }
         if(games.size() != 0)
         {
@@ -270,11 +274,26 @@ public class RealBridge implements Bridge {
     }
 
     public int getPotSize(String gamename) {
-        return -1;
+        try {
+            Game g=service.searchService().findGameByName(gamename);
+            return g.getLastRound().getPotAmount();
+        } catch (EntityDoesNotExistsException e) {
+            return -1;
+        } catch (InvalidArgumentException e) {
+            return -1;
+        }
+
     }
 
     public int getPlayerbalance(String username, String gamename) {
-        return -1;
+        try {
+            Game g= service.searchService().findGameByName(gamename);
+            return g.getBalanceOfPlayer(username);
+        } catch (EntityDoesNotExistsException e) {
+            return -1;
+        } catch (InvalidArgumentException e) {
+            return -1;
+        }
     }
 
 
@@ -333,31 +352,53 @@ public class RealBridge implements Bridge {
     } */
 
 
-    public void startgame(String gamename) {
-
-    }
-
-    // FIXME: Add try / catch if necessary & remove redundant argument "amount".
-    public boolean playcall(String username, String gamename, int amount) {
-        service.gameService().playCall(username, gamename);
+    public boolean startgame(String userName,String gameName) {
+        try {
+            service.gameService().startGame(userName, gameName);
+        } catch (GameException e) {
+            return false;
+        }
         return true;
     }
 
-    // FIXME: Add try / catch if necessary & remove redundant argument "amount".
-    public boolean playcheck(String username, String gamename, int amount) {
-        service.gameService().playCheck(username, gamename);
+
+    public boolean playcall(String username, String gamename) {
+        try{
+            service.gameService().playCall(username, gamename);
+        }
+        catch(Exception e){
+            return false;
+        }
         return true;
     }
 
-    // FIXME: Add try / catch if necessary.
+    public boolean playcheck(String username, String gamename) {
+        try{
+            service.gameService().playCheck(username, gamename);
+        }
+        catch(Exception e){
+            return false;
+        }
+        return true;
+    }
+
     public boolean playraise(String username, String gamename, int amount) {
-        service.gameService().playRaise(username, gamename, amount);
+        try{
+            service.gameService().playRaise(username, gamename, amount);
+        }
+        catch(Exception e){
+            return false;
+        }
         return true;
     }
 
-    // FIXME: Add try / catch if necessary & remove redundant argument "amount".
-    public boolean playfold(String username, String gamename, int amount) {
-        service.gameService().playFold(username, gamename);
+    public boolean playfold(String username, String gamename) {
+        try{
+            service.gameService().playFold(username, gamename);
+        }
+        catch(Exception e){
+            return false;
+        }
         return true;
     }
 

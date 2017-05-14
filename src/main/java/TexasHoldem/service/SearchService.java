@@ -1,5 +1,6 @@
 package TexasHoldem.service;
 
+import TexasHoldem.common.Exceptions.EntityDoesNotExistsException;
 import TexasHoldem.common.Exceptions.InvalidArgumentException;
 import TexasHoldem.domain.game.Game;
 import TexasHoldem.domain.game.GamePolicy;
@@ -20,9 +21,14 @@ public class SearchService {
         this.gameCenter = gameCenter;
     }
 
-    public List<Game> findAvailableGames(String username) throws InvalidArgumentException {
+    public List<Game> findAvailableGames(String username) throws InvalidArgumentException, EntityDoesNotExistsException {
         verifyStrings(username);
         return gameCenter.findAvailableGames(username);
+    }
+
+    public Game findGameByName(String gameName) throws EntityDoesNotExistsException, InvalidArgumentException {
+        verifyStrings(gameName);
+        return gameCenter.findGameByName(gameName);
     }
 
     public List<Game> findSpectatableGames(){

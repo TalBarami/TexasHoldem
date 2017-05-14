@@ -1,5 +1,17 @@
 package TexasHoldem.domain.game;
 
 public enum GameActions {
-    CHECK, RAISE, CALL, FOLD, ENTER, EXIT, NEWROUND, CLOSED
+    CHECK(0), RAISE(1), CALL(2), FOLD(3), ENTER(4), START(5), EXIT(6), NEWROUND(7), CLOSED(8) , SEND(9);
+
+    private int action;
+
+    GameActions(int action)
+    {
+        this.action = action;
+    }
+
+    public int getAction()
+    {
+        return action;
+    }
 }

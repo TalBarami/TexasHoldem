@@ -1,7 +1,10 @@
 package TexasHoldem.domain.game;
 
 import TexasHoldem.common.Exceptions.*;
-import TexasHoldem.domain.events.GameEvent;
+import TexasHoldem.domain.events.chatEvents.MessageEvent;
+import TexasHoldem.domain.events.chatEvents.WhisperEvent;
+import TexasHoldem.domain.events.gameFlowEvents.GameEvent;
+import TexasHoldem.domain.game.chat.Message;
 import TexasHoldem.domain.game.participants.Participant;
 import TexasHoldem.domain.user.LeagueManager;
 import TexasHoldem.domain.game.participants.Player;
@@ -12,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Game {
 
@@ -25,6 +29,7 @@ public class Game {
     private LeagueManager leagueManager;
     private boolean isActive;
     private List<GameEvent> gameEvents;
+    private int numPlayersStarted;
 
     public Game(GameSettings settings, User creator, LeagueManager leagueManager){
         this.settings=settings;
@@ -35,6 +40,7 @@ public class Game {
         this.dealerIndex=0;
         this.leagueManager = leagueManager;
         this.isActive=true;
+        this.numPlayersStarted=0;
         //Automatically the creator is added to the room.
         logger.info("A new game '{}' created by the user {}.",getName(),creator.getUsername());
         addPlayer(creator);
@@ -50,26 +56,26 @@ public class Game {
         Spectator spec=new Spectator(user);
         spectators.add(spec);
         user.addGameParticipant(this,spec);
-        addGameEvnet(spec,GameActions.ENTER);
+        addGameEvent(spec,GameActions.ENTER);
         logger.info("'{}' has joined the game '{}' as spectator.", user.getUsername(),getName());
     }
 
     public void startGame(Player initiator) throws GameException {
-        if (players.size() < getMinimalAmountOfPlayer())
+        if (!canStart())
             throw new GameException(String.format("Can't start round, minimal amount for a new round is %d, but currently there are only %d players.",
                     getMinimalAmountOfPlayer(), players.size()));
 
-        addGameEvnet(initiator, GameActions.NEWROUND);
+        addGameEvent(initiator, GameActions.NEWROUND);
         if (realMoneyGame()) {
             logger.info("A new money round in game '{}' has started.", getName());
             handleNewRound();
         } else { //tournament
             setIsActive(false);
+            numPlayersStarted=players.size();
             logger.info("A new tournament round in game '{}' has started.", getName());
             handleNewRound();
         }
     }
-
 
     private void handleNewRound(){
         Round rnd=new Round(players,settings,dealerIndex);
@@ -80,7 +86,7 @@ public class Game {
 
     public void removeParticipant(Spectator spectator){
         spectators.remove(spectator);
-        addGameEvnet(spectator,GameActions.EXIT);
+        addGameEvent(spectator,GameActions.EXIT);
         logger.info("'{}' has stopped watching this game.", spectator.getUser().getUsername());
     }
 
@@ -95,13 +101,13 @@ public class Game {
                 lastRound.notifyPlayerExited(player);
         }
 
-        leagueManager.updateUserLeague(player.getUser());
-
         if(isTournamentAndEnded()){
             handleEndTournament();
         }
 
-        addGameEvnet(player,GameActions.EXIT);
+        leagueManager.updateUserLeague(player.getUser());
+
+        addGameEvent(player,GameActions.EXIT);
     }
 
     public boolean isFull(){
@@ -122,8 +128,43 @@ public class Game {
         players.add(p);
         user.addGameParticipant(this,p);
 
-        addGameEvnet(p,GameActions.ENTER);
+        addGameEvent(p,GameActions.ENTER);
         logger.info("'{}' has joined the game '{}' as player.", user.getUsername(),getName());
+    }
+
+    public void handleMessageFromParticipant(MessageEvent messageEvent){
+        Participant sender = messageEvent.getEventInitiator();
+        if(sender instanceof Player) {
+            sendMessageToPlayers(messageEvent.getContent());
+            sendMessageToAllSpectators(messageEvent.getContent());
+        }
+        else //he is a spectator
+            sendMessageToAllSpectators(messageEvent.getContent());
+    }
+
+    public void handleWhisperFromParticipant(WhisperEvent whisperEvent) throws ArgumentNotInBoundsException {
+        Participant sender = whisperEvent.getEventInitiator();
+        if(sender instanceof Player){
+            //TODO :: send the message
+            ;
+        }
+        else{
+            if(!(whisperEvent.getParticipantToSendTo() instanceof Spectator))
+                throw new ArgumentNotInBoundsException("spectator should send whispers only to other spectators");
+            else
+                //TODO :: send the message
+                ;
+        }
+    }
+
+    private void sendMessageToAllSpectators(Message content) {
+        for(int i = 0; i < spectators.size(); i++);
+        //TODO :: send the message to spectator
+    }
+
+    private void sendMessageToPlayers(Message content) {
+        for(int i = 0; i < players.size(); i++);
+        //TODO :: send the message to spectator
     }
 
     public boolean realMoneyGame(){
@@ -209,10 +250,10 @@ public class Game {
 
     private boolean isTournamentAndEnded(){
         // amount of players in the room is 1 and he won the whole 'pot'.
-        return (!realMoneyGame() && (players.size() == 1) && (players.get(0).getChipsAmount() == getMinimalAmountOfPlayer() * settings.getChipPolicy()));
+        return (!realMoneyGame() && (players.size() == 1));
     }
 
-    public void addGameEvnet(Participant initiator,GameActions eventAction){
+    public void addGameEvent(Participant initiator, GameActions eventAction){
         this.gameEvents.add(new GameEvent(initiator,eventAction));
     }
 
@@ -223,6 +264,21 @@ public class Game {
     private void handleEndTournament(){
         setIsActive(true);
         resetDealerIndex();
+        try {
+            depositTournamentEarningsForWinner();
+        } catch (ArgumentNotInBoundsException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public int getBalanceOfPlayer(String userName){
+        return getPlayers().stream()
+                .filter(player -> player.getUser().getUsername().equals(userName))
+                .collect(Collectors.toList()).get(0).getChipsAmount();
+    }
+
+    private void depositTournamentEarningsForWinner() throws ArgumentNotInBoundsException {
+        players.get(0).getUser().deposit(numPlayersStarted * getBuyInPolicy(),false);
     }
 
 }

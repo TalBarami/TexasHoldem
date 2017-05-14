@@ -1,7 +1,7 @@
 package TexasHoldem.domain.game;
 
-import TexasHoldem.domain.events.GameEvent;
-import TexasHoldem.domain.events.MoveEvent;
+import TexasHoldem.domain.events.gameFlowEvents.MoveEvent;
+import TexasHoldem.domain.events.gameFlowEvents.GameEvent;
 import TexasHoldem.domain.game.card.Card;
 import TexasHoldem.domain.game.card.Dealer;
 import TexasHoldem.domain.game.hand.Hand;
@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static TexasHoldem.domain.game.GameActions.*;
 
@@ -129,9 +130,12 @@ public class Round {
         if(!calculateTurnOptions().contains(playerMoveEvent.getEventAction()))
             throw new IllegalArgumentException("Your move is Invalid");
 
+        boolean isLastPlayerPlayed = false;
         if (isRoundActive) {
             eventList.add(playerMoveEvent);
             GameActions chosenAction = playerMoveEvent.getEventAction();
+
+            isLastPlayerPlayed = isLastPlayerPlayed(playerMoveEvent);
 
             switch (chosenAction) {
                 case RAISE:
@@ -148,7 +152,7 @@ public class Round {
                     break;
             }
 
-            if (isLastPlayerPlayed(playerMoveEvent)) {
+            if (isLastPlayerPlayed) {
                 endFlow();
             } else {
                 // TODO :: Call communication layer to send currentPlayer a message which requests him to play
@@ -479,5 +483,11 @@ public class Round {
 
     public List<GameEvent> getEvents(){
         return eventList;
+    }
+
+    public int getBalancaOfPlayer(String userName){
+        return getActivePlayers().stream()
+                .filter(player -> player.getUser().getUsername().equals(userName))
+                .collect(Collectors.toList()).get(0).getChipsAmount();
     }
 }

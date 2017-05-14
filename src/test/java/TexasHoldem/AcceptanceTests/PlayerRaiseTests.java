@@ -27,12 +27,12 @@ public class PlayerRaiseTests extends ProjectTest {
         addBalance();
         createGames();
         usersJoinsGames();
-        usersJoinsGames();
-        this.startgame("achiadg-poker-game");
-        boolean playerplayed1 = this.playcall("ronenbu", "achiadg-poker-game", 0);
-        boolean playerplayed2 = this.playcall("achiadg", "achiadg-poker-game", 0);
-        boolean playerplayed3 = this.playcall("hodbub", "achiadg-poker-game", 0);
-        boolean playerplayed4 = this.playcheck("rotemw", "achiadg-poker-game", 0);
+        this.startgame("achiadg","achiadg-poker-game");
+        boolean playerplayed1 = this.playcall("ronenbu", "achiadg-poker-game");
+        boolean playerplayed2 = this.playcall("achiadg", "achiadg-poker-game");
+        boolean playerplayed3 = this.playcall("hodbub", "achiadg-poker-game");
+        boolean playerplayed4 = this.playcheck("rotemw", "achiadg-poker-game");
+
         int potsize1 = this.getPotSize("achiadg-poker-game");
         int playerbalance1 = this.getPlayerbalance("hodbub","achiadg-poker-game");
         boolean playedturn1 = this.playraise("hodbub", "achiadg-poker-game", 300);
@@ -53,18 +53,17 @@ public class PlayerRaiseTests extends ProjectTest {
         createGames();
         usersJoinsGames();
         usersJoinsGames();
-        this.startgame("achiadg-poker-game");
-        boolean playerplayed1 = this.playcall("ronenbu", "achiadg-poker-game", 0);
-        boolean playerplayed2 = this.playcall("achiadg", "achiadg-poker-game", 0);
-        boolean playerplayed3 = this.playcall("hodbub", "achiadg-poker-game", 0);
-        boolean playerplayed4 = this.playcheck("rotemw", "achiadg-poker-game", 0);
+        this.startgame("achiadg","achiadg-poker-game");
+        boolean playerplayed1 = this.playcall("ronenbu", "achiadg-poker-game");
+        boolean playerplayed2 = this.playcall("achiadg", "achiadg-poker-game");
+        boolean playerplayed3 = this.playcall("hodbub", "achiadg-poker-game");
+        boolean playerplayed4 = this.playcheck("rotemw", "achiadg-poker-game");
         boolean playedturn1 = this.playraise("hodbub", "achiadg-poker-game", 300);
         assertFalse(playedturn1);
         leaveGames();
         logoutUsers();
         deleteUsers();
     }
-
 
     private void createGames()
     {
@@ -91,16 +90,12 @@ public class PlayerRaiseTests extends ProjectTest {
         boolean deleteUser4 = this.deleteUser("ronenbu");
     }
 
-
     public void logoutUsers() {
         boolean userloggedout1 = this.logout("achiadg");
         boolean userloggedout2 = this.logout("hodbub");
         boolean userloggedout3 = this.logout("rotemw");
         boolean userloggedout4 = this.logout("ronenbu");
     }
-
-
-
 
     public void addBalance() {
         boolean addedbalance1 = this.addbalancetouserwallet("achiadg",20000);
@@ -109,15 +104,12 @@ public class PlayerRaiseTests extends ProjectTest {
         boolean addedbalance4 = this.addbalancetouserwallet("ronenbu",30000);
     }
 
-
     public void loginUsers() {
         boolean userloggedin1 = this.login("achiadg","aChi12#*");
         boolean userloggedin2 = this.login("hodbub","hBublil1308");
         boolean userloggedin3 = this.login("rotemw","rotemwald123");
         boolean userloggedin4 = this.login("ronenbu","ronenbu123");
     }
-
-
 
     public void registerUsers()
     {
