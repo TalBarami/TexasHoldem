@@ -16,6 +16,10 @@ public class UserClientUserProfileConverter {
         client.setYearOfBirth(user.getDateOfBirth().getYear());
         client.setMonthOfBirth(user.getDateOfBirth().getMonth().getValue());
         client.setDayOfBirth(user.getDateOfBirth().getDayOfMonth());
+        client.setBalance(user.getBalance());
+        client.setAmountearnedinleague(user.getAmountEarnedInLeague());
+        client.setCurrleague(user.getCurrLeague());
+        client.setNumofgamesplayed(user.getNumOfGamesPlayed());
 
         return client;
 
