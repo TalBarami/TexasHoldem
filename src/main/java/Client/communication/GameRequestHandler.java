@@ -5,7 +5,7 @@ import Client.common.exceptions.EntityDoesNotExistsException;
 import Client.common.exceptions.InvalidArgumentException;
 import Client.common.exceptions.NoBalanceForBuyInException;
 import Client.communication.entities.ClientGameDetails;
-import TexasHoldem.communication.entities.ResponseMessage;
+import Client.communication.entities.ResponseMessage;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;

@@ -4,7 +4,6 @@ import TexasHoldem.common.Exceptions.*;
 import TexasHoldem.communication.converters.GameClientGameDetailsConverter;
 import TexasHoldem.communication.entities.*;
 import TexasHoldem.domain.game.Game;
-import TexasHoldem.domain.game.GameActions;
 import TexasHoldem.domain.game.GamePolicy;
 import TexasHoldem.service.GameService;
 import TexasHoldem.service.SearchService;
