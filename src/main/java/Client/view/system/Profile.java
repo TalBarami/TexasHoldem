@@ -52,6 +52,7 @@ public class Profile {
         ClientUtils.frameInit(ancestor, contentPane);
         generateUserInformation();
         ancestor.getRootPane().setDefaultButton(buttonApply);
+        ClientUtils.clearTextFields(oldPasswordPasswordField, newPasswordPasswordField, repeatPasswordPasswordField, newEmailTextField, repeatEmailTextField, newBirthdayDatePicker.getJFormattedTextField(), newPictureTextField);
     }
 
     private void assignActionListeners(){

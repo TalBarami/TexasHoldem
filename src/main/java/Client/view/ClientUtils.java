@@ -27,4 +27,10 @@ public class ClientUtils {
         frame.setVisible(true);
         frame.revalidate();
     }
+
+    public static void clearTextFields(JTextField ... fields){
+        for(JTextField field : fields){
+            field.setText("");
+        }
+    }
 }

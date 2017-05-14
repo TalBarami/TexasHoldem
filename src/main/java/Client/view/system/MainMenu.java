@@ -1,6 +1,7 @@
 package Client.view.system;
 
 import Client.communication.entities.ClientUserProfile;
+import Client.domain.SearchPolicy;
 import Client.domain.SessionManager;
 import Client.view.ClientUtils;
 import Client.view.access.Welcome;
@@ -17,7 +18,7 @@ public class MainMenu extends JFrame {
     private List<Game> games;
 
     private Profile profile;
-    private CreateGame createGame;
+    private List<SearchPolicy> searchPolicies;
 
     private JLabel label_name;
     private JLabel label_cash;
@@ -29,17 +30,20 @@ public class MainMenu extends JFrame {
     private JButton createNewGameButton;
     private JButton joinSelectedGameButton;
     private JTextField searchTextField;
-    private JComboBox filterComboBox;
+    private JComboBox<String> filterComboBox;
     private JCheckBox onlyAvailableCheckBox;
     private JButton logoutButton;
     private JButton replaySelectedGameButton;
     private JButton spectateSelectedGameButton;
     private JCheckBox inactiveGamesCheckBox;
+    private JButton depositButton;
+    private JButton findButton;
 
     public MainMenu() {
         init();
 
         assignActionListeners();
+        initializeSearchFilters();
     }
 
     private void assignActionListeners(){
@@ -50,10 +54,7 @@ public class MainMenu extends JFrame {
         joinSelectedGameButton.addActionListener(e -> onJoinGame());
         spectateSelectedGameButton.addActionListener(e -> onSpectateGame());
         replaySelectedGameButton.addActionListener(e -> onReplayGame());
-
-        filterComboBox.addActionListener(e -> onFilterChange());
-        searchTextField.addActionListener(e -> onSearchTextChange());
-        onlyAvailableCheckBox.addActionListener(e -> onAvailableOnly());
+        findButton.addActionListener(e -> onFind());
 
         contentPane.registerKeyboardAction(e -> onExit(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
 
@@ -63,6 +64,18 @@ public class MainMenu extends JFrame {
                 onExit();
             }
         });
+    }
+
+    private void initializeSearchFilters(){
+        filterComboBox.addItem("Game name");
+        filterComboBox.addItem("User name");
+        filterComboBox.addItem("Pot size");
+        filterComboBox.addItem("Game policy");
+        filterComboBox.addItem("Maximum buy-in");
+        filterComboBox.addItem("Chip policy");
+        filterComboBox.addItem("Minimum bet");
+        filterComboBox.addItem("Minimum players");
+        filterComboBox.addItem("Maximum players");
     }
 
     private void generateUserInformation(){
@@ -100,6 +113,10 @@ public class MainMenu extends JFrame {
 
     }
 
+    private void onFind(){
+
+    }
+
     private void onLogout() {
         Welcome welcome = new Welcome();
         welcome.pack();
@@ -108,21 +125,10 @@ public class MainMenu extends JFrame {
         dispose();
     }
 
-    private void onFilterChange(){
-
-    }
-
-    private void onSearchTextChange(){
-
-    }
-
-    private void onAvailableOnly(){
-
-    }
-
     public void init(){
         ClientUtils.frameInit(this, contentPane);
         generateUserInformation();
+        ClientUtils.clearTextFields(searchTextField);
     }
 
     private void onExit(){

@@ -33,6 +33,7 @@ public class Login {
     public void init(){
         ClientUtils.frameInit(ancestor, contentPane);
         ancestor.getRootPane().setDefaultButton(buttonOK);
+        ClientUtils.clearTextFields(text_username, text_password);
     }
 
     private void onOK() {
