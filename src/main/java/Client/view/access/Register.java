@@ -1,10 +1,15 @@
-package Client.View.AccessView;
+package Client.view.access;
 
+import Client.common.exceptions.EntityDoesNotExistsException;
+import Client.common.exceptions.InvalidArgumentException;
+import Client.view.ClientUtils;
 import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
 import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
 import net.sourceforge.jdatepicker.impl.UtilDateModel;
 
+import javax.security.auth.login.LoginException;
 import javax.swing.*;
+import java.awt.event.KeyEvent;
 
 public class Register {
     private Welcome ancestor;
@@ -31,6 +36,8 @@ public class Register {
         buttonCancel.addActionListener(e -> onCancel());
 
         button_picture.addActionListener(e -> onBrowse());
+
+        contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
     }
 
     public void init(){
@@ -39,7 +46,11 @@ public class Register {
     }
 
     private void onOK() {
-        // add your code here
+        try {
+            ancestor.sessionManager().register(text_name.getText(), new String(text_password.getPassword()), text_email.getText(), datePicker_birthdate.getJFormattedTextField().getText(), text_picture.getText());
+        } catch (InvalidArgumentException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void onCancel() {

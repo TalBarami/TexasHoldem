@@ -1,11 +1,12 @@
-package Client.View.SystemView;
+package Client.view.system;
 
-import Client.View.AccessView.ClientUtils;
+import Client.view.ClientUtils;
 import TexasHoldem.domain.user.User;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import java.awt.event.KeyEvent;
 import java.util.Arrays;
 
 /**
@@ -36,6 +37,17 @@ public class Profile {
     public Profile(MainMenu ancestor) {
         this.ancestor = ancestor;
 
+        assignActionListeners();
+
+        generateUserInformation();
+    }
+
+    public void init(){
+        ClientUtils.frameInit(ancestor, contentPane);
+        ancestor.getRootPane().setDefaultButton(buttonApply);
+    }
+
+    private void assignActionListeners(){
         buttonApply.addActionListener(e -> onApply());
 
         buttonCancel.addActionListener(e -> onCancel());
@@ -47,12 +59,7 @@ public class Profile {
         newEMailTextField.getDocument().addDocumentListener(textChangeListener());
         repeatEMailTextField.getDocument().addDocumentListener(textChangeListener());
 
-        generateUserInformation();
-    }
-
-    public void init(){
-        ClientUtils.frameInit(ancestor, contentPane);
-        ancestor.getRootPane().setDefaultButton(buttonApply);
+        contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
     }
 
     public void generateUserInformation(){

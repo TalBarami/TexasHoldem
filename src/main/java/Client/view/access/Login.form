@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="Client.View.AccessView.Login">
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="Client.view.access.Login">
   <grid id="cbd77" binding="contentPane" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="10" left="10" bottom="10" right="10"/>
     <constraints>
@@ -62,10 +62,11 @@
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
+              <labelFor value="d30c4"/>
               <text value="Username:"/>
             </properties>
           </component>
-          <component id="d30c4" class="javax.swing.JTextField" binding="Text_username">
+          <component id="d30c4" class="javax.swing.JTextField" binding="text_username">
             <constraints>
               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
@@ -78,10 +79,11 @@
               <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
+              <labelFor value="ad0d9"/>
               <text value="Password:"/>
             </properties>
           </component>
-          <component id="ad0d9" class="javax.swing.JPasswordField" binding="Text_password">
+          <component id="ad0d9" class="javax.swing.JPasswordField" binding="text_password">
             <constraints>
               <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>

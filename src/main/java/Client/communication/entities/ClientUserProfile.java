@@ -11,6 +11,18 @@ public class ClientUserProfile {
     private int monthOfBirth;
     private int yearOfBirth;
 
+    public ClientUserProfile(String username, String password, String email, int dayOfBirth, int monthOfBirth, int yearOfBirth) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.dayOfBirth = dayOfBirth;
+        this.monthOfBirth = monthOfBirth;
+        this.yearOfBirth = yearOfBirth;
+    }
+
+    public ClientUserProfile() {
+    }
+
     public String getUsername() {
         return username;
     }

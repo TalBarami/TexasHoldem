@@ -1,17 +1,20 @@
-package Client.View.SystemView;
+package Client.view.system;
 
-import Client.View.AccessView.ClientUtils;
-import Client.View.AccessView.Welcome;
+import Client.view.ClientUtils;
+import Client.view.access.Welcome;
+import Client.view.game.Game;
 import TexasHoldem.domain.user.User;
 
 import javax.swing.*;
 import java.awt.event.*;
+import java.util.List;
 
 /**
  * Created by User on 12/05/2017.
  */
 public class MainMenu extends JFrame {
     public User user;
+    public List<Game> games;
 
     private Profile profile;
     private CreateGame createGame;
@@ -55,13 +58,14 @@ public class MainMenu extends JFrame {
         searchTextField.addActionListener(e -> onSearchTextChange());
         onlyAvailableCheckBox.addActionListener(e -> onAvailableOnly());
 
+        contentPane.registerKeyboardAction(e -> onExit(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
+
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 onExit();
             }
         });
-        contentPane.registerKeyboardAction(e -> onExit(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
     }
 
     private void generateUserInformation(){
@@ -86,7 +90,8 @@ public class MainMenu extends JFrame {
     }
 
     private void onJoinGame(){
-
+        Game game = new Game();
+        game.init();
     }
 
     private void onSpectateGame(){
@@ -122,6 +127,9 @@ public class MainMenu extends JFrame {
     }
 
     private void onExit(){
+        for(Game game : games){
+            game.onExit();
+        }
         dispose();
     }
 }

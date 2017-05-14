@@ -7,6 +7,14 @@ public class ClientUserDetails {
     String username;
     String password;
 
+    public ClientUserDetails(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
+    public ClientUserDetails() {
+    }
+
     public String getUsername() {
         return username;
     }
