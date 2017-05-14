@@ -2,6 +2,7 @@ package Client.View.AccessView;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.*;
 
 /**
  * Created by User on 13/05/2017.
@@ -17,5 +18,13 @@ public class ClientUtils {
         if(returnVal == JFileChooser.APPROVE_OPTION) {
             textField.setText(fileChooser.getSelectedFile().getPath());
         }
+    }
+
+    public static void frameInit(JFrame frame, Container contentPane){
+        frame.setContentPane(contentPane);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+        frame.revalidate();
     }
 }

@@ -14,7 +14,6 @@ public class Welcome extends JFrame {
 
     public Welcome() {
         setContentPane(contentPane);
-        //setModal(true);
         getRootPane().setDefaultButton(buttonLogin);
 
         buttonLogin.addActionListener(e -> onLogin());
@@ -48,8 +47,7 @@ public class Welcome extends JFrame {
     }
 
     public void init(){
-        setContentPane(contentPane);
-        revalidate();
+        ClientUtils.frameInit(this, contentPane);
     }
 
     private void onExit(){

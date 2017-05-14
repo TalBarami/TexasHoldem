@@ -51,9 +51,8 @@ public class Profile {
     }
 
     public void init(){
-        ancestor.setContentPane(contentPane);
+        ClientUtils.frameInit(ancestor, contentPane);
         ancestor.getRootPane().setDefaultButton(buttonApply);
-        ancestor.revalidate();
     }
 
     public void generateUserInformation(){

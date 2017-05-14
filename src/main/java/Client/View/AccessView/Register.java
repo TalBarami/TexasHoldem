@@ -34,9 +34,8 @@ public class Register {
     }
 
     public void init(){
-        ancestor.setContentPane(contentPane);
+        ClientUtils.frameInit(ancestor, contentPane);
         ancestor.getRootPane().setDefaultButton(buttonOK);
-        ancestor.revalidate();
     }
 
     private void onOK() {

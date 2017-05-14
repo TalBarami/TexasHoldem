@@ -1,5 +1,6 @@
 package Client.View.SystemView;
 
+import Client.View.AccessView.ClientUtils;
 import Client.View.AccessView.Welcome;
 import TexasHoldem.domain.user.User;
 
@@ -30,10 +31,11 @@ public class MainMenu extends JFrame {
     private JButton logoutButton;
     private JButton replaySelectedGameButton;
     private JButton spectateSelectedGameButton;
+    private JCheckBox inactiveGamesCheckBox;
 
     public MainMenu(User user) {
         this.user = user;
-        setContentPane(contentPane);
+        init();
 
         generateUserInformation();
 
@@ -46,6 +48,7 @@ public class MainMenu extends JFrame {
 
         createNewGameButton.addActionListener(e -> onCreateGame());
         joinSelectedGameButton.addActionListener(e -> onJoinGame());
+        spectateSelectedGameButton.addActionListener(e -> onSpectateGame());
         replaySelectedGameButton.addActionListener(e -> onReplayGame());
 
         filterComboBox.addActionListener(e -> onFilterChange());
@@ -76,16 +79,18 @@ public class MainMenu extends JFrame {
     }
 
     private void onCreateGame(){
-        //if(createGame == null)
         CreateGame createGame = new CreateGame(this);
         createGame.pack();
+        createGame.setLocationRelativeTo(null);
         createGame.setVisible(true);
     }
 
     private void onJoinGame(){
-        JoinGame joinGame = new JoinGame(this);
-        joinGame.pack();
-        joinGame.setVisible(true);
+
+    }
+
+    private void onSpectateGame(){
+
     }
 
     private void onReplayGame(){
@@ -95,7 +100,9 @@ public class MainMenu extends JFrame {
     private void onLogout() {
         Welcome welcome = new Welcome();
         welcome.pack();
+        welcome.setLocationRelativeTo(null);
         welcome.setVisible(true);
+        dispose();
     }
 
     private void onFilterChange(){
@@ -110,9 +117,8 @@ public class MainMenu extends JFrame {
 
     }
 
-    private void init(){
-        setContentPane(contentPane);
-        revalidate();
+    public void init(){
+        ClientUtils.frameInit(this, contentPane);
     }
 
     private void onExit(){
