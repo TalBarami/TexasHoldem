@@ -22,7 +22,7 @@ public class UserRequestHandler {
         this.restTemplate = new RestTemplate();
     }
 
-    public void requestUserRegistration(ClientUserProfile userProfile) throws InvalidArgumentException {
+    public void requestUserProfileRegistration(ClientUserProfile userProfile) throws InvalidArgumentException {
         String addr = serviceURI + "/" + userProfile.getUsername();
         HttpEntity<ClientUserProfile> request = new HttpEntity<>(userProfile);
 
@@ -52,7 +52,7 @@ public class UserRequestHandler {
     }
 
 
-    public void requestUserProfileUpdate(String username) throws InvalidArgumentException, EntityDoesNotExistsException {
+    public void requestUserProfileDelete(String username) throws InvalidArgumentException, EntityDoesNotExistsException {
         String addr = serviceURI + "/" + username;
 
         try {
@@ -65,6 +65,18 @@ public class UserRequestHandler {
             else {
                 throw new EntityDoesNotExistsException(e.getMessage());
             }
+        }
+    }
+
+    public Client.communication.entities.ClientUserProfile requestUserProfileEntity(String username) throws InvalidArgumentException {
+        String addr = serviceURI + "/" + username;
+
+        try {
+            ResponseEntity<ResponseMessage> response = restTemplate.exchange(addr, HttpMethod.GET, null, ResponseMessage.class);
+            return (Client.communication.entities.ClientUserProfile)response.getBody().getData();
+        }
+        catch (HttpStatusCodeException e) {
+            throw new InvalidArgumentException(e.getMessage());
         }
     }
 }
