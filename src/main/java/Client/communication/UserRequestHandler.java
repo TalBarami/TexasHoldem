@@ -1,9 +1,11 @@
 package Client.communication;
 
 import Client.common.exceptions.EntityDoesNotExistsException;
+import Client.common.exceptions.ExceptionObject;
 import Client.common.exceptions.InvalidArgumentException;
 import Client.communication.entities.ClientUserProfile;
 import Client.communication.entities.ResponseMessage;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -12,15 +14,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
+
 /**
  * Created by user on 13/05/2017.
  */
 public class UserRequestHandler {
     public final static String serviceURI = "http://localhost:8080/user";
-    public RestTemplate restTemplate;
+    private RestTemplate restTemplate;
+    private ObjectMapper objectMapper;
 
     public UserRequestHandler() {
         this.restTemplate = new RestTemplate();
+        this.objectMapper = new ObjectMapper();
     }
 
     public void requestUserProfileRegistration(ClientUserProfile userProfile) throws InvalidArgumentException {
@@ -31,7 +37,16 @@ public class UserRequestHandler {
             ResponseEntity<ResponseMessage> response = restTemplate.exchange(addr, HttpMethod.POST, request, ResponseMessage.class);
         }
         catch (HttpStatusCodeException e) {
-            throw new InvalidArgumentException(e.getMessage());
+            String responseBody = e.getResponseBodyAsString();
+
+            ExceptionObject exceptionObj = null;
+            try {
+                exceptionObj = objectMapper.readValue(responseBody, ExceptionObject.class);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+
+            throw new InvalidArgumentException(exceptionObj.getMessage());
         }
     }
 
@@ -43,11 +58,20 @@ public class UserRequestHandler {
             ResponseEntity<ResponseMessage> response = restTemplate.exchange(addr, HttpMethod.PUT, request, ResponseMessage.class);
         }
         catch (HttpStatusCodeException e) {
+            String responseBody = e.getResponseBodyAsString();
+
+            ExceptionObject exceptionObj = null;
+            try {
+                exceptionObj = objectMapper.readValue(responseBody, ExceptionObject.class);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+
             if (e.getStatusCode() == HttpStatus.NOT_ACCEPTABLE) {
-                throw new InvalidArgumentException(e.getMessage());
+                throw new InvalidArgumentException(exceptionObj.getMessage());
             }
             else {
-                throw new EntityDoesNotExistsException(e.getMessage());
+                throw new EntityDoesNotExistsException(exceptionObj.getMessage());
             }
         }
     }
@@ -60,11 +84,20 @@ public class UserRequestHandler {
             ResponseEntity<ResponseMessage> response = restTemplate.exchange(addr, HttpMethod.DELETE, null, ResponseMessage.class);
         }
         catch (HttpStatusCodeException e) {
+            String responseBody = e.getResponseBodyAsString();
+
+            ExceptionObject exceptionObj = null;
+            try {
+                exceptionObj = objectMapper.readValue(responseBody, ExceptionObject.class);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+
             if (e.getStatusCode() == HttpStatus.NOT_ACCEPTABLE) {
-                throw new InvalidArgumentException(e.getMessage());
+                throw new InvalidArgumentException(exceptionObj.getMessage());
             }
             else {
-                throw new EntityDoesNotExistsException(e.getMessage());
+                throw new EntityDoesNotExistsException(exceptionObj.getMessage());
             }
         }
     }
@@ -77,7 +110,16 @@ public class UserRequestHandler {
             return response.getBody().getData();
         }
         catch (HttpStatusCodeException e) {
-            throw new InvalidArgumentException(e.getLocalizedMessage());
+            String responseBody = e.getResponseBodyAsString();
+
+            ExceptionObject exceptionObj = null;
+            try {
+                exceptionObj = objectMapper.readValue(responseBody, ExceptionObject.class);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+
+            throw new InvalidArgumentException(exceptionObj.getMessage());
         }
     }
 }
