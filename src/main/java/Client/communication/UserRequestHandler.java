@@ -4,6 +4,7 @@ import Client.common.exceptions.EntityDoesNotExistsException;
 import Client.common.exceptions.InvalidArgumentException;
 import Client.communication.entities.ClientUserProfile;
 import Client.communication.entities.ResponseMessage;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -72,11 +73,11 @@ public class UserRequestHandler {
         String addr = serviceURI + "/" + username;
 
         try {
-            ResponseEntity<ResponseMessage> response = restTemplate.exchange(addr, HttpMethod.GET, null, ResponseMessage.class);
-            return (ClientUserProfile)response.getBody().getData();
+            ResponseEntity<ResponseMessage<ClientUserProfile>> response = restTemplate.exchange(addr, HttpMethod.GET, null, new ParameterizedTypeReference<ResponseMessage<ClientUserProfile>>() {});
+            return response.getBody().getData();
         }
         catch (HttpStatusCodeException e) {
-            throw new InvalidArgumentException(e.getMessage());
+            throw new InvalidArgumentException(e.getLocalizedMessage());
         }
     }
 }
