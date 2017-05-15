@@ -66,6 +66,115 @@ public class FindAllAvailableGamesToJoinTests extends ProjectTest {
         deleteUsers();
     }
 
+    @Test
+    public void testFindAvailableGamesFailBecauseTournamentIsInProgress(){
+        registerUsers();
+        loginUsers();
+        addBalance();
+        boolean gamecreated1 = this.createnewgame("achiadg","hodbub-poker-game",  GamePolicy.NOLIMIT , 100, 10000, 100, 2, 5, true);
+        assertTrue(gamecreated1);
+        usersJoinsGames();
+        boolean gamesfound1= this.searchavailablegamestojoin("hodbub");
+        assertTrue(gamesfound1);
+        this.startgame("achiadg","hodbub-poker-game");
+        boolean gamesfound2 = this.searchavailablegamestojoin("hodbub");
+        assertFalse(gamesfound2);
+        leaveGames();
+        logoutUsers();
+        deleteUsers();
+    }
+
+    @Test
+    public void testFindAvailableGamesFailBecauseNoMuchBuyInForPolicyTournament(){
+        registerUsers();
+        loginUsers();
+        addBalance();
+        boolean addedbalance1 = this.addbalancetouserwallet("achiadg",200000);
+        boolean gamecreated1 = this.createnewgame("achiadg","hodbub-poker-game",  GamePolicy.NOLIMIT , 100000, 10000, 100, 2, 5, true);
+        assertTrue(gamecreated1);
+
+        boolean gamesfound1= this.searchavailablegamestojoin("ronenbu");
+        assertFalse(gamesfound1);
+
+        addedbalance1 = this.addbalancetouserwallet("ronenbu",200000);
+
+        boolean gamesfound2= this.searchavailablegamestojoin("ronenbu");
+        assertTrue(gamesfound2);
+
+        leaveGames();
+        logoutUsers();
+        deleteUsers();
+    }
+
+    @Test
+    public void testFindAvailableGamesSuccessNoEnoughBuyInButMoneyGame(){
+        registerUsers();
+        loginUsers();
+        addBalance();
+        this.addbalancetouserwallet("achiadg",200000);
+        boolean gamecreated1 = this.createnewgame("achiadg","hodbub-poker-game",  GamePolicy.NOLIMIT , 100000, 100, 100, 2, 5, true);
+        assertTrue(gamecreated1);
+
+        boolean gamesfound1= this.searchavailablegamestojoin("ronenbu");
+        assertFalse(gamesfound1);
+
+        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game1",  GamePolicy.NOLIMIT , 100, 0, 100, 2, 5, true);
+        assertTrue(gamecreated2);
+
+        boolean gamesfound2= this.searchavailablegamestojoin("ronenbu");
+        assertTrue(gamesfound2);
+
+        leaveGames();
+        logoutUsers();
+        deleteUsers();
+    }
+
+    @Test
+    public void testFindAvailableGamesFailBecauseMaximumAmountOfPlayersInGame(){
+        registerUsers();
+        loginUsers();
+        addBalance();
+        boolean addedbalance1 = this.addbalancetouserwallet("achiadg",200000);
+        boolean gamecreated1 = this.createnewgame("achiadg","hodbub-poker-game",  GamePolicy.NOLIMIT , 100, 100, 100, 2, 3, true);
+        assertTrue(gamecreated1);
+
+        boolean gamesfound1= this.searchavailablegamestojoin("rotemw");
+        assertTrue(gamesfound1);
+
+        this.joinexistinggame("hodbub","hodbub-poker-game",false);
+        this.joinexistinggame("ronenbu","hodbub-poker-game",false);
+
+        boolean gamesfound2= this.searchavailablegamestojoin("rotemw");
+        assertFalse(gamesfound2);
+
+        leaveGames();
+        logoutUsers();
+        deleteUsers();
+    }
+
+    @Test
+    public void testFindAvailableGamesFailBecausePlayerAlreadyInGame(){
+        registerUsers();
+        loginUsers();
+        addBalance();
+        boolean addedbalance1 = this.addbalancetouserwallet("achiadg",200000);
+        boolean gamecreated1 = this.createnewgame("achiadg","hodbub-poker-game",  GamePolicy.NOLIMIT , 100, 100, 100, 2, 3, true);
+        assertTrue(gamecreated1);
+
+        boolean gamesfound1= this.searchavailablegamestojoin("rotemw");
+        assertTrue(gamesfound1);
+
+        this.joinexistinggame("rotemw","hodbub-poker-game",false);
+        this.joinexistinggame("ronenbu","hodbub-poker-game",false);
+
+        boolean gamesfound2= this.searchavailablegamestojoin("rotemw");
+        assertFalse(gamesfound2);
+
+        leaveGames();
+        logoutUsers();
+        deleteUsers();
+    }
+
     public void leaveGames() {
         boolean closegame1 = this.leavegame("achiadg", "YES", "achiadg-poker-game");
         boolean closegame2 = this.leavegame("hodbub","YES","hodbub-poker-game");

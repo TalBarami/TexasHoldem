@@ -129,7 +129,11 @@ public class GameCenter {
 
     public void joinGame(String userName, String gameName, boolean asSpectator) throws GameException {
         Game toJoin = getSpecificGameIfExist(gameName);
-        User user = usersDb.getUserByUserName(userName);
+        User user = getSpecificUserIfExist(userName);
+
+        if(user.getGamePlayerMappings().containsKey(toJoin))
+            throw new GameException(String.format("User '%s' is already in game '%s'.", userName, gameName));
+
         if (asSpectator){
             if(!toJoin.canBeSpectated())
                 throw new CantSpeactateThisRoomException("Selected game can't be spectated due to it's settings.");
@@ -257,6 +261,15 @@ public class GameCenter {
         return user;
     }
 
+
+    public List<Game> getArchivedGames(){
+        return gamesDb.getArchivedGames();
+    }
+
+    public void redistributeUsersInLeagues(DistributionAlgorithm da) {
+        leagueManager.redistributeUsersInLeagues(da);
+    }
+  
     public void redistributeUsersInLeagues() {
         DistributionAlgorithm distributionAlgorithm = new Min2InLeagueSameAmount((IUsersForDistributionAlgorithm)usersDb);
         leagueManager.redistributeUsersInLeagues(distributionAlgorithm);

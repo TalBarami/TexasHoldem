@@ -33,11 +33,11 @@ public class PlayerRaiseTests extends ProjectTest {
         boolean playerplayed3 = this.playcall("hodbub", "achiadg-poker-game");
         boolean playerplayed4 = this.playcheck("rotemw", "achiadg-poker-game");
 
-        int potsize1 = this.getPotSize("achiadg-poker-game");
-        int playerbalance1 = this.getPlayerbalance("hodbub","achiadg-poker-game");
+        int potsize1 = this.getpotsize("achiadg-poker-game");
+        int playerbalance1 = this.getplayerbalance("hodbub","achiadg-poker-game");
         boolean playedturn1 = this.playraise("hodbub", "achiadg-poker-game", 300);
-        int potsize3 = this.getPotSize("achiadg-poker-game");
-        int playerbalance3 = this.getPlayerbalance("hodbub" ,"achiadg-poker-game");
+        int potsize3 = this.getpotsize("achiadg-poker-game");
+        int playerbalance3 = this.getplayerbalance("hodbub" ,"achiadg-poker-game");
         assertEquals(potsize1,potsize3 - 300);
         assertEquals(playerbalance1,playerbalance3 + 300);
         leaveGames();
@@ -58,7 +58,27 @@ public class PlayerRaiseTests extends ProjectTest {
         boolean playerplayed2 = this.playcall("achiadg", "achiadg-poker-game");
         boolean playerplayed3 = this.playcall("hodbub", "achiadg-poker-game");
         boolean playerplayed4 = this.playcheck("rotemw", "achiadg-poker-game");
-        boolean playedturn1 = this.playraise("hodbub", "achiadg-poker-game", 300);
+        boolean playedturn1 = this.playraise("hodbub", "achia\tdg-poker-ga\nme", 30);
+        assertFalse(playedturn1);
+        leaveGames();
+        logoutUsers();
+        deleteUsers();
+    }
+
+    @Test
+    public void testPlayerRaiseInvalidRiseAmount() {
+        registerUsers();
+        loginUsers();
+        addBalance();
+        createGames();
+        usersJoinsGames();
+        usersJoinsGames();
+        this.startgame("achiadg","achiadg-poker-game");
+        boolean playerplayed1 = this.playcall("ronenbu", "achiadg-poker-game");
+        boolean playerplayed2 = this.playcall("achiadg", "achiadg-poker-game");
+        boolean playerplayed3 = this.playcall("hodbub", "achiadg-poker-game");
+        boolean playerplayed4 = this.playcheck("rotemw", "achiadg-poker-game");
+        boolean playedturn1 = this.playraise("hodbub", "achiadg-poker-game", -1000);
         assertFalse(playedturn1);
         leaveGames();
         logoutUsers();

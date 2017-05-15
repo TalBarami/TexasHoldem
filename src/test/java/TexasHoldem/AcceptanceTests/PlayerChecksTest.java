@@ -32,11 +32,11 @@ public class PlayerChecksTest extends ProjectTest {
         boolean playerplayed2 = this.playcall("achiadg", "achiadg-poker-game");
         boolean playerplayed3 = this.playcall("hodbub", "achiadg-poker-game");
         boolean playerplayed4 = this.playcheck("rotemw", "achiadg-poker-game");
-        int potsize1 = this.getPotSize("achiadg-poker-game");
-        int playerbalance1 = this.getPlayerbalance("hodbub","achiadg-poker-game");
+        int potsize1 = this.getpotsize("achiadg-poker-game");
+        int playerbalance1 = this.getplayerbalance("hodbub","achiadg-poker-game");
         boolean playedturn1 = this.playcheck("hodbub", "achiadg-poker-game");
-        int potsize3 = this.getPotSize("achiadg-poker-game");
-        int playerbalance3 = this.getPlayerbalance("hodbub" ,"achiadg-poker-game");
+        int potsize3 = this.getpotsize("achiadg-poker-game");
+        int playerbalance3 = this.getplayerbalance("hodbub" ,"achiadg-poker-game");
         assertEquals(potsize1,potsize3);
         assertEquals(playerbalance1,playerbalance3);
         assertTrue(playedturn1);

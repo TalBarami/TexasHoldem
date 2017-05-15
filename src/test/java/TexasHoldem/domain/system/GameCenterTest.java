@@ -257,8 +257,6 @@ public class GameCenterTest {
             fail();
         } catch(Exception e){}
 
-
-
         gc.createGame(testUser1,tournamentGameSettings);
         User user=gc.getUser(testUser1);
         Game game=gc.getGameByName(tournamentGameSettings.getName());
