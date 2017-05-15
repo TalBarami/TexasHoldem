@@ -51,17 +51,17 @@ public class UserService {
         gameCenter.editProfile(originalUserName, newUserName, pass, email, date);
     }
 
-    public void deposit(String username, int amount) throws ArgumentNotInBoundsException, InvalidArgumentException {
+    public void deposit(String username, int amount) throws ArgumentNotInBoundsException, InvalidArgumentException, EntityDoesNotExistsException {
         verifyStrings(username);
         verifyPositiveNumbers(amount);
         gameCenter.depositMoney(username, amount);
     }
 
-    public int getUserLeague(String username) throws InvalidArgumentException {
+    public int getUserLeague(String username) throws InvalidArgumentException, EntityDoesNotExistsException {
         return getUser(username).getCurrLeague();
     }
 
-    public User getUser(String username) throws InvalidArgumentException {
+    public User getUser(String username) throws InvalidArgumentException, EntityDoesNotExistsException {
         verifyStrings(username);
         return gameCenter.getUser(username);
     }

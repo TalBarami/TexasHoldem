@@ -29,7 +29,7 @@ public class GameManager {
     public void createGame(String gameName, String gamePolicy, int policyLimit, int minBet, int buyInPolicy, int chipPolicy,
                            int minPlayerAmount, int maxPlayerAmount, boolean specAccept) throws InvalidArgumentException, EntityDoesNotExistsException, NoBalanceForBuyInException, ArgumentNotInBoundsException {
         // FIXME: Handle game policy
-        ClientGameDetails gameDetails = new ClientGameDetails(SessionManager.getInstance().user().getUsername(), gameName, 1, policyLimit, minBet, buyInPolicy, chipPolicy, minPlayerAmount, maxPlayerAmount, specAccept);
+        ClientGameDetails gameDetails = new ClientGameDetails(SessionManager.getInstance().user().getUsername(), gameName, 1, policyLimit, minBet, buyInPolicy, chipPolicy, minPlayerAmount, maxPlayerAmount, specAccept, null);
         gameRequestHandler.requestGameCreation(gameDetails);
     }
 

@@ -42,7 +42,7 @@ public class RealBridge implements Bridge {
               return true;
             else
               return false;
-        }catch (InvalidArgumentException e){
+        }catch (EntityDoesNotExistsException|InvalidArgumentException e){
             return false;}
     }
 
@@ -100,7 +100,7 @@ public class RealBridge implements Bridge {
             service.userService().deposit(username,amounttoadd);
         }catch (ArgumentNotInBoundsException e){
             return false;
-        } catch (InvalidArgumentException e) {
+        } catch (EntityDoesNotExistsException|InvalidArgumentException e) {
             return false;
         }
         return true;
@@ -411,7 +411,7 @@ public class RealBridge implements Bridge {
     public int getuserleague(String username) {
         try {
             return service.userService().getUserLeague(username);
-        } catch (InvalidArgumentException e) {
+        } catch (EntityDoesNotExistsException|InvalidArgumentException e) {
            return -1;
         }
     }

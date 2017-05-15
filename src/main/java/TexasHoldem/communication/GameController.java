@@ -33,6 +33,14 @@ public class GameController {
         this.searchService = searchService;
     }
 
+    @RequestMapping(method=GET, value="/game/{roomname}")
+    public ResponseMessage findGame(@PathVariable("roomname") String roomName) throws InvalidArgumentException, EntityDoesNotExistsException {
+        Game game = searchService.findGameByName(roomName);
+        ClientGameDetails clientGame = GameClientGameDetailsConverter.convert(game);
+
+        return new ResponseMessage("Game found successfully", clientGame);
+    }
+
     @RequestMapping(method=POST, value="/game/{roomname}")
     public ResponseMessage createGame(@PathVariable("roomname") String roomName, @RequestBody ClientGameDetails gameDetails) throws InvalidArgumentException, NoBalanceForBuyInException, ArgumentNotInBoundsException, EntityDoesNotExistsException {
         String gameName = gameDetails.getName();
@@ -108,7 +116,7 @@ public class GameController {
         else
         {
             gameService.sendMessage(userName,gameName,messageContent);
-            return new ResponseMessage("Massage sent successfully", null);
+            return new ResponseMessage("Message sent successfully", null);
         }
     }
 

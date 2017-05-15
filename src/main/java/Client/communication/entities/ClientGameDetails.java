@@ -1,5 +1,7 @@
 package Client.communication.entities;
 
+import java.util.List;
+
 /**
  * Created by user on 13/05/2017.
  */
@@ -14,8 +16,9 @@ public class ClientGameDetails {
     private int minimumPlayersAmount;
     private int maximumPlayersAmount;
     private boolean isSpectateValid;
+    private List<ClientPlayer> playerList;
 
-    public ClientGameDetails(String username, String name, int policyType, int policyLimitAmount, int minimumBet, int buyInAmount, int chipPolicyAmount, int minimumPlayersAmount, int maximumPlayersAmount, boolean isSpectateValid) {
+    public ClientGameDetails(String username, String name, int policyType, int policyLimitAmount, int minimumBet, int buyInAmount, int chipPolicyAmount, int minimumPlayersAmount, int maximumPlayersAmount, boolean isSpectateValid, List<ClientPlayer> playerList) {
         this.username = username;
         this.name = name;
         this.policyType = policyType;
@@ -26,6 +29,7 @@ public class ClientGameDetails {
         this.minimumPlayersAmount = minimumPlayersAmount;
         this.maximumPlayersAmount = maximumPlayersAmount;
         this.isSpectateValid = isSpectateValid;
+        this.playerList = playerList;
     }
 
     public ClientGameDetails() {
@@ -109,5 +113,13 @@ public class ClientGameDetails {
 
     public void setSpectateValid(boolean spectateValid) {
         isSpectateValid = spectateValid;
+    }
+
+    public List<ClientPlayer> getPlayerList() {
+        return playerList;
+    }
+
+    public void setPlayerList(List<ClientPlayer> playerList) {
+        this.playerList = playerList;
     }
 }
