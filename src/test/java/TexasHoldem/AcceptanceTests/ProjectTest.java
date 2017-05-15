@@ -1,5 +1,6 @@
 package TexasHoldem.AcceptanceTests;
 
+import TexasHoldem.domain.events.gameFlowEvents.GameEvent;
 import TexasHoldem.domain.game.GamePolicy;
 import junit.framework.TestCase;
 
@@ -18,7 +19,6 @@ public abstract class ProjectTest extends TestCase{
     {
         this.bridge = Driver.getBridge();
     }
-
 
     public boolean searchUser(String username) {
         return bridge.searchUser(username);
@@ -40,12 +40,16 @@ public abstract class ProjectTest extends TestCase{
         return bridge.logout(username);
     }
 
-    public boolean editUserName(String oldusername, String newusername, String password, String email, LocalDate date) {
+    public boolean editusername(String oldusername, String newusername, String password, String email, LocalDate date) {
         return bridge.editUserName(oldusername, newusername,password,email,date);
     }
 
     public boolean addbalancetouserwallet(String username, int amounttoadd) {
         return bridge.addbalancetouserwallet(username, amounttoadd);
+    }
+
+    public List<GameEvent> replaynonactivegame(String gamename) {
+        return bridge.replaynonactivegame(gamename);
     }
 
     public boolean createnewgame(String username, String gamename, GamePolicy policy, int buyin, int chippolicy, int minimumbet, int minplayers, int maxplayers, boolean spectateisvalid) {
@@ -84,48 +88,29 @@ public abstract class ProjectTest extends TestCase{
         return bridge.searchgamebymaxplayers(numplayers);
     }
 
-    public boolean searchgamebyspectateisvalid(boolean spectatingavailable) {
-        return bridge.searchgamebyspectateisvalid(spectatingavailable);
+    public boolean searchgamebyspectateisvalid() {
+        return bridge.searchgamebyspectateisvalid();
     }
-
 
     public boolean leavegame(String username, String choise, String gamename) {
         return bridge.leavegame(username, choise, gamename);
     }
 
-  /*  public boolean replaynonactivegame(String username, String gamename) {
-        return bridge.replaynonactivegame(username,gamename);
-    } */
-
-
     public boolean searchavailablegamestojoin(String username) {
         return bridge.searchavailablegamestojoin(username);
     }
 
-
-    public int getPotSize(String gamename) {
+    public int getpotsize(String gamename) {
         return bridge.getPotSize(gamename);
     }
 
-    public int getPlayerbalance(String username, String gamename) {
+    public int getplayerbalance(String username, String gamename) {
         return  bridge.getPlayerbalance(username, gamename);
     }
-
-  /*  public boolean setuserleague(String adminname, String username, int newleague) {
-        return bridge.setuserleague(adminname, username,newleague);
-    } */
-
-  /*  public boolean setcriteriatomoveleague(String adminname, int criteria) {
-        return bridge.setcriteriatomoveleague(adminname,criteria);
-    } */
 
     public boolean spectateactivegame(String username, String gamename, boolean spec) {
         return bridge.spectateactivegame(username, gamename, spec);
     }
-
-  /*  public boolean moveuserleague(String admin, String username, int league) {
-        return bridge.moveuserleague(admin, username,league);
-    } */
 
     public boolean startgame(String userName,String gameName) {
         return bridge.startgame(userName,gameName);
@@ -150,4 +135,18 @@ public abstract class ProjectTest extends TestCase{
     public int getuserleague(String username) {
         return bridge.getuserleague(username);
     }
+
+    /* DELETED FROM PREVIOUS ASSIGNMENTS
+     public boolean setuserleague(String adminname, String username, int newleague) {
+        return bridge.setuserleague(adminname, username,newleague);
+    }
+
+    public boolean setcriteriatomoveleague(String adminname, int criteria) {
+        return bridge.setcriteriatomoveleague(adminname,criteria);
+    }
+
+    public boolean moveuserleague(String admin, String username, int league) {
+        return bridge.moveuserleague(admin, username,league);
+    }
+     */
 }

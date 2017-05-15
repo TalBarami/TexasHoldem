@@ -143,4 +143,8 @@ public class Player extends Participant{
     public void updateGamesPlayed(){
         user.updateGamesPlayed();
     }
+
+    public void clearCards(){
+        cards.clear();
+    }
 }

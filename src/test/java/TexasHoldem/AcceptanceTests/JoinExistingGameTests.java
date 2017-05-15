@@ -64,6 +64,29 @@ public class JoinExistingGameTests extends ProjectTest {
     }
 
     @Test
+    public void testJoinExistingGameInValidUserName()
+    {
+        registerUsers();
+        loginUsers();
+        addBalance();
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GamePolicy.NOLIMIT, 100, 10000, 100, 2, 9, true);
+        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game", GamePolicy.NOLIMIT , 300, 300, 2, 2, 9, false);
+        assertTrue(gamecreated1);
+        assertTrue(gamecreated2);
+        boolean useraddedgame1 = this.joinexistinggame("kaki" , "achiadg-poker-game",false);
+        boolean useraddedgame2 = this.joinexistinggame("osem" , "achiadg-poker-game",false);
+        boolean useraddedgame3 = this.joinexistinggame("bamba" , "hodbub-poker-game",false);
+        boolean useraddedgame4 = this.joinexistinggame("obama" , "hodbub-poker-game",false);
+        assertFalse(useraddedgame1);
+        assertFalse(useraddedgame2);
+        assertFalse(useraddedgame3);
+        assertFalse(useraddedgame4);
+        leaveGames();
+        logoutUsers();
+        deleteUsers();
+    }
+
+    @Test
     public void testJoinExistingGameThatIsFull()
     {
         registerUsers();
@@ -102,6 +125,23 @@ public class JoinExistingGameTests extends ProjectTest {
     }
 
     @Test
+    public void testJoinExistingGameThatBuyInIsGreaterThanBalanceButRealMoney()
+    {
+        registerUsers();
+        loginUsers();
+        addBalance();
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GamePolicy.NOLIMIT , 43000, 0, 100, 2, 3, true);
+        assertTrue(gamecreated1);
+        boolean useraddedgame1 = this.joinexistinggame("hodbub" , "achiadg-poker-game",false);
+        boolean useraddedgame2 = this.joinexistinggame("rotemw" , "achiadg-poker-game",false);
+        assertTrue(useraddedgame1);
+        assertTrue(useraddedgame2);
+        boolean closegame1 = this.leavegame("achiadg", "YES", "achiadg-poker-game");
+        logoutUsers();
+        deleteUsers();
+    }
+
+    @Test
     public void testJoinExistingGameThatNoLeagueMatch()
     {
         registerUsers();
@@ -134,6 +174,40 @@ public class JoinExistingGameTests extends ProjectTest {
         boolean useraddedgame1 = this.joinexistinggame("hodbub" , "achiad-poker-game ; SELECT * FROM GAMES WHERE GAMENAME = achiad-poker-game",false);
         assertFalse(useraddedgame1);
         boolean closegame1 = this.leavegame("achiadg", "YES", "achiadg-poker-game");
+        logoutUsers();
+        deleteUsers();
+    }
+
+    @Test
+    public void testJoinExistingTournamentGameInProgress(){
+        registerUsers();
+        loginUsers();
+        addBalance();
+        boolean gamecreated1 = this.createnewgame("achiadg","hodbub-poker-game",  GamePolicy.NOLIMIT , 100, 10000, 100, 2, 5, true);
+        assertTrue(gamecreated1);
+        boolean userjoined1 = this.joinexistinggame("hodbub","hodbub-poker-game",false);
+        assertTrue(userjoined1);
+        this.startgame("achiadg","hodbub-poker-game");
+        boolean userjoined2 = this.joinexistinggame("ronenbu","hodbub-poker-game",false);
+        assertFalse(userjoined2);
+
+        this.leavegame("hodbub","YES","hodbub-poker-game");
+        this.leavegame("achiadg","YES","hodbub-poker-game");
+        logoutUsers();
+        deleteUsers();
+    }
+
+    @Test
+    public void testJoinExistingGameUserAlreadyInGame()
+    {
+        registerUsers();
+        loginUsers();
+        addBalance();
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game",  GamePolicy.NOLIMIT , 43000, 0, 100, 2, 3, true);
+        assertTrue(gamecreated1);
+        boolean gamecreated2 = this.joinexistinggame("achiadg","achiadg-poker-game", false);
+        assertFalse(gamecreated2);
+        this.leavegame("achiadg", "YES", "achiadg-poker-game");
         logoutUsers();
         deleteUsers();
     }

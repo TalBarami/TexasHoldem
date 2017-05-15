@@ -7,6 +7,7 @@ import TexasHoldem.domain.game.GamePolicy;
 import TexasHoldem.domain.system.GameCenter;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static TexasHoldem.service.TexasHoldemService.verifyObjects;
 import static TexasHoldem.service.TexasHoldemService.verifyStrings;
@@ -67,5 +68,9 @@ public class SearchService {
 
     public List<Game> findGamesByMaximumPlayers(int maximumPlayers){
         return gameCenter.findGamesByMaximumPlayers(maximumPlayers);
+    }
+
+    public List<String> findArchivedGamesNames(){
+       return gameCenter.getArchivedGames().stream().map(x->x.getName()).collect(Collectors.toList());
     }
 }

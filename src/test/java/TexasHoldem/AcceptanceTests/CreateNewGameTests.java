@@ -224,4 +224,29 @@ public class CreateNewGameTests extends ProjectTest {
         boolean deleteUser1 = this.deleteUser("achiadg");
         assertTrue(deleteUser1);
     }
+
+    @Test
+    public void testCreateNewGameFailNoEnoughForBuyIn()
+    {
+        boolean useradded1 = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com", LocalDate.of(1991,4,20),null);
+        boolean userloggedin1 = this.login("achiadg","aChi12#*");
+        assertTrue(useradded1);
+        assertTrue(userloggedin1);
+
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", GamePolicy.NOLIMIT , 10000, 10000, 100, 2, 9, true);
+        assertFalse(gamecreated1);
+
+        boolean addedbalance1 = this.addbalancetouserwallet("achiadg",20000);
+        assertTrue(addedbalance1);
+
+        boolean gamecreated2 = this.createnewgame("achiadg","achiadg-poker-game", GamePolicy.NOLIMIT , 10000, 10000, 100, 2, 9, true);
+        assertTrue(gamecreated2);
+
+        boolean closegame1 = this.leavegame("achiadg", "YES", "achiadg-poker-game");
+        assertTrue(closegame1);
+        boolean userloggedout1 = this.logout("achiadg");
+        boolean deleteUser1 = this.deleteUser("achiadg");
+        assertTrue(userloggedout1);
+        assertTrue(userloggedout1);
+    }
 }
