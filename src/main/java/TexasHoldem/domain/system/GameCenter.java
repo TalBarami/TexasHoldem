@@ -55,8 +55,8 @@ public class GameCenter {
         logger.info("'{}' deleted from the system.",username);
     }
 
-    public User getUser(String username){
-        return usersDb.getUserByUserName(username);
+    public User getUser(String username) throws EntityDoesNotExistsException {
+        return getSpecificUserIfExist(username);
     }
 
     public void login(String userName,String pass) throws LoginException, EntityDoesNotExistsException {
