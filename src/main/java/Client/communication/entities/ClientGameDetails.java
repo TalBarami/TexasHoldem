@@ -15,6 +15,22 @@ public class ClientGameDetails {
     private int maximumPlayersAmount;
     private boolean isSpectateValid;
 
+    public ClientGameDetails(String username, String name, int policyType, int policyLimitAmount, int minimumBet, int buyInAmount, int chipPolicyAmount, int minimumPlayersAmount, int maximumPlayersAmount, boolean isSpectateValid) {
+        this.username = username;
+        this.name = name;
+        this.policyType = policyType;
+        this.policyLimitAmount = policyLimitAmount;
+        this.minimumBet = minimumBet;
+        this.buyInAmount = buyInAmount;
+        this.chipPolicyAmount = chipPolicyAmount;
+        this.minimumPlayersAmount = minimumPlayersAmount;
+        this.maximumPlayersAmount = maximumPlayersAmount;
+        this.isSpectateValid = isSpectateValid;
+    }
+
+    public ClientGameDetails() {
+    }
+
     public String getUsername() {
         return username;
     }
