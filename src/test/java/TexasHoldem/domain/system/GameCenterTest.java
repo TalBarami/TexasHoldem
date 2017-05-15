@@ -72,7 +72,10 @@ public class GameCenterTest {
 
     @Test
     public void registerUserTest() throws Exception {
-        Assert.assertNull(gc.getUser(testUser1));
+        try{
+            gc.getUser(testUser1);
+            fail();
+        }catch(Exception e){}
         gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
         assertThat(gc.getUser(testUser1).getPassword(),is(testUser1Pass));
         assertThat(gc.getUser(testUser1).getCurrLeague(),is(gc.getLeagueManager().getDefaultLeagueForNewUsers()));
@@ -91,7 +94,10 @@ public class GameCenterTest {
         gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
         assertNotNull(gc.getUser(testUser1));
         gc.deleteUser(testUser1);
-        assertNull(gc.getUser(testUser1));
+        try{
+            gc.getUser(testUser1);
+            fail();
+        }catch(Exception e){}
     }
 
     @Test
@@ -193,9 +199,15 @@ public class GameCenterTest {
     @Test
     public void editProfileSuccessTest() throws Exception {
         gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
-        assertNull(gc.getUser("newName"));
+        try{
+            gc.getUser("newName");
+            fail();
+        }catch(Exception e){}
         gc.editProfile(testUser1,"newName","newPass","new@gmail.com",now.minusYears(2));
-        assertNull(gc.getUser(testUser1));
+        try{
+            gc.getUser(testUser1);
+            fail();
+        }catch(Exception e){}
         User u=gc.getUser("newName");
         assertThat(u.getPassword(),is("newPass"));
         assertThat(u.getEmail(),is("new@gmail.com"));

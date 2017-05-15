@@ -44,6 +44,9 @@ public class RealBridge implements Bridge {
               return false;
         }catch (InvalidArgumentException e){
             return false;}
+        catch (EntityDoesNotExistsException e) {
+            return false;
+        }
     }
 
     public  boolean deleteUser(String username)
@@ -413,6 +416,8 @@ public class RealBridge implements Bridge {
             return service.userService().getUserLeague(username);
         } catch (InvalidArgumentException e) {
            return -1;
+        } catch (EntityDoesNotExistsException e) {
+            return -1;
         }
     }
 }
