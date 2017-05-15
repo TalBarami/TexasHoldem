@@ -1,5 +1,6 @@
 package TexasHoldem.AcceptanceTests;
 
+import TexasHoldem.domain.events.gameFlowEvents.GameEvent;
 import TexasHoldem.domain.game.GamePolicy;
 
 import java.time.LocalDate;
@@ -95,17 +96,17 @@ public class ProxyBridge implements Bridge {
         return real.searchgamebymaxplayers(numplayers);
     }
 
-    public boolean searchgamebyspectateisvalid(boolean spectatingavailable) {
-        return real.searchgamebyspectateisvalid(spectatingavailable);
+    public boolean searchgamebyspectateisvalid() {
+        return real.searchgamebyspectateisvalid();
     }
 
     public boolean leavegame(String username, String choise, String gamename) {
         return  real.leavegame(username,choise, gamename);
     }
 
-   /* public boolean replaynonactivegame(String username, String gamename) {
-        return true;
-    }*/
+   public List<GameEvent> replaynonactivegame(String gamename) {
+        return real.replaynonactivegame(gamename);
+    }
 
     public boolean searchavailablegamestojoin(String username) {
        return real.searchavailablegamestojoin(username);

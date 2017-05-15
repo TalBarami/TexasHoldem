@@ -1,6 +1,7 @@
 package TexasHoldem.AcceptanceTests;
 
 import TexasHoldem.common.Exceptions.*;
+import TexasHoldem.domain.events.gameFlowEvents.GameEvent;
 import TexasHoldem.domain.game.Game;
 import TexasHoldem.domain.game.GamePolicy;
 
@@ -230,7 +231,7 @@ public class RealBridge implements Bridge {
         }
     }
 
-    public boolean searchgamebyspectateisvalid(boolean spectatingavailable) {
+    public boolean searchgamebyspectateisvalid() {
         if(service.searchService().findSpectatableGames().size() != 0)
         {
             return true;
@@ -250,9 +251,13 @@ public class RealBridge implements Bridge {
         return true;
     }
 
- /*   public boolean replaynonactivegame(String username, String gamename) {
-        return true;
-    } */
+    public List<GameEvent> replaynonactivegame(String gameName) {
+        try {
+            return service.gameService().replayGame(gameName);
+        } catch (EntityDoesNotExistsException e) {
+            return null;
+        }
+    }
 
     public boolean searchavailablegamestojoin(String username) {
         List<Game> games = null;

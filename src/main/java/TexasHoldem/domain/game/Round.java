@@ -85,7 +85,7 @@ public class Round {
         }
 
         activePlayers.remove(player);
-        logger.info("{} has left the game {} during a played round.", player.getUser().getUsername(), gameSettings.getName());
+        //logger.info("{} has left the game {} during a played round.", player.getUser().getUsername(), gameSettings.getName());
 
         if (activePlayers.size() == 1) {
             endRound();

@@ -127,6 +127,46 @@ public class LeaveGameTests extends ProjectTest {
         deleteUsers();
     }
 
+    @Test
+    public void testLeaveGameArchivedLastPlayerLeave()
+    {
+        registerUsers();
+        loginUsers();
+        addBalance();
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", GamePolicy.NOLIMIT , 10000, 10000, 100, 2, 9, true);
+        assertTrue(gamecreated1);
+
+        boolean find1=this.searchavailablegamestojoin("ronenbu");
+        assertTrue(find1);
+
+        boolean leavedgame2 = this.leavegame("achiadg" , "YES", "achiadg-poker-game");
+
+        boolean find2=this.searchavailablegamestojoin("ronenbu");
+        assertFalse(find2);
+
+        assertTrue(leavedgame2);
+        logoutUsers();
+        deleteUsers();
+    }
+
+    @Test
+    public void testLeaveGameUserNotInGame()
+    {
+        registerUsers();
+        loginUsers();
+        addBalance();
+        boolean gamecreated1 = this.createnewgame("achiadg","achiadg-poker-game", GamePolicy.NOLIMIT , 10000, 10000, 100, 2, 9, true);
+        boolean gamecreated2 = this.createnewgame("hodbub","hodbub-poker-game",  GamePolicy.NOLIMIT , 300, 300, 2, 2, 9, true);
+        assertTrue(gamecreated1);
+        assertTrue(gamecreated2);
+        boolean leavedgame1 = this.leavegame("achiadg" , "YES", "hodbub-poker-game");
+        boolean leavedgame2 = this.leavegame("hodbub" , "YES", "achiadg-poker-game");
+        assertFalse(leavedgame1);
+        assertFalse(leavedgame2);
+        logoutUsers();
+        deleteUsers();
+    }
+
     private void usersJoinsGames() {
         boolean useraddedgame1 = this.joinexistinggame("hodbub" , "achiadg-poker-game", false);
         boolean useraddedgame2 = this.joinexistinggame("rotemw" , "achiadg-poker-game",false);
