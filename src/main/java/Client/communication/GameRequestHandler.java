@@ -27,6 +27,32 @@ public class GameRequestHandler {
         this.objectMapper = new ObjectMapper();
     }
 
+    public ClientGameDetails requestGameEntity(String gameName) throws EntityDoesNotExistsException, InvalidArgumentException {
+        String addr = serviceURI + "/" + gameName;
+
+        try {
+            ResponseEntity<ResponseMessage<ClientGameDetails>> response = restTemplate.exchange(addr, HttpMethod.GET, null, new ParameterizedTypeReference<ResponseMessage<ClientGameDetails>>() {});
+            return response.getBody().getData();
+        } catch (HttpStatusCodeException e) {
+            String responseBody = e.getResponseBodyAsString();
+
+            ExceptionObject exceptionObj = null;
+            try {
+                exceptionObj = objectMapper.readValue(responseBody, ExceptionObject.class);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+
+            if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
+                throw new EntityDoesNotExistsException(exceptionObj.getMessage());
+            }
+
+            else {
+                throw new InvalidArgumentException(exceptionObj.getMessage());
+            }
+        }
+    }
+
     public void requestGameCreation(ClientGameDetails gameDetails) throws InvalidArgumentException, NoBalanceForBuyInException, ArgumentNotInBoundsException, EntityDoesNotExistsException {
         String addr = serviceURI + "/" + gameDetails.getName();
         HttpEntity<ClientGameDetails> request = new HttpEntity<>(gameDetails);

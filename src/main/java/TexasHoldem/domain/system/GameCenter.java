@@ -93,7 +93,7 @@ public class GameCenter {
         logger.info("'{}' user edit his profile [u: {}, p: {}, e: {}, d: {}] .",originalUserName,newUserName,pass,email,date);
     }
 
-    public void depositMoney(String userName,int amount) throws ArgumentNotInBoundsException {
+    public void depositMoney(String userName,int amount) throws ArgumentNotInBoundsException, EntityDoesNotExistsException {
         usersDb.getUserByUserName(userName).deposit(amount,true);
         logger.info("{} successfully deposited {} to it's wallet.",userName,amount);
     }

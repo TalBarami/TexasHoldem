@@ -44,6 +44,14 @@ public class Card implements Comparable<Card>{
         return this.suit.ordinal();
     }
 
+    public Rank getRank() {
+        return rank;
+    }
+
+    public Suit getSuit() {
+        return suit;
+    }
+
     public String toString() {
         return rank + " of " + suit;
     }
