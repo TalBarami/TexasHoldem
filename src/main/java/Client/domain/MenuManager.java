@@ -3,7 +3,11 @@ package Client.domain;
 import Client.common.exceptions.*;
 import Client.communication.GameRequestHandler;
 import Client.communication.entities.ClientGameDetails;
+import Client.communication.entities.ClientGamePolicy;
 import Client.communication.entities.ClientGameRequest;
+import TexasHoldem.domain.game.GamePolicy;
+
+import java.util.ArrayList;
 
 /**
  * Created by User on 15/05/2017.
@@ -23,12 +27,13 @@ public class MenuManager {
         return instance;
     }
 
-    public void createGame(String gameName, String gamePolicy, int policyLimit, int minBet, int buyInPolicy, int chipPolicy,
+    public void createGame(String gameName, ClientGamePolicy gamePolicy, int policyLimit, int minBet, int buyInPolicy, int chipPolicy,
                            int minPlayerAmount, int maxPlayerAmount, boolean specAccept) throws InvalidArgumentException, EntityDoesNotExistsException, NoBalanceForBuyInException, ArgumentNotInBoundsException {
         // FIXME: Handle game policy
-        ClientGameDetails gameDetails = new ClientGameDetails(SessionManager.getInstance().user().getUsername(), gameName, 1, policyLimit, minBet, buyInPolicy, chipPolicy, minPlayerAmount, maxPlayerAmount, specAccept);
+        ClientGameDetails gameDetails = new ClientGameDetails(SessionManager.getInstance().user().getUsername(),
+                gameName, gamePolicy.value(), policyLimit, minBet, buyInPolicy,
+                chipPolicy, minPlayerAmount, maxPlayerAmount, specAccept, new ArrayList<>());
         gameRequestHandler.requestGameCreation(gameDetails);
-
     }
 
     public void joinGame(String username, String gameName) throws GameException {

@@ -4,6 +4,7 @@ import Client.common.exceptions.EntityDoesNotExistsException;
 import Client.common.exceptions.GameException;
 import Client.common.exceptions.InvalidArgumentException;
 import Client.communication.entities.ClientGameDetails;
+import Client.communication.entities.ClientGamePolicy;
 import Client.communication.entities.ClientUserProfile;
 import Client.domain.GameManager;
 import Client.domain.MenuManager;
@@ -52,7 +53,7 @@ public class MainMenu extends JFrame {
     private JButton depositButton;
     private JButton findButton;
     private JSpinner searchSpinner;
-    private JComboBox<String> searchComboBox;
+    private JComboBox<ClientGamePolicy> searchComboBox;
 
     public MainMenu() {
         init();
@@ -94,8 +95,7 @@ public class MainMenu extends JFrame {
             searchTypeComboBox.addItem(type);
         }
 
-        List<String> gamePolicies = Arrays.asList("Limit", "No limit", "Pot limit");
-        for(String policy : gamePolicies){
+        for(ClientGamePolicy policy : ClientGamePolicy.values()){
             searchComboBox.addItem(policy);
         }
 

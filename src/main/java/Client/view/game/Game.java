@@ -11,6 +11,8 @@ import Client.view.system.MainMenu;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 /**
  * Created by User on 14/05/2017.
@@ -45,6 +47,7 @@ public class Game extends JFrame{
     }
 
     public void init(){
+        toFront();
         ClientUtils.frameInit(this, contentPane);
         getRootPane().setDefaultButton(sendButton);
     }
@@ -58,6 +61,15 @@ public class Game extends JFrame{
 
         sendButton.addActionListener(e -> onSend());
         contentPane.registerKeyboardAction(e -> onSend(), KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
+
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                onExit();
+            }
+        });
+
+        contentPane.registerKeyboardAction(e -> onExit(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
     }
 
     private void onSend(){
@@ -65,19 +77,35 @@ public class Game extends JFrame{
     }
 
     private void onFold(){
-
+        try{
+            gameManager.playFold();
+        } catch (GameException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void onCall(){
-
+        try {
+            gameManager.playCall();
+        } catch (GameException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void onRaise(){
-
+        try{
+            gameManager.playRaise("FIXME!");
+        } catch (GameException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void onCheck(){
-
+        try {
+            gameManager.playCheck();
+        } catch (GameException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public void onExit() {
