@@ -4,8 +4,11 @@ import Client.common.exceptions.ArgumentNotInBoundsException;
 import Client.common.exceptions.EntityDoesNotExistsException;
 import Client.common.exceptions.InvalidArgumentException;
 import Client.common.exceptions.NoBalanceForBuyInException;
+import Client.communication.entities.ClientGameDetails;
 import Client.domain.GameManager;
-import Client.domain.SessionManager;
+import Client.domain.MenuManager;
+import Client.domain.SearchManager;
+import Client.view.game.Game;
 
 import javax.swing.*;
 import javax.swing.text.NumberFormatter;
@@ -84,13 +87,13 @@ public class CreateGame extends JDialog {
 
     private void onOK() {
         // add your code here
-        GameManager gameManager = GameManager.getInstance();
+        MenuManager menuManager = MenuManager.getInstance();
         try {
-            gameManager.createGame(nameTextField.getText(), (String)policyComboBox.getSelectedItem(), (int)raiseLimitSpinner.getValue(), (int)minBetSpinner.getValue(),
-                    (int)buyInPolicySpinner.getValue(), (int)chipPolicySpinner.getValue(), (int)minSpinner.getValue(), (int)maxSpinner.getValue(), (boolean)allowSpectatingCheckBox.isSelected());
+            menuManager.createGame(nameTextField.getText(), (String)policyComboBox.getSelectedItem(), (int)raiseLimitSpinner.getValue(), (int)minBetSpinner.getValue(),
+                    (int)buyInPolicySpinner.getValue(), (int)chipPolicySpinner.getValue(), (int)minSpinner.getValue(), (int)maxSpinner.getValue(), allowSpectatingCheckBox.isSelected());
 
             // FIXME: Put the player in the newly created game.
-            ancestor.init();
+            Game game = new Game(ancestor, nameTextField.getText());
             dispose();
         } catch (InvalidArgumentException | EntityDoesNotExistsException | ArgumentNotInBoundsException | NoBalanceForBuyInException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

@@ -1,9 +1,12 @@
 package Client.view.system;
 
 import Client.common.exceptions.EntityDoesNotExistsException;
+import Client.common.exceptions.GameException;
 import Client.common.exceptions.InvalidArgumentException;
 import Client.communication.entities.ClientGameDetails;
 import Client.communication.entities.ClientUserProfile;
+import Client.domain.GameManager;
+import Client.domain.MenuManager;
 import Client.domain.SearchManager;
 import Client.domain.SessionManager;
 import Client.view.ClientUtils;
@@ -25,8 +28,6 @@ import static Client.domain.SearchManager.*;
  * Created by User on 12/05/2017.
  */
 public class MainMenu extends JFrame {
-    private List<Game> games;
-
     private Profile profile;
 
     private List<String> textFields = Arrays.asList(GAME_NAME, USERNAME);
@@ -148,15 +149,35 @@ public class MainMenu extends JFrame {
     }
 
     private void onJoinGame(){
-
+        String gameName = String.valueOf(gamesTable.getValueAt(gamesTable.getSelectedRow(), 0));
+        String username = SessionManager.getInstance().user().getUsername();
+        try {
+            MenuManager.getInstance().joinGame(username, gameName);
+            Game game = new Game(this, gameName);
+        } catch (GameException | EntityDoesNotExistsException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void onSpectateGame(){
-
+        String gameName = String.valueOf(gamesTable.getValueAt(gamesTable.getSelectedRow(), 0));
+        String username = SessionManager.getInstance().user().getUsername();
+        try {
+            MenuManager.getInstance().spectateGame(username, gameName);
+            Game game = new Game(this, gameName);
+        } catch (GameException | EntityDoesNotExistsException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void onReplayGame(){
-
+        String gameName = String.valueOf(gamesTable.getValueAt(gamesTable.getSelectedRow(), 0));
+        try {
+            MenuManager.getInstance().replayGame(gameName);
+            Game game = new Game(this, gameName);
+        } catch (GameException | EntityDoesNotExistsException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void onFind(){

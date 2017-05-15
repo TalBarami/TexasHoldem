@@ -1,6 +1,6 @@
 package Client.view.system;
 
-import Client.domain.GameManager;
+import Client.domain.MenuManager;
 
 import javax.swing.*;
 import javax.swing.text.NumberFormatter;
@@ -43,7 +43,7 @@ public class Deposit extends JDialog {
 
     private void onOK() {
         // add your code here
-        GameManager gameManager = GameManager.getInstance();
+        MenuManager gameManager = MenuManager.getInstance();
         gameManager.deposit((int)amountSpinner.getValue());
         ancestor.init();
         dispose();
