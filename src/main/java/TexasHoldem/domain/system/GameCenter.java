@@ -164,6 +164,7 @@ public class GameCenter {
     public List<Game> findAvailableGames(String userName) throws  EntityDoesNotExistsException {
         User user = getSpecificUserIfExist(userName);
         List<Game> activeGames = gamesDb.getActiveGames();
+
         return activeGames.stream()
                 .filter(game -> game.getLeague() == user.getCurrLeague() &&
                         (game.realMoneyGame() || (!game.realMoneyGame() && game.isActive() && (game.getBuyInPolicy() <= user.getBalance()))) &&

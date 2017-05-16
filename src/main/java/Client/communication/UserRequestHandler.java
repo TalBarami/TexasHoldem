@@ -1,10 +1,12 @@
 package Client.communication;
 
+import Client.common.exceptions.ArgumentNotInBoundsException;
 import Client.common.exceptions.EntityDoesNotExistsException;
 import Client.common.exceptions.ExceptionObject;
 import Client.common.exceptions.InvalidArgumentException;
 import Client.communication.entities.ClientUserProfile;
 import Client.communication.entities.ResponseMessage;
+import Client.communication.entities.ClientTransactionRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -120,6 +122,36 @@ public class UserRequestHandler {
             }
 
             throw new InvalidArgumentException(exceptionObj.getMessage());
+        }
+    }
+
+    public void requestUserTransaction(String username, ClientTransactionRequest transaction) throws EntityDoesNotExistsException, ArgumentNotInBoundsException, InvalidArgumentException {
+        String addr = serviceURI + "/" + username + "/balance";
+        HttpEntity<ClientTransactionRequest> request = new HttpEntity<>(transaction);
+
+        try {
+            ResponseEntity<ResponseMessage> response = restTemplate.exchange(addr, HttpMethod.PUT, request, ResponseMessage.class);
+        } catch (HttpStatusCodeException e) {
+            String responseBody = e.getResponseBodyAsString();
+
+            ExceptionObject exceptionObj = null;
+            try {
+                exceptionObj = objectMapper.readValue(responseBody, ExceptionObject.class);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+
+            if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
+                throw new EntityDoesNotExistsException(exceptionObj.getMessage());
+            }
+
+            else if (e.getStatusCode() == HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE) {
+                throw new ArgumentNotInBoundsException(exceptionObj.getMessage());
+            }
+
+            else {
+                throw new InvalidArgumentException(exceptionObj.getMessage());
+            }
         }
     }
 }

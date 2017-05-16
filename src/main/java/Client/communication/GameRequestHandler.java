@@ -74,8 +74,8 @@ public class GameRequestHandler {
                 throw new InvalidArgumentException(exceptionObj.getMessage());
             }
 
-            else if (e.getStatusCode() == HttpStatus.NOT_ACCEPTABLE) {
-                throw new ArgumentNotInBoundsException(exceptionObj.getMessage());
+            else if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
+                throw new EntityDoesNotExistsException(exceptionObj.getMessage());
             }
 
             else if (e.getStatusCode() == HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE) {
@@ -134,7 +134,7 @@ public class GameRequestHandler {
         HttpEntity<ClientGamePreferences> request = new HttpEntity<>(gamePreferences);
 
         try {
-            ResponseEntity<ResponseMessage<List<ClientGameDetails>>> response = restTemplate.exchange(serviceURI, HttpMethod.GET, null, new ParameterizedTypeReference<ResponseMessage<List<ClientGameDetails>>>() {});
+            ResponseEntity<ResponseMessage<List<ClientGameDetails>>> response = restTemplate.exchange(serviceURI, HttpMethod.POST, null, new ParameterizedTypeReference<ResponseMessage<List<ClientGameDetails>>>() {});
             return response.getBody().getData();
         }
         catch (HttpStatusCodeException e) {

@@ -133,7 +133,8 @@ public class GameController {
         return new ResponseMessage("Leave game succeeded", null);
     }
 
-    @RequestMapping(method = GET, value = "/game")
+    // TODO :: Find a solution to POST (originally was GET) and also update the fixes in GameRequestHandler
+    @RequestMapping(method = POST, value = "/game")
     public ResponseMessage getActiveGames(@RequestBody ClientGamePreferences gamePreferences) throws EntityDoesNotExistsException, InvalidArgumentException {
         String userName = gamePreferences.getUsername();
         List<Game> gameList = null;
