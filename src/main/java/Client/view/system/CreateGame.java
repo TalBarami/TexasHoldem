@@ -4,8 +4,12 @@ import Client.common.exceptions.ArgumentNotInBoundsException;
 import Client.common.exceptions.EntityDoesNotExistsException;
 import Client.common.exceptions.InvalidArgumentException;
 import Client.common.exceptions.NoBalanceForBuyInException;
+import Client.communication.entities.ClientGameDetails;
+import Client.communication.entities.ClientGamePolicy;
 import Client.domain.GameManager;
-import Client.domain.SessionManager;
+import Client.domain.MenuManager;
+import Client.domain.SearchManager;
+import Client.view.game.Game;
 
 import javax.swing.*;
 import javax.swing.text.NumberFormatter;
@@ -20,7 +24,7 @@ public class CreateGame extends JDialog {
     private JButton buttonOK;
     private JButton buttonCancel;
     private JTextField nameTextField;
-    private JComboBox<String> policyComboBox;
+    private JComboBox<ClientGamePolicy> policyComboBox;
     private JSpinner minBetSpinner;
     private JLabel raiseLimitLabel;
     private JLabel buyInPolicyLabel;
@@ -63,8 +67,7 @@ public class CreateGame extends JDialog {
     }
 
     private void initComponents(){
-        List<String> gamePolicies = Arrays.asList("Limit", "No limit", "Pot limit");
-        for(String policy : gamePolicies){
+        for(ClientGamePolicy policy : ClientGamePolicy.values()){
             policyComboBox.addItem(policy);
         }
 
@@ -84,13 +87,11 @@ public class CreateGame extends JDialog {
 
     private void onOK() {
         // add your code here
-        GameManager gameManager = GameManager.getInstance();
+        MenuManager menuManager = MenuManager.getInstance();
         try {
-            gameManager.createGame(nameTextField.getText(), (String)policyComboBox.getSelectedItem(), (int)raiseLimitSpinner.getValue(), (int)minBetSpinner.getValue(),
-                    (int)buyInPolicySpinner.getValue(), (int)chipPolicySpinner.getValue(), (int)minSpinner.getValue(), (int)maxSpinner.getValue(), (boolean)allowSpectatingCheckBox.isSelected());
-
-            // FIXME: Put the player in the newly created game.
-            ancestor.init();
+            menuManager.createGame(nameTextField.getText(), (ClientGamePolicy)policyComboBox.getSelectedItem(), (int)raiseLimitSpinner.getValue(), (int)minBetSpinner.getValue(),
+                    (int)buyInPolicySpinner.getValue(), (int)chipPolicySpinner.getValue(), (int)minSpinner.getValue(), (int)maxSpinner.getValue(), allowSpectatingCheckBox.isSelected());
+            Game game = new Game(ancestor, nameTextField.getText());
             dispose();
         } catch (InvalidArgumentException | EntityDoesNotExistsException | ArgumentNotInBoundsException | NoBalanceForBuyInException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

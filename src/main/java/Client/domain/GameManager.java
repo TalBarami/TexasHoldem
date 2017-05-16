@@ -1,55 +1,68 @@
 package Client.domain;
 
-import Client.common.exceptions.ArgumentNotInBoundsException;
 import Client.common.exceptions.EntityDoesNotExistsException;
+import Client.common.exceptions.GameException;
 import Client.common.exceptions.InvalidArgumentException;
-import Client.common.exceptions.NoBalanceForBuyInException;
 import Client.communication.GameRequestHandler;
 import Client.communication.entities.ClientGameDetails;
 import Client.communication.entities.ClientGameRequest;
+import Client.communication.entities.ClientUserDetails;
+import Client.communication.entities.ClientUserProfile;
 
 /**
  * Created by User on 15/05/2017.
  */
 public class GameManager {
-    private static GameManager instance;
-
+    private ClientGameDetails gameDetails;
     private GameRequestHandler gameRequestHandler;
 
-    private GameManager(){
+    public GameManager(String gameName) throws EntityDoesNotExistsException, InvalidArgumentException {
+        gameDetails = SearchManager.getInstance().findGameByName(gameName).get(0);
         gameRequestHandler = new GameRequestHandler();
     }
 
-    public static GameManager getInstance(){
-        if(instance == null)
-            instance = new GameManager();
-        return instance;
+    public ClientGameDetails getGameDetails(){
+        return gameDetails;
     }
 
-    public void createGame(String gameName, String gamePolicy, int policyLimit, int minBet, int buyInPolicy, int chipPolicy,
-                           int minPlayerAmount, int maxPlayerAmount, boolean specAccept) throws InvalidArgumentException, EntityDoesNotExistsException, NoBalanceForBuyInException, ArgumentNotInBoundsException {
-        // FIXME: Handle game policy
-        ClientGameDetails gameDetails = new ClientGameDetails(SessionManager.getInstance().user().getUsername(), gameName, 1, policyLimit, minBet, buyInPolicy, chipPolicy, minPlayerAmount, maxPlayerAmount, specAccept);
-        gameRequestHandler.requestGameCreation(gameDetails);
+    public ClientUserProfile getUser(){
+        return SessionManager.getInstance().user();
     }
 
-    public void joinGame(){
+    public void playCheck() throws GameException {
+        ClientGameRequest request = new ClientGameRequest();
+        request.setGamename(gameDetails.getName());
+        request.setUsername(SessionManager.getInstance().user().getUsername());
+        request.setAction(0);
 
+        gameRequestHandler.requestGameEventSend(request);
     }
 
-    public void spectateGame(){
+    public void playCall() throws GameException {
+        ClientGameRequest request = new ClientGameRequest();
+        request.setGamename(gameDetails.getName());
+        request.setUsername(SessionManager.getInstance().user().getUsername());
+        request.setAction(1);
 
+        gameRequestHandler.requestGameEventSend(request);
     }
 
-    public void replayGame(){
+    public void playRaise(String amount) throws GameException {
+        ClientGameRequest request = new ClientGameRequest();
+        request.setGamename(gameDetails.getName());
+        request.setUsername(SessionManager.getInstance().user().getUsername());
+        request.setAction(2);
 
+        gameRequestHandler.requestGameEventSend(request);
     }
 
-    public void leaveGame(){
+    public void playFold() throws GameException {
+        ClientGameRequest request = new ClientGameRequest();
+        request.setGamename(gameDetails.getName());
+        request.setUsername(SessionManager.getInstance().user().getUsername());
+        request.setAction(3);
 
+        gameRequestHandler.requestGameEventSend(request);
     }
 
-    public void deposit(int amount){
-
-    }
 }

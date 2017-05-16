@@ -51,7 +51,7 @@ public class UserService {
         gameCenter.editProfile(originalUserName, newUserName, pass, email, date);
     }
 
-    public void deposit(String username, int amount) throws ArgumentNotInBoundsException, InvalidArgumentException {
+    public void deposit(String username, int amount) throws ArgumentNotInBoundsException, InvalidArgumentException, EntityDoesNotExistsException {
         verifyStrings(username);
         verifyPositiveNumbers(amount);
         gameCenter.depositMoney(username, amount);

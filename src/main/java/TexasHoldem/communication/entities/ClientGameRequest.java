@@ -9,14 +9,14 @@ public class ClientGameRequest {
     private int action;
     private int amount;
     private boolean spectating;
-    private String massagecontent;
+    private String messageContent;
 
     public String getMassage() {
-        return massagecontent;
+        return messageContent;
     }
 
     public void setMassage(String newMassage) {
-        this.massagecontent = newMassage;
+        this.messageContent = newMassage;
     }
 
     public boolean getSpectating() {

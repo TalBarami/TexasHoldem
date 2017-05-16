@@ -4,12 +4,10 @@ import Client.common.exceptions.EntityDoesNotExistsException;
 import Client.common.exceptions.InvalidArgumentException;
 import Client.communication.GameRequestHandler;
 import Client.communication.entities.ClientGameDetails;
+import Client.communication.entities.ClientGamePolicy;
 import Client.communication.entities.ClientGamePreferences;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by User on 14/05/2017.
@@ -35,26 +33,25 @@ public class SearchManager {
         return instance;
     }
 
-    public List<ClientGameDetails> findAvailableGames(String username) throws EntityDoesNotExistsException, InvalidArgumentException {
+    public List<ClientGameDetails> findAvailableGames(String ignore) throws EntityDoesNotExistsException, InvalidArgumentException {
         ClientGamePreferences pref = new ClientGamePreferences();
+        String username = SessionManager.getInstance().user().getUsername();
         pref.setDisplayAllAvailableGames(true);
         pref.setUsername(username);
         return gameRequestHandler.requestGameSearch(pref);
     }
 
     public List<ClientGameDetails> findGameByName(String gameName) throws EntityDoesNotExistsException, InvalidArgumentException {
-        ClientGamePreferences pref = new ClientGamePreferences();
-        // FIXME: Set game name & boolean field
-        return gameRequestHandler.requestGameSearch(pref);
+        return Collections.singletonList(gameRequestHandler.requestGameEntity(gameName));
     }
 
-    public List<ClientGameDetails> findSpectatableGames(String s) throws EntityDoesNotExistsException, InvalidArgumentException {
+    public List<ClientGameDetails> findSpectatableGames(String ignore) throws EntityDoesNotExistsException, InvalidArgumentException {
         ClientGamePreferences pref = new ClientGamePreferences();
         pref.setSerachBySpectatingAvailable(true);
         return gameRequestHandler.requestGameSearch(pref);
     }
 
-    public List<ClientGameDetails> findReplayableGames(String s) throws EntityDoesNotExistsException, InvalidArgumentException {
+    public List<ClientGameDetails> findReplayableGames(String ignore) throws EntityDoesNotExistsException, InvalidArgumentException {
         ClientGamePreferences pref = new ClientGamePreferences();
         // FIXME: Add "find replayable"
         return gameRequestHandler.requestGameSearch(pref);
@@ -76,7 +73,7 @@ public class SearchManager {
     public List<ClientGameDetails> findGamesByGamePolicy(String policy) throws EntityDoesNotExistsException, InvalidArgumentException {
         ClientGamePreferences pref = new ClientGamePreferences();
         pref.setSearchByTypePolicy(true);
-        // FIXME: Set policy as string
+        pref.setPolicyNumberToSearch(ClientGamePolicy.valueOf(policy).value());
         return gameRequestHandler.requestGameSearch(pref);
     }
 
@@ -96,7 +93,8 @@ public class SearchManager {
 
     public List<ClientGameDetails> findGamesByMinimumBet(String minimumBet) throws EntityDoesNotExistsException, InvalidArgumentException {
         ClientGamePreferences pref = new ClientGamePreferences();
-        pref.setDisplayAllAvailableGames(true);
+        pref.setSearchByMinimumBet(true);
+        pref.setMinimumBetAmount(Integer.parseInt(minimumBet));
         return gameRequestHandler.requestGameSearch(pref);
     }
 
@@ -125,6 +123,7 @@ public class SearchManager {
         searchPolicies.put(MIN_BET, this::findGamesByMinimumBet);
         searchPolicies.put(MIN_PLAYERS, this::findGamesByMinimumPlayers);
         searchPolicies.put(MAX_PLAYERS, this::findGamesByMaximumPlayers);
+        searchPolicies.put(AVAILABLE, this::findAvailableGames);
         searchPolicies.put(SPECTATEABLE, this::findSpectatableGames);
         searchPolicies.put(REPLAYABLE, this::findReplayableGames);
     }
