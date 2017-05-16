@@ -64,13 +64,7 @@ public class Users implements IUsers, IUsersForDistributionAlgorithm {
         return _userList.values().stream().map(User::getUsername).collect(Collectors.toList());
     }
 
-    public User getUserByUserName(String userName) throws EntityDoesNotExistsException {
-        User user =  _userList.get(userName);
-
-        if (user == null) {
-            throw new EntityDoesNotExistsException("No such user exists.");
-        }
-
+    public User getUserByUserName(String userName) {
         return _userList.get(userName);
     }
 
