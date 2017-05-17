@@ -2,10 +2,10 @@ package Client.domain;
 
 import Client.common.exceptions.*;
 import Client.communication.GameRequestHandler;
-import Client.communication.entities.ClientGameDetails;
-import Client.communication.entities.ClientGamePolicy;
-import Client.communication.entities.ClientGameRequest;
+import Client.communication.UserRequestHandler;
+import Client.communication.entities.*;
 import TexasHoldem.domain.game.GamePolicy;
+import TexasHoldem.domain.user.Transaction;
 
 import java.util.ArrayList;
 
@@ -16,9 +16,11 @@ public class MenuManager {
     private static MenuManager instance;
 
     private GameRequestHandler gameRequestHandler;
+    private UserRequestHandler userRequestHandler;
 
     private MenuManager(){
         gameRequestHandler = new GameRequestHandler();
+        userRequestHandler = new UserRequestHandler();
     }
 
     public static MenuManager getInstance(){
@@ -29,7 +31,6 @@ public class MenuManager {
 
     public void createGame(String gameName, ClientGamePolicy gamePolicy, int policyLimit, int minBet, int buyInPolicy, int chipPolicy,
                            int minPlayerAmount, int maxPlayerAmount, boolean specAccept) throws InvalidArgumentException, EntityDoesNotExistsException, NoBalanceForBuyInException, ArgumentNotInBoundsException {
-        // FIXME: Handle game policy
         ClientGameDetails gameDetails = new ClientGameDetails(SessionManager.getInstance().user().getUsername(),
                 gameName, gamePolicy.value(), policyLimit, minBet, buyInPolicy,
                 chipPolicy, minPlayerAmount, maxPlayerAmount, specAccept, new ArrayList<>());
@@ -64,15 +65,16 @@ public class MenuManager {
     }
 
     public void leaveGame(String username, String gameName) throws GameException {
-        ClientGameRequest request = new ClientGameRequest();
-        request.setGamename(gameName);
-        request.setUsername(username);
-        request.setAction(6);
-
-        gameRequestHandler.requestGameEventSend(request);
+        ClientLeaveGameDetails leaveGameDetails = new ClientLeaveGameDetails();
+        leaveGameDetails.setGameName(gameName);
+        leaveGameDetails.setUsername(username);
+        gameRequestHandler.requestGameLeave(leaveGameDetails);
     }
 
-    public void deposit(int amount){
-
+    public void deposit(String username, int amount) throws InvalidArgumentException, ArgumentNotInBoundsException, EntityDoesNotExistsException {
+        ClientTransactionRequest request = new ClientTransactionRequest();
+        request.setAction(Transaction.DEPOSIT);
+        request.setAmount(amount);
+        userRequestHandler.requestUserTransaction(username, request);
     }
 }

@@ -35,6 +35,8 @@ public class Game extends JFrame{
     private JPanel rightPanel;
     private JPanel contentPane;
     private JButton startGameButton;
+    private JLabel usernameLabel;
+    private JLabel cashLabel;
 
     public Game(MainMenu ancestor, String gameName) throws EntityDoesNotExistsException, InvalidArgumentException {
         this.ancestor = ancestor;
@@ -43,13 +45,25 @@ public class Game extends JFrame{
         init();
 
         assignActionListeners();
-
+        initializeLabels();
+        showPlayers();
     }
 
     public void init(){
         toFront();
         ClientUtils.frameInit(this, contentPane);
+        setTitle(gameManager.getGameDetails().getName());
         getRootPane().setDefaultButton(sendButton);
+        showPlayers();
+    }
+
+    private void showPlayers() {
+
+    }
+
+    private void initializeLabels(){
+        usernameLabel.setText(gameManager.getUser().getUsername());
+        cashLabel.setText(String.valueOf(gameManager.getUser().getBalance()));
     }
 
     private void assignActionListeners(){
@@ -73,7 +87,11 @@ public class Game extends JFrame{
     }
 
     private void onSend(){
-
+        try{
+            gameManager.sendMessage();
+        } catch (GameException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void onFold(){
