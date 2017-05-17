@@ -42,6 +42,7 @@ public class Register {
 
     public void init(){
         ClientUtils.frameInit(ancestor, contentPane);
+        ancestor.setTitle("Register");
         ancestor.getRootPane().setDefaultButton(buttonOK);
         ClientUtils.clearTextFields(text_name, text_password, text_email, datePicker_birthday.getJFormattedTextField(), text_picture);
     }

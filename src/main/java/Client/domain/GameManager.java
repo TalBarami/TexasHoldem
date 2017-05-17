@@ -4,10 +4,9 @@ import Client.common.exceptions.EntityDoesNotExistsException;
 import Client.common.exceptions.GameException;
 import Client.common.exceptions.InvalidArgumentException;
 import Client.communication.GameRequestHandler;
-import Client.communication.entities.ClientGameDetails;
-import Client.communication.entities.ClientGameRequest;
-import Client.communication.entities.ClientUserDetails;
-import Client.communication.entities.ClientUserProfile;
+import Client.communication.entities.*;
+
+import java.util.List;
 
 /**
  * Created by User on 15/05/2017.
@@ -51,6 +50,7 @@ public class GameManager {
         ClientGameRequest request = new ClientGameRequest();
         request.setGamename(gameDetails.getName());
         request.setUsername(SessionManager.getInstance().user().getUsername());
+        request.setAction(Integer.parseInt(amount));
         request.setAction(2);
 
         gameRequestHandler.requestGameEventSend(request);
@@ -65,4 +65,12 @@ public class GameManager {
         gameRequestHandler.requestGameEventSend(request);
     }
 
+    public void sendMessage() throws GameException {
+        ClientGameRequest request = new ClientGameRequest();
+        request.setGamename(gameDetails.getName());
+        request.setUsername(SessionManager.getInstance().user().getUsername());
+        request.setAction(9);
+
+        gameRequestHandler.requestGameEventSend(request);
+    }
 }

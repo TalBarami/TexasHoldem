@@ -6,7 +6,6 @@ import Client.common.exceptions.InvalidArgumentException;
 import Client.communication.entities.ClientGameDetails;
 import Client.communication.entities.ClientGamePolicy;
 import Client.communication.entities.ClientUserProfile;
-import Client.domain.GameManager;
 import Client.domain.MenuManager;
 import Client.domain.SearchManager;
 import Client.domain.SessionManager;
@@ -15,8 +14,6 @@ import Client.view.access.Welcome;
 import Client.view.game.Game;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.NumberFormatter;
 import java.awt.event.*;
@@ -54,6 +51,7 @@ public class MainMenu extends JFrame {
     private JButton findButton;
     private JSpinner searchSpinner;
     private JComboBox<ClientGamePolicy> searchComboBox;
+    private JLabel searchValueLabel;
 
     public MainMenu() {
         init();
@@ -89,7 +87,7 @@ public class MainMenu extends JFrame {
 
 
     private void initSearchProperties(){
-        Set<String> searchPolicies = SearchManager.getInstance().getPolicies();
+        Set<String> searchPolicies = SearchManager.getInstance().getPoliciesNames();
 
         for(String type : searchPolicies){
             searchTypeComboBox.addItem(type);
@@ -181,7 +179,9 @@ public class MainMenu extends JFrame {
     }
 
     private void onFind(){
-        gamesTable.removeAll();
+        DefaultTableModel dtm = (DefaultTableModel) gamesTable.getModel();
+        dtm.setRowCount(0);
+
         String searchType = String.valueOf(searchTypeComboBox.getSelectedItem());
         String searchValue = searchTextField.isVisible() ? searchTextField.getText()
                 : searchSpinner.isVisible() ? String.valueOf(searchSpinner.getValue())
@@ -210,6 +210,8 @@ public class MainMenu extends JFrame {
         searchTextField.setVisible(textFields.contains(selectedItem));
         searchSpinner.setVisible(numericFields.contains(selectedItem));
         searchComboBox.setVisible(selectionFields.contains(selectedItem));
+        searchValueLabel.setVisible(!noFields.contains(selectedItem));
+        revalidate();
 
         handleButtonsAvailability();
     }
@@ -240,6 +242,7 @@ public class MainMenu extends JFrame {
 
     public void init(){
         ClientUtils.frameInit(this, contentPane);
+        setTitle("Main menu");
         generateUserInformation();
         ClientUtils.clearTextFields(searchTextField);
     }

@@ -41,6 +41,7 @@ public class CreateGame extends JDialog {
         this.ancestor = ancestor;
 
         setContentPane(contentPane);
+        setTitle("Create game");
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
 

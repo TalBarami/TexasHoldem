@@ -134,7 +134,7 @@ public class GameRequestHandler {
         HttpEntity<ClientGamePreferences> request = new HttpEntity<>(gamePreferences);
 
         try {
-            ResponseEntity<ResponseMessage<List<ClientGameDetails>>> response = restTemplate.exchange(serviceURI, HttpMethod.POST, null, new ParameterizedTypeReference<ResponseMessage<List<ClientGameDetails>>>() {});
+            ResponseEntity<ResponseMessage<List<ClientGameDetails>>> response = restTemplate.exchange(serviceURI, HttpMethod.POST, request, new ParameterizedTypeReference<ResponseMessage<List<ClientGameDetails>>>() {});
             return response.getBody().getData();
         }
         catch (HttpStatusCodeException e) {

@@ -35,9 +35,9 @@ public class SearchManager {
 
     public List<ClientGameDetails> findAvailableGames(String ignore) throws EntityDoesNotExistsException, InvalidArgumentException {
         ClientGamePreferences pref = new ClientGamePreferences();
-        String username = SessionManager.getInstance().user().getUsername();
         pref.setDisplayAllAvailableGames(true);
-        pref.setUsername(username);
+        String sessionUser = SessionManager.getInstance().user().getUsername();
+        pref.setUsername(sessionUser);
         return gameRequestHandler.requestGameSearch(pref);
     }
 
@@ -114,7 +114,7 @@ public class SearchManager {
 
     private void generateSearchTypes(){
         searchPolicies = new HashMap<>();
-        searchPolicies.put(GAME_NAME, this::findGamesByUsername);
+        searchPolicies.put(GAME_NAME, this::findGameByName);
         searchPolicies.put(USERNAME, this::findGamesByUsername);
         searchPolicies.put(POT_SIZE, this::findGamesByPotSize);
         searchPolicies.put(GAME_POLICY, this::findGamesByGamePolicy);
@@ -132,7 +132,7 @@ public class SearchManager {
         return searchPolicies.get(value);
     }
 
-    public Set<String> getPolicies(){
+    public Set<String> getPoliciesNames(){
         return searchPolicies.keySet();
     }
 

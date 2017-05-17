@@ -55,6 +55,7 @@ public class Welcome extends JFrame {
 
     public void init(){
         ClientUtils.frameInit(this, contentPane);
+        setTitle("Texas Hold'em");
     }
 
     private void onExit(){

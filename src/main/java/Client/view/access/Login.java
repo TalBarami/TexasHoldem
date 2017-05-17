@@ -32,6 +32,7 @@ public class Login {
 
     public void init(){
         ClientUtils.frameInit(ancestor, contentPane);
+        ancestor.setTitle("Login");
         ancestor.getRootPane().setDefaultButton(buttonOK);
         ClientUtils.clearTextFields(text_username, text_password);
     }
