@@ -21,6 +21,9 @@ public class User {
 
     private int amountEarnedInLeague;
     private int currLeague;
+    private int totalNetoProfit;
+    private int totalGrossProfit;
+    private int highestCashGain;
     private int numOfGamesPlayed;
 
     private User(){}
@@ -30,12 +33,14 @@ public class User {
         this.username = user;
         this.password = pass;
         this.wallet = new Wallet();
-        this.amountEarnedInLeague = 0;
         this.email = email;
         this.dateOfBirth = date;
         this.img = image;
         this.gameMapping = new HashMap<>();
         this.numOfGamesPlayed = 0;
+        this.totalNetoProfit = 0;
+        this.totalGrossProfit = 0;
+        this.highestCashGain = 0;
     }
 
     public void deposit(int amount, boolean selfDeposit) throws ArgumentNotInBoundsException {
@@ -43,11 +48,15 @@ public class User {
             throw new ArgumentNotInBoundsException("Amount less than zero , should be greater.");
         getWallet().setBalance(getWallet().getBalance() + amount);
 
-        if(!selfDeposit)
+        if(!selfDeposit) {
             amountEarnedInLeague += amount;
+            totalNetoProfit += amount;
+            totalGrossProfit += amount;
+            updateHighestCashGain(amount);
+        }
     }
 
-    public int withdraw(int amount, boolean selfDeposit) throws ArgumentNotInBoundsException {
+    public int withdraw(int amount, boolean selfWithraw) throws ArgumentNotInBoundsException {
         int amountToReduce = amount;
         if(amount < 0)
             throw new ArgumentNotInBoundsException("Amount less than zero , should be greater.");
@@ -56,8 +65,10 @@ public class User {
             amountToReduce = getWallet().getBalance();
         getWallet().setBalance(getWallet().getBalance() - amountToReduce);
 
-        if(!selfDeposit)
+        if(!selfWithraw) {
             amountEarnedInLeague -= amountToReduce;
+            totalNetoProfit -= amountToReduce;
+        }
         return amountToReduce;
     }
 
@@ -91,6 +102,11 @@ public class User {
         result = 31 * result + amountEarnedInLeague;
         result = 31 * result + currLeague;
         return result;
+    }
+
+    private void updateHighestCashGain(int amount) {
+        if(amount > highestCashGain)
+            highestCashGain = amount;
     }
 
     public String getPassword() {
@@ -175,5 +191,21 @@ public class User {
 
     public void updateGamesPlayed() {
         this.numOfGamesPlayed++;
+    }
+
+    public int getTotalProfit() {
+        return totalNetoProfit;
+    }
+
+    public int getHighestCashGain() {
+        return highestCashGain;
+    }
+
+    public int getTotalNetoProfit() {
+        return totalNetoProfit;
+    }
+
+    public int getTotalGrossProfit() {
+        return totalGrossProfit;
     }
 }
