@@ -9,14 +9,13 @@ import TexasHoldem.domain.game.*;
 import TexasHoldem.domain.game.chat.Message;
 import TexasHoldem.domain.game.participants.Participant;
 import TexasHoldem.domain.game.participants.Player;
+import TexasHoldem.domain.game.participants.Spectator;
 import TexasHoldem.domain.system.GameCenter;
 import TexasHoldem.domain.user.User;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.*;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -111,11 +110,19 @@ public class GameService {
         verifyStrings(username,gameName);
         Game game = gameCenter.getGameByName(gameName);
         User user = gameCenter.getUser(username);
-        List<Participant> allParInGame = new ArrayList<>();
-        allParInGame.addAll(game.getPlayers());
-        allParInGame.addAll(game.getSpectators());
-        Participant participant = allParInGame.stream().filter(p -> p.getUser().equals(user)).findFirst().get();
-        game.handleMessageFromParticipant(new MessageEvent(participant, new Message(content)));
+
+        List<Player> allPlayersInGame = new ArrayList<>();
+        allPlayersInGame.addAll(game.getPlayers());
+
+        try { //check if he is a player
+            Player player = allPlayersInGame.stream().filter(p -> p.getUser().equals(user)).findFirst().get();
+            game.handleMessageFromPlayer(player, new MessageEvent(player, new Message(content)));
+        }catch (NoSuchElementException e){
+            List<Spectator> allSpectators = new ArrayList<>();
+            allSpectators.addAll(game.getSpectators());
+            Spectator spectator = allSpectators.stream().filter(p -> p.getUser().equals(user)).findFirst().get();
+            game.handleMessageFromSpectator(spectator, new MessageEvent(spectator, new Message(content)));
+        }
     }
 
     public void sendWhisper(String username, String gameName, String content, String userNameToSend) throws InvalidArgumentException, EntityDoesNotExistsException, ArgumentNotInBoundsException {
@@ -123,12 +130,24 @@ public class GameService {
         Game game = gameCenter.getGameByName(gameName);
         User user = gameCenter.getUser(username);
         User userToSend = gameCenter.getUser(userNameToSend);
+
         List<Participant> allParInGame = new ArrayList<>();
         allParInGame.addAll(game.getPlayers());
         allParInGame.addAll(game.getSpectators());
-        Participant participant = allParInGame.stream().filter(p -> p.getUser().equals(user)).findFirst().get();
         Participant parToSendTo = allParInGame.stream().filter(p -> p.getUser().equals(userNameToSend)).findFirst().get();
-        game.handleWhisperFromParticipant(new WhisperEvent(participant, new Message(content), parToSendTo));
+
+        List<Player> allPlayersInGame = new ArrayList<>();
+        allPlayersInGame.addAll(game.getPlayers());
+
+        try { //check the sender is a player
+            Player player = allPlayersInGame.stream().filter(p -> p.getUser().equals(user)).findFirst().get();
+            game.handleWhisperFromPlayer(player, new WhisperEvent(player, new Message(content), parToSendTo));
+        }catch (NoSuchElementException e){
+            List<Spectator> allSpectators = new ArrayList<>();
+            allSpectators.addAll(game.getSpectators());
+            Spectator spectator = allSpectators.stream().filter(p -> p.getUser().equals(user)).findFirst().get();
+            game.handleWhisperFromSpectator(spectator, new WhisperEvent(spectator, new Message(content), parToSendTo));
+        }
     }
 
     public List<GameEvent> replayGame(String gameName) throws EntityDoesNotExistsException {
