@@ -280,6 +280,45 @@ public class GameCenter {
         return (IUsersForDistributionAlgorithm)usersDb;
     }
 
+    public List<User> getTop20UsersByGrossProfit(){
+        List<User> users = usersDb.getAllUsersInList();
+        users.sort(new Comparator<User>() {
+            @Override
+            public int compare(User firstUser, User secondUser) {
+                return firstUser.getTotalGrossProfit() - secondUser.getTotalGrossProfit();
+            }
+        });
+        if(users.size() > 20)
+            return users.subList(0,20);
+        return users;
+    }
+
+    public List<User> getTop20UsersByHighestCashGain(){
+        List<User> users = usersDb.getAllUsersInList();
+        users.sort(new Comparator<User>() {
+            @Override
+            public int compare(User firstUser, User secondUser) {
+                return firstUser.getHighestCashGain() - secondUser.getHighestCashGain();
+            }
+        });
+        if(users.size() > 20)
+            return users.subList(0,20);
+        return users;
+    }
+
+    public List<User> getTop20UsersByNumOfGamesPlayed(){
+        List<User> users = usersDb.getAllUsersInList();
+        users.sort(new Comparator<User>() {
+            @Override
+            public int compare(User firstUser, User secondUser) {
+                return firstUser.getNumOfGamesPlayed() - secondUser.getNumOfGamesPlayed();
+            }
+        });
+        if(users.size() > 20)
+            return users.subList(0,20);
+        return users;
+    }
+
 //    public void setDefaultLeague(String admin, int league) throws NoPermissionException {
 //        if(!usersDb.getHighestBalance().getUsername().equalsIgnoreCase(admin))
 //            throw new NoPermissionException("User must have the highest balance.");
