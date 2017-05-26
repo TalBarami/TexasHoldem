@@ -135,29 +135,30 @@ public class Game {
         logger.info("'{}' has joined the game '{}' as player.", user.getUsername(),getName());
     }
 
-    public void handleMessageFromParticipant(MessageEvent messageEvent){
-        Participant sender = messageEvent.getEventInitiator();
-        if(sender instanceof Player) {
-            sendMessageToPlayers(messageEvent.getContent());
-            sendMessageToAllSpectators(messageEvent.getContent());
-        }
-        else //he is a spectator
-            sendMessageToAllSpectators(messageEvent.getContent());
+    public void handleMessageFromPlayer(Player player, MessageEvent messageEvent) {
+        sendMessageToPlayers(messageEvent.getContent());
+        sendMessageToAllSpectators(messageEvent.getContent());
     }
 
-    public void handleWhisperFromParticipant(WhisperEvent whisperEvent) throws ArgumentNotInBoundsException {
-        Participant sender = whisperEvent.getEventInitiator();
-        if(sender instanceof Player){
+    public void handleMessageFromSpectator(Spectator spectator, MessageEvent messageEvent) {
+        sendMessageToAllSpectators(messageEvent.getContent());
+    }
+
+    public void handleWhisperFromPlayer(Player player, WhisperEvent whisperEvent) {
+        //TODO :: send the message
+    }
+
+    public void handleWhisperFromSpectator(Spectator spectator, WhisperEvent whisperEvent) throws ArgumentNotInBoundsException{
+        handleWhisperFromSpectator(spectator, whisperEvent.getContent(), whisperEvent.getParticipantToSendTo());
+    }
+
+    public void handleWhisperFromSpectator(Spectator spectator, Message whisper, Spectator spcToSendTo) {
             //TODO :: send the message
-            ;
-        }
-        else{
-            if(!(whisperEvent.getParticipantToSendTo() instanceof Spectator))
-                throw new ArgumentNotInBoundsException("spectator should send whispers only to other spectators");
-            else
-                //TODO :: send the message
-                ;
-        }
+    }
+
+    //should not be called because @param spcToSendTo - is suppose to be from type Spectator
+    public void handleWhisperFromSpectator(Spectator spectator, Message whisper, Participant spcToSendTo) throws ArgumentNotInBoundsException{
+        throw new ArgumentNotInBoundsException("spectator should send whispers only to other spectators");
     }
 
     private void sendMessageToAllSpectators(Message content) {
@@ -301,6 +302,5 @@ public class Game {
             p.setTotalAmountPayedInRound(0);
         }
     }
-
 }
 
