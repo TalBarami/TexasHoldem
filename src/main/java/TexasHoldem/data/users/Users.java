@@ -3,11 +3,16 @@ package TexasHoldem.data.users;
 import TexasHoldem.common.Exceptions.EntityDoesNotExistsException;
 import TexasHoldem.common.Exceptions.InvalidArgumentException;
 import TexasHoldem.common.Exceptions.LoginException;
+import TexasHoldem.data.Hybernate.HibernateUtil;
 import TexasHoldem.domain.user.User;
 
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import TexasHoldem.domain.user.Wallet;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
 
 
 public class Users implements IUsers, IUsersForDistributionAlgorithm {
@@ -18,8 +23,38 @@ public class Users implements IUsers, IUsersForDistributionAlgorithm {
     }
 
     public void addUser(User user) throws InvalidArgumentException {
-        verifyUserNameAndEmail(user.getUsername(),user.getEmail());
-        _userList.put(user.getUsername(),user);
+        verifyUserNameAndEmail(user.getUsername(),user.getPassword());
+        User userToAdd = setUser(user);
+        Session session = null;
+        try{
+            session = HibernateUtil.getInstance().getSessionFactory().openSession();
+            session.beginTransaction();
+            session.save(userToAdd);
+            session.getTransaction().commit();
+        }catch (HibernateException e) {
+            if (session.getTransaction()!=null) session.getTransaction().rollback();
+            throw new InvalidArgumentException("Invalid Arguments");
+        }finally {
+            session.close();
+        }
+    }
+
+    private static User setUser(User user)
+    {
+        User userToAdd = new User();
+        userToAdd.setUsername(user.getUsername());
+        userToAdd.setPassword(user.getPassword());
+        userToAdd.setEmail(user.getEmail());
+        userToAdd.setDateOfBirth(user.getDateOfBirth());
+        userToAdd.setAmountEarnedInLeague(user.getAmountEarnedInLeague());
+        userToAdd.setCurrLeague(user.getCurrLeague());
+        userToAdd.setTotalNetoProfit(user.getTotalNetoProfit());
+        userToAdd.setTotalGrossProfit(user.getTotalGrossProfit());
+        userToAdd.setHighestCashGain(user.getHighestCashGain());
+        userToAdd.setNumOfGamesPlayed(user.getNumOfGamesPlayed());
+        userToAdd.setWallet(user.getWallet());
+
+        return userToAdd;
     }
 
     public void editUser(String oldUser, String newUser, String pass, String email, LocalDate date) throws InvalidArgumentException, EntityDoesNotExistsException {

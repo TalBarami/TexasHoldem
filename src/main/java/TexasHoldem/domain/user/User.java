@@ -3,30 +3,58 @@ package TexasHoldem.domain.user;
 import TexasHoldem.common.Exceptions.ArgumentNotInBoundsException;
 import TexasHoldem.domain.game.Game;
 import TexasHoldem.domain.game.participants.Participant;
+import org.hibernate.annotations.Cascade;
 
+import javax.persistence.*;
 import java.awt.image.BufferedImage;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
+@Entity
+@Table(name = "users")
 public class User {
-
+    @Id
+    @Column(name = "userName")
     private String username;
+
+    @Column(name = "password")
     private String password;
+
+    @Column(name = "email")
     private String email;
+
+    @Column(name = "birthDate")
     private LocalDate dateOfBirth;
+
+    @Transient
     private BufferedImage img;
+
+    @OneToOne(cascade = CascadeType.ALL)
     private Wallet wallet;
+
+    @Transient
     private Map<Game,Participant> gameMapping;
 
+    @Column(name = "amountEarnedInLeague")
     private int amountEarnedInLeague;
+
+    @Column(name = "currLeague")
     private int currLeague;
+
+    @Column(name = "netoProfit")
     private int totalNetoProfit;
+
+    @Column(name = "grossProfit")
     private int totalGrossProfit;
+
+    @Column(name = "highestCashGain")
     private int highestCashGain;
+
+    @Column(name = "numOfGamesPlayed")
     private int numOfGamesPlayed;
 
-    private User(){}
+    public User(){}
 
     public User(String user, String pass, String email, LocalDate date, BufferedImage image)
     {
@@ -117,13 +145,16 @@ public class User {
         return username;
     }
 
-    private Wallet getWallet() {
+
+
+    public Wallet getWallet() {
         return wallet;
     }
 
     public void setUsername(String username) {
         this.username = username;
     }
+
 
     public void setPassword(String password) {
         this.password = password;
@@ -208,4 +239,26 @@ public class User {
     public int getTotalGrossProfit() {
         return totalGrossProfit;
     }
+
+    public void setWallet(Wallet wallet) {
+        this.wallet = wallet;
+    }
+
+    public void setTotalNetoProfit(int totalNetoProfit) {
+        this.totalNetoProfit = totalNetoProfit;
+    }
+
+    public void setTotalGrossProfit(int totalGrossProfit) {
+        this.totalGrossProfit = totalGrossProfit;
+    }
+
+    public void setHighestCashGain(int highestCashGain) {
+        this.highestCashGain = highestCashGain;
+    }
+
+    public void setNumOfGamesPlayed(int numOfGamesPlayed) {
+        this.numOfGamesPlayed = numOfGamesPlayed;
+    }
+
+
 }
