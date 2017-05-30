@@ -22,7 +22,7 @@ public class Deck {
     @Transient
     private static Logger logger = LoggerFactory.getLogger(Deck.class);
 
-    @ManyToOne(cascade = javax.persistence.CascadeType.ALL)
+    @OneToMany(cascade = javax.persistence.CascadeType.ALL)
     @JoinColumns ({ @JoinColumn( name="rank" ),@JoinColumn( name="suit" )})
     private List<Card> cards;
 
