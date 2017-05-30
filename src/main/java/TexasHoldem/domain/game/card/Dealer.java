@@ -4,15 +4,30 @@ import TexasHoldem.domain.game.participants.Player;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.persistence.*;
 import java.util.Collection;
 import java.util.List;
 
 /**
  * Created by Tal on 05/04/2017.
  */
+
+@Entity
+@Table(name = "dealer")
 public class Dealer {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "dealerId")
+    private int id;
+
+    @Transient
     private static Logger logger = LoggerFactory.getLogger(Dealer.class);
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "deckId")
     private Deck deck;
+
     public Dealer(){
         deck = new Deck();
     }
@@ -29,5 +44,25 @@ public class Dealer {
         List<Card> cards = deck.get(numOfCards);
         logger.info("Revealing {} new cards: {}", numOfCards, cards);
         return cards;
+    }
+
+    public Deck getDeck()
+    {
+        return deck;
+    }
+
+    public void setDeck(Deck deck)
+    {
+        this.deck = deck;
+    }
+
+    public int getId()
+    {
+        return id;
+    }
+
+    public void setId(int id)
+    {
+        this.id = id;
     }
 }

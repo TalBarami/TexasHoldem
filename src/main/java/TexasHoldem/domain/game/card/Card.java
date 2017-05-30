@@ -1,8 +1,21 @@
 package TexasHoldem.domain.game.card;
 
 
+import javax.persistence.*;
+
+
+@Entity
+@Table(name = "cards")
 public class Card implements Comparable<Card>{
+
+    @Id
+    @Enumerated(EnumType.STRING)
+    @Column(name = "rank")
     private Rank rank;
+
+    @Id
+    @Enumerated(EnumType.STRING)
+    @Column(name = "suit")
     private Suit suit;
 
     public Card(Rank rank, Suit suit) {
@@ -10,7 +23,7 @@ public class Card implements Comparable<Card>{
         this.suit = suit;
     }
 
-    private Card(){
+    public Card(){
 
     }
 
@@ -50,6 +63,16 @@ public class Card implements Comparable<Card>{
 
     public Suit getSuit() {
         return suit;
+    }
+
+    public void setRank(Rank rank)
+    {
+        this.rank = rank;
+    }
+
+    public void setSuit(Suit suit)
+    {
+        this.suit = suit;
     }
 
     public String toString() {
