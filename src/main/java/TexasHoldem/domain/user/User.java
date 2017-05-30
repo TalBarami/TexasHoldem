@@ -31,6 +31,7 @@ public class User {
     private BufferedImage img;
 
     @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "walletId")
     private Wallet wallet;
 
     @Transient
