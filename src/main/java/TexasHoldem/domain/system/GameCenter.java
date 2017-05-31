@@ -16,6 +16,7 @@ import TexasHoldem.domain.user.User;
 import TexasHoldem.domain.user.LeagueManager;
 import TexasHoldem.domain.user.usersDistributions.DistributionAlgorithm;
 import TexasHoldem.domain.user.usersDistributions.Min2InLeagueSameAmount;
+import javafx.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -280,7 +281,7 @@ public class GameCenter {
         return (IUsersForDistributionAlgorithm)usersDb;
     }
 
-    public List<User> getTop20UsersByGrossProfit(){
+    public List<Pair<String, Integer>> getTop20UsersByGrossProfit(){
         List<User> users = usersDb.getAllUsersInList();
         users.sort(new Comparator<User>() {
             @Override
@@ -289,11 +290,11 @@ public class GameCenter {
             }
         });
         if(users.size() > 20)
-            return users.subList(0,20);
-        return users;
+            return convertUserListToPair(users.subList(0,20), "grossProfit");
+        return convertUserListToPair(users, "grossProfit");
     }
 
-    public List<User> getTop20UsersByHighestCashGain(){
+    public List<Pair<String, Integer>> getTop20UsersByHighestCashGain(){
         List<User> users = usersDb.getAllUsersInList();
         users.sort(new Comparator<User>() {
             @Override
@@ -302,11 +303,11 @@ public class GameCenter {
             }
         });
         if(users.size() > 20)
-            return users.subList(0,20);
-        return users;
+            return convertUserListToPair(users.subList(0,20), "highestCashGain");
+        return convertUserListToPair(users, "highestCashGain");
     }
 
-    public List<User> getTop20UsersByNumOfGamesPlayed(){
+    public List<Pair<String, Integer>> getTop20UsersByNumOfGamesPlayed(){
         List<User> users = usersDb.getAllUsersInList();
         users.sort(new Comparator<User>() {
             @Override
@@ -315,8 +316,26 @@ public class GameCenter {
             }
         });
         if(users.size() > 20)
-            return users.subList(0,20);
-        return users;
+            return convertUserListToPair(users.subList(0,20), "numOfGamesPlayed");
+        return convertUserListToPair(users, "numOfGamesPlayed");
+    }
+
+    public List<Pair<String, Integer>> convertUserListToPair(List<User> users, String byWhat){
+        List<Pair<String, Integer>> userStats = new ArrayList<>(users.size());
+        for(User user: users){
+            switch (byWhat) {
+                case "numOfGamesPlayed":
+                    userStats.add(new Pair<>(user.getUsername(), user.getNumOfGamesPlayed()));
+                    break;
+                case "highestCashGain":
+                    userStats.add(new Pair<>(user.getUsername(), user.getHighestCashGain()));
+                    break;
+                case "grossProfit":
+                    userStats.add(new Pair<>(user.getUsername(), user.getTotalGrossProfit()));
+                    break;
+            }
+        }
+        return userStats;
     }
 
 //    public void setDefaultLeague(String admin, int league) throws NoPermissionException {
