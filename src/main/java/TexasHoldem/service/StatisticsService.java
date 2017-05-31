@@ -4,6 +4,7 @@ import TexasHoldem.common.Exceptions.EntityDoesNotExistsException;
 import TexasHoldem.common.Exceptions.InvalidArgumentException;
 import TexasHoldem.domain.system.GameCenter;
 import TexasHoldem.domain.user.User;
+import javafx.util.Pair;
 
 import java.util.List;
 
@@ -28,15 +29,15 @@ public class StatisticsService {
         return gameCenter.getUser(userName).getAvgGrossProfit();
     }
 
-    public List<User> getTop20UsersByGrossProfit(){
+    public List<Pair<String, Integer>> getTop20UsersByGrossProfit(){
         return gameCenter.getTop20UsersByGrossProfit();
     }
 
-    public List<User> getTop20UsersByHighestCashGain(){
+    public List<Pair<String, Integer>> getTop20UsersByHighestCashGain(){
         return gameCenter.getTop20UsersByHighestCashGain();
     }
 
-    public List<User> getTop20UsersByNumOfGamesPlayed(){
+    public List<Pair<String, Integer>> getTop20UsersByNumOfGamesPlayed(){
         return gameCenter.getTop20UsersByNumOfGamesPlayed();
     }
 }

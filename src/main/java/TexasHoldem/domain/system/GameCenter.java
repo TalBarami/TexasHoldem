@@ -286,12 +286,7 @@ public class GameCenter {
 
     public List<Pair<String, Integer>> getTop20UsersByGrossProfit(){
         List<User> users = usersDb.getAllUsersInList();
-        users.sort(new Comparator<User>() {
-            @Override
-            public int compare(User firstUser, User secondUser) {
-                return firstUser.getTotalGrossProfit() - secondUser.getTotalGrossProfit();
-            }
-        });
+        users.sort(Comparator.comparingInt(User::getTotalGrossProfit));
         if(users.size() > 20)
             return convertUserListToPair(users.subList(0,20), "grossProfit");
         return convertUserListToPair(users, "grossProfit");
@@ -299,12 +294,7 @@ public class GameCenter {
 
     public List<Pair<String, Integer>> getTop20UsersByHighestCashGain(){
         List<User> users = usersDb.getAllUsersInList();
-        users.sort(new Comparator<User>() {
-            @Override
-            public int compare(User firstUser, User secondUser) {
-                return firstUser.getHighestCashGain() - secondUser.getHighestCashGain();
-            }
-        });
+        users.sort(Comparator.comparingInt(User::getHighestCashGain));
         if(users.size() > 20)
             return convertUserListToPair(users.subList(0,20), "highestCashGain");
         return convertUserListToPair(users, "highestCashGain");
