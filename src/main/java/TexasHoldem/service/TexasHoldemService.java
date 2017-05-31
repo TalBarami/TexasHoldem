@@ -12,6 +12,7 @@ public class TexasHoldemService {
     private GameService gameService;
     private UserService userService;
     private SearchService searchService;
+    private StatisticsService statisticsService;
    // private LeagueService leagueService;
 
     public TexasHoldemService(){
@@ -19,6 +20,7 @@ public class TexasHoldemService {
         gameService = new GameService(gameCenter);
         userService = new UserService(gameCenter);
         searchService = new SearchService(gameCenter);
+        statisticsService = new StatisticsService(gameCenter);
      //   leagueService = new LeagueService(gameCenter);
     }
 
@@ -33,6 +35,8 @@ public class TexasHoldemService {
     public SearchService searchService(){
         return searchService;
     }
+
+    public StatisticsService statisticsService(){return statisticsService;}
 
    /* public LeagueService leagueService(){
         return leagueService;

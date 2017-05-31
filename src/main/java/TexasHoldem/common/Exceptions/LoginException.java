@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * Created by user on 12/05/2017.
  */
 @ResponseStatus(value=HttpStatus.FORBIDDEN)
-public class LoginException extends javax.security.auth.login.LoginException {
+public class LoginException extends Exception {
     public LoginException(String message) {
         super(message);
     }

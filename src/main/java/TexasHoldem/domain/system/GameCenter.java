@@ -1,6 +1,7 @@
 package TexasHoldem.domain.system;
 
 import TexasHoldem.common.Exceptions.*;
+import TexasHoldem.common.Exceptions.LoginException;
 import TexasHoldem.data.games.Games;
 import TexasHoldem.data.games.IGames;
 import TexasHoldem.data.users.IUsers;
@@ -19,7 +20,6 @@ import TexasHoldem.domain.user.usersDistributions.Min2InLeagueSameAmount;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.security.auth.login.LoginException;
 import java.awt.image.BufferedImage;
 import java.time.LocalDate;
 import java.util.*;
@@ -61,7 +61,10 @@ public class GameCenter {
 
     public void login(String userName,String pass) throws LoginException, EntityDoesNotExistsException {
         User user=usersDb.verifyCredentials(userName,pass);
-        loggedInUsers.add(user);//todo: or maybe change status in Db that he logged in?
+        if(loggedInUsers.contains(user)){
+            throw new  LoginException(String.format("'%s' is already logged in to the game.",userName));
+        }
+        loggedInUsers.add(user);
         logger.info("{} has logged in to the system.",userName);
     }
 
@@ -308,34 +311,29 @@ public class GameCenter {
 
     public List<User> getTop20UsersByNumOfGamesPlayed(){
         List<User> users = usersDb.getAllUsersInList();
-        users.sort(new Comparator<User>() {
-            @Override
-            public int compare(User firstUser, User secondUser) {
-                return firstUser.getNumOfGamesPlayed() - secondUser.getNumOfGamesPlayed();
-            }
-        });
+        users.sort(Comparator.comparingInt(User::getNumOfGamesPlayed));
         if(users.size() > 20)
             return users.subList(0,20);
         return users;
     }
+/*
+    public void setDefaultLeague(String admin, int league) throws NoPermissionException {
+        if(!usersDb.getHighestBalance().getUsername().equalsIgnoreCase(admin))
+            throw new NoPermissionException("User must have the highest balance.");
+        leagueManager.setDefaultLeagueForNewUsers(league);
+    }
+    public void setUserLeague(String admin, String username, int league) throws NoPermissionException {
+        User ad = usersDb.getHighestBalance();
+        if(!usersDb.getHighestBalance().getUsername().equalsIgnoreCase(admin))
+            throw new NoPermissionException("User must have the highest balance.");
+        User user = getUser(username);
+        leagueManager.moveUserToLeague(user, league);
+    }
 
-//    public void setDefaultLeague(String admin, int league) throws NoPermissionException {
-//        if(!usersDb.getHighestBalance().getUsername().equalsIgnoreCase(admin))
-//            throw new NoPermissionException("User must have the highest balance.");
-//        leagueManager.setDefaultLeagueForNewUsers(league);
-//    }
-
-//    public void setUserLeague(String admin, String username, int league) throws NoPermissionException {
-//        User ad = usersDb.getHighestBalance();
-//        if(!usersDb.getHighestBalance().getUsername().equalsIgnoreCase(admin))
-//            throw new NoPermissionException("User must have the highest balance.");
-//        User user = getUser(username);
-//        leagueManager.moveUserToLeague(user, league);
-//    }
-//
-//    public void setLeagueCriteria(String admin, int criteria) throws NoPermissionException {
-//        if(!usersDb.getHighestBalance().getUsername().equalsIgnoreCase(admin))
-//            throw new NoPermissionException("User must have the highest balance.");
-//        leagueManager.setCriteriaToMovingLeague(criteria);
-//    }
+    public void setLeagueCriteria(String admin, int criteria) throws NoPermissionException {
+        if(!usersDb.getHighestBalance().getUsername().equalsIgnoreCase(admin))
+            throw new NoPermissionException("User must have the highest balance.");
+        leagueManager.setCriteriaToMovingLeague(criteria);
+    }
+*/
 }
