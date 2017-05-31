@@ -3,6 +3,7 @@ package TexasHoldem.data.users;
 import TexasHoldem.common.Exceptions.EntityDoesNotExistsException;
 import TexasHoldem.common.Exceptions.InvalidArgumentException;
 import TexasHoldem.common.Exceptions.LoginException;
+
 import TexasHoldem.domain.user.User;
 
 import java.time.LocalDate;
@@ -103,7 +104,7 @@ public class Users implements IUsers, IUsersForDistributionAlgorithm {
     }
 
 
-    public User verifyCredentials(String userName,String password) throws LoginException, EntityDoesNotExistsException {
+    public User verifyCredentials(String userName,String password) throws EntityDoesNotExistsException, LoginException {
         User user=getUserByUserName(userName);
         if(user == null)
             throw new EntityDoesNotExistsException(String.format("'%s' doesn't exist in the system.",userName));

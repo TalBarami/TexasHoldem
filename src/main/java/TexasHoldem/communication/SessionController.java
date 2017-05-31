@@ -2,16 +2,13 @@ package TexasHoldem.communication;
 
 import TexasHoldem.common.Exceptions.EntityDoesNotExistsException;
 import TexasHoldem.common.Exceptions.InvalidArgumentException;
+import TexasHoldem.common.Exceptions.LoginException;
 import TexasHoldem.communication.entities.ClientUserDetails;
 import TexasHoldem.communication.entities.ResponseMessage;
 import TexasHoldem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import javax.security.auth.login.LoginException;
 
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -19,7 +16,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 /**
  * Created by user on 12/05/2017.
  */
-
+@CrossOrigin
 @RestController
 public class SessionController {
     private UserService service;

@@ -208,4 +208,12 @@ public class User {
     public int getTotalGrossProfit() {
         return totalGrossProfit;
     }
+
+    public double getAvgNetoProfit(){
+        return getTotalNetoProfit()/getNumOfGamesPlayed();
+    }
+
+    public double getAvgGrossProfit(){
+        return getTotalGrossProfit()/getNumOfGamesPlayed();
+    }
 }

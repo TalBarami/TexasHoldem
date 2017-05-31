@@ -8,10 +8,7 @@ import TexasHoldem.domain.game.GamePolicy;
 import TexasHoldem.service.GameService;
 import TexasHoldem.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -21,7 +18,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 /**
  * Created by user on 13/05/2017.
  */
-
+@CrossOrigin
 @RestController
 public class GameController {
     private GameService gameService;
