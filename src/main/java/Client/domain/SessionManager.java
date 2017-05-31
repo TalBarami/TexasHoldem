@@ -6,9 +6,11 @@ import Client.communication.SessionRequestHandler;
 import Client.communication.UserRequestHandler;
 import Client.communication.entities.ClientUserDetails;
 import Client.communication.entities.ClientUserProfile;
+import Client.notification.SubscriptionManager;
 import TexasHoldem.common.SystemUtils;
 
 import javax.security.auth.login.LoginException;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by User on 14/05/2017.
@@ -70,6 +72,15 @@ public class SessionManager {
         sessionRequestHandler.requestUserLogin(details);
 
         user = userRequestHandler.requestUserProfileEntity(username);
+
+        // Subscribe to channel
+        try {
+            new SubscriptionManager().subscribe(username);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public void logout(String username) throws InvalidArgumentException {

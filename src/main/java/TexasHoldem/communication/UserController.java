@@ -6,6 +6,7 @@ import TexasHoldem.common.Exceptions.InvalidArgumentException;
 import TexasHoldem.communication.converters.UserClientUserProfileConverter;
 import TexasHoldem.communication.entities.*;
 import TexasHoldem.domain.user.Transaction;
+import TexasHoldem.notification.UserNotificationController;
 import TexasHoldem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -69,6 +70,7 @@ public class UserController {
 
         // TODO :: Add withdraw support
         // TODO :: Verify username and password
+        new UserNotificationController().sendMessageToUser("waldr");
         return new ResponseMessage("Transaction completed successfully", null);
     }
 

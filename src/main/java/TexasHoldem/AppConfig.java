@@ -1,5 +1,6 @@
 package TexasHoldem;
 
+import TexasHoldem.notification.WebAgentSessionRegistry;
 import TexasHoldem.service.GameService;
 import TexasHoldem.service.SearchService;
 import TexasHoldem.service.TexasHoldemService;
@@ -16,10 +17,13 @@ import java.util.TimerTask;
 @Configuration
 public class AppConfig {
     public TexasHoldemService service;
+    public WebAgentSessionRegistry webAgentSessionRegistry;
     private final int weekTime = 604800000;
 
     public AppConfig() {
         service = new TexasHoldemService();
+        webAgentSessionRegistry = new WebAgentSessionRegistry();
+
         Timer t = new Timer();
         // This task is scheduled to run every week
         t.scheduleAtFixedRate(new TimerTask() {
@@ -43,5 +47,10 @@ public class AppConfig {
     @Bean
     public SearchService getSearchServiceBean(){
         return service.searchService();
+    }
+
+    @Bean
+    public WebAgentSessionRegistry getWebAgentSessionRegistryBean() {
+        return webAgentSessionRegistry;
     }
 }
