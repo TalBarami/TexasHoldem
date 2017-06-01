@@ -50,7 +50,7 @@ public class Register {
     private void onOK() {
         try {
             SessionManager.getInstance().register(text_name.getText(), new String(text_password.getPassword()), text_email.getText(), datePicker_birthday.getJFormattedTextField().getText(), text_picture.getText());
-            ancestor.login().init();
+            ancestor.showLogin();
         } catch (InvalidArgumentException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }

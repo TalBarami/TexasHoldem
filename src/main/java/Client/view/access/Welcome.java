@@ -40,21 +40,23 @@ public class Welcome extends JFrame {
     }
 
     private void onLogin() {
-        // add your code here
+        showLogin();
+    }
+
+    private void onRegister() {
+        showRegister();
+    }
+
+    public void showLogin(){
         if(login == null)
             login = new Login(this);
         login.init();
     }
 
-    private void onRegister() {
-        // add your code here if necessary
+    public void showRegister(){
         if(register == null)
             register = new Register(this);
         register.init();
-    }
-
-    public Login login(){
-        return login;
     }
 
     public void init(){
