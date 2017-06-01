@@ -53,6 +53,10 @@ public class Welcome extends JFrame {
         register.init();
     }
 
+    public Login login(){
+        return login;
+    }
+
     public void init(){
         ClientUtils.frameInit(this, contentPane);
         setTitle("Texas Hold'em");
