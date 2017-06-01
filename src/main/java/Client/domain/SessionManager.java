@@ -41,6 +41,15 @@ public class SessionManager {
         userRequestHandler.requestUserProfileRegistration(profile);
 
         user = userRequestHandler.requestUserProfileEntity(username);
+
+        // Subscribe to channel
+        try {
+            new SubscriptionManager().subscribe(username);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public void editProfile(String newPassword, String newEmail, String newBirthday, String newImage) throws InvalidArgumentException, EntityDoesNotExistsException {
@@ -72,15 +81,6 @@ public class SessionManager {
         sessionRequestHandler.requestUserLogin(details);
 
         user = userRequestHandler.requestUserProfileEntity(username);
-
-        // Subscribe to channel
-        try {
-            new SubscriptionManager().subscribe(username);
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     public void logout(String username) throws InvalidArgumentException {

@@ -26,7 +26,7 @@ public class ClientStompSessionHandler extends StompSessionHandlerAdapter {
 
             @Override
             public void handleFrame(StompHeaders stompHeaders, Object o) {
-                System.out.println(((ResponseMessage<Object>)o).getMessage());
+                System.err.println(((ResponseMessage<Object>)o).getMessage());
             }
         });
     }

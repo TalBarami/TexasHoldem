@@ -1,8 +1,10 @@
 package Client.notification;
 
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
+import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandler;
+import org.springframework.messaging.support.NativeMessageHeaderAccessor;
 import org.springframework.web.socket.WebSocketHttpHeaders;
 import org.springframework.web.socket.client.WebSocketClient;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
@@ -32,9 +34,10 @@ public class SubscriptionManager {
         StompSessionHandler sessionHandler = new ClientStompSessionHandler();
 
         WebSocketHttpHeaders webSocketHttpHeaders = new WebSocketHttpHeaders();
-        webSocketHttpHeaders.add("Login", userName);
+        StompHeaders stompHeaders = new StompHeaders();
+        stompHeaders.add("Login", userName);
 
-        StompSession session = stompClient.connect(url, webSocketHttpHeaders, sessionHandler).get();
+        StompSession session = stompClient.connect(url, webSocketHttpHeaders, stompHeaders, sessionHandler).get();
 
         return session;
     }

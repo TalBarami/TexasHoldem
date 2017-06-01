@@ -1,5 +1,6 @@
 package TexasHoldem;
 
+import TexasHoldem.notification.MessageSender;
 import TexasHoldem.notification.WebAgentSessionRegistry;
 import TexasHoldem.service.GameService;
 import TexasHoldem.service.SearchService;
