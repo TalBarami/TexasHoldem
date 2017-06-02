@@ -9,6 +9,7 @@ import Client.communication.UserRequestHandler;
 import Server.domain.user.Transaction;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by User on 15/05/2017.

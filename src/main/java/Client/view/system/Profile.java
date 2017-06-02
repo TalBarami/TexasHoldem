@@ -45,18 +45,19 @@ public class Profile {
     public Profile(MainMenu ancestor) {
         this.ancestor = ancestor;
 
+        generateUserInformation(SessionManager.getInstance().user());
         assignActionListeners();
-
     }
 
     public void init(){
         ClientUtils.frameInit(ancestor, contentPane);
-        generateUserInformation();
         ancestor.getRootPane().setDefaultButton(buttonApply);
         ClientUtils.clearTextFields(oldPasswordPasswordField, newPasswordPasswordField, repeatPasswordPasswordField, newEmailTextField, repeatEmailTextField, newBirthdayDatePicker.getJFormattedTextField(), newPictureTextField);
     }
 
     private void assignActionListeners(){
+        SessionManager.getInstance().addUpdateCallback(this::generateUserInformation);
+
         buttonApply.addActionListener(e -> onApply());
 
         buttonCancel.addActionListener(e -> onCancel());
@@ -71,18 +72,17 @@ public class Profile {
         contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
     }
 
-    public void generateUserInformation(){
-        ClientUserProfile user = SessionManager.getInstance().user();
+    public void generateUserInformation(ClientUserProfile profile){
         /*ImageIcon icon = new ImageIcon(user.getImg().getScaledInstance(200, 200, 0));*/
         label_userPicture.setText("");
         /*label_userPicture.setIcon(icon);*/
-        label_name.setText("Name: " + user.getUsername());
-        label_birthday.setText("Birthday: " + user.getDayOfBirth() + "/" + user.getMonthOfBirth() + "/" + user.getYearOfBirth());
-        label_email.setText("E-mail: " + user.getEmail());
-        label_cash.setText("Total cash: " + user.getBalance());
-        label_totalPlayed.setText("Games played: " + user.getNumOfGamesPlayed());
-        label_league.setText("League: " + user.getCurrLeague());
-        label_earned.setText("Total earned in league: " + user.getAmountEarnedInLeague());
+        label_name.setText("Name: " + profile.getUsername());
+        label_birthday.setText("Birthday: " + profile.getDayOfBirth() + "/" + profile.getMonthOfBirth() + "/" + profile.getYearOfBirth());
+        label_email.setText("E-mail: " + profile.getEmail());
+        label_cash.setText("Total cash: " + profile.getBalance());
+        label_totalPlayed.setText("Games played: " + profile.getNumOfGamesPlayed());
+        label_league.setText("League: " + profile.getLeague());
+        label_earned.setText("Total earned in league: " + profile.getAmountEarnedInLeague());
     }
 
     private void onApply() {

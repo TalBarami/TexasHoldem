@@ -15,6 +15,8 @@ public class GameManager {
     private ClientGameDetails gameDetails;
     private GameRequestHandler gameRequestHandler;
 
+    private List<GameUpdateCallback> updateCallbacks;
+
     public GameManager(String gameName) throws EntityDoesNotExistsException, InvalidArgumentException {
         gameDetails = SearchManager.getInstance().findGameByName(gameName).get(0);
         gameRequestHandler = new GameRequestHandler();
@@ -22,10 +24,6 @@ public class GameManager {
 
     public ClientGameDetails getGameDetails(){
         return gameDetails;
-    }
-
-    public ClientUserProfile getUser(){
-        return SessionManager.getInstance().user();
     }
 
     public void playCheck() throws GameException {
@@ -72,5 +70,19 @@ public class GameManager {
         request.setAction(9);
 
         gameRequestHandler.requestGameEventSend(request);
+    }
+
+    public void updateGameDetails(ClientGameDetails details){
+        for(GameUpdateCallback callback : updateCallbacks){
+            callback.update(details);
+        }
+    }
+
+    public interface GameUpdateCallback {
+        void update(ClientGameDetails details);
+    }
+
+    public void addUpdateCallback(GameUpdateCallback callback){
+        updateCallbacks.add(callback);
     }
 }

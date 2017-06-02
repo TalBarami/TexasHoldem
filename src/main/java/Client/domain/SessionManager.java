@@ -10,6 +10,8 @@ import Exceptions.LoginException;
 import Client.communication.SessionRequestHandler;
 import Client.communication.UserRequestHandler;
 import Server.common.SystemUtils;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by User on 14/05/2017.
@@ -21,9 +23,13 @@ public class SessionManager {
     private SessionRequestHandler sessionRequestHandler;
     private UserRequestHandler userRequestHandler;
 
+    private List<UserUpdateCallback> updateCallbacks;
+
     private SessionManager(){
         sessionRequestHandler = new SessionRequestHandler();
         userRequestHandler = new UserRequestHandler();
+
+        updateCallbacks = new ArrayList<>();
     }
 
     public static SessionManager getInstance(){
@@ -86,5 +92,20 @@ public class SessionManager {
     void verifyStrings(String... strings) throws InvalidArgumentException {
         if(SystemUtils.hasNullOrEmptyOrSpecialChars(strings))
             throw new InvalidArgumentException("Null/Empty fields or invalid characters are not allowed.");
+    }
+
+    public void updateUserDetails(ClientUserProfile profile){
+        user = profile;
+        for(UserUpdateCallback callback : updateCallbacks){
+            callback.update(profile);
+        }
+    }
+
+    public interface UserUpdateCallback {
+        void update(ClientUserProfile profile);
+    }
+
+    public void addUpdateCallback(UserUpdateCallback callback){
+        updateCallbacks.add(callback);
     }
 }
