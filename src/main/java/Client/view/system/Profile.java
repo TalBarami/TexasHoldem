@@ -1,8 +1,9 @@
 package Client.view.system;
 
-import Client.common.exceptions.EntityDoesNotExistsException;
-import Client.common.exceptions.InvalidArgumentException;
-import Client.communication.entities.ClientUserProfile;
+import MutualJsonObjects.ClientUserProfile;
+import Exceptions.EntityDoesNotExistsException;
+import Exceptions.InvalidArgumentException;
+
 import Client.domain.SessionManager;
 import Client.view.ClientUtils;
 import net.sourceforge.jdatepicker.impl.JDatePanelImpl;

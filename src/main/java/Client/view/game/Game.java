@@ -1,12 +1,12 @@
 package Client.view.game;
 
-import Client.common.exceptions.EntityDoesNotExistsException;
-import Client.common.exceptions.GameException;
-import Client.common.exceptions.InvalidArgumentException;
-import Client.communication.entities.ClientUserProfile;
+import Exceptions.EntityDoesNotExistsException;
+import Exceptions.GameException;
+import Exceptions.InvalidArgumentException;
+import MutualJsonObjects.ClientUserProfile;
+
 import Client.domain.GameManager;
 import Client.domain.MenuManager;
-import Client.domain.SessionManager;
 import Client.view.ClientUtils;
 import Client.view.system.MainMenu;
 

@@ -1,11 +1,13 @@
 package Client.communication;
 
-import Client.common.exceptions.EntityDoesNotExistsException;
-import Client.common.exceptions.ExceptionObject;
-import Client.common.exceptions.InvalidArgumentException;
-import Client.common.exceptions.LoginException;
-import Client.communication.entities.ClientUserDetails;
-import Client.communication.entities.ResponseMessage;
+import MutualJsonObjects.ClientUserDetails;
+import MutualJsonObjects.ResponseMessage;
+
+import Exceptions.EntityDoesNotExistsException;
+import Exceptions.ExceptionObject;
+import Exceptions.InvalidArgumentException;
+import Exceptions.LoginException;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -29,7 +31,7 @@ public class SessionRequestHandler {
         this.objectMapper = new ObjectMapper();
     }
 
-    public void requestUserLogin(ClientUserDetails loginDetails) throws javax.security.auth.login.LoginException, InvalidArgumentException, EntityDoesNotExistsException {
+    public void requestUserLogin(ClientUserDetails loginDetails) throws LoginException, InvalidArgumentException, EntityDoesNotExistsException {
         HttpEntity<ClientUserDetails> request = new HttpEntity<>(loginDetails);
 
         try {

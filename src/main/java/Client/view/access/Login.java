@@ -1,12 +1,13 @@
 package Client.view.access;
 
-import Client.common.exceptions.EntityDoesNotExistsException;
-import Client.common.exceptions.InvalidArgumentException;
+import Exceptions.EntityDoesNotExistsException;
+import Exceptions.InvalidArgumentException;
+import Exceptions.LoginException;
+
 import Client.domain.SessionManager;
 import Client.view.ClientUtils;
 import Client.view.system.MainMenu;
 
-import javax.security.auth.login.LoginException;
 import javax.swing.*;
 import java.awt.event.KeyEvent;
 

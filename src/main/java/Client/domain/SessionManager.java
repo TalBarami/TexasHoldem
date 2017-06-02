@@ -1,14 +1,15 @@
 package Client.domain;
 
-import Client.common.exceptions.EntityDoesNotExistsException;
-import Client.common.exceptions.InvalidArgumentException;
+import MutualJsonObjects.ClientUserDetails;
+import MutualJsonObjects.ClientUserProfile;
+
+import Exceptions.EntityDoesNotExistsException;
+import Exceptions.InvalidArgumentException;
+import Exceptions.LoginException;
+
 import Client.communication.SessionRequestHandler;
 import Client.communication.UserRequestHandler;
-import Client.communication.entities.ClientUserDetails;
-import Client.communication.entities.ClientUserProfile;
-import TexasHoldem.common.SystemUtils;
-
-import javax.security.auth.login.LoginException;
+import Server.common.SystemUtils;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,7 +66,7 @@ public class SessionManager {
         }
         /*if(newImage == null || newImage.isEmpty())
             newImage = user.getImage();*/
-        ClientUserProfile profile = new ClientUserProfile(user.getUsername(), newPassword, newEmail, day, month, year, user.getBalance(), user.getLeague(), user.getNumOfGamesPlayed(), user.getAmountEarnedInLeague());
+        ClientUserProfile profile = new ClientUserProfile(user.getUsername(), newPassword, newEmail, day, month, year, user.getBalance(), user.getCurrLeague(), user.getNumOfGamesPlayed(), user.getAmountEarnedInLeague());
         userRequestHandler.requestUserProfileUpdate(user.getUsername(), profile);
 
         user = userRequestHandler.requestUserProfileEntity(user.getUsername());

@@ -1,7 +1,8 @@
 package Client.communication;
 
-import Client.common.exceptions.*;
-import Client.communication.entities.*;
+import MutualJsonObjects.*;
+import Exceptions.*;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
