@@ -81,7 +81,7 @@ public class Profile {
         label_email.setText("E-mail: " + profile.getEmail());
         label_cash.setText("Total cash: " + profile.getBalance());
         label_totalPlayed.setText("Games played: " + profile.getNumOfGamesPlayed());
-        label_league.setText("League: " + profile.getLeague());
+        label_league.setText("League: " + profile.getCurrLeague());
         label_earned.setText("Total earned in league: " + profile.getAmountEarnedInLeague());
     }
 

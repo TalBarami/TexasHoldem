@@ -172,8 +172,8 @@ public class MainMenu extends JFrame {
         try {
             MenuManager.getInstance().spectateGame(username, gameName);
             Game game = new Game(this, gameName);
-        } catch (GameException e) {
             addGame(game);
+        } catch (GameException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -183,8 +183,8 @@ public class MainMenu extends JFrame {
         try {
             MenuManager.getInstance().replayGame(gameName);
             Game game = new Game(this, gameName);
-        } catch (GameException e) {
             addGame(game);
+        } catch (GameException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
