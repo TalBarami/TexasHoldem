@@ -1,6 +1,7 @@
 package Client.domain;
 
-import MutualJsonObjects.ClientUserDetails;
+import Client.notification.SubscriptionManager;
+import MutualJsonObjects.ClientUserLoginDetails;
 import MutualJsonObjects.ClientUserProfile;
 
 import Exceptions.EntityDoesNotExistsException;
@@ -12,6 +13,7 @@ import Client.communication.UserRequestHandler;
 import Server.common.SystemUtils;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by User on 14/05/2017.
@@ -73,14 +75,23 @@ public class SessionManager {
     }
 
     public void login(String username, String password) throws LoginException, EntityDoesNotExistsException, InvalidArgumentException {
-        ClientUserDetails details = new ClientUserDetails(username, password);
+        ClientUserLoginDetails details = new ClientUserLoginDetails(username, password);
         sessionRequestHandler.requestUserLogin(details);
 
         user = userRequestHandler.requestUserProfileEntity(username);
+
+        // Subscribe to queue
+        try {
+            new SubscriptionManager().subscribe(user.getUsername());
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public void logout(String username) throws InvalidArgumentException {
-        ClientUserDetails details = new ClientUserDetails(username, "");
+        ClientUserLoginDetails details = new ClientUserLoginDetails(username, "");
         sessionRequestHandler.requestUserLogout(details);
         user = null;
     }

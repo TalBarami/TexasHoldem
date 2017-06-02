@@ -1,6 +1,6 @@
 package Client.communication;
 
-import MutualJsonObjects.ClientUserDetails;
+import MutualJsonObjects.ClientUserLoginDetails;
 import MutualJsonObjects.ResponseMessage;
 
 import Exceptions.EntityDoesNotExistsException;
@@ -31,8 +31,8 @@ public class SessionRequestHandler {
         this.objectMapper = new ObjectMapper();
     }
 
-    public void requestUserLogin(ClientUserDetails loginDetails) throws LoginException, InvalidArgumentException, EntityDoesNotExistsException {
-        HttpEntity<ClientUserDetails> request = new HttpEntity<>(loginDetails);
+    public void requestUserLogin(ClientUserLoginDetails loginDetails) throws LoginException, InvalidArgumentException, EntityDoesNotExistsException {
+        HttpEntity<ClientUserLoginDetails> request = new HttpEntity<>(loginDetails);
 
         try {
             ResponseEntity<ResponseMessage> response = restTemplate.exchange(serviceURI, HttpMethod.POST, request, ResponseMessage.class);
@@ -59,8 +59,8 @@ public class SessionRequestHandler {
         }
     }
 
-    public void requestUserLogout(ClientUserDetails logoutDetails) throws InvalidArgumentException {
-        HttpEntity<ClientUserDetails> request = new HttpEntity<>(logoutDetails);
+    public void requestUserLogout(ClientUserLoginDetails logoutDetails) throws InvalidArgumentException {
+        HttpEntity<ClientUserLoginDetails> request = new HttpEntity<>(logoutDetails);
 
         try {
             ResponseEntity<ResponseMessage> response = restTemplate.exchange(serviceURI, HttpMethod.DELETE, request, ResponseMessage.class);

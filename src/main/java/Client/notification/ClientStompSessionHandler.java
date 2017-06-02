@@ -1,6 +1,11 @@
 package Client.notification;
 
-import MutualJsonObjects.ResponseMessage;
+import Client.domain.SessionManager;
+import NotificationMessages.MessageNotification;
+import NotificationMessages.Notification;
+import NotificationMessages.PlayMoveNotification;
+import NotificationMessages.UserProfileUpdateNotification;
+
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
@@ -21,12 +26,21 @@ public class ClientStompSessionHandler extends StompSessionHandlerAdapter {
         session.subscribe("/user/queue", new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders stompHeaders) {
-                return ResponseMessage.class;
+                return Notification.class;
             }
 
             @Override
             public void handleFrame(StompHeaders stompHeaders, Object o) {
-                System.err.println(((ResponseMessage<Object>)o).getMessage());
+                System.err.println("received");
+                Notification notification = (Notification)o;
+
+                if (notification instanceof UserProfileUpdateNotification) {
+                    SessionManager.getInstance().updateUserDetails(((UserProfileUpdateNotification)o).getClientUserProfile());
+                } else if (notification instanceof MessageNotification) {
+                    // Call callback which handles MessageNotification
+                } else if (notification instanceof PlayMoveNotification) {
+                    // Call callback which handles PlayMoveNotification
+                }
             }
         });
     }

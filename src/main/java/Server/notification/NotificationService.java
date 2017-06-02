@@ -1,15 +1,18 @@
 package Server.notification;
 
 import Enumerations.Move;
+import MutualJsonObjects.ClientUserProfile;
 import NotificationMessages.MessageNotification;
 import NotificationMessages.Notification;
 import NotificationMessages.PlayMoveNotification;
+import NotificationMessages.UserProfileUpdateNotification;
 import Server.SpringApplicationContext;
 import Server.domain.events.chatEvents.MessageEvent;
 import Server.domain.events.chatEvents.WhisperEvent;
 import Server.domain.game.GameActions;
 import Server.domain.game.participants.Participant;
 import Server.domain.game.participants.Player;
+import Server.domain.user.User;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -75,5 +78,23 @@ public class NotificationService {
 
         Notification msgNotification = new MessageNotification(recipientUserName, senderUserName, msgContent);
         messageSender.sendNotification(msgNotification);
+    }
+
+    public void sendUserProfileUpdateNotification(User user) {
+        String username = user.getUsername();
+        String password = user.getPassword();
+        String email = user.getEmail();
+        int dayOfBirth = user.getDateOfBirth().getDayOfMonth();
+        int monthOfBirth = user.getDateOfBirth().getMonthValue();
+        int yearOfBirth = user.getDateOfBirth().getYear();
+        int balance = user.getBalance();
+        int currLeague = user.getCurrLeague();
+        int numOfGamesPlayed = user.getNumOfGamesPlayed();
+        int amountEarnedInLeague = user.getAmountEarnedInLeague();
+
+        ClientUserProfile profile = new ClientUserProfile(username, password, email, dayOfBirth, monthOfBirth, yearOfBirth, balance, currLeague, numOfGamesPlayed, amountEarnedInLeague);
+        Notification profileNotification = new UserProfileUpdateNotification(username, profile);
+
+        messageSender.sendNotification(profileNotification);
     }
 }

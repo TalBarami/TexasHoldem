@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 /**
  * Created by rotemwald on 31/05/17.
  */
-@Service
+@Service("MessageSender")
 public class MessageSender {
     private SimpMessageSendingOperations messagingTemplate;
     private WebAgentSessionRegistry webAgentSessionRegistry;
@@ -31,6 +31,10 @@ public class MessageSender {
 
     public void sendNotification(Notification notification) {
         String sessionId = webAgentSessionRegistry.map.get(notification.getRecipientUserName());
-        messagingTemplate.convertAndSendToUser(sessionId, "/queue", notification, createHeaders(sessionId));
+
+        if (sessionId != null) {
+            messagingTemplate.convertAndSendToUser(sessionId, "/queue", notification, createHeaders(sessionId));
+            System.err.println("sent");
+        }
     }
 }

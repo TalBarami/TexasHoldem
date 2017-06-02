@@ -3,16 +3,16 @@ package MutualJsonObjects;
 /**
  * Created by user on 12/05/2017.
  */
-public class ClientUserDetails {
+public class ClientUserLoginDetails {
     String username;
     String password;
 
-    public ClientUserDetails(String username, String password) {
+    public ClientUserLoginDetails(String username, String password) {
         this.username = username;
         this.password = password;
     }
 
-    public ClientUserDetails() {
+    public ClientUserLoginDetails() {
     }
 
     public String getUsername() {
