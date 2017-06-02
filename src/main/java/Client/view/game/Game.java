@@ -1,8 +1,10 @@
 package Client.view.game;
 
+import Client.domain.SessionManager;
 import Exceptions.EntityDoesNotExistsException;
 import Exceptions.GameException;
 import Exceptions.InvalidArgumentException;
+import MutualJsonObjects.ClientGameDetails;
 import MutualJsonObjects.ClientUserProfile;
 
 import Client.domain.GameManager;
@@ -47,7 +49,8 @@ public class Game extends JFrame{
 
         assignActionListeners();
         generateUserInformation(SessionManager.getInstance().user());
-        showPlayers();
+        updatePlayersInformation(gameManager.getGameDetails());
+
     }
 
     public void init(){
@@ -55,10 +58,13 @@ public class Game extends JFrame{
         ClientUtils.frameInit(this, contentPane);
         setTitle(gameManager.getGameDetails().getName());
         getRootPane().setDefaultButton(sendButton);
-        showPlayers();
     }
 
-    private void showPlayers() {
+    private void updatePlayersInformation(ClientGameDetails gameDetails) {
+
+    }
+
+    private void updatePotSize(ClientGameDetails gameDetails){
 
     }
 
@@ -69,6 +75,8 @@ public class Game extends JFrame{
 
     private void assignActionListeners(){
         SessionManager.getInstance().addUpdateCallback(this::generateUserInformation);
+        gameManager.addUpdateCallback(this::updatePlayersInformation);
+        gameManager.addUpdateCallback(this::updatePotSize);
 
         foldButton.addActionListener(e -> onFold());
         callButton.addActionListener(e -> onCall());
