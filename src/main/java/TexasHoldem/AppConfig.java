@@ -1,11 +1,7 @@
 package TexasHoldem;
 
-import TexasHoldem.notification.MessageSender;
 import TexasHoldem.notification.WebAgentSessionRegistry;
-import TexasHoldem.service.GameService;
-import TexasHoldem.service.SearchService;
-import TexasHoldem.service.TexasHoldemService;
-import TexasHoldem.service.UserService;
+import TexasHoldem.service.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -48,6 +44,11 @@ public class AppConfig {
     @Bean
     public SearchService getSearchServiceBean(){
         return service.searchService();
+    }
+
+    @Bean
+    public StatisticsService getStatisticsServiceBean(){
+        return service.statisticsService();
     }
 
     @Bean

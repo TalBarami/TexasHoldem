@@ -9,7 +9,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.security.auth.login.LoginException;
 import javax.swing.text.html.parser.Entity;
 import java.time.LocalDate;
 import java.util.List;

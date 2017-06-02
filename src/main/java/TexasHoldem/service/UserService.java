@@ -3,10 +3,10 @@ package TexasHoldem.service;
 import TexasHoldem.common.Exceptions.ArgumentNotInBoundsException;
 import TexasHoldem.common.Exceptions.EntityDoesNotExistsException;
 import TexasHoldem.common.Exceptions.InvalidArgumentException;
+import TexasHoldem.common.Exceptions.LoginException;
 import TexasHoldem.domain.system.GameCenter;
 import TexasHoldem.domain.user.User;
 
-import javax.security.auth.login.LoginException;
 import java.awt.image.BufferedImage;
 import java.time.LocalDate;
 

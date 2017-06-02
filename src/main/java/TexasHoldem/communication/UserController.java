@@ -10,10 +10,7 @@ import TexasHoldem.domain.user.Transaction;
 import TexasHoldem.notification.MessageSender;
 import TexasHoldem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.awt.image.BufferedImage;
 import java.time.LocalDate;
@@ -23,7 +20,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 /**
  * Created by user on 12/05/2017.
  */
-
+@CrossOrigin
 @RestController
 public class UserController {
     private MessageSender messageSender;

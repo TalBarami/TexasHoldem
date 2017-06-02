@@ -1,6 +1,7 @@
 package TexasHoldem.domain.system;
 
 import TexasHoldem.common.Exceptions.*;
+import TexasHoldem.common.Exceptions.LoginException;
 import TexasHoldem.data.games.Games;
 import TexasHoldem.data.games.IGames;
 import TexasHoldem.data.users.IUsers;
@@ -16,10 +17,10 @@ import TexasHoldem.domain.user.User;
 import TexasHoldem.domain.user.LeagueManager;
 import TexasHoldem.domain.user.usersDistributions.DistributionAlgorithm;
 import TexasHoldem.domain.user.usersDistributions.Min2InLeagueSameAmount;
+import javafx.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.security.auth.login.LoginException;
 import java.awt.image.BufferedImage;
 import java.time.LocalDate;
 import java.util.*;
@@ -61,7 +62,10 @@ public class GameCenter {
 
     public void login(String userName,String pass) throws LoginException, EntityDoesNotExistsException {
         User user=usersDb.verifyCredentials(userName,pass);
-        loggedInUsers.add(user);//todo: or maybe change status in Db that he logged in?
+        if(loggedInUsers.contains(user)){
+            throw new  LoginException(String.format("'%s' is already logged in to the game.",userName));
+        }
+        loggedInUsers.add(user);
         logger.info("{} has logged in to the system.",userName);
     }
 
@@ -280,62 +284,65 @@ public class GameCenter {
         return (IUsersForDistributionAlgorithm)usersDb;
     }
 
-    public List<User> getTop20UsersByGrossProfit(){
+    public List<Pair<String, Integer>> getTop20UsersByGrossProfit(){
         List<User> users = usersDb.getAllUsersInList();
-        users.sort(new Comparator<User>() {
-            @Override
-            public int compare(User firstUser, User secondUser) {
-                return firstUser.getTotalGrossProfit() - secondUser.getTotalGrossProfit();
-            }
-        });
+        users.sort(Comparator.comparingInt(User::getTotalGrossProfit));
         if(users.size() > 20)
-            return users.subList(0,20);
-        return users;
+            return convertUserListToPair(users.subList(0,20), "grossProfit");
+        return convertUserListToPair(users, "grossProfit");
     }
 
-    public List<User> getTop20UsersByHighestCashGain(){
+    public List<Pair<String, Integer>> getTop20UsersByHighestCashGain(){
         List<User> users = usersDb.getAllUsersInList();
-        users.sort(new Comparator<User>() {
-            @Override
-            public int compare(User firstUser, User secondUser) {
-                return firstUser.getHighestCashGain() - secondUser.getHighestCashGain();
-            }
-        });
+        users.sort(Comparator.comparingInt(User::getHighestCashGain));
         if(users.size() > 20)
-            return users.subList(0,20);
-        return users;
+            return convertUserListToPair(users.subList(0,20), "highestCashGain");
+        return convertUserListToPair(users, "highestCashGain");
     }
 
-    public List<User> getTop20UsersByNumOfGamesPlayed(){
+    public List<Pair<String, Integer>> getTop20UsersByNumOfGamesPlayed(){
         List<User> users = usersDb.getAllUsersInList();
-        users.sort(new Comparator<User>() {
-            @Override
-            public int compare(User firstUser, User secondUser) {
-                return firstUser.getNumOfGamesPlayed() - secondUser.getNumOfGamesPlayed();
-            }
-        });
+        users.sort(Comparator.comparingInt(User::getNumOfGamesPlayed));
         if(users.size() > 20)
-            return users.subList(0,20);
-        return users;
+            return convertUserListToPair(users.subList(0,20), "numOfGamesPlayed");
+        return convertUserListToPair(users, "numOfGamesPlayed");
     }
 
-//    public void setDefaultLeague(String admin, int league) throws NoPermissionException {
-//        if(!usersDb.getHighestBalance().getUsername().equalsIgnoreCase(admin))
-//            throw new NoPermissionException("User must have the highest balance.");
-//        leagueManager.setDefaultLeagueForNewUsers(league);
-//    }
+    public List<Pair<String, Integer>> convertUserListToPair(List<User> users, String byWhat){
+        List<Pair<String, Integer>> userStats = new ArrayList<>(users.size());
+        for(User user: users){
+            switch (byWhat) {
+                case "numOfGamesPlayed":
+                    userStats.add(new Pair<>(user.getUsername(), user.getNumOfGamesPlayed()));
+                    break;
+                case "highestCashGain":
+                    userStats.add(new Pair<>(user.getUsername(), user.getHighestCashGain()));
+                    break;
+                case "grossProfit":
+                    userStats.add(new Pair<>(user.getUsername(), user.getTotalGrossProfit()));
+                    break;
+            }
+        }
+        return userStats;
+    }
+/*
+    public void setDefaultLeague(String admin, int league) throws NoPermissionException {
+        if(!usersDb.getHighestBalance().getUsername().equalsIgnoreCase(admin))
+            throw new NoPermissionException("User must have the highest balance.");
+        leagueManager.setDefaultLeagueForNewUsers(league);
+    }
+    public void setUserLeague(String admin, String username, int league) throws NoPermissionException {
+        User ad = usersDb.getHighestBalance();
+        if(!usersDb.getHighestBalance().getUsername().equalsIgnoreCase(admin))
+            throw new NoPermissionException("User must have the highest balance.");
+        User user = getUser(username);
+        leagueManager.moveUserToLeague(user, league);
+    }
 
-//    public void setUserLeague(String admin, String username, int league) throws NoPermissionException {
-//        User ad = usersDb.getHighestBalance();
-//        if(!usersDb.getHighestBalance().getUsername().equalsIgnoreCase(admin))
-//            throw new NoPermissionException("User must have the highest balance.");
-//        User user = getUser(username);
-//        leagueManager.moveUserToLeague(user, league);
-//    }
-//
-//    public void setLeagueCriteria(String admin, int criteria) throws NoPermissionException {
-//        if(!usersDb.getHighestBalance().getUsername().equalsIgnoreCase(admin))
-//            throw new NoPermissionException("User must have the highest balance.");
-//        leagueManager.setCriteriaToMovingLeague(criteria);
-//    }
+    public void setLeagueCriteria(String admin, int criteria) throws NoPermissionException {
+        if(!usersDb.getHighestBalance().getUsername().equalsIgnoreCase(admin))
+            throw new NoPermissionException("User must have the highest balance.");
+        leagueManager.setCriteriaToMovingLeague(criteria);
+    }
+*/
 }
