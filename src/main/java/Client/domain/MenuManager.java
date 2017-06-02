@@ -4,10 +4,10 @@ import Client.common.exceptions.*;
 import Client.communication.GameRequestHandler;
 import Client.communication.UserRequestHandler;
 import Client.communication.entities.*;
-import TexasHoldem.domain.game.GamePolicy;
 import TexasHoldem.domain.user.Transaction;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by User on 15/05/2017.

@@ -33,6 +33,8 @@ public class MainMenu extends JFrame {
     private List<String> selectionFields = Collections.singletonList(GAME_POLICY);
     private List<String> noFields = Arrays.asList(AVAILABLE, REPLAYABLE, SPECTATEABLE);
 
+    private List<Game> activeGames;
+
     private JLabel label_name;
     private JLabel label_cash;
     private JLabel label_picture;
@@ -56,12 +58,17 @@ public class MainMenu extends JFrame {
     public MainMenu() {
         init();
 
+        activeGames = new ArrayList<>();
+
+        generateUserInformation(SessionManager.getInstance().user());
         assignActionListeners();
         initSearchProperties();
         initTable();
     }
 
     private void assignActionListeners(){
+        SessionManager.getInstance().addUpdateCallback(this::generateUserInformation);
+
         profileButton.addActionListener(e -> onProfile());
         logoutButton.addActionListener(e -> onLogout());
         depositButton.addActionListener(e -> onDeposit());
@@ -103,7 +110,7 @@ public class MainMenu extends JFrame {
     }
 
 
-    private void generateUserInformation(){
+    private void generateUserInformation(ClientUserProfile profile){
         ClientUserProfile user = SessionManager.getInstance().user();
         //ImageIcon icon = new ImageIcon(user.getImg().getScaledInstance(100, 100, 0));
         label_name.setText(user.getUsername());
@@ -140,7 +147,7 @@ public class MainMenu extends JFrame {
     }
 
     private void onCreateGame(){
-        CreateGame createGame = new CreateGame(this);
+        CreateGame createGame = new CreateGame(this, this::addGame);
         createGame.pack();
         createGame.setLocationRelativeTo(null);
         createGame.setVisible(true);
@@ -151,7 +158,9 @@ public class MainMenu extends JFrame {
         String username = SessionManager.getInstance().user().getUsername();
         try {
             MenuManager.getInstance().joinGame(username, gameName);
+            AddGameCallback callback = game -> activeGames.add(game);
             Game game = new Game(this, gameName);
+            addGame(game);
         } catch (GameException | EntityDoesNotExistsException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -163,6 +172,7 @@ public class MainMenu extends JFrame {
         try {
             MenuManager.getInstance().spectateGame(username, gameName);
             Game game = new Game(this, gameName);
+            addGame(game);
         } catch (GameException | EntityDoesNotExistsException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -173,6 +183,7 @@ public class MainMenu extends JFrame {
         try {
             MenuManager.getInstance().replayGame(gameName);
             Game game = new Game(this, gameName);
+            addGame(game);
         } catch (GameException | EntityDoesNotExistsException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -243,11 +254,26 @@ public class MainMenu extends JFrame {
     public void init(){
         ClientUtils.frameInit(this, contentPane);
         setTitle("Main menu");
-        generateUserInformation();
         ClientUtils.clearTextFields(searchTextField);
     }
 
     private void onExit(){
+        try {
+            for(Game game : activeGames){
+                game.onExit();
+            }
+            SessionManager.getInstance().logout(SessionManager.getInstance().user().getUsername());
+        } catch (InvalidArgumentException e) {
+            e.printStackTrace();
+        }
         dispose();
+    }
+
+    public interface AddGameCallback {
+        void add(Game game);
+    }
+
+    public void addGame(Game game){
+        activeGames.add(game);
     }
 }

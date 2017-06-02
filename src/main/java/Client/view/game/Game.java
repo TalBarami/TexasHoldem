@@ -3,6 +3,7 @@ package Client.view.game;
 import Client.common.exceptions.EntityDoesNotExistsException;
 import Client.common.exceptions.GameException;
 import Client.common.exceptions.InvalidArgumentException;
+import Client.communication.entities.ClientUserProfile;
 import Client.domain.GameManager;
 import Client.domain.MenuManager;
 import Client.domain.SessionManager;
@@ -45,7 +46,7 @@ public class Game extends JFrame{
         init();
 
         assignActionListeners();
-        initializeLabels();
+        generateUserInformation(SessionManager.getInstance().user());
         showPlayers();
     }
 
@@ -61,12 +62,13 @@ public class Game extends JFrame{
 
     }
 
-    private void initializeLabels(){
-        usernameLabel.setText(gameManager.getUser().getUsername());
-        cashLabel.setText(String.valueOf(gameManager.getUser().getBalance()));
+    private void generateUserInformation(ClientUserProfile user){
+        usernameLabel.setText(user.getUsername());
+        cashLabel.setText(String.valueOf(user.getBalance()));
     }
 
     private void assignActionListeners(){
+        SessionManager.getInstance().addUpdateCallback(this::generateUserInformation);
 
         foldButton.addActionListener(e -> onFold());
         callButton.addActionListener(e -> onCall());
@@ -128,7 +130,7 @@ public class Game extends JFrame{
 
     public void onExit() {
         try {
-            MenuManager.getInstance().leaveGame(gameManager.getUser().getUsername(), gameManager.getGameDetails().getName());
+            MenuManager.getInstance().leaveGame(SessionManager.getInstance().user().getUsername(), gameManager.getGameDetails().getName());
         } catch (GameException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
