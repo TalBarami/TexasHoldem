@@ -87,21 +87,6 @@ public class Player extends Participant{
         }
     }
 
-    // TODO :: Make choose dynamically
-    public int chooseAmountToRaise(int minAmount, int maxAmount) {
-        return minAmount;
-    }
-
-    // TODO :: Make choose dynamically
-    public GameActions chooseAction(List<GameActions> gameActions) {
-        if (gameActions.contains(CALL)) {
-            return CALL;
-        }
-        else {
-            return CHECK;
-        }
-    }
-
     public void addCards(Collection<Card> cards){
         this.cards.addAll(cards);
     }

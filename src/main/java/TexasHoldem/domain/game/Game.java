@@ -1,5 +1,6 @@
 package TexasHoldem.domain.game;
 
+import NotificationMessages.Notification;
 import TexasHoldem.common.Exceptions.*;
 import TexasHoldem.domain.events.chatEvents.MessageEvent;
 import TexasHoldem.domain.events.chatEvents.WhisperEvent;
@@ -10,6 +11,7 @@ import TexasHoldem.domain.user.LeagueManager;
 import TexasHoldem.domain.game.participants.Player;
 import TexasHoldem.domain.game.participants.Spectator;
 import TexasHoldem.domain.user.User;
+import TexasHoldem.notification.NotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -135,16 +137,16 @@ public class Game {
         logger.info("'{}' has joined the game '{}' as player.", user.getUsername(),getName());
     }
 
-    public void handleMessageFromPlayer(Player player, MessageEvent messageEvent) {
-        sendMessageToPlayers(messageEvent.getContent());
-        sendMessageToAllSpectators(messageEvent.getContent());
+    public void handleMessageFromPlayer(MessageEvent messageEvent) {
+        sendMessageToPlayers(messageEvent);
+        sendMessageToAllSpectators(messageEvent);
     }
 
-    public void handleMessageFromSpectator(Spectator spectator, MessageEvent messageEvent) {
-        sendMessageToAllSpectators(messageEvent.getContent());
+    public void handleMessageFromSpectator(MessageEvent messageEvent) {
+        sendMessageToAllSpectators(messageEvent);
     }
 
-    public void handleWhisperFromPlayer(Player player, WhisperEvent whisperEvent) {
+    public void handleWhisperFromPlayer(WhisperEvent whisperEvent) {
         //TODO :: send the message
     }
 
@@ -161,14 +163,16 @@ public class Game {
         throw new ArgumentNotInBoundsException("spectator should send whispers only to other spectators");
     }
 
-    private void sendMessageToAllSpectators(Message content) {
-        for(int i = 0; i < spectators.size(); i++);
-        //TODO :: send the message to spectator
+    private void sendMessageToAllSpectators(MessageEvent event) {
+        for (Spectator s : spectators) {
+            NotificationService.getInstance().sendMessageNotification(s, event);
+        }
     }
 
-    private void sendMessageToPlayers(Message content) {
-        for(int i = 0; i < players.size(); i++);
-        //TODO :: send the message to spectator
+    private void sendMessageToPlayers(MessageEvent event) {
+        for (Player p : players) {
+            NotificationService.getInstance().sendMessageNotification(p, event);
+        }
     }
 
     public boolean realMoneyGame(){

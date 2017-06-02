@@ -13,7 +13,6 @@ import TexasHoldem.domain.game.participants.Spectator;
 import TexasHoldem.domain.system.GameCenter;
 import TexasHoldem.domain.user.User;
 
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -116,12 +115,12 @@ public class GameService {
 
         try { //check if he is a player
             Player player = allPlayersInGame.stream().filter(p -> p.getUser().equals(user)).findFirst().get();
-            game.handleMessageFromPlayer(player, new MessageEvent(player, new Message(content)));
+            game.handleMessageFromPlayer(new MessageEvent(player, new Message(content)));
         }catch (NoSuchElementException e){
             List<Spectator> allSpectators = new ArrayList<>();
             allSpectators.addAll(game.getSpectators());
             Spectator spectator = allSpectators.stream().filter(p -> p.getUser().equals(user)).findFirst().get();
-            game.handleMessageFromSpectator(spectator, new MessageEvent(spectator, new Message(content)));
+            game.handleMessageFromSpectator(new MessageEvent(spectator, new Message(content)));
         }
     }
 
@@ -141,7 +140,7 @@ public class GameService {
 
         try { //check the sender is a player
             Player player = allPlayersInGame.stream().filter(p -> p.getUser().equals(user)).findFirst().get();
-            game.handleWhisperFromPlayer(player, new WhisperEvent(player, new Message(content), parToSendTo));
+            game.handleWhisperFromPlayer(new WhisperEvent(player, new Message(content), parToSendTo));
         }catch (NoSuchElementException e){
             List<Spectator> allSpectators = new ArrayList<>();
             allSpectators.addAll(game.getSpectators());

@@ -52,7 +52,12 @@ public class AppConfig {
     }
 
     @Bean
-    public WebAgentSessionRegistry getWebAgentSessionRegistryBean() {
+    public WebAgentSessionRegistry getWebAgentSessionRegistryBean(){
         return webAgentSessionRegistry;
+    }
+
+    @Bean
+    public SpringApplicationContext getSpringApplicationContextBean() {
+        return new SpringApplicationContext();
     }
 }

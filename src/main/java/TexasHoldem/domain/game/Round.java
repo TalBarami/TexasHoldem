@@ -7,6 +7,7 @@ import TexasHoldem.domain.game.card.Dealer;
 import TexasHoldem.domain.game.hand.Hand;
 import TexasHoldem.domain.game.hand.HandCalculator;
 import TexasHoldem.domain.game.participants.Player;
+import TexasHoldem.notification.NotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,7 +63,8 @@ public class Round {
         dealer.deal(activePlayers);
         paySmallAndBigBlind();
 
-        // TODO :: Call communication layer to send currentPlayer a message which requests him to play
+        // Call communication layer to send currentPlayer a message which requests him to play
+        NotificationService.getInstance().sendPlayTurnNotification(currentPlayer, calculateTurnOptions());
     }
 
     public void notifyPlayerExited(Player player) {
@@ -155,8 +157,8 @@ public class Round {
             if (isLastPlayerPlayed) {
                 endFlow();
             } else {
-                // TODO :: Call communication layer to send currentPlayer a message which requests him to play
-            }
+                // Call communication layer to send currentPlayer a message which requests him to play
+                NotificationService.getInstance().sendPlayTurnNotification(currentPlayer, calculateTurnOptions());            }
         }
     }
 
@@ -221,7 +223,8 @@ public class Round {
         int newCurrentPlayerIndex = (dealerIndex + 1) % (activePlayers.size());
         currentPlayer = activePlayers.get(newCurrentPlayerIndex);
 
-        // TODO :: Call communication layer to send currentPlayer a message which requests him to play
+        // Call communication layer to send currentPlayer a message which requests him to play
+        NotificationService.getInstance().sendPlayTurnNotification(currentPlayer, calculateTurnOptions());
     }
 
     private void endFlopOrTurnFlow() {
@@ -485,7 +488,7 @@ public class Round {
         return eventList;
     }
 
-    public int getBalancaOfPlayer(String userName){
+    public int getBalanceOfPlayer(String userName){
         return getActivePlayers().stream()
                 .filter(player -> player.getUser().getUsername().equals(userName))
                 .collect(Collectors.toList()).get(0).getChipsAmount();

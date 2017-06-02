@@ -5,9 +5,7 @@ import TexasHoldem.common.Exceptions.EntityDoesNotExistsException;
 import TexasHoldem.common.Exceptions.InvalidArgumentException;
 import TexasHoldem.communication.converters.UserClientUserProfileConverter;
 import TexasHoldem.communication.entities.*;
-import TexasHoldem.domain.game.chat.Message;
 import TexasHoldem.domain.user.Transaction;
-import TexasHoldem.notification.MessageSender;
 import TexasHoldem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,13 +21,11 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 @CrossOrigin
 @RestController
 public class UserController {
-    private MessageSender messageSender;
     private UserService service;
 
     @Autowired
-    public UserController(UserService service, MessageSender messageSender) {
+    public UserController(UserService service) {
         this.service = service;
-        this.messageSender = messageSender;
     }
 
     @RequestMapping(method=POST, value="/user/{username}")
@@ -64,9 +60,6 @@ public class UserController {
 
     @RequestMapping(method=PUT, value="/user/{username}/balance")
     public ResponseMessage updateUserBalance(@PathVariable("username") String username, @RequestBody ClientTransactionRequest transaction) throws EntityDoesNotExistsException, ArgumentNotInBoundsException, InvalidArgumentException {
-        // Test
-        messageSender.sendMessageToUser(username);
-
         if (transaction.getAction() == Transaction.DEPOSIT) {
             service.deposit(username, transaction.getAmount());
         }
