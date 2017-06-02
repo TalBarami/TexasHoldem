@@ -96,13 +96,11 @@ public class SessionManager {
 
     public void updateUserDetails(ClientUserProfile profile){
         user = profile;
-        for(UserUpdateCallback callback : updateCallbacks){
-            callback.update(profile);
-        }
+        updateCallbacks.parallelStream().forEach(c -> c.execute(profile));
     }
 
     public interface UserUpdateCallback {
-        void update(ClientUserProfile profile);
+        void execute(ClientUserProfile profile);
     }
 
     public void addUpdateCallback(UserUpdateCallback callback){

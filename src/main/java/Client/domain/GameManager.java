@@ -8,6 +8,7 @@ import Exceptions.InvalidArgumentException;
 
 import Client.communication.GameRequestHandler;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,11 +18,15 @@ public class GameManager {
     private ClientGameDetails gameDetails;
     private GameRequestHandler gameRequestHandler;
 
-    private List<GameUpdateCallback> updateCallbacks;
+    private List<GameUpdateCallback> gameUpdateCallbacks;
+    private List<ChatUpdateCallback> chatUpdateCallbacks;
 
     public GameManager(String gameName) throws EntityDoesNotExistsException, InvalidArgumentException {
         gameDetails = SearchManager.getInstance().findGameByName(gameName).get(0);
         gameRequestHandler = new GameRequestHandler();
+
+        gameUpdateCallbacks = new ArrayList<>();
+        chatUpdateCallbacks = new ArrayList<>();
     }
 
     public ClientGameDetails getGameDetails(){
@@ -65,26 +70,38 @@ public class GameManager {
         gameRequestHandler.requestGameEventSend(request);
     }
 
-    public void sendMessage() throws GameException {
+    public void sendMessage(String message) throws GameException {
         ClientGameRequest request = new ClientGameRequest();
         request.setGamename(gameDetails.getName());
         request.setUsername(SessionManager.getInstance().user().getUsername());
+        request.setMassage(message);
         request.setAction(9);
 
         gameRequestHandler.requestGameEventSend(request);
     }
 
-    public void updateGameDetails(ClientGameDetails details){
-        for(GameUpdateCallback callback : updateCallbacks){
-            callback.update(details);
-        }
+    public void updateGameDetails(ClientGameDetails gameDetails){
+        this.gameDetails = gameDetails;
+        gameUpdateCallbacks.parallelStream().forEach(c -> c.execute(gameDetails));
     }
 
     public interface GameUpdateCallback {
-        void update(ClientGameDetails details);
+        void execute(ClientGameDetails details);
     }
 
-    public void addUpdateCallback(GameUpdateCallback callback){
-        updateCallbacks.add(callback);
+    public void addGameUpdateCallback(GameUpdateCallback callback){
+        gameUpdateCallbacks.add(callback);
+    }
+
+    public void updateChat(){
+        chatUpdateCallbacks.parallelStream().forEach(c -> c.execute());
+    }
+
+    public interface ChatUpdateCallback{
+        void execute();
+    }
+
+    public void addChatUpdateCallback(ChatUpdateCallback callback){
+        chatUpdateCallbacks.add(callback);
     }
 }
