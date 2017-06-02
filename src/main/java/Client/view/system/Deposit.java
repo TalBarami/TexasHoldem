@@ -1,8 +1,8 @@
 package Client.view.system;
 
-import Client.common.exceptions.ArgumentNotInBoundsException;
-import Client.common.exceptions.EntityDoesNotExistsException;
-import Client.common.exceptions.InvalidArgumentException;
+import Exceptions.ArgumentNotInBoundsException;
+import Exceptions.EntityDoesNotExistsException;
+import Exceptions.InvalidArgumentException;
 import Client.domain.MenuManager;
 import Client.domain.SessionManager;
 

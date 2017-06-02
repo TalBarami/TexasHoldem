@@ -1,11 +1,12 @@
 package Client.domain;
 
-import Client.common.exceptions.*;
+import Enumerations.GamePolicy;
+import MutualJsonObjects.*;
+import Exceptions.*;
+
 import Client.communication.GameRequestHandler;
 import Client.communication.UserRequestHandler;
-import Client.communication.entities.*;
-import TexasHoldem.domain.game.GamePolicy;
-import TexasHoldem.domain.user.Transaction;
+import Server.domain.user.Transaction;
 
 import java.util.ArrayList;
 
@@ -29,10 +30,10 @@ public class MenuManager {
         return instance;
     }
 
-    public void createGame(String gameName, ClientGamePolicy gamePolicy, int policyLimit, int minBet, int buyInPolicy, int chipPolicy,
+    public void createGame(String gameName, GamePolicy gamePolicy, int policyLimit, int minBet, int buyInPolicy, int chipPolicy,
                            int minPlayerAmount, int maxPlayerAmount, boolean specAccept) throws InvalidArgumentException, EntityDoesNotExistsException, NoBalanceForBuyInException, ArgumentNotInBoundsException {
         ClientGameDetails gameDetails = new ClientGameDetails(SessionManager.getInstance().user().getUsername(),
-                gameName, gamePolicy.value(), policyLimit, minBet, buyInPolicy,
+                gameName, gamePolicy.getPolicy(), policyLimit, minBet, buyInPolicy,
                 chipPolicy, minPlayerAmount, maxPlayerAmount, specAccept, new ArrayList<>());
         gameRequestHandler.requestGameCreation(gameDetails);
     }

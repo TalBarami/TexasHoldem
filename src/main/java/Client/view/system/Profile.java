@@ -1,8 +1,9 @@
 package Client.view.system;
 
-import Client.common.exceptions.EntityDoesNotExistsException;
-import Client.common.exceptions.InvalidArgumentException;
-import Client.communication.entities.ClientUserProfile;
+import MutualJsonObjects.ClientUserProfile;
+import Exceptions.EntityDoesNotExistsException;
+import Exceptions.InvalidArgumentException;
+
 import Client.domain.SessionManager;
 import Client.view.ClientUtils;
 import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
@@ -80,7 +81,7 @@ public class Profile {
         label_email.setText("E-mail: " + user.getEmail());
         label_cash.setText("Total cash: " + user.getBalance());
         label_totalPlayed.setText("Games played: " + user.getNumOfGamesPlayed());
-        label_league.setText("League: " + user.getLeague());
+        label_league.setText("League: " + user.getCurrLeague());
         label_earned.setText("Total earned in league: " + user.getAmountEarnedInLeague());
     }
 

@@ -1,12 +1,12 @@
 package Client.domain;
 
-import Client.common.exceptions.EntityDoesNotExistsException;
-import Client.common.exceptions.GameException;
-import Client.common.exceptions.InvalidArgumentException;
-import Client.communication.GameRequestHandler;
-import Client.communication.entities.*;
+import MutualJsonObjects.*;
 
-import java.util.List;
+import Exceptions.EntityDoesNotExistsException;
+import Exceptions.GameException;
+import Exceptions.InvalidArgumentException;
+
+import Client.communication.GameRequestHandler;
 
 /**
  * Created by User on 15/05/2017.

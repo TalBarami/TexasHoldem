@@ -1,6 +1,6 @@
 package Client.notification;
 
-import Client.communication.entities.ResponseMessage;
+import MutualJsonObjects.ResponseMessage;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;

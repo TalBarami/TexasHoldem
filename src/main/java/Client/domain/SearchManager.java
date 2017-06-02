@@ -1,11 +1,12 @@
 package Client.domain;
 
-import Client.common.exceptions.EntityDoesNotExistsException;
-import Client.common.exceptions.InvalidArgumentException;
+import MutualJsonObjects.ClientGameDetails;
+import MutualJsonObjects.ClientGamePreferences;
+import Enumerations.GamePolicy;
+import Exceptions.EntityDoesNotExistsException;
+import Exceptions.InvalidArgumentException;
+
 import Client.communication.GameRequestHandler;
-import Client.communication.entities.ClientGameDetails;
-import Client.communication.entities.ClientGamePolicy;
-import Client.communication.entities.ClientGamePreferences;
 
 import java.util.*;
 
@@ -73,7 +74,7 @@ public class SearchManager {
     public List<ClientGameDetails> findGamesByGamePolicy(String policy) throws EntityDoesNotExistsException, InvalidArgumentException {
         ClientGamePreferences pref = new ClientGamePreferences();
         pref.setSearchByTypePolicy(true);
-        pref.setPolicyNumberToSearch(ClientGamePolicy.valueOf(policy).value());
+        pref.setPolicyNumberToSearch(GamePolicy.valueOf(policy).getPolicy());
         return gameRequestHandler.requestGameSearch(pref);
     }
 

@@ -1,16 +1,15 @@
 package Client.domain;
 
-import Client.common.exceptions.EntityDoesNotExistsException;
-import Client.common.exceptions.InvalidArgumentException;
+import MutualJsonObjects.ClientUserDetails;
+import MutualJsonObjects.ClientUserProfile;
+
+import Exceptions.EntityDoesNotExistsException;
+import Exceptions.InvalidArgumentException;
+import Exceptions.LoginException;
+
 import Client.communication.SessionRequestHandler;
 import Client.communication.UserRequestHandler;
-import Client.communication.entities.ClientUserDetails;
-import Client.communication.entities.ClientUserProfile;
-import Client.notification.SubscriptionManager;
-import TexasHoldem.common.SystemUtils;
-
-import javax.security.auth.login.LoginException;
-import java.util.concurrent.ExecutionException;
+import Server.common.SystemUtils;
 
 /**
  * Created by User on 14/05/2017.
@@ -61,7 +60,7 @@ public class SessionManager {
         }
         /*if(newImage == null || newImage.isEmpty())
             newImage = user.getImage();*/
-        ClientUserProfile profile = new ClientUserProfile(user.getUsername(), newPassword, newEmail, day, month, year, user.getBalance(), user.getLeague(), user.getNumOfGamesPlayed(), user.getAmountEarnedInLeague());
+        ClientUserProfile profile = new ClientUserProfile(user.getUsername(), newPassword, newEmail, day, month, year, user.getBalance(), user.getCurrLeague(), user.getNumOfGamesPlayed(), user.getAmountEarnedInLeague());
         userRequestHandler.requestUserProfileUpdate(user.getUsername(), profile);
 
         user = userRequestHandler.requestUserProfileEntity(user.getUsername());
