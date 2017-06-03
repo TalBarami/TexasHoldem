@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.awt.image.BufferedImage;
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
@@ -82,5 +83,11 @@ public class UserController {
     public ResponseMessage getActiveGames(@PathVariable("username") String userName) throws InvalidArgumentException, EntityDoesNotExistsException {
         ClientUserProfile clientProfile = UserClientUserProfileConverter.convert(service.getUser(userName));
         return new ResponseMessage<ClientUserProfile>("User received successfully", clientProfile);
+    }
+
+    @RequestMapping(method = GET, value="/user")
+    public ResponseMessage getAllUserNames() {
+       List<String> users = service.getAllUserNames();
+        return new ResponseMessage<>("All user name retrieved successfully.", users);
     }
 }

@@ -59,6 +59,10 @@ public class GameCenter {
         return getSpecificUserIfExist(username);
     }
 
+    public List<String> getAllUserNames(){
+        return usersDb.getAllUserNames();
+    }
+
     public void login(String userName,String pass) throws LoginException, EntityDoesNotExistsException {
         User user=usersDb.verifyCredentials(userName,pass);
         if(loggedInUsers.contains(user)){
@@ -285,7 +289,7 @@ public class GameCenter {
 
     public List<Pair<String, Integer>> getTop20UsersByGrossProfit(){
         List<User> users = usersDb.getAllUsersInList();
-        users.sort(Comparator.comparingInt(User::getTotalGrossProfit));
+        users.sort((firstUser, secondUser) -> -1 * (firstUser.getTotalGrossProfit() - secondUser.getTotalGrossProfit()));
         if(users.size() > 20)
             return convertUserListToPair(users.subList(0,20), "grossProfit");
         return convertUserListToPair(users, "grossProfit");
@@ -293,7 +297,7 @@ public class GameCenter {
 
     public List<Pair<String, Integer>> getTop20UsersByHighestCashGain(){
         List<User> users = usersDb.getAllUsersInList();
-        users.sort(Comparator.comparingInt(User::getHighestCashGain));
+        users.sort((firstUser, secondUser) -> -1 * (firstUser.getHighestCashGain() - secondUser.getHighestCashGain()));
         if(users.size() > 20)
             return convertUserListToPair(users.subList(0,20), "highestCashGain");
         return convertUserListToPair(users, "highestCashGain");
@@ -301,11 +305,12 @@ public class GameCenter {
 
     public List<Pair<String, Integer>> getTop20UsersByNumOfGamesPlayed(){
         List<User> users = usersDb.getAllUsersInList();
-        users.sort(Comparator.comparingInt(User::getNumOfGamesPlayed));
+        users.sort((firstUser, secondUser) -> -1 * (firstUser.getNumOfGamesPlayed() - secondUser.getNumOfGamesPlayed()));
         if(users.size() > 20)
             return convertUserListToPair(users.subList(0,20), "numOfGamesPlayed");
         return convertUserListToPair(users, "numOfGamesPlayed");
     }
+
 
     public List<Pair<String, Integer>> convertUserListToPair(List<User> users, String byWhat){
         List<Pair<String, Integer>> userStats = new ArrayList<>(users.size());
@@ -324,6 +329,9 @@ public class GameCenter {
         }
         return userStats;
     }
+
+
+
 /*
     public void setDefaultLeague(String admin, int league) throws NoPermissionException {
         if(!usersDb.getHighestBalance().getUsername().equalsIgnoreCase(admin))

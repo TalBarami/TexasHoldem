@@ -243,10 +243,10 @@ public class User extends Observable {
     }
 
     public double getAvgNetoProfit(){
-        return getTotalNetoProfit()/getNumOfGamesPlayed();
+        return getNumOfGamesPlayed() != 0 ? getTotalNetoProfit()/getNumOfGamesPlayed() : 0;
     }
 
     public double getAvgGrossProfit(){
-        return getTotalGrossProfit()/getNumOfGamesPlayed();
+        return getNumOfGamesPlayed() != 0 ? getTotalGrossProfit()/getNumOfGamesPlayed() : 0;
     }
 }
