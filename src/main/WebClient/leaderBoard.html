@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Leader Boards</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="icon" type="image/x-icon" href="./resources/pageIcon.jpg">
+    <link href="https://fonts.googleapis.com/css?family=Combo|Diplomata|Fredoka+One|Kavoon|Londrina+Outline|Luckiest+Guy|Permanent+Marker" rel="stylesheet">
+</head>
+<body>
+    <div align="center">
+        <img src="resources/gamesPlayed.png" onclick="getTop20GamesPlayed()">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <img src="resources/totalGrossProfit.png" onclick="getTop20GrossProfit()">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <img src="resources/highestCashGain.png" onclick="getTop20CashGain()">
+        <div id="leaderBoardData" align="center"></div><br>
+        <button onclick="window.location='statistics.html'" class="myButton">Back</button><br><br>
+        <button onclick="logOut()" class="myButton">Click Here To Logout</button><br>
+    </div>
+
+    <script src="script/poker.js"></script>
+</body>
+</html>

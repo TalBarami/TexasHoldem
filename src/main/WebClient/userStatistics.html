@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Statistics</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="icon" type="image/x-icon" href="./resources/pageIcon.jpg">
+    <link href="https://fonts.googleapis.com/css?family=Combo|Diplomata|Fredoka+One|Kavoon|Londrina+Outline|Luckiest+Guy|Permanent+Marker" rel="stylesheet">
+</head>
+<body onload="initUserSelectionComboBox();">
+    <div align="center">
+        <select id="userPicker">
+            <!-- This method is nice because it doesn't require extra div tags, but it also doesn't retain the style across all browsers. -->
+            <option>Select A Player</option>
+        </select>
+        <br><br>
+        <img src="resources/avgCashGain.png" onclick="getUserAvgCashGain()">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <img src="resources/avgGrossProfit.png" onclick="getUserAvgGrossProfit()">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <div id="userStatisticsData" align="center"></div><br>
+        <button onclick="window.location='statistics.html'" class="myButton">Back</button><br><br>
+        <button onclick="logOut()" class="myButton">Click Here To Logout</button><br>
+    </div>
+    <script src="script/poker.js"></script>
+</body>
+</html>
