@@ -147,15 +147,11 @@ public class Game {
     }
 
     public void handleWhisperFromPlayer(WhisperEvent whisperEvent) {
-        //TODO :: send the message
+        NotificationService.getInstance().sendWhisperNotification(whisperEvent);
     }
 
     public void handleWhisperFromSpectator(Spectator spectator, WhisperEvent whisperEvent) throws ArgumentNotInBoundsException{
         handleWhisperFromSpectator(spectator, whisperEvent.getContent(), whisperEvent.getParticipantToSendTo());
-    }
-
-    public void handleWhisperFromSpectator(Spectator spectator, Message whisper, Spectator spcToSendTo) {
-            //TODO :: send the message
     }
 
     //should not be called because @param spcToSendTo - is suppose to be from type Spectator
