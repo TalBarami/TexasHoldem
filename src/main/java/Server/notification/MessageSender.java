@@ -1,6 +1,8 @@
 package Server.notification;
 
-import NotificationMessages.Notification;
+import NotificationMessages.MessageNotification;
+import NotificationMessages.PlayMoveNotification;
+import NotificationMessages.UserProfileUpdateNotification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
@@ -11,7 +13,7 @@ import org.springframework.stereotype.Service;
 /**
  * Created by rotemwald on 31/05/17.
  */
-@Service
+@Service("MessageSender")
 public class MessageSender {
     private SimpMessageSendingOperations messagingTemplate;
     private WebAgentSessionRegistry webAgentSessionRegistry;
@@ -29,8 +31,27 @@ public class MessageSender {
         return headerAccessor.getMessageHeaders();
     }
 
-    public void sendNotification(Notification notification) {
+    public void sendPlayMoveNotification(PlayMoveNotification notification) {
         String sessionId = webAgentSessionRegistry.map.get(notification.getRecipientUserName());
-        messagingTemplate.convertAndSendToUser(sessionId, "/queue", notification, createHeaders(sessionId));
+
+        if (sessionId != null) {
+            messagingTemplate.convertAndSendToUser(sessionId, "/queue/move", notification, createHeaders(sessionId));
+        }
+    }
+
+    public void sendMessageNotification(MessageNotification notification) {
+        String sessionId = webAgentSessionRegistry.map.get(notification.getRecipientUserName());
+
+        if (sessionId != null) {
+            messagingTemplate.convertAndSendToUser(sessionId, "/queue/message", notification, createHeaders(sessionId));
+        }
+    }
+
+    public void sendUserProfileUpdateNotification(UserProfileUpdateNotification notification) {
+        String sessionId = webAgentSessionRegistry.map.get(notification.getRecipientUserName());
+
+        if (sessionId != null) {
+            messagingTemplate.convertAndSendToUser(sessionId, "/queue/profile", notification, createHeaders(sessionId));
+        }
     }
 }

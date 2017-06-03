@@ -3,13 +3,16 @@ package Server.domain.user;
 import Exceptions.ArgumentNotInBoundsException;
 import Server.domain.game.Game;
 import Server.domain.game.participants.Participant;
+import Server.notification.NotificationService;
 
 import java.awt.image.BufferedImage;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Observable;
+import java.util.Observer;
 
-public class User {
+public class User extends Observable {
 
     private String username;
     private String password;
@@ -41,6 +44,14 @@ public class User {
         this.totalNetoProfit = 0;
         this.totalGrossProfit = 0;
         this.highestCashGain = 0;
+
+        User thisUser = this;
+        addObserver(new Observer() {
+            @Override
+            public void update(Observable o, Object arg) {
+                NotificationService.getInstance().sendUserProfileUpdateNotification(thisUser);
+            }
+        });
     }
 
     public void deposit(int amount, boolean selfDeposit) throws ArgumentNotInBoundsException {
@@ -54,6 +65,9 @@ public class User {
             totalGrossProfit += amount;
             updateHighestCashGain(amount);
         }
+
+        setChanged();
+        notifyObservers();
     }
 
     public int withdraw(int amount, boolean selfWithraw) throws ArgumentNotInBoundsException {
@@ -69,6 +83,10 @@ public class User {
             amountEarnedInLeague -= amountToReduce;
             totalNetoProfit -= amountToReduce;
         }
+
+        setChanged();
+        notifyObservers();
+
         return amountToReduce;
     }
 
@@ -166,6 +184,11 @@ public class User {
     }
 
     public void setAmountEarnedInLeague(int amountEarnedInLeague) {
+        /*
+        setChanged();
+        notifyObservers();
+        */
+
         this.amountEarnedInLeague = amountEarnedInLeague;
     }
 
@@ -174,6 +197,11 @@ public class User {
     }
 
     public void setCurrLeague(int currLeague) {
+        /*
+        setChanged();
+        notifyObservers();
+        */
+
         this.currLeague = currLeague;
     }
 
@@ -186,6 +214,11 @@ public class User {
     }
 
     public int getNumOfGamesPlayed() {
+        /*
+        setChanged();
+        notifyObservers();
+        */
+
         return numOfGamesPlayed;
     }
 

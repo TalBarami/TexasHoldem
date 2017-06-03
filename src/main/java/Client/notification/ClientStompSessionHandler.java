@@ -1,6 +1,10 @@
 package Client.notification;
 
-import MutualJsonObjects.ResponseMessage;
+import Client.domain.SessionManager;
+import NotificationMessages.MessageNotification;
+import NotificationMessages.PlayMoveNotification;
+import NotificationMessages.UserProfileUpdateNotification;
+
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
@@ -18,15 +22,39 @@ public class ClientStompSessionHandler extends StompSessionHandlerAdapter {
 
     @Override
     public void afterConnected(StompSession session, StompHeaders connectedHeaders) {
-        session.subscribe("/user/queue", new StompFrameHandler() {
+        session.subscribe("/user/queue/move", new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders stompHeaders) {
-                return ResponseMessage.class;
+                return PlayMoveNotification.class;
             }
 
             @Override
             public void handleFrame(StompHeaders stompHeaders, Object o) {
-                System.err.println(((ResponseMessage<Object>)o).getMessage());
+                // TODO :: Call callback
+            }
+        });
+
+        session.subscribe("/user/queue/message", new StompFrameHandler() {
+            @Override
+            public Type getPayloadType(StompHeaders stompHeaders) {
+                return MessageNotification.class;
+            }
+
+            @Override
+            public void handleFrame(StompHeaders stompHeaders, Object o) {
+                // TODO :: Call callback
+            }
+        });
+
+        session.subscribe("/user/queue/profile", new StompFrameHandler() {
+            @Override
+            public Type getPayloadType(StompHeaders stompHeaders) {
+                return UserProfileUpdateNotification.class;
+            }
+
+            @Override
+            public void handleFrame(StompHeaders stompHeaders, Object o) {
+                SessionManager.getInstance().updateUserDetails(((UserProfileUpdateNotification)o).getClientUserProfile());
             }
         });
     }
