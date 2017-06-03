@@ -1,5 +1,9 @@
 package Client.domain;
 
+import Client.domain.callbacks.ChatUpdateCallback;
+import Client.domain.callbacks.GameUpdateCallback;
+import Client.domain.callbacks.MoveUpdateCallback;
+import Enumerations.Move;
 import MutualJsonObjects.*;
 
 import Exceptions.EntityDoesNotExistsException;
@@ -7,6 +11,7 @@ import Exceptions.GameException;
 import Exceptions.InvalidArgumentException;
 
 import Client.communication.GameRequestHandler;
+import NotificationMessages.MessageNotification;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +24,7 @@ public class GameManager {
     private GameRequestHandler gameRequestHandler;
 
     private List<GameUpdateCallback> gameUpdateCallbacks;
+    private List<MoveUpdateCallback> moveUpdateCallbacks;
     private List<ChatUpdateCallback> chatUpdateCallbacks;
 
     public GameManager(String gameName) throws EntityDoesNotExistsException, InvalidArgumentException {
@@ -26,6 +32,7 @@ public class GameManager {
         gameRequestHandler = new GameRequestHandler();
 
         gameUpdateCallbacks = new ArrayList<>();
+        moveUpdateCallbacks = new ArrayList<>();
         chatUpdateCallbacks = new ArrayList<>();
     }
 
@@ -85,23 +92,23 @@ public class GameManager {
         gameUpdateCallbacks.parallelStream().forEach(c -> c.execute(gameDetails));
     }
 
-    public interface GameUpdateCallback {
-        void execute(ClientGameDetails details);
-    }
-
     public void addGameUpdateCallback(GameUpdateCallback callback){
         gameUpdateCallbacks.add(callback);
     }
 
-    public void updateChat(){
-        chatUpdateCallbacks.parallelStream().forEach(c -> c.execute());
-    }
-
-    public interface ChatUpdateCallback{
-        void execute();
+    public void updateChat(MessageNotification message){
+        chatUpdateCallbacks.parallelStream().forEach(c -> c.execute(message.getSenderUserName() + ": " + message.getMessageContent()));
     }
 
     public void addChatUpdateCallback(ChatUpdateCallback callback){
         chatUpdateCallbacks.add(callback);
+    }
+
+    public void updateGameMoves(List<Move> possibleMoves){
+        moveUpdateCallbacks.parallelStream().forEach(c -> c.execute(possibleMoves));
+    }
+
+    public void addMoveUpdateCallback(MoveUpdateCallback callback){
+        moveUpdateCallbacks.add(callback);
     }
 }

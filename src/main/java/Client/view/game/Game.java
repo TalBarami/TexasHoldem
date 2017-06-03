@@ -1,6 +1,7 @@
 package Client.view.game;
 
 import Client.domain.SessionManager;
+import Enumerations.Move;
 import Exceptions.EntityDoesNotExistsException;
 import Exceptions.GameException;
 import Exceptions.InvalidArgumentException;
@@ -79,6 +80,8 @@ public class Game extends JFrame{
         SessionManager.getInstance().addUpdateCallback(this::generateUserInformation);
 
         gameManager.addGameUpdateCallback(this::updateTable);
+        gameManager.addMoveUpdateCallback(this::updateGameMoves);
+        gameManager.addChatUpdateCallback(this::updateChatWindow);
 
         raiseAmountSpinner.setModel(new SpinnerNumberModel(10, 1, Integer.MAX_VALUE, 1));
         JFormattedTextField txt = ((JSpinner.NumberEditor) raiseAmountSpinner.getEditor()).getTextField();
@@ -125,13 +128,20 @@ public class Game extends JFrame{
     }
 
     private void updateChatWindow(String message){
-        // FIXME: Upon receiving chat message, add it to the TextArea
         chatTextField.setText(chatTextField.getText() + message + "\n");
+    }
+
+    private void updateGameMoves(List<Move> possibleMoves){
+        foldButton.setEnabled(possibleMoves.contains(Move.FOLD));
+        callButton.setEnabled(possibleMoves.contains(Move.CALL));
+        raiseButton.setEnabled(possibleMoves.contains(Move.RAISE));
+        checkButton.setEnabled(possibleMoves.contains(Move.CHECK));
     }
 
     private void onSend(){
         try{
             gameManager.sendMessage(chatTextField.getText());
+            chatTextField.setText("");
         } catch (GameException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -140,6 +150,7 @@ public class Game extends JFrame{
     private void onFold(){
         try{
             gameManager.playFold();
+            disableGameActions();
         } catch (GameException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -148,6 +159,7 @@ public class Game extends JFrame{
     private void onCall(){
         try {
             gameManager.playCall();
+            disableGameActions();
         } catch (GameException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -156,6 +168,7 @@ public class Game extends JFrame{
     private void onRaise(){
         try{
             gameManager.playRaise(raiseAmountSpinner.getValue().toString());
+            disableGameActions();
         } catch (GameException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -164,6 +177,7 @@ public class Game extends JFrame{
     private void onCheck(){
         try {
             gameManager.playCheck();
+            disableGameActions();
         } catch (GameException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -177,5 +191,12 @@ public class Game extends JFrame{
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
         dispose();
+    }
+
+    public void disableGameActions(){
+        foldButton.setEnabled(false);
+        callButton.setEnabled(false);
+        raiseButton.setEnabled(false);
+        checkButton.setEnabled(false);
     }
 }

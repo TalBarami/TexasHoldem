@@ -88,7 +88,7 @@ public class CreateGame extends JDialog {
             menuManager.createGame(nameTextField.getText(), (GamePolicy)policyComboBox.getSelectedItem(), (int)raiseLimitSpinner.getValue(), (int)minBetSpinner.getValue(),
                     (int)buyInPolicySpinner.getValue(), (int)chipPolicySpinner.getValue(), (int)minSpinner.getValue(), (int)maxSpinner.getValue(), allowSpectatingCheckBox.isSelected());
             Game game = new Game(ancestor, nameTextField.getText());
-            ancestor.add(game);
+            ancestor.addGame(game);
             dispose();
             game.init();
         } catch (InvalidArgumentException | EntityDoesNotExistsException | ArgumentNotInBoundsException | NoBalanceForBuyInException e) {
