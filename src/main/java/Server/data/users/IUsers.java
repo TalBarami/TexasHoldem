@@ -20,4 +20,5 @@ public interface IUsers {
     void deleteUser(User user) throws EntityDoesNotExistsException;
     List<User> getAllUsersInList();
     List<User> getUsersByLeague(int leagueNum);
+    List<String> getAllUserNames();
 }
