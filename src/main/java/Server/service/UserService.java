@@ -9,6 +9,8 @@ import Server.domain.user.User;
 
 import java.awt.image.BufferedImage;
 import java.time.LocalDate;
+import java.util.Collections;
+import java.util.List;
 
 import static Server.service.TexasHoldemService.verifyObjects;
 import static Server.service.TexasHoldemService.verifyPositiveNumbers;
@@ -64,5 +66,11 @@ public class UserService {
     public User getUser(String username) throws InvalidArgumentException, EntityDoesNotExistsException {
         verifyStrings(username);
         return gameCenter.getUser(username);
+    }
+
+    public List<String> getAllUserNames(){
+        List<String> users = gameCenter.getAllUserNames();
+        Collections.sort(users);
+        return users;
     }
 }

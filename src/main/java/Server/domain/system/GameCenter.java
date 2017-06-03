@@ -59,6 +59,10 @@ public class GameCenter {
         return getSpecificUserIfExist(username);
     }
 
+    public List<String> getAllUserNames(){
+        return usersDb.getAllUserNames();
+    }
+
     public void login(String userName,String pass) throws LoginException, EntityDoesNotExistsException {
         User user=usersDb.verifyCredentials(userName,pass);
         if(loggedInUsers.contains(user)){
