@@ -3,7 +3,7 @@ package Server.communication;
 import Exceptions.EntityDoesNotExistsException;
 import Exceptions.InvalidArgumentException;
 import Exceptions.LoginException;
-import MutualJsonObjects.ClientUserDetails;
+import MutualJsonObjects.ClientUserLoginDetails;
 import MutualJsonObjects.ResponseMessage;
 import Server.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class SessionController {
     }
 
     @RequestMapping(method=POST, value="/session")
-    public ResponseMessage loginUser(@RequestBody ClientUserDetails loginDetails) throws LoginException, EntityDoesNotExistsException, InvalidArgumentException {
+    public ResponseMessage loginUser(@RequestBody ClientUserLoginDetails loginDetails) throws LoginException, EntityDoesNotExistsException, InvalidArgumentException {
         String userName = loginDetails.getUsername();
         String password = loginDetails.getPassword();
 
@@ -36,7 +36,7 @@ public class SessionController {
     }
 
     @RequestMapping(method=DELETE, value="/session")
-    public ResponseMessage logoutUser(@RequestBody ClientUserDetails logoutDetails) throws InvalidArgumentException {
+    public ResponseMessage logoutUser(@RequestBody ClientUserLoginDetails logoutDetails) throws InvalidArgumentException {
         String userName = logoutDetails.getUsername();
         String password = logoutDetails.getPassword();
 

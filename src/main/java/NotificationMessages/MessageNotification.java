@@ -13,6 +13,9 @@ public class MessageNotification extends Notification {
         this.messageContent = messageContent;
     }
 
+    public MessageNotification() {
+    }
+
     public String getSenderUserName() {
         return senderUserName;
     }

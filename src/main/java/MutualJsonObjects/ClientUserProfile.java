@@ -10,6 +10,7 @@ public class ClientUserProfile {
     private int dayOfBirth;
     private int monthOfBirth;
     private int yearOfBirth;
+
     private int balance;
     private int currLeague;
     private int numOfGamesPlayed;

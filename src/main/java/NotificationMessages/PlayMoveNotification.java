@@ -15,6 +15,9 @@ public class PlayMoveNotification extends Notification {
         this.moveList = moveList;
     }
 
+    public PlayMoveNotification() {
+    }
+
     public List<Move> getMoveList() {
         return moveList;
     }
