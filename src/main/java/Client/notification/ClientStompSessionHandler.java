@@ -2,7 +2,6 @@ package Client.notification;
 
 import Client.domain.SessionManager;
 import NotificationMessages.MessageNotification;
-import NotificationMessages.Notification;
 import NotificationMessages.PlayMoveNotification;
 import NotificationMessages.UserProfileUpdateNotification;
 
@@ -23,24 +22,39 @@ public class ClientStompSessionHandler extends StompSessionHandlerAdapter {
 
     @Override
     public void afterConnected(StompSession session, StompHeaders connectedHeaders) {
-        session.subscribe("/user/queue", new StompFrameHandler() {
+        session.subscribe("/user/queue/move", new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders stompHeaders) {
-                return Notification.class;
+                return PlayMoveNotification.class;
             }
 
             @Override
             public void handleFrame(StompHeaders stompHeaders, Object o) {
-                System.err.println("received");
-                Notification notification = (Notification)o;
+                // TODO :: Call callback
+            }
+        });
 
-                if (notification instanceof UserProfileUpdateNotification) {
-                    SessionManager.getInstance().updateUserDetails(((UserProfileUpdateNotification)o).getClientUserProfile());
-                } else if (notification instanceof MessageNotification) {
-                    // Call callback which handles MessageNotification
-                } else if (notification instanceof PlayMoveNotification) {
-                    // Call callback which handles PlayMoveNotification
-                }
+        session.subscribe("/user/queue/message", new StompFrameHandler() {
+            @Override
+            public Type getPayloadType(StompHeaders stompHeaders) {
+                return MessageNotification.class;
+            }
+
+            @Override
+            public void handleFrame(StompHeaders stompHeaders, Object o) {
+                // TODO :: Call callback
+            }
+        });
+
+        session.subscribe("/user/queue/profile", new StompFrameHandler() {
+            @Override
+            public Type getPayloadType(StompHeaders stompHeaders) {
+                return UserProfileUpdateNotification.class;
+            }
+
+            @Override
+            public void handleFrame(StompHeaders stompHeaders, Object o) {
+                SessionManager.getInstance().updateUserDetails(((UserProfileUpdateNotification)o).getClientUserProfile());
             }
         });
     }

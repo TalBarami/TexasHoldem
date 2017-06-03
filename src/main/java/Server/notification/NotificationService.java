@@ -3,7 +3,6 @@ package Server.notification;
 import Enumerations.Move;
 import MutualJsonObjects.ClientUserProfile;
 import NotificationMessages.MessageNotification;
-import NotificationMessages.Notification;
 import NotificationMessages.PlayMoveNotification;
 import NotificationMessages.UserProfileUpdateNotification;
 import Server.SpringApplicationContext;
@@ -36,7 +35,7 @@ public class NotificationService {
         return INSTANCE;
     }
 
-    public void sendPlayTurnNotification(Player player, List<GameActions> turnActions) {
+    public void sendPlayMoveNotification(Player player, List<GameActions> turnActions) {
         String userName = player.getUser().getUsername();
         List<Move> moveList = new LinkedList<>();
 
@@ -58,8 +57,8 @@ public class NotificationService {
             }
         }
 
-        Notification turnNotification = new PlayMoveNotification(userName, moveList);
-        messageSender.sendNotification(turnNotification);
+        PlayMoveNotification moveNotification = new PlayMoveNotification(userName, moveList);
+        messageSender.sendPlayMoveNotification(moveNotification);
     }
 
     public void sendMessageNotification(Participant participant, MessageEvent event) {
@@ -67,8 +66,8 @@ public class NotificationService {
         String senderUserName = event.getEventInitiator().getUser().getUsername();
         String messageContent = event.getContent().getContent();
 
-        Notification msgNotification = new MessageNotification(userName, senderUserName, messageContent);
-        messageSender.sendNotification(msgNotification);
+        MessageNotification msgNotification = new MessageNotification(userName, senderUserName, messageContent);
+        messageSender.sendMessageNotification(msgNotification);
     }
 
     public void sendWhisperNotification(WhisperEvent event) {
@@ -76,8 +75,8 @@ public class NotificationService {
         String senderUserName = event.getEventInitiator().getUser().getUsername();
         String msgContent = event.getContent().getContent();
 
-        Notification msgNotification = new MessageNotification(recipientUserName, senderUserName, msgContent);
-        messageSender.sendNotification(msgNotification);
+        MessageNotification msgNotification = new MessageNotification(recipientUserName, senderUserName, msgContent);
+        messageSender.sendMessageNotification(msgNotification);
     }
 
     public void sendUserProfileUpdateNotification(User user) {
@@ -93,8 +92,8 @@ public class NotificationService {
         int amountEarnedInLeague = user.getAmountEarnedInLeague();
 
         ClientUserProfile profile = new ClientUserProfile(username, password, email, dayOfBirth, monthOfBirth, yearOfBirth, balance, currLeague, numOfGamesPlayed, amountEarnedInLeague);
-        Notification profileNotification = new UserProfileUpdateNotification(username, profile);
+        UserProfileUpdateNotification profileNotification = new UserProfileUpdateNotification(username, profile);
 
-        messageSender.sendNotification(profileNotification);
+        messageSender.sendUserProfileUpdateNotification(profileNotification);
     }
 }

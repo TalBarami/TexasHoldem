@@ -65,7 +65,7 @@ public class Round {
         paySmallAndBigBlind();
 
         // Call communication layer to send currentPlayer a message which requests him to play
-        NotificationService.getInstance().sendPlayTurnNotification(currentPlayer, calculateTurnOptions());
+        NotificationService.getInstance().sendPlayMoveNotification(currentPlayer, calculateTurnOptions());
     }
 
     public void notifyPlayerExited(Player player) {
@@ -159,7 +159,7 @@ public class Round {
                 endFlow();
             } else {
                 // Call communication layer to send currentPlayer a message which requests him to play
-                NotificationService.getInstance().sendPlayTurnNotification(currentPlayer, calculateTurnOptions());            }
+                NotificationService.getInstance().sendPlayMoveNotification(currentPlayer, calculateTurnOptions());            }
         }
     }
 
@@ -225,7 +225,7 @@ public class Round {
         currentPlayer = activePlayers.get(newCurrentPlayerIndex);
 
         // Call communication layer to send currentPlayer a message which requests him to play
-        NotificationService.getInstance().sendPlayTurnNotification(currentPlayer, calculateTurnOptions());
+        NotificationService.getInstance().sendPlayMoveNotification(currentPlayer, calculateTurnOptions());
     }
 
     private void endFlopOrTurnFlow() {

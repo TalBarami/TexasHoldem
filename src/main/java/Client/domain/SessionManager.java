@@ -11,6 +11,8 @@ import Exceptions.LoginException;
 import Client.communication.SessionRequestHandler;
 import Client.communication.UserRequestHandler;
 import Server.common.SystemUtils;
+import org.springframework.messaging.simp.stomp.StompSession;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -24,12 +26,14 @@ public class SessionManager {
     private ClientUserProfile user;
     private SessionRequestHandler sessionRequestHandler;
     private UserRequestHandler userRequestHandler;
+    private StompSession stompSession;
 
     private List<UserUpdateCallback> updateCallbacks;
 
     private SessionManager(){
         sessionRequestHandler = new SessionRequestHandler();
         userRequestHandler = new UserRequestHandler();
+        stompSession = null;
 
         updateCallbacks = new ArrayList<>();
     }
@@ -80,9 +84,8 @@ public class SessionManager {
 
         user = userRequestHandler.requestUserProfileEntity(username);
 
-        // Subscribe to queue
         try {
-            new SubscriptionManager().subscribe(user.getUsername());
+            stompSession = new SubscriptionManager().subscribe(user.getUsername());
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -94,6 +97,12 @@ public class SessionManager {
         ClientUserLoginDetails details = new ClientUserLoginDetails(username, "");
         sessionRequestHandler.requestUserLogout(details);
         user = null;
+
+        if (stompSession != null && stompSession.isConnected()) {
+            stompSession.disconnect();
+        }
+
+        stompSession = null;
     }
 
     public ClientUserProfile user(){

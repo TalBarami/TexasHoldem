@@ -13,6 +13,9 @@ public class UserProfileUpdateNotification extends Notification {
         this.clientUserProfile = clientUserProfile;
     }
 
+    public UserProfileUpdateNotification() {
+    }
+
     public ClientUserProfile getClientUserProfile() {
         return clientUserProfile;
     }
