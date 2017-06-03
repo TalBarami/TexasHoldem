@@ -14,7 +14,6 @@ import java.awt.event.*;
 
 public class CreateGame extends JDialog {
     private MainMenu ancestor;
-    private MainMenu.AddGameCallback addGameCallback;
 
     private JPanel contentPane;
     private JButton buttonOK;
@@ -33,9 +32,8 @@ public class CreateGame extends JDialog {
     private JCheckBox tournamentCheckBox;
     private JCheckBox allowSpectatingCheckBox;
 
-    public CreateGame(MainMenu ancestor, MainMenu.AddGameCallback addGameCallback) {
+    public CreateGame(MainMenu ancestor) {
         this.ancestor = ancestor;
-        this.addGameCallback = addGameCallback;
 
         setContentPane(contentPane);
         setTitle("Create game");
@@ -90,8 +88,9 @@ public class CreateGame extends JDialog {
             menuManager.createGame(nameTextField.getText(), (GamePolicy)policyComboBox.getSelectedItem(), (int)raiseLimitSpinner.getValue(), (int)minBetSpinner.getValue(),
                     (int)buyInPolicySpinner.getValue(), (int)chipPolicySpinner.getValue(), (int)minSpinner.getValue(), (int)maxSpinner.getValue(), allowSpectatingCheckBox.isSelected());
             Game game = new Game(ancestor, nameTextField.getText());
-            addGameCallback.add(game);
+            ancestor.add(game);
             dispose();
+            game.init();
         } catch (InvalidArgumentException | EntityDoesNotExistsException | ArgumentNotInBoundsException | NoBalanceForBuyInException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }

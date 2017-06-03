@@ -14,6 +14,7 @@ import Client.view.ClientUtils;
 import Client.view.system.MainMenu;
 
 import javax.swing.*;
+import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
@@ -45,6 +46,7 @@ public class Game extends JFrame{
     private JLabel cashLabel;
     private JLabel potLabel;
     private JLabel cardsLabel;
+    private JSpinner raiseAmountSpinner;
 
     private List<JPanel> seats = Arrays.asList(bottomPanel, leftPanel, topPanel, rightPanel);
 
@@ -52,8 +54,7 @@ public class Game extends JFrame{
         this.ancestor = ancestor;
         gameManager = new GameManager(gameName);
 
-        init();
-
+        initializeSeats();
         assignActionListeners();
         generateUserInformation(SessionManager.getInstance().user());
         updateTable(gameManager.getGameDetails());
@@ -67,39 +68,11 @@ public class Game extends JFrame{
         getRootPane().setDefaultButton(sendButton);
     }
 
-
-    private void updatePlayersInformation(List<ClientPlayer> players) throws NullPointerException {
-        seats.forEach(Container::removeAll);
-
-        for(int i=0; i<players.size(); i++){
-            ClientPlayer player = players.get(i);
-            JPanel container = new JPanel();
-            JLabel name = new JLabel(player.getPlayerName());
-            JLabel chipAmount = new JLabel(String.valueOf(player.getChipAmount()));
-            container.add(name);
-            container.add(chipAmount);
-            if(player.getPlayerName().equals(SessionManager.getInstance().user().getUsername())){
-                JLabel cards = new JLabel(player.getPlayerCards().toString());
-                container.add(cards);
-            }
-            seats.get(i%4).add(container);
-            // FIXME: Mark "current player" (and maybe "client player"?)
-        }
-    }
-
-    private void updateTable(ClientGameDetails gameDetails){
-        updatePlayersInformation(gameDetails.getPlayerList());
-
-        // FIXME: Add pot & cards.
-    }
-
-    private void updateChatWindow(){
-        // FIXME: Upon receiving chat message, add it to the TextArea
-    }
-
-    private void generateUserInformation(ClientUserProfile user){
-        usernameLabel.setText(user.getUsername());
-        cashLabel.setText(String.valueOf(user.getBalance()));
+    private void initializeSeats(){
+        bottomPanel.setLayout(new GridLayout(1, 0));
+        leftPanel.setLayout(new GridLayout(0, 1));
+        topPanel.setLayout(new GridLayout(1, 0));
+        rightPanel.setLayout(new GridLayout(0, 1));
     }
 
     private void assignActionListeners(){
@@ -107,6 +80,9 @@ public class Game extends JFrame{
 
         gameManager.addGameUpdateCallback(this::updateTable);
 
+        raiseAmountSpinner.setModel(new SpinnerNumberModel(10, 1, Integer.MAX_VALUE, 1));
+        JFormattedTextField txt = ((JSpinner.NumberEditor) raiseAmountSpinner.getEditor()).getTextField();
+        ((NumberFormatter) txt.getFormatter()).setAllowsInvalid(false);
 
         foldButton.addActionListener(e -> onFold());
         callButton.addActionListener(e -> onCall());
@@ -124,6 +100,33 @@ public class Game extends JFrame{
         });
 
         contentPane.registerKeyboardAction(e -> onExit(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
+    }
+
+    private void generateUserInformation(ClientUserProfile user){
+        usernameLabel.setText(user.getUsername());
+        cashLabel.setText(String.valueOf(user.getBalance()));
+    }
+
+    private void updatePlayersInformation(List<ClientPlayer> players) throws NullPointerException {
+        seats.forEach(Container::removeAll);
+
+        for (int i = 0; i < players.size(); i++) {
+            ClientPlayer player = players.get(i);
+            JPanel playerComponent = new Player(player).getContainer();
+            seats.get(i % 4).add(playerComponent);
+            // FIXME: Mark "current player" (and maybe "client player"?)
+        }
+    }
+
+    private void updateTable(ClientGameDetails gameDetails){
+        updatePlayersInformation(gameDetails.getPlayerList());
+
+        // FIXME: Add pot & cards.
+    }
+
+    private void updateChatWindow(String message){
+        // FIXME: Upon receiving chat message, add it to the TextArea
+        chatTextField.setText(chatTextField.getText() + message + "\n");
     }
 
     private void onSend(){
@@ -152,7 +155,7 @@ public class Game extends JFrame{
 
     private void onRaise(){
         try{
-            gameManager.playRaise("FIXME!");
+            gameManager.playRaise(raiseAmountSpinner.getValue().toString());
         } catch (GameException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -168,6 +171,7 @@ public class Game extends JFrame{
 
     public void onExit() {
         try {
+            ancestor.removeGame(this);
             MenuManager.getInstance().leaveGame(SessionManager.getInstance().user().getUsername(), gameManager.getGameDetails().getName());
         } catch (GameException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
