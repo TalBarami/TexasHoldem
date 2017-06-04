@@ -11,9 +11,8 @@ import Exceptions.GameException;
 import Exceptions.InvalidArgumentException;
 
 import Client.communication.GameRequestHandler;
-import NotificationMessages.MessageNotification;
+import NotificationMessages.ChatNotification;
 import NotificationMessages.RoundUpdateNotification;
-import Server.domain.game.Round;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -106,7 +105,7 @@ public class GameManager {
         gameUpdateCallbacks.add(callback);
     }
 
-    public void updateChat(MessageNotification message){
+    public void updateChat(ChatNotification message){
         chatUpdateCallbacks.parallelStream().forEach(c -> c.execute(message));
     }
 

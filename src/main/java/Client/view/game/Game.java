@@ -14,7 +14,7 @@ import Client.domain.GameManager;
 import Client.domain.MenuManager;
 import Client.view.ClientUtils;
 import Client.view.system.MainMenu;
-import NotificationMessages.MessageNotification;
+import NotificationMessages.ChatNotification;
 import NotificationMessages.RoundUpdateNotification;
 
 import javax.swing.*;
@@ -143,8 +143,8 @@ public class Game extends JFrame{
         // FIXME: Add pot & cards.
     }
 
-    private void updateChatWindow(MessageNotification messageNotification){
-        chatPanel.setText(chatPanel.getText() + messageNotification.getSenderUserName() + ": " + messageNotification.getMessageContent() + "\n");
+    private void updateChatWindow(ChatNotification ChatNotification){
+        chatPanel.setText(chatPanel.getText() + ChatNotification.getSenderUserName() + ": " + ChatNotification.getMessageContent() + "\n");
     }
 
     private void updateGameMoves(List<Move> possibleMoves){

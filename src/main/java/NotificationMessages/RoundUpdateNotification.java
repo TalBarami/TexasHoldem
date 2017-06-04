@@ -8,14 +8,14 @@ import java.util.List;
 /**
  * Created by user on 03/06/2017.
  */
-public class RoundUpdateNotification extends Notification {
+public class RoundUpdateNotification extends GameNotification {
     private int currentPotSize;
     private String currentPlayerName;
     private List<ClientPlayer> currentPlayers;
     private List<ClientCard> currentOpenedCards;
 
-    public RoundUpdateNotification(String recipientUserName, int currentPotSize, String currentPlayerName, List<ClientPlayer> currentPlayers, List<ClientCard> currentOpenedCards) {
-        super(recipientUserName);
+    public RoundUpdateNotification(String recipientUserName, String gameName, int currentPotSize, String currentPlayerName, List<ClientPlayer> currentPlayers, List<ClientCard> currentOpenedCards) {
+        super(recipientUserName, gameName);
         this.currentPotSize = currentPotSize;
         this.currentPlayerName = currentPlayerName;
         this.currentPlayers = currentPlayers;
