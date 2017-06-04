@@ -1,15 +1,22 @@
 package Server.notification;
 
 import Enumerations.Move;
+import MutualJsonObjects.ClientCard;
+import MutualJsonObjects.ClientPlayer;
 import MutualJsonObjects.ClientUserProfile;
 import NotificationMessages.ChatNotification;
 import NotificationMessages.PlayMoveNotification;
+import NotificationMessages.RoundUpdateNotification;
 import NotificationMessages.UserProfileUpdateNotification;
 import Server.SpringApplicationContext;
+import Server.communication.converters.CardClientCardConverter;
+import Server.communication.converters.PlayerClientPlayerConverter;
 import Server.domain.events.chatEvents.MessageEvent;
 import Server.domain.events.chatEvents.WhisperEvent;
 import Server.domain.game.Game;
 import Server.domain.game.GameActions;
+import Server.domain.game.Round;
+import Server.domain.game.card.Card;
 import Server.domain.game.participants.Participant;
 import Server.domain.game.participants.Player;
 import Server.domain.user.User;
@@ -98,5 +105,22 @@ public class NotificationService {
         UserProfileUpdateNotification profileNotification = new UserProfileUpdateNotification(username, profile);
 
         messageSender.sendUserProfileUpdateNotification(profileNotification);
+    }
+
+    public void sendRoundUpdateNotification(Round round) {
+        int currentPotSize = round.getPotAmount();
+        String currentPlayerName = round.getCurrentPlayer().getUser().getUsername();
+
+        List<ClientPlayer> currentPlayers = new LinkedList<>();
+        for (Player p : round.getActivePlayers()) {
+            currentPlayers.add(PlayerClientPlayerConverter.convert(p));
+        }
+
+        List<ClientCard> currentOpenedCards = new LinkedList<>();
+        for (Card c : round.getOpenedCards()) {
+            currentOpenedCards.add(CardClientCardConverter.convert(c));
+        }
+
+        // TODO :: Send notification to all members in round
     }
 }

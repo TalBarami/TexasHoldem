@@ -2,6 +2,7 @@ package Server.notification;
 
 import NotificationMessages.ChatNotification;
 import NotificationMessages.PlayMoveNotification;
+import NotificationMessages.RoundUpdateNotification;
 import NotificationMessages.UserProfileUpdateNotification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.MessageHeaders;
@@ -52,6 +53,14 @@ public class MessageSender {
 
         if (sessionId != null) {
             messagingTemplate.convertAndSendToUser(sessionId, "/queue/profile", notification, createHeaders(sessionId));
+        }
+    }
+
+    public void sendRoundUpdateNotification(RoundUpdateNotification notification) {
+        String sessionId = webAgentSessionRegistry.map.get(notification.getRecipientUserName());
+
+        if (sessionId != null) {
+            messagingTemplate.convertAndSendToUser(sessionId, "/queue/round", notification, createHeaders(sessionId));
         }
     }
 }

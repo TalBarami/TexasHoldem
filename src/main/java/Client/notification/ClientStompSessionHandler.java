@@ -6,6 +6,7 @@ import Client.domain.callbacks.MoveUpdateCallback;
 import Client.domain.callbacks.UserUpdateCallback;
 import NotificationMessages.ChatNotification;
 import NotificationMessages.PlayMoveNotification;
+import NotificationMessages.RoundUpdateNotification;
 import NotificationMessages.UserProfileUpdateNotification;
 
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
@@ -73,6 +74,18 @@ public class ClientStompSessionHandler extends StompSessionHandlerAdapter {
             @Override
             public void handleFrame(StompHeaders stompHeaders, Object o) {
                 userUpdateCallback.execute(((UserProfileUpdateNotification)o).getClientUserProfile());
+            }
+        });
+
+        session.subscribe("/user/queue/round", new StompFrameHandler() {
+            @Override
+            public Type getPayloadType(StompHeaders stompHeaders) {
+                return RoundUpdateNotification.class;
+            }
+
+            @Override
+            public void handleFrame(StompHeaders stompHeaders, Object o) {
+                // TODO :: Add RoundUpdateNotification callback
             }
         });
     }

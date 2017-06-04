@@ -18,6 +18,7 @@ public class PlayerClientPlayerConverter {
 
         clientPlayer.setPlayerName(player.getUser().getUsername());
         clientPlayer.setChipAmount(player.getChipsAmount());
+        clientPlayer.setLastBetSinceCardOpen(player.getLastBetSinceCardOpen());
 
         for (Card c : player.getCards()) {
             clientCards.add(CardClientCardConverter.convert(c));
