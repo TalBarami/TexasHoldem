@@ -11,8 +11,8 @@ public class WhisperEvent extends SystemEvent {
     Message content;
     Participant participantToSendTo;
 
-    public WhisperEvent(Participant eventInitiator, Message content, Participant participantToSendTo) {
-        super(eventInitiator);
+    public WhisperEvent(Participant eventInitiator, Message content, Participant participantToSendTo, String gameName) {
+        super(eventInitiator, gameName);
         this.content = content;
         this.participantToSendTo = participantToSendTo;
     }

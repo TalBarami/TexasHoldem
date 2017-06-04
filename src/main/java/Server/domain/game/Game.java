@@ -260,7 +260,7 @@ public class Game {
     }
 
     public void addGameEvent(Participant initiator, GameActions eventAction){
-        this.gameEvents.add(new GameEvent(initiator,eventAction));
+        this.gameEvents.add(new GameEvent(initiator,eventAction, this.getName()));
     }
 
     public List<GameEvent> getGameEvents(){

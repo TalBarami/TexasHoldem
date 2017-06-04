@@ -10,12 +10,16 @@ import Server.domain.game.participants.Participant;
 public class MessageEvent extends SystemEvent {
     Message content;
 
-    public MessageEvent(Participant eventInitiator, Message content) {
-        super(eventInitiator);
+    public MessageEvent(Participant eventInitiator, Message content, String gameName) {
+        super(eventInitiator, gameName);
         this.content = content;
     }
 
     public Message getContent() {
         return content;
+    }
+
+    public void setContent(Message content) {
+        this.content = content;
     }
 }

@@ -1,6 +1,10 @@
 package Client.notification;
 
 import Client.domain.SessionManager;
+import Client.domain.callbacks.ChatUpdateCallback;
+import Client.domain.callbacks.GameUpdateCallback;
+import Client.domain.callbacks.MoveUpdateCallback;
+import Client.domain.callbacks.UserUpdateCallback;
 import NotificationMessages.MessageNotification;
 import NotificationMessages.PlayMoveNotification;
 import NotificationMessages.UserProfileUpdateNotification;
@@ -11,13 +15,24 @@ import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by rotemwald on 31/05/17.
  */
 public class ClientStompSessionHandler extends StompSessionHandlerAdapter {
+    private Map<String, GameUpdateCallback> gameUpdateCallbackMap;
+    private Map<String, ChatUpdateCallback> chatUpdateCallbackMap;
+    private Map<String, MoveUpdateCallback> moveUpdateCallbackMap;
+    private UserUpdateCallback userUpdateCallback;
+
     public ClientStompSessionHandler() {
         super();
+
+        gameUpdateCallbackMap = new HashMap<>();
+        chatUpdateCallbackMap = new HashMap<>();
+        moveUpdateCallbackMap = new HashMap<>();
     }
 
     @Override
@@ -42,7 +57,9 @@ public class ClientStompSessionHandler extends StompSessionHandlerAdapter {
 
             @Override
             public void handleFrame(StompHeaders stompHeaders, Object o) {
-                // TODO :: Call callback
+                MessageNotification notification = (MessageNotification)o;
+                String gameName = notification.getGameName();
+                chatUpdateCallbackMap.get(gameName).execute(notification);
             }
         });
 
@@ -54,8 +71,24 @@ public class ClientStompSessionHandler extends StompSessionHandlerAdapter {
 
             @Override
             public void handleFrame(StompHeaders stompHeaders, Object o) {
-                SessionManager.getInstance().updateUserDetails(((UserProfileUpdateNotification)o).getClientUserProfile());
+                userUpdateCallback.execute(((UserProfileUpdateNotification)o).getClientUserProfile());
             }
         });
+    }
+
+    public void addGameUpdateCallBack(String gameName, GameUpdateCallback callback) {
+        gameUpdateCallbackMap.put(gameName, callback);
+    }
+
+    public void addChatUpdateCallback(String gameName, ChatUpdateCallback callback) {
+        chatUpdateCallbackMap.put(gameName, callback);
+    }
+
+    public void addMoveUpdateCallback(String gameName, MoveUpdateCallback callback) {
+        moveUpdateCallbackMap.put(gameName, callback);
+    }
+
+    public void setUserUpdateCallback(UserUpdateCallback userUpdateCallback) {
+        this.userUpdateCallback = userUpdateCallback;
     }
 }

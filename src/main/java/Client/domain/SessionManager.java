@@ -85,8 +85,7 @@ public class SessionManager {
         sessionRequestHandler.requestUserLogin(details);
 
         user = userRequestHandler.requestUserProfileEntity(username);
-
-        stompSession = new SubscriptionManager().subscribe(user.getUsername());
+        stompSession = SubscriptionManager.subscribe(user.getUsername());
     }
 
     public void logout(String username) throws InvalidArgumentException {
@@ -97,7 +96,6 @@ public class SessionManager {
         if (stompSession != null && stompSession.isConnected()) {
             stompSession.disconnect();
         }
-
         stompSession = null;
     }
 

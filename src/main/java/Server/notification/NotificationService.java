@@ -65,8 +65,9 @@ public class NotificationService {
         String userName = participant.getUser().getUsername();
         String senderUserName = event.getEventInitiator().getUser().getUsername();
         String messageContent = event.getContent().getContent();
+        String gameName = event.getGameName();
 
-        MessageNotification msgNotification = new MessageNotification(userName, senderUserName, messageContent);
+        MessageNotification msgNotification = new MessageNotification(userName, senderUserName, messageContent, gameName, false);
         messageSender.sendMessageNotification(msgNotification);
     }
 
@@ -74,8 +75,9 @@ public class NotificationService {
         String recipientUserName = event.getParticipantToSendTo().getUser().getUsername();
         String senderUserName = event.getEventInitiator().getUser().getUsername();
         String msgContent = event.getContent().getContent();
+        String gameName = event.getGameName();
 
-        MessageNotification msgNotification = new MessageNotification(recipientUserName, senderUserName, msgContent);
+        MessageNotification msgNotification = new MessageNotification(recipientUserName, senderUserName, msgContent, gameName, true);
         messageSender.sendMessageNotification(msgNotification);
     }
 

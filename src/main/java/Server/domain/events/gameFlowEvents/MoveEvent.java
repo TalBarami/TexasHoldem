@@ -9,8 +9,8 @@ import Server.domain.game.participants.Player;
 public class MoveEvent extends GameEvent {
     private int amountToRaise;
 
-    public MoveEvent(Player eventInitiator, GameActions eventAction, int amountToRaise) {
-        super(eventInitiator,eventAction);
+    public MoveEvent(Player eventInitiator, GameActions eventAction, int amountToRaise, String gameName) {
+        super(eventInitiator,eventAction,gameName);
         this.amountToRaise = amountToRaise; // Should  be zero if unless eventAction is of type RAISE
     }
 

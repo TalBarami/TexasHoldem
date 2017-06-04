@@ -21,7 +21,7 @@ import java.util.concurrent.ExecutionException;
  * Created by rotemwald on 31/05/17.
  */
 public class SubscriptionManager {
-    public StompSession subscribe(String userName) throws ExecutionException, InterruptedException {
+    public static StompSession subscribe(String userName) throws ExecutionException, InterruptedException {
         WebSocketClient simpleWebSocketClient = new StandardWebSocketClient();
         List<Transport> transports = new ArrayList<>(1);
         transports.add(new WebSocketTransport(simpleWebSocketClient));

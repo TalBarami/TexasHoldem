@@ -9,14 +9,24 @@ import org.joda.time.DateTime;
 public class SystemEvent {
     private DateTime eventTime;
     private Participant eventInitiator;
+    private String gameName;
 
-    public SystemEvent(Participant eventInitiator) {
+    public SystemEvent(Participant eventInitiator, String gameName) {
         this.eventTime = DateTime.now();
         this.eventInitiator = eventInitiator;
+        this.gameName = gameName;
     }
 
     public DateTime getEventTime() {
         return eventTime;
     }
     public Participant getEventInitiator(){return eventInitiator;}
+
+    public String getGameName() {
+        return gameName;
+    }
+
+    public void setGameName(String gameName) {
+        this.gameName = gameName;
+    }
 }

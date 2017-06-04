@@ -184,11 +184,6 @@ public class User extends Observable {
     }
 
     public void setAmountEarnedInLeague(int amountEarnedInLeague) {
-        /*
-        setChanged();
-        notifyObservers();
-        */
-
         this.amountEarnedInLeague = amountEarnedInLeague;
     }
 
@@ -197,11 +192,6 @@ public class User extends Observable {
     }
 
     public void setCurrLeague(int currLeague) {
-        /*
-        setChanged();
-        notifyObservers();
-        */
-
         this.currLeague = currLeague;
     }
 
@@ -214,11 +204,6 @@ public class User extends Observable {
     }
 
     public int getNumOfGamesPlayed() {
-        /*
-        setChanged();
-        notifyObservers();
-        */
-
         return numOfGamesPlayed;
     }
 

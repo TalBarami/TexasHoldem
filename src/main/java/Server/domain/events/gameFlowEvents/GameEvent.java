@@ -10,8 +10,8 @@ import Server.domain.game.participants.Participant;
 public class GameEvent extends SystemEvent {
     private GameActions eventAction;
 
-    public GameEvent(Participant eventInitiator, GameActions action) {
-        super(eventInitiator);
+    public GameEvent(Participant eventInitiator, GameActions action, String gameName) {
+        super(eventInitiator, gameName);
         this.eventAction = action;
     }
 

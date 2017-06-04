@@ -81,9 +81,9 @@ public class RoundTest {
         Game game1 = new Game(settings1, user1, new LeagueManager());
         Round round1 = new Round(playerList1, settings1, 0);
 
-        MoveEvent me1 = new MoveEvent(player1, GameActions.FOLD, 0);
-        MoveEvent me2 = new MoveEvent(player2, GameActions.FOLD, 0);
-        MoveEvent me4 = new MoveEvent(player4, GameActions.FOLD, 0);
+        MoveEvent me1 = new MoveEvent(player1, GameActions.FOLD, 0, game1.getName());
+        MoveEvent me2 = new MoveEvent(player2, GameActions.FOLD, 0, game1.getName());
+        MoveEvent me4 = new MoveEvent(player4, GameActions.FOLD, 0, game1.getName());
 
         round1.setRoundActive(true);
         round1.setCurrentState(RoundState.PREFLOP);
@@ -126,10 +126,10 @@ public class RoundTest {
         Game game1 = new Game(settings1, user1, new LeagueManager());
         Round round1 = new Round(playerList1, settings1, 0);
 
-        MoveEvent me1 = new MoveEvent(player1, GameActions.CHECK, 0);
-        MoveEvent me2 = new MoveEvent(player2, GameActions.CHECK, 0);
-        MoveEvent me3 = new MoveEvent(player3, GameActions.CHECK, 0);
-        MoveEvent me4 = new MoveEvent(player4, GameActions.CHECK, 0);
+        MoveEvent me1 = new MoveEvent(player1, GameActions.CHECK, 0, game1.getName());
+        MoveEvent me2 = new MoveEvent(player2, GameActions.CHECK, 0, game1.getName());
+        MoveEvent me3 = new MoveEvent(player3, GameActions.CHECK, 0, game1.getName());
+        MoveEvent me4 = new MoveEvent(player4, GameActions.CHECK, 0, game1.getName());
 
         round1.setRoundActive(true);
         round1.setCurrentState(RoundState.PREFLOP);
@@ -177,12 +177,12 @@ public class RoundTest {
         round1.setCurrentState(RoundState.TURN);
 
         // Player 4 is the first player
-        MoveEvent me4 = new MoveEvent(player4, GameActions.CALL, 0);
-        MoveEvent me1 = new MoveEvent(player1, GameActions.FOLD, 0);
-        MoveEvent me2 = new MoveEvent(player2, GameActions.CALL, 0);
-        MoveEvent me3 = new MoveEvent(player3, GameActions.RAISE, 20);
-        MoveEvent me41 = new MoveEvent(player4, GameActions.CALL, 0);
-        MoveEvent me21 = new MoveEvent(player2, GameActions.FOLD, 0);
+        MoveEvent me4 = new MoveEvent(player4, GameActions.CALL, 0, game1.getName());
+        MoveEvent me1 = new MoveEvent(player1, GameActions.FOLD, 0, game1.getName());
+        MoveEvent me2 = new MoveEvent(player2, GameActions.CALL, 0, game1.getName());
+        MoveEvent me3 = new MoveEvent(player3, GameActions.RAISE, 20, game1.getName());
+        MoveEvent me41 = new MoveEvent(player4, GameActions.CALL, 0, game1.getName());
+        MoveEvent me21 = new MoveEvent(player2, GameActions.FOLD, 0, game1.getName());
 
         when(player1.getUser()).thenReturn(user1);
         when(player2.getUser()).thenReturn(user2);
