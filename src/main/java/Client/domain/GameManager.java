@@ -12,6 +12,8 @@ import Exceptions.InvalidArgumentException;
 
 import Client.communication.GameRequestHandler;
 import NotificationMessages.MessageNotification;
+import NotificationMessages.RoundUpdateNotification;
+import Server.domain.game.Round;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +23,7 @@ import java.util.List;
  */
 public class GameManager {
     private ClientGameDetails gameDetails;
+
     private GameRequestHandler gameRequestHandler;
 
     private List<GameUpdateCallback> gameUpdateCallbacks;
@@ -91,9 +94,12 @@ public class GameManager {
         gameRequestHandler.requestGameEventSend(request);
     }
 
-    public void updateGameDetails(ClientGameDetails gameDetails){
-        this.gameDetails = gameDetails;
-        gameUpdateCallbacks.parallelStream().forEach(c -> c.execute(gameDetails));
+    public void sentPrivateMessage(String message, String playerName) throws GameException{
+        // FIXME: Add.
+    }
+
+    public void updateGameDetails(RoundUpdateNotification roundUpdate){
+        gameUpdateCallbacks.parallelStream().forEach(c -> c.execute(roundUpdate));
     }
 
     public void addGameUpdateCallback(GameUpdateCallback callback){
