@@ -34,6 +34,10 @@ public class GameManager {
         gameUpdateCallbacks = new ArrayList<>();
         moveUpdateCallbacks = new ArrayList<>();
         chatUpdateCallbacks = new ArrayList<>();
+
+        SessionManager.getInstance().getSessionHandler().addGameUpdateCallBack(gameName, this::updateGameDetails);
+        SessionManager.getInstance().getSessionHandler().addChatUpdateCallback(gameName, this::updateChat);
+        SessionManager.getInstance().getSessionHandler().addMoveUpdateCallback(gameName, this::updateGameMoves);
     }
 
     public ClientGameDetails getGameDetails(){
@@ -97,7 +101,7 @@ public class GameManager {
     }
 
     public void updateChat(MessageNotification message){
-        chatUpdateCallbacks.parallelStream().forEach(c -> c.execute(message.getSenderUserName() + ": " + message.getMessageContent()));
+        chatUpdateCallbacks.parallelStream().forEach(c -> c.execute(message));
     }
 
     public void addChatUpdateCallback(ChatUpdateCallback callback){

@@ -1,6 +1,7 @@
 package Client.view.game;
 
 import Client.domain.SessionManager;
+import Client.domain.callbacks.ChatUpdateCallback;
 import Enumerations.Move;
 import Exceptions.EntityDoesNotExistsException;
 import Exceptions.GameException;
@@ -13,6 +14,7 @@ import Client.domain.GameManager;
 import Client.domain.MenuManager;
 import Client.view.ClientUtils;
 import Client.view.system.MainMenu;
+import NotificationMessages.MessageNotification;
 
 import javax.swing.*;
 import javax.swing.text.NumberFormatter;
@@ -127,8 +129,8 @@ public class Game extends JFrame{
         // FIXME: Add pot & cards.
     }
 
-    private void updateChatWindow(String message){
-        chatTextField.setText(chatTextField.getText() + message + "\n");
+    private void updateChatWindow(MessageNotification messageNotification){
+        chatPanel.setText(chatPanel.getText() + messageNotification.getSenderUserName() + ": " + messageNotification.getMessageContent() + "\n");
     }
 
     private void updateGameMoves(List<Move> possibleMoves){

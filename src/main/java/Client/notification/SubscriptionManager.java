@@ -21,6 +21,8 @@ import java.util.concurrent.ExecutionException;
  * Created by rotemwald on 31/05/17.
  */
 public class SubscriptionManager {
+    private static ClientStompSessionHandler stompSessionHandler;
+
     public static StompSession subscribe(String userName) throws ExecutionException, InterruptedException {
         WebSocketClient simpleWebSocketClient = new StandardWebSocketClient();
         List<Transport> transports = new ArrayList<>(1);
@@ -31,14 +33,17 @@ public class SubscriptionManager {
         stompClient.setMessageConverter(new MappingJackson2MessageConverter());
 
         String url = "ws://localhost:8080/subscribe";
-        StompSessionHandler sessionHandler = new ClientStompSessionHandler();
 
         WebSocketHttpHeaders webSocketHttpHeaders = new WebSocketHttpHeaders();
         StompHeaders stompHeaders = new StompHeaders();
         stompHeaders.add("Login", userName);
 
-        StompSession session = stompClient.connect(url, webSocketHttpHeaders, stompHeaders, sessionHandler).get();
+        stompSessionHandler = new ClientStompSessionHandler();
 
-        return session;
+        return stompClient.connect(url, webSocketHttpHeaders, stompHeaders, stompSessionHandler).get();
+    }
+
+    public static ClientStompSessionHandler getStompSessionHandler(){
+        return stompSessionHandler;
     }
 }

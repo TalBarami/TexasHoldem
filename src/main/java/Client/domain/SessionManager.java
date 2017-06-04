@@ -19,16 +19,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-/**
- * Created by User on 14/05/2017.
- */
 public class SessionManager {
     private static SessionManager instance;
+
+    private StompSession stompSession;
 
     private ClientUserProfile user;
     private SessionRequestHandler sessionRequestHandler;
     private UserRequestHandler userRequestHandler;
-    private StompSession stompSession;
 
     private List<UserUpdateCallback> updateCallbacks;
 
@@ -86,6 +84,7 @@ public class SessionManager {
 
         user = userRequestHandler.requestUserProfileEntity(username);
         stompSession = SubscriptionManager.subscribe(user.getUsername());
+        SubscriptionManager.getStompSessionHandler().setUserUpdateCallback(this::updateUserDetails);
     }
 
     public void logout(String username) throws InvalidArgumentException {
@@ -115,5 +114,9 @@ public class SessionManager {
 
     public void addUpdateCallback(UserUpdateCallback callback){
         updateCallbacks.add(callback);
+    }
+
+    public ClientStompSessionHandler getSessionHandler(){
+        return SubscriptionManager.getStompSessionHandler();
     }
 }
