@@ -1,6 +1,7 @@
 package Client.view.game;
 
 import Client.domain.SessionManager;
+import Client.domain.callbacks.ChatUpdateCallback;
 import Enumerations.Move;
 import Exceptions.EntityDoesNotExistsException;
 import Exceptions.GameException;
@@ -13,14 +14,13 @@ import Client.domain.GameManager;
 import Client.domain.MenuManager;
 import Client.view.ClientUtils;
 import Client.view.system.MainMenu;
-import NotificationMessages.ChatNotification;
+import NotificationMessages.MessageNotification;
+import NotificationMessages.RoundUpdateNotification;
 
 import javax.swing.*;
 import javax.swing.text.NumberFormatter;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.util.Arrays;
 import java.util.List;
 
@@ -49,6 +49,8 @@ public class Game extends JFrame{
     private JLabel potLabel;
     private JLabel cardsLabel;
     private JSpinner raiseAmountSpinner;
+    private JScrollPane chatScrollPane;
+    private JComboBox<String> chatComboBox;
 
     private List<JPanel> seats = Arrays.asList(bottomPanel, leftPanel, topPanel, rightPanel);
 
@@ -58,9 +60,14 @@ public class Game extends JFrame{
 
         initializeSeats();
         assignActionListeners();
-        generateUserInformation(SessionManager.getInstance().user());
-        updateTable(gameManager.getGameDetails());
+        initializeGame(gameManager.getGameDetails());
+    }
 
+    public void initializeGame(ClientGameDetails gameDetails){
+        generateUserInformation(SessionManager.getInstance().user());
+        updatePlayersInformation(gameDetails.getPlayerList());
+        potLabel.setText("0");
+        cardsLabel.setText("");
     }
 
     public void init(){
@@ -88,6 +95,8 @@ public class Game extends JFrame{
         JFormattedTextField txt = ((JSpinner.NumberEditor) raiseAmountSpinner.getEditor()).getTextField();
         ((NumberFormatter) txt.getFormatter()).setAllowsInvalid(false);
 
+        chatScrollPane.getVerticalScrollBar().addAdjustmentListener(e -> e.getAdjustable().setValue(e.getAdjustable().getMaximum()));
+
         foldButton.addActionListener(e -> onFold());
         callButton.addActionListener(e -> onCall());
         raiseButton.addActionListener(e -> onRaise());
@@ -113,6 +122,7 @@ public class Game extends JFrame{
 
     private void updatePlayersInformation(List<ClientPlayer> players) throws NullPointerException {
         seats.forEach(Container::removeAll);
+        chatComboBox.removeAllItems();
 
         for (int i = 0; i < players.size(); i++) {
             ClientPlayer player = players.get(i);
@@ -120,16 +130,21 @@ public class Game extends JFrame{
             seats.get(i % 4).add(playerComponent);
             // FIXME: Mark "current player" (and maybe "client player"?)
         }
+
+        chatComboBox.addItem("All");
+        for(ClientPlayer player : players){
+            chatComboBox.addItem(player.getPlayerName());
+        }
     }
 
-    private void updateTable(ClientGameDetails gameDetails){
-        updatePlayersInformation(gameDetails.getPlayerList());
+    private void updateTable(RoundUpdateNotification roundUpdateNotification){
+        updatePlayersInformation(roundUpdateNotification.getCurrentPlayers());
 
         // FIXME: Add pot & cards.
     }
 
-    private void updateChatWindow(ChatNotification chatNotification){
-        chatPanel.setText(chatPanel.getText() + chatNotification.getSenderUserName() + ": " + chatNotification.getMessageContent() + "\n");
+    private void updateChatWindow(MessageNotification messageNotification){
+        chatPanel.setText(chatPanel.getText() + messageNotification.getSenderUserName() + ": " + messageNotification.getMessageContent() + "\n");
     }
 
     private void updateGameMoves(List<Move> possibleMoves){
@@ -141,7 +156,11 @@ public class Game extends JFrame{
 
     private void onSend(){
         try{
-            gameManager.sendMessage(chatTextField.getText());
+            if(chatComboBox.getSelectedItem().equals("All")) {
+                gameManager.sendMessage(chatTextField.getText());
+            } else{
+                gameManager.sentPrivateMessage(chatTextField.getText(), (String)chatComboBox.getSelectedItem());
+            }
             chatTextField.setText("");
         } catch (GameException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

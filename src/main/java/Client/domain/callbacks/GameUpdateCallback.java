@@ -1,10 +1,10 @@
 package Client.domain.callbacks;
 
-import MutualJsonObjects.ClientGameDetails;
+import NotificationMessages.RoundUpdateNotification;
 
 /**
  * Created by User on 03/06/2017.
  */
 public interface GameUpdateCallback {
-    void execute(ClientGameDetails details);
+    void execute(RoundUpdateNotification roundUpdateNotification);
 }
