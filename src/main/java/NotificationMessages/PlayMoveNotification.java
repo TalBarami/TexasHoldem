@@ -7,11 +7,11 @@ import java.util.List;
 /**
  * Created by rotemwald on 02/06/17.
  */
-public class PlayMoveNotification extends Notification {
+public class PlayMoveNotification extends GameNotification {
     private List<Move> moveList;
 
-    public PlayMoveNotification(String recipientUserName, List<Move> moveList) {
-        super(recipientUserName);
+    public PlayMoveNotification(String gameName, String recipientUserName, List<Move> moveList) {
+        super(recipientUserName, gameName);
         this.moveList = moveList;
     }
 

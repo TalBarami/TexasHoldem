@@ -3,21 +3,19 @@ package NotificationMessages;
 /**
  * Created by rotemwald on 02/06/17.
  */
-public class MessageNotification extends Notification {
+public class ChatNotification extends GameNotification {
     private String senderUserName;
     private String messageContent;
-    private String gameName;
     private boolean isPrivate;
 
-    public MessageNotification(String recipientUserName, String senderUserName, String messageContent, String gameName, boolean isPrivate) {
-        super(recipientUserName);
+    public ChatNotification(String recipientUserName, String senderUserName, String messageContent, String gameName, boolean isPrivate) {
+        super(recipientUserName, gameName);
         this.senderUserName = senderUserName;
         this.messageContent = messageContent;
-        this.gameName = gameName;
         this.isPrivate = isPrivate;
     }
 
-    public MessageNotification() {
+    public ChatNotification() {
     }
 
     public String getSenderUserName() {
@@ -34,14 +32,6 @@ public class MessageNotification extends Notification {
 
     public void setMessageContent(String messageContent) {
         this.messageContent = messageContent;
-    }
-
-    public String getGameName() {
-        return gameName;
-    }
-
-    public void setGameName(String gameName) {
-        this.gameName = gameName;
     }
 
     public boolean isPrivate() {

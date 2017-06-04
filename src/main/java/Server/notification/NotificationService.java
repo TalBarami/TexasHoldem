@@ -2,12 +2,13 @@ package Server.notification;
 
 import Enumerations.Move;
 import MutualJsonObjects.ClientUserProfile;
-import NotificationMessages.MessageNotification;
+import NotificationMessages.ChatNotification;
 import NotificationMessages.PlayMoveNotification;
 import NotificationMessages.UserProfileUpdateNotification;
 import Server.SpringApplicationContext;
 import Server.domain.events.chatEvents.MessageEvent;
 import Server.domain.events.chatEvents.WhisperEvent;
+import Server.domain.game.Game;
 import Server.domain.game.GameActions;
 import Server.domain.game.participants.Participant;
 import Server.domain.game.participants.Player;
@@ -35,7 +36,7 @@ public class NotificationService {
         return INSTANCE;
     }
 
-    public void sendPlayMoveNotification(Player player, List<GameActions> turnActions) {
+    public void sendPlayMoveNotification(String gameName, Player player, List<GameActions> turnActions) {
         String userName = player.getUser().getUsername();
         List<Move> moveList = new LinkedList<>();
 
@@ -57,7 +58,7 @@ public class NotificationService {
             }
         }
 
-        PlayMoveNotification moveNotification = new PlayMoveNotification(userName, moveList);
+        PlayMoveNotification moveNotification = new PlayMoveNotification(gameName, userName, moveList);
         messageSender.sendPlayMoveNotification(moveNotification);
     }
 
@@ -67,7 +68,7 @@ public class NotificationService {
         String messageContent = event.getContent().getContent();
         String gameName = event.getGameName();
 
-        MessageNotification msgNotification = new MessageNotification(userName, senderUserName, messageContent, gameName, false);
+        ChatNotification msgNotification = new ChatNotification(userName, senderUserName, messageContent, gameName, false);
         messageSender.sendMessageNotification(msgNotification);
     }
 
@@ -77,7 +78,7 @@ public class NotificationService {
         String msgContent = event.getContent().getContent();
         String gameName = event.getGameName();
 
-        MessageNotification msgNotification = new MessageNotification(recipientUserName, senderUserName, msgContent, gameName, true);
+        ChatNotification msgNotification = new ChatNotification(recipientUserName, senderUserName, msgContent, gameName, true);
         messageSender.sendMessageNotification(msgNotification);
     }
 

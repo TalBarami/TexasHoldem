@@ -1,11 +1,10 @@
 package Client.notification;
 
-import Client.domain.SessionManager;
 import Client.domain.callbacks.ChatUpdateCallback;
 import Client.domain.callbacks.GameUpdateCallback;
 import Client.domain.callbacks.MoveUpdateCallback;
 import Client.domain.callbacks.UserUpdateCallback;
-import NotificationMessages.MessageNotification;
+import NotificationMessages.ChatNotification;
 import NotificationMessages.PlayMoveNotification;
 import NotificationMessages.UserProfileUpdateNotification;
 
@@ -45,19 +44,21 @@ public class ClientStompSessionHandler extends StompSessionHandlerAdapter {
 
             @Override
             public void handleFrame(StompHeaders stompHeaders, Object o) {
-                // TODO :: Call callback
+                PlayMoveNotification notification = (PlayMoveNotification)o;
+                String gameName = notification.getGameName();
+                moveUpdateCallbackMap.get(gameName).execute(notification.getMoveList());
             }
         });
 
         session.subscribe("/user/queue/message", new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders stompHeaders) {
-                return MessageNotification.class;
+                return ChatNotification.class;
             }
 
             @Override
             public void handleFrame(StompHeaders stompHeaders, Object o) {
-                MessageNotification notification = (MessageNotification)o;
+                ChatNotification notification = (ChatNotification)o;
                 String gameName = notification.getGameName();
                 chatUpdateCallbackMap.get(gameName).execute(notification);
             }

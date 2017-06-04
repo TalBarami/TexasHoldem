@@ -1,6 +1,6 @@
 package Server.notification;
 
-import NotificationMessages.MessageNotification;
+import NotificationMessages.ChatNotification;
 import NotificationMessages.PlayMoveNotification;
 import NotificationMessages.UserProfileUpdateNotification;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,7 @@ public class MessageSender {
         }
     }
 
-    public void sendMessageNotification(MessageNotification notification) {
+    public void sendMessageNotification(ChatNotification notification) {
         String sessionId = webAgentSessionRegistry.map.get(notification.getRecipientUserName());
 
         if (sessionId != null) {

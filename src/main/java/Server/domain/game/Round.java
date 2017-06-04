@@ -65,7 +65,7 @@ public class Round extends Observable {
         paySmallAndBigBlind();
 
         // Call communication layer to send currentPlayer a message which requests him to play
-        NotificationService.getInstance().sendPlayMoveNotification(currentPlayer, calculateTurnOptions());
+        NotificationService.getInstance().sendPlayMoveNotification(gameSettings.getName(), currentPlayer, calculateTurnOptions());
     }
 
     public void notifyPlayerExited(Player player) {
@@ -159,7 +159,7 @@ public class Round extends Observable {
                 endFlow();
             } else {
                 // Call communication layer to send currentPlayer a message which requests him to play
-                NotificationService.getInstance().sendPlayMoveNotification(currentPlayer, calculateTurnOptions());            }
+                NotificationService.getInstance().sendPlayMoveNotification(gameSettings.getName(), currentPlayer, calculateTurnOptions());            }
         }
     }
 
@@ -225,7 +225,7 @@ public class Round extends Observable {
         currentPlayer = activePlayers.get(newCurrentPlayerIndex);
 
         // Call communication layer to send currentPlayer a message which requests him to play
-        NotificationService.getInstance().sendPlayMoveNotification(currentPlayer, calculateTurnOptions());
+        NotificationService.getInstance().sendPlayMoveNotification(gameSettings.getName(), currentPlayer, calculateTurnOptions());
     }
 
     private void endFlopOrTurnFlow() {
