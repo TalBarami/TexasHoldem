@@ -20,7 +20,7 @@ import static Server.domain.game.GameActions.*;
 /**
  * Created by Hod and Rotem on 05/04/2017.
  */
-public class Round {
+public class Round extends Observable {
     private static Logger logger = LoggerFactory.getLogger(Round.class);
 
     private boolean isRoundActive;
