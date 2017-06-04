@@ -148,7 +148,7 @@ public class MainMenu extends JFrame {
     }
 
     private void onCreateGame(){
-        CreateGame createGame = new CreateGame(this, this::addGame);
+        CreateGame createGame = new CreateGame(this);
         createGame.pack();
         createGame.setLocationRelativeTo(null);
         createGame.setVisible(true);
@@ -159,8 +159,8 @@ public class MainMenu extends JFrame {
         String username = SessionManager.getInstance().user().getUsername();
         try {
             MenuManager.getInstance().joinGame(username, gameName);
-            AddGameCallback callback = game -> activeGames.add(game);
             Game game = new Game(this, gameName);
+            addGame(game);
         } catch (GameException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -269,11 +269,11 @@ public class MainMenu extends JFrame {
         dispose();
     }
 
-    public interface AddGameCallback {
-        void add(Game game);
-    }
-
     public void addGame(Game game){
         activeGames.add(game);
+    }
+
+    public void removeGame(Game game){
+        activeGames.remove(game);
     }
 }

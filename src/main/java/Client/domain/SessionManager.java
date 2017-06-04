@@ -1,5 +1,7 @@
 package Client.domain;
 
+import Client.domain.callbacks.UserUpdateCallback;
+import Client.notification.ClientStompSessionHandler;
 import Client.notification.SubscriptionManager;
 import MutualJsonObjects.ClientUserLoginDetails;
 import MutualJsonObjects.ClientUserProfile;
@@ -78,19 +80,13 @@ public class SessionManager {
         user = userRequestHandler.requestUserProfileEntity(user.getUsername());
     }
 
-    public void login(String username, String password) throws LoginException, EntityDoesNotExistsException, InvalidArgumentException {
+    public void login(String username, String password) throws LoginException, EntityDoesNotExistsException, InvalidArgumentException, ExecutionException, InterruptedException {
         ClientUserLoginDetails details = new ClientUserLoginDetails(username, password);
         sessionRequestHandler.requestUserLogin(details);
 
         user = userRequestHandler.requestUserProfileEntity(username);
 
-        try {
-            stompSession = new SubscriptionManager().subscribe(user.getUsername());
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        stompSession = new SubscriptionManager().subscribe(user.getUsername());
     }
 
     public void logout(String username) throws InvalidArgumentException {
@@ -116,13 +112,7 @@ public class SessionManager {
 
     public void updateUserDetails(ClientUserProfile profile){
         user = profile;
-        for(UserUpdateCallback callback : updateCallbacks){
-            callback.update(profile);
-        }
-    }
-
-    public interface UserUpdateCallback {
-        void update(ClientUserProfile profile);
+        updateCallbacks.parallelStream().forEach(c -> c.execute(profile));
     }
 
     public void addUpdateCallback(UserUpdateCallback callback){
