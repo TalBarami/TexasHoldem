@@ -45,12 +45,12 @@ public class GameService {
         gameCenter.createGame(creatorUsername, new GameSettings(gameName, policy, limit, minBet, buyInPolicy, chipPolicy, minPlayerAmount, maxPlayerAmount, specAccept));
     }
 
-    public void joinGame(String username, String gameName, boolean asSpectator) throws GameException {
+    public void joinGame(String username, String gameName) throws GameException {
         verifyStrings(username, gameName);
         gameCenter.joinGame(username, gameName, false);
     }
 
-    public void spectateGame(String username, String gameName, boolean asSpectator) throws GameException {
+    public void spectateGame(String username, String gameName) throws GameException {
         verifyStrings(username, gameName);
         gameCenter.joinGame(username, gameName, true);
     }
@@ -134,7 +134,7 @@ public class GameService {
         List<Participant> allParInGame = new ArrayList<>();
         allParInGame.addAll(game.getPlayers());
         allParInGame.addAll(game.getSpectators());
-        Participant parToSendTo = allParInGame.stream().filter(p -> p.getUser().equals(userNameToSend)).findFirst().get();
+        Participant parToSendTo = allParInGame.stream().filter(p -> p.getUser().getUsername().equals(userNameToSend)).findFirst().get();
 
         List<Player> allPlayersInGame = new ArrayList<>();
         allPlayersInGame.addAll(game.getPlayers());

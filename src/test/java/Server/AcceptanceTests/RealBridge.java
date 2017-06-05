@@ -123,7 +123,7 @@ public class RealBridge implements Bridge {
 
     public boolean joinexistinggame(String username, String gamename, boolean spec) {
         try {
-            service.gameService().joinGame(username, gamename,spec);
+            service.gameService().joinGame(username, gamename);
         }catch (GameIsFullException e){
             return false;
         }catch (  InvalidArgumentException e){
@@ -335,7 +335,7 @@ public class RealBridge implements Bridge {
 
    public boolean spectateactivegame(String username, String gamename, boolean spec) {
         try {
-            service.gameService().spectateGame(username, gamename,spec);
+            service.gameService().spectateGame(username, gamename);
         }catch (GameIsFullException | NoBalanceForBuyInException | LeaguesDontMatchException | InvalidArgumentException | CantSpeactateThisRoomException e){
             return false;
         } catch (GameException e) {

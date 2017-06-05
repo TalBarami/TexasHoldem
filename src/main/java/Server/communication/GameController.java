@@ -96,12 +96,12 @@ public class GameController {
 
         else if (actionToPerform == 4 && spectateOption == false)
         {
-            gameService.joinGame(userName,gameName,spectateOption);
+            gameService.joinGame(userName,gameName);
             return new ResponseMessage("Join game succeeded", null);
         }
 
         else if(actionToPerform == 4 && spectateOption == true){
-            gameService.spectateGame(userName,gameName,spectateOption);
+            gameService.spectateGame(userName,gameName);
             return new ResponseMessage("Spectate game succeeded", null);
         }
 
