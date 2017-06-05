@@ -68,7 +68,7 @@ public class GameManager {
         ClientGameRequest request = new ClientGameRequest();
         request.setGamename(gameDetails.getName());
         request.setUsername(SessionManager.getInstance().user().getUsername());
-        request.setAction(1);
+        request.setAction(2);
 
         gameRequestHandler.requestGameEventSend(request);
     }
@@ -78,7 +78,7 @@ public class GameManager {
         request.setGamename(gameDetails.getName());
         request.setUsername(SessionManager.getInstance().user().getUsername());
         request.setAction(Integer.parseInt(amount));
-        request.setAction(2);
+        request.setAction(1);
 
         gameRequestHandler.requestGameEventSend(request);
     }

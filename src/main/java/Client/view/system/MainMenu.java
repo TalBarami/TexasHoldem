@@ -161,6 +161,7 @@ public class MainMenu extends JFrame {
             MenuManager.getInstance().joinGame(username, gameName);
             Game game = new Game(this, gameName);
             addGame(game);
+            game.init();
         } catch (GameException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -173,6 +174,7 @@ public class MainMenu extends JFrame {
             MenuManager.getInstance().spectateGame(username, gameName);
             Game game = new Game(this, gameName);
             addGame(game);
+            game.init();
         } catch (GameException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -184,6 +186,7 @@ public class MainMenu extends JFrame {
             MenuManager.getInstance().replayGame(gameName);
             Game game = new Game(this, gameName);
             addGame(game);
+            game.init();
         } catch (GameException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -259,8 +262,8 @@ public class MainMenu extends JFrame {
 
     private void onExit(){
         try {
-            for(Game game : activeGames){
-                game.onExit();
+            for(int i=activeGames.size()-1; i>=0; i--){
+                activeGames.get(i).onExit();
             }
             SessionManager.getInstance().logout(SessionManager.getInstance().user().getUsername());
         } catch (InvalidArgumentException e) {

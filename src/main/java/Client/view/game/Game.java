@@ -226,10 +226,10 @@ public class Game extends JFrame{
         try {
             ancestor.removeGame(this);
             MenuManager.getInstance().leaveGame(SessionManager.getInstance().user().getUsername(), gameManager.getGameDetails().getName());
+            dispose();
         } catch (GameException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-        dispose();
     }
 
     private void disableGameActions(){
