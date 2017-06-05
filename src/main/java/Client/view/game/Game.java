@@ -58,16 +58,10 @@ public class Game extends JFrame{
         this.ancestor = ancestor;
         gameManager = new GameManager(gameName);
 
+        disableGameActions();
         initializeSeats();
         assignActionListeners();
         initializeGame(gameManager.getGameDetails());
-    }
-
-    public void initializeGame(ClientGameDetails gameDetails){
-        generateUserInformation(SessionManager.getInstance().user());
-        updatePlayersInformation(gameDetails.getPlayerList());
-        potLabel.setText("0");
-        cardsLabel.setText("");
     }
 
     public void init(){
@@ -75,6 +69,13 @@ public class Game extends JFrame{
         ClientUtils.frameInit(this, contentPane);
         setTitle(gameManager.getGameDetails().getName());
         getRootPane().setDefaultButton(sendButton);
+    }
+
+    private void initializeGame(ClientGameDetails gameDetails){
+        generateUserInformation(SessionManager.getInstance().user());
+        updatePlayersInformation(gameDetails.getPlayerList());
+        potLabel.setText("0");
+        cardsLabel.setText("");
     }
 
     private void initializeSeats(){
@@ -96,6 +97,8 @@ public class Game extends JFrame{
         ((NumberFormatter) txt.getFormatter()).setAllowsInvalid(false);
 
         chatScrollPane.getVerticalScrollBar().addAdjustmentListener(e -> e.getAdjustable().setValue(e.getAdjustable().getMaximum()));
+
+        startGameButton.addActionListener(e -> onStart());
 
         foldButton.addActionListener(e -> onFold());
         callButton.addActionListener(e -> onCall());
@@ -120,15 +123,18 @@ public class Game extends JFrame{
         cashLabel.setText(String.valueOf(user.getBalance()));
     }
 
-    private void updatePlayersInformation(List<ClientPlayer> players) throws NullPointerException {
+    private void updatePlayersInformation(List<ClientPlayer> players, String currentPlayerName){
         seats.forEach(Container::removeAll);
         chatComboBox.removeAllItems();
 
         for (int i = 0; i < players.size(); i++) {
-            ClientPlayer player = players.get(i);
-            JPanel playerComponent = new Player(player).getContainer();
+            ClientPlayer clientPlayer = players.get(i);
+            Player player = new Player(clientPlayer);
+            if(clientPlayer.getPlayerName().equals(currentPlayerName)){
+                player.mark();
+            }
+            JPanel playerComponent = player.getContainer();
             seats.get(i % 4).add(playerComponent);
-            // FIXME: Mark "current player" (and maybe "client player"?)
         }
 
         chatComboBox.addItem("All");
@@ -137,10 +143,15 @@ public class Game extends JFrame{
         }
     }
 
-    private void updateTable(RoundUpdateNotification roundUpdateNotification){
-        updatePlayersInformation(roundUpdateNotification.getCurrentPlayers());
+    private void updatePlayersInformation(List<ClientPlayer> players) {
+        updatePlayersInformation(players, null);
+    }
 
-        // FIXME: Add pot & cards.
+    private void updateTable(RoundUpdateNotification roundUpdateNotification){
+        updatePlayersInformation(roundUpdateNotification.getCurrentPlayers(), roundUpdateNotification.getCurrentPlayerName());
+
+        potLabel.setText(String.valueOf(roundUpdateNotification.getCurrentPotSize()));
+        cardsLabel.setText(roundUpdateNotification.getCurrentOpenedCards().toString());
     }
 
     private void updateChatWindow(ChatNotification ChatNotification){
@@ -152,6 +163,14 @@ public class Game extends JFrame{
         callButton.setEnabled(possibleMoves.contains(Move.CALL));
         raiseButton.setEnabled(possibleMoves.contains(Move.RAISE));
         checkButton.setEnabled(possibleMoves.contains(Move.CHECK));
+    }
+
+    private void onStart(){
+        try{
+            gameManager.startGame();
+        } catch (GameException e){
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void onSend(){
@@ -213,7 +232,7 @@ public class Game extends JFrame{
         dispose();
     }
 
-    public void disableGameActions(){
+    private void disableGameActions(){
         foldButton.setEnabled(false);
         callButton.setEnabled(false);
         raiseButton.setEnabled(false);

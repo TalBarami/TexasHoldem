@@ -46,6 +46,15 @@ public class GameManager {
         return gameDetails;
     }
 
+    public void startGame() throws GameException {
+        ClientGameRequest request = new ClientGameRequest();
+        request.setGamename(gameDetails.getName());
+        request.setUsername(SessionManager.getInstance().user().getUsername());
+        request.setAction(5);
+
+        gameRequestHandler.requestGameEventSend(request);
+    }
+
     public void playCheck() throws GameException {
         ClientGameRequest request = new ClientGameRequest();
         request.setGamename(gameDetails.getName());
@@ -97,7 +106,7 @@ public class GameManager {
         // FIXME: Add.
     }
 
-    public void updateGameDetails(RoundUpdateNotification roundUpdate){
+    private void updateGameDetails(RoundUpdateNotification roundUpdate){
         gameUpdateCallbacks.parallelStream().forEach(c -> c.execute(roundUpdate));
     }
 
@@ -105,7 +114,7 @@ public class GameManager {
         gameUpdateCallbacks.add(callback);
     }
 
-    public void updateChat(ChatNotification message){
+    private void updateChat(ChatNotification message){
         chatUpdateCallbacks.parallelStream().forEach(c -> c.execute(message));
     }
 
@@ -113,7 +122,7 @@ public class GameManager {
         chatUpdateCallbacks.add(callback);
     }
 
-    public void updateGameMoves(List<Move> possibleMoves){
+    private void updateGameMoves(List<Move> possibleMoves){
         moveUpdateCallbacks.parallelStream().forEach(c -> c.execute(possibleMoves));
     }
 

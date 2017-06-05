@@ -4,6 +4,7 @@ import Client.domain.SessionManager;
 import MutualJsonObjects.ClientPlayer;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.List;
 
 /**
@@ -31,6 +32,11 @@ public class Player {
             cardsLabel = new JLabel(player.getPlayerCards().toString());
             container.add(cardsLabel);
         }
+    }
+
+    public void mark(){
+        Font f = nameLabel.getFont();
+        nameLabel.setFont(f.deriveFont(Font.BOLD));
     }
 
     public JPanel getContainer(){
