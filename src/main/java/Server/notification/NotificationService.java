@@ -108,6 +108,7 @@ public class NotificationService {
     }
 
     public void sendRoundUpdateNotification(Round round) {
+        String gameName = round.getGameSettings().getName();
         int currentPotSize = round.getPotAmount();
         String currentPlayerName = round.getCurrentPlayer().getUser().getUsername();
 
@@ -121,6 +122,10 @@ public class NotificationService {
             currentOpenedCards.add(CardClientCardConverter.convert(c));
         }
 
-        // TODO :: Send notification to all members in round
+        for (Player p : round.getActivePlayers()) {
+            String userName = p.getUser().getUsername();
+            RoundUpdateNotification notification = new RoundUpdateNotification(userName, gameName, currentPotSize, currentPlayerName, currentPlayers, currentOpenedCards);
+            messageSender.sendRoundUpdateNotification(notification);
+        }
     }
 }

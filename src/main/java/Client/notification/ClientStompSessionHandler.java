@@ -85,7 +85,9 @@ public class ClientStompSessionHandler extends StompSessionHandlerAdapter {
 
             @Override
             public void handleFrame(StompHeaders stompHeaders, Object o) {
-                // TODO :: Add RoundUpdateNotification callback
+                RoundUpdateNotification notification = (RoundUpdateNotification)o;
+                String gameName = notification.getGameName();
+                gameUpdateCallbackMap.get(gameName).execute(notification);
             }
         });
     }

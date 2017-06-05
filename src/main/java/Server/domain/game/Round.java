@@ -20,7 +20,7 @@ import static Server.domain.game.GameActions.*;
 /**
  * Created by Hod and Rotem on 05/04/2017.
  */
-public class Round extends Observable {
+public class Round {
     private static Logger logger = LoggerFactory.getLogger(Round.class);
 
     private boolean isRoundActive;
@@ -157,9 +157,14 @@ public class Round extends Observable {
 
             if (isLastPlayerPlayed) {
                 endFlow();
+                // Send RoundUpdateNotification
+                NotificationService.getInstance().sendRoundUpdateNotification(this);
             } else {
+                // Send RoundUpdateNotification
+                NotificationService.getInstance().sendRoundUpdateNotification(this);
                 // Call communication layer to send currentPlayer a message which requests him to play
-                NotificationService.getInstance().sendPlayMoveNotification(gameSettings.getName(), currentPlayer, calculateTurnOptions());            }
+                NotificationService.getInstance().sendPlayMoveNotification(gameSettings.getName(), currentPlayer, calculateTurnOptions());
+            }
         }
     }
 
@@ -493,5 +498,9 @@ public class Round extends Observable {
         return getActivePlayers().stream()
                 .filter(player -> player.getUser().getUsername().equals(userName))
                 .collect(Collectors.toList()).get(0).getChipsAmount();
+    }
+
+    public GameSettings getGameSettings() {
+        return gameSettings;
     }
 }
