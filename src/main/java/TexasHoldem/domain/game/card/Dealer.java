@@ -1,6 +1,7 @@
 package TexasHoldem.domain.game.card;
 
 import TexasHoldem.domain.game.participants.Player;
+import org.hibernate.annotations.Cascade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,14 +19,15 @@ public class Dealer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "dealerId")
+    @Column(name = "dealer_id")
     private int id;
 
     @Transient
     private static Logger logger = LoggerFactory.getLogger(Dealer.class);
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "deckId")
+    @JoinColumn(name = "deck_id")
+    @Cascade( {org.hibernate.annotations.CascadeType.DELETE_ORPHAN} )
     private Deck deck;
 
     public Dealer(){

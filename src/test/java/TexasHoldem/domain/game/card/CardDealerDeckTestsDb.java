@@ -4,8 +4,10 @@ import TexasHoldem.data.Hybernate.HibernateUtil;
 import TexasHoldem.domain.user.User;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.junit.Assert;
 import org.junit.Test;
 
+import javax.validation.constraints.AssertTrue;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -70,15 +72,38 @@ public class CardDealerDeckTestsDb {
     @Test
     public void deckTests(){
         Deck deck = new Deck();
+        Deck deckFromDB = null;
         Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
         try{
             session.beginTransaction();
             session.save(deck);
+            deckFromDB = (Deck) session.get(Deck.class, deck.getId());
+            session.delete(deckFromDB);
             session.getTransaction().commit();
         }catch (HibernateException e) {
             if (session.getTransaction()!=null) session.getTransaction().rollback();
         }finally {
             session.close();
         }
+        Assert.assertEquals(deck.getId(), deckFromDB.getId());
+    }
+
+    @Test
+    public void dealerTests(){
+        Dealer dealer = new Dealer();
+        Dealer dealerFromDB = null;
+        Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
+        try{
+            session.beginTransaction();
+            session.save(dealer);
+            dealerFromDB = (Dealer) session.get(Dealer.class, dealer.getId());
+            session.delete(dealer);
+            session.getTransaction().commit();
+        }catch (HibernateException e) {
+            if (session.getTransaction()!=null) session.getTransaction().rollback();
+        }finally {
+            session.close();
+        }
+        Assert.assertEquals(dealer.getId(), dealerFromDB.getId());
     }
 }

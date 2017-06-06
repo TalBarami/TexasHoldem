@@ -20,26 +20,26 @@ import static TexasHoldem.domain.game.GameActions.*;
  */
 
 @Entity
-@Table(name="Player")
-@PrimaryKeyJoinColumn(name="id")
+@Table(name="player")
+@PrimaryKeyJoinColumn(name="participant_id")
 public class Player extends Participant{
     @Transient
     private static Logger logger = LoggerFactory.getLogger(Player.class);
 
     @OneToMany
-    @JoinColumns ({ @JoinColumn( name="rank" ),@JoinColumn( name="suit" )})
+    @JoinTable(name = "player_cards", joinColumns = @JoinColumn(name = "participant_id"), inverseJoinColumns = { @JoinColumn(name = "card_id") })
     private Set<Card> cards;
 
-    @Column(name = "chipsAmount")
+    @Column(name = "chips_amount")
     private int chipsAmount;
 
-    @Column(name = "lastBetSinceCardOpen")
+    @Column(name = "last_bet_since_card_open")
     private int lastBetSinceCardOpen;
 
-    @Column(name = "totalAmountPayedInRound")
+    @Column(name = "total_amount_payed_in_round")
     private int totalAmountPayedInRound;
 
-    @Column(name = "chipPolicy")
+    @Column(name = "chip_policy")
     private int chipPolicy;
 
     public Player(User user,int chipsAmount, int policy){

@@ -25,7 +25,7 @@ public class Deck {
     private static Logger logger = LoggerFactory.getLogger(Deck.class);
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name="card_id")
+    @JoinTable(name = "card_in_deck", joinColumns = @JoinColumn(name = "deck_id"), inverseJoinColumns = { @JoinColumn(name = "card_id") })
     private List<Card> cards;
 
     public Deck(){

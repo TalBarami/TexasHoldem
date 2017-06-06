@@ -10,17 +10,16 @@ import javax.persistence.*;
  */
 
 @Entity
-@Table(name = "Participant")
+@Table(name = "participant")
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Participant {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "participant_id")
     private int id;
 
-//    @ManyToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "userName")
-    @Transient
+    @ManyToOne
+    @JoinColumn(name = "userName")
     protected User user;
 
     public Participant(User user){

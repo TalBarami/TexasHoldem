@@ -17,12 +17,13 @@ public class ParticipantPlayerSpectatorDBTest {
 
     @Test
     public void testNewParticipantAsPlayerTest() throws Exception {
-        User user = new User("dfer", "dfer", "dfer@gmail.com", LocalDate.of(1991,4,20),null);
+        User user = new User("achiad", "achiad", "achiad@gmail.com", LocalDate.of(1991,4,20),null);
         Player p = new Player(user, 1000, 0);
 
         Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
         try{
             session.beginTransaction();
+            session.save(user);
             session.save(p);
             p.setChipPolicy(100);
             p.setChipsAmount(200);
@@ -46,46 +47,32 @@ public class ParticipantPlayerSpectatorDBTest {
 
     @Test
     public void testNewParticipantAsSpecatatorTest() throws Exception {
-        User user = new User("dfer", "dfer", "dfer@gmail.com", LocalDate.of(1991,4,20),null);
+        User user = new User("achiad", "1234", "achiad@gmail.com", LocalDate.of(1991,4,20),null);
         Spectator spec = new Spectator(user);
+        Spectator specFromDb = null;
 
         Session session1 = HibernateUtil.getInstance().getSessionFactory().openSession();
-        Session session2 = HibernateUtil.getInstance().getSessionFactory().openSession();
-        Session session3 = HibernateUtil.getInstance().getSessionFactory().openSession();
         try{
             session1.beginTransaction();
             session1.save(user);
+            session1.save(spec);
+
+            specFromDb = (Spectator) session1.get(Spectator.class, spec.getId());
+
+            session1.delete(user);
+            session1.delete(spec);
+
             session1.getTransaction().commit();
-
-            session2.beginTransaction();
-            session2.save(spec);
-            session2.getTransaction().commit();
-
-            Spectator specFromDb = (Spectator) session1.get(Spectator.class, spec.getId());
-
-            assertEquals(spec.getUser().getUsername(), specFromDb.getUser().getUsername());
-            assertEquals(spec.getUser().getPassword(), specFromDb.getUser().getPassword());
-            assertEquals(spec.getUser().getEmail(), specFromDb.getUser().getEmail());
-
-            session3.beginTransaction();
-            session3.delete(spec);
-            session3.delete(user);
-            session3.getTransaction().commit();
         }catch (HibernateException e) {
             if (session1.getTransaction()!=null) {
                 session1.getTransaction().rollback();
             }
-            if (session2.getTransaction()!=null){
-                session2.getTransaction().rollback();
-            }
-            if (session3.getTransaction()!=null) {
-                session3.getTransaction().rollback();
-            }
         }finally {
             session1.close();
-            session2.close();
-            session3.close();
         }
+        assertEquals(spec.getUser().getUsername(), specFromDb.getUser().getUsername());
+        assertEquals(spec.getUser().getPassword(), specFromDb.getUser().getPassword());
+        assertEquals(spec.getUser().getEmail(), specFromDb.getUser().getEmail());
     }
 
 }

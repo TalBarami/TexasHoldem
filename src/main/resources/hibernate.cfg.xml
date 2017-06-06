@@ -18,5 +18,9 @@
         <mapping class="TexasHoldem.domain.user.Wallet"/>
         <mapping class="TexasHoldem.domain.game.card.Card"/>
         <mapping class="TexasHoldem.domain.game.card.Deck"/>
+        <mapping class="TexasHoldem.domain.game.card.Dealer"/>
+        <mapping class="TexasHoldem.domain.game.participants.Participant"/>
+        <mapping class="TexasHoldem.domain.game.participants.Spectator"/>
+        <mapping class="TexasHoldem.domain.game.participants.Player"/>
     </session-factory>
 </hibernate-configuration>
