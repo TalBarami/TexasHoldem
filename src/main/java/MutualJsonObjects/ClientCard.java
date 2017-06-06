@@ -33,4 +33,9 @@ public class ClientCard {
     public void setSuit(Suit suit) {
         this.suit = suit;
     }
+
+    @Override
+    public String toString() {
+        return rank + " of " + suit;
+    }
 }

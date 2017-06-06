@@ -1,10 +1,10 @@
 package Client.domain.callbacks;
 
-import NotificationMessages.RoundUpdateNotification;
+import NotificationMessages.GameUpdateNotification;
 
 /**
- * Created by User on 03/06/2017.
+ * Created by User on 06/06/2017.
  */
 public interface GameUpdateCallback {
-    void execute(RoundUpdateNotification roundUpdateNotification);
+    void execute(GameUpdateNotification gameUpdateNotification);
 }

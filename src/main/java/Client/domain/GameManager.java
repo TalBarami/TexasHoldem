@@ -2,6 +2,7 @@ package Client.domain;
 
 import Client.domain.callbacks.ChatUpdateCallback;
 import Client.domain.callbacks.GameUpdateCallback;
+import Client.domain.callbacks.RoundUpdateCallback;
 import Client.domain.callbacks.MoveUpdateCallback;
 import Enumerations.Move;
 import MutualJsonObjects.*;
@@ -12,6 +13,7 @@ import Exceptions.InvalidArgumentException;
 
 import Client.communication.GameRequestHandler;
 import NotificationMessages.ChatNotification;
+import NotificationMessages.GameUpdateNotification;
 import NotificationMessages.RoundUpdateNotification;
 
 import java.util.ArrayList;
@@ -26,6 +28,7 @@ public class GameManager {
     private GameRequestHandler gameRequestHandler;
 
     private List<GameUpdateCallback> gameUpdateCallbacks;
+    private List<RoundUpdateCallback> roundUpdateCallbacks;
     private List<MoveUpdateCallback> moveUpdateCallbacks;
     private List<ChatUpdateCallback> chatUpdateCallbacks;
 
@@ -34,10 +37,12 @@ public class GameManager {
         gameRequestHandler = new GameRequestHandler();
 
         gameUpdateCallbacks = new ArrayList<>();
+        roundUpdateCallbacks = new ArrayList<>();
         moveUpdateCallbacks = new ArrayList<>();
         chatUpdateCallbacks = new ArrayList<>();
 
-        SessionManager.getInstance().getSessionHandler().addGameUpdateCallBack(gameName, this::updateGameDetails);
+        SessionManager.getInstance().getSessionHandler().addGameUpdateCallback(gameName, this::updateGameDetails);
+        SessionManager.getInstance().getSessionHandler().addRoundUpdateCallback(gameName, this::updateRoundDetails);
         SessionManager.getInstance().getSessionHandler().addChatUpdateCallback(gameName, this::updateChat);
         SessionManager.getInstance().getSessionHandler().addMoveUpdateCallback(gameName, this::updateGameMoves);
     }
@@ -96,22 +101,37 @@ public class GameManager {
         ClientGameRequest request = new ClientGameRequest();
         request.setGamename(gameDetails.getName());
         request.setUsername(SessionManager.getInstance().user().getUsername());
-        request.setMassage(message);
+        request.setMessage(message);
         request.setAction(9);
 
         gameRequestHandler.requestGameEventSend(request);
     }
 
     public void sentPrivateMessage(String message, String playerName) throws GameException{
-        // FIXME: Add.
+        ClientGameRequest request = new ClientGameRequest();
+        request.setGamename(gameDetails.getName());
+        request.setUsername(SessionManager.getInstance().user().getUsername());
+        request.setMessage(message);
+        request.setRecipientUserName(playerName);
+        request.setAction(9);
+
+        gameRequestHandler.requestGameEventSend(request);
     }
 
-    private void updateGameDetails(RoundUpdateNotification roundUpdate){
-        gameUpdateCallbacks.parallelStream().forEach(c -> c.execute(roundUpdate));
+    private void updateGameDetails(GameUpdateNotification gameUpdateNotification){
+        gameUpdateCallbacks.parallelStream().forEach(c -> c.execute(gameUpdateNotification));
     }
 
     public void addGameUpdateCallback(GameUpdateCallback callback){
         gameUpdateCallbacks.add(callback);
+    }
+
+    private void updateRoundDetails(RoundUpdateNotification roundUpdateNotification){
+        roundUpdateCallbacks.parallelStream().forEach(c -> c.execute(roundUpdateNotification));
+    }
+
+    public void addRoundUpdateCallback(RoundUpdateCallback callback){
+        roundUpdateCallbacks.add(callback);
     }
 
     private void updateChat(ChatNotification message){

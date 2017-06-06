@@ -11,32 +11,35 @@ import java.util.List;
  * Created by User on 03/06/2017.
  */
 public class Player {
-    private JLabel nameLabel;
-    private JLabel chipAmountLabel;
-    private JLabel lastBetLabel;
-    private JLabel cardsLabel;
+    private ClientPlayer player;
 
     private JPanel container;
+    private JLabel nameLabel;
 
     public Player(ClientPlayer player){
-        nameLabel = new JLabel(player.getPlayerName());
-        chipAmountLabel = new JLabel(String.valueOf(player.getChipAmount()));
-        lastBetLabel = new JLabel();
+        this.player = player;
+        nameLabel = new JLabel("Name: " + player.getPlayerName());
+        JLabel chipAmountLabel = new JLabel("Chips: " + String.valueOf(player.getChipAmount()));
+        JLabel lastBetLabel = new JLabel("Last Bet: " + String.valueOf(player.getLastBetSinceCardOpen()));
 
         container = new JPanel();
         container.add(nameLabel);
         container.add(chipAmountLabel);
         container.add(lastBetLabel);
-
-        if(SessionManager.getInstance().user().getUsername().equals(player.getPlayerName())) {
-            cardsLabel = new JLabel(player.getPlayerCards().toString());
-            container.add(cardsLabel);
-        }
     }
 
     public void mark(){
         Font f = nameLabel.getFont();
-        nameLabel.setFont(f.deriveFont(Font.BOLD));
+        nameLabel.setFont(f.deriveFont(Font.BOLD, f.getSize() + 2));
+    }
+
+    public void showCards(){
+        JLabel cardsLabel = new JLabel(player.getPlayerCards().toString());
+        container.add(cardsLabel);
+    }
+
+    public void self(){
+        nameLabel.setText(nameLabel.getText() + " (You)");
     }
 
     public JPanel getContainer(){
