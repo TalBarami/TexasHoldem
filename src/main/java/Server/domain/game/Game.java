@@ -60,6 +60,9 @@ public class Game {
         user.addGameParticipant(this,spec);
         addGameEvent(spec,GameActions.ENTER);
         logger.info("'{}' has joined the game '{}' as spectator.", user.getUsername(),getName());
+
+        // Send notification about the action
+        NotificationService.getInstance().sendGameUpdateNotification(GameActions.ENTER, user.getUsername(),this);
     }
 
     public void startGame(Player initiator) throws GameException {
@@ -78,6 +81,9 @@ public class Game {
             logger.info("A new tournament round in game '{}' has started.", getName());
             handleNewRound();
         }
+
+        // Send notification about the action
+        NotificationService.getInstance().sendGameUpdateNotification(GameActions.NEWROUND, initiator.getUser().getUsername(),this);
     }
 
     private void handleNewRound(){
@@ -92,6 +98,9 @@ public class Game {
         spectators.remove(spectator);
         addGameEvent(spectator,GameActions.EXIT);
         logger.info("'{}' has stopped watching this game.", spectator.getUser().getUsername());
+
+        // Send notification about the action
+        NotificationService.getInstance().sendGameUpdateNotification(GameActions.EXIT, spectator.getUser().getUsername(),this);
     }
 
     public void removeParticipant(Player player){
@@ -113,6 +122,9 @@ public class Game {
         leagueManager.updateUserLeague(player.getUser());
 
         addGameEvent(player,GameActions.EXIT);
+
+        // Send notification about the action
+        NotificationService.getInstance().sendGameUpdateNotification(GameActions.ENTER, player.getUser().getUsername(),this);
     }
 
     public boolean isFull(){
@@ -135,6 +147,9 @@ public class Game {
 
         addGameEvent(p,GameActions.ENTER);
         logger.info("'{}' has joined the game '{}' as player.", user.getUsername(),getName());
+
+        // Send notification about the action
+        NotificationService.getInstance().sendGameUpdateNotification(GameActions.ENTER, user.getUsername(),this);
     }
 
     public void handleMessageFromPlayer(MessageEvent messageEvent) {

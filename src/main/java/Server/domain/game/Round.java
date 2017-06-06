@@ -64,6 +64,8 @@ public class Round {
         dealer.deal(activePlayers);
         paySmallAndBigBlind();
 
+        // Send round update notification
+        NotificationService.getInstance().sendRoundUpdateNotification(this);
         // Call communication layer to send currentPlayer a message which requests him to play
         NotificationService.getInstance().sendPlayMoveNotification(gameSettings.getName(), currentPlayer, calculateTurnOptions());
     }
