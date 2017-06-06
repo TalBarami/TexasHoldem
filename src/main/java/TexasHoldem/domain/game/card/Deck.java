@@ -1,29 +1,31 @@
 package TexasHoldem.domain.game.card;
 
-import org.hibernate.annotations.CascadeType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-
 @Entity
-@Table(name = "Deck")
+@Table(name = "deck")
 public class Deck {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "deckId")
+    @Column(name = "deck_id")
     private int id;
 
     @Transient
     private static Logger logger = LoggerFactory.getLogger(Deck.class);
 
-    @OneToMany(cascade = javax.persistence.CascadeType.ALL)
-    @JoinColumns ({ @JoinColumn( name="rank" ),@JoinColumn( name="suit" )})
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name="card_id")
     private List<Card> cards;
 
     public Deck(){
@@ -35,7 +37,7 @@ public class Deck {
         logger.info("Preparing new deck.");
         for (Suit suit : Suit.values())
             for (Rank rank : Rank.values())
-                cards.add(rank.of(suit));
+                cards.add(new Card(rank, suit));
         shuffle();
     }
 

@@ -3,9 +3,12 @@ package TexasHoldem.domain.user;
 import TexasHoldem.common.Exceptions.ArgumentNotInBoundsException;
 import TexasHoldem.domain.game.Game;
 import TexasHoldem.domain.game.participants.Participant;
-import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.awt.image.BufferedImage;
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -32,6 +35,7 @@ public class User {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "walletId")
+    @Cascade( {org.hibernate.annotations.CascadeType.DELETE_ORPHAN} )
     private Wallet wallet;
 
     @Transient

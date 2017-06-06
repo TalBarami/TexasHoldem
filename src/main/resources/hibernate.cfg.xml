@@ -13,7 +13,10 @@
         <property name="show_sql">true</property>
         <property name="format_sql">true</property>
         <property name="hbm2ddl.auto">update</property>
+        <property name="hibernate.id.new_generator_mappings">false</property>
         <mapping class="TexasHoldem.domain.user.User"/>
         <mapping class="TexasHoldem.domain.user.Wallet"/>
+        <mapping class="TexasHoldem.domain.game.card.Card"/>
+        <mapping class="TexasHoldem.domain.game.card.Deck"/>
     </session-factory>
 </hibernate-configuration>

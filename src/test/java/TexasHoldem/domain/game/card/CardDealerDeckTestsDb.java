@@ -25,14 +25,37 @@ public class CardDealerDeckTestsDb {
 
     @Test
     public void addCardTest(){
-        Card card1 = TEN.of(HEART);
-        Card card2 = new Card(TEN, HEART);
+        Card card1 = new Card(TEN, HEART);
         Card card = null;
         Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
         try{
             session.beginTransaction();
+            session.save(card1);
+            card = (Card) session.get(Card.class, card1.getId());
+            session.delete(card1);
+            session.getTransaction().commit();
+        }catch (HibernateException e) {
+            if (session.getTransaction()!=null) session.getTransaction().rollback();
+        }finally {
+            session.close();
+        }
+        assertThat(card,equalTo(card1));
+    }
+
+    @Test
+    public void cardsValuesTest(){
+        Card card1FromDB = null;
+        Card card2FromDB = null;
+        Card card1 = new Card(TEN, HEART);
+        Card card2 = new Card(NINE, HEART);
+        Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
+        try{
+            session.beginTransaction();
+            session.save(card1);
             session.save(card2);
-            card = (Card) session.get(Card.class, (Serializable) card1);
+            card1FromDB = (Card) session.get(Card.class, card1.getId());
+            card2FromDB = (Card) session.get(Card.class, card2.getId());
+            session.delete(card1);
             session.delete(card2);
             session.getTransaction().commit();
         }catch (HibernateException e) {
@@ -40,100 +63,22 @@ public class CardDealerDeckTestsDb {
         }finally {
             session.close();
         }
-        assertThat(card,equalTo(card2));
-        assertThat(card1,equalTo(card2));
-    }
-
-    @Test
-    public void cardsValuesTest(){
-        Card card = null;
-        Card card1 = null;
-        Card thiscard = TEN.of(HEART);
-        Card thatcard = new Card(TEN, HEART);
-        Card thiscard1 = NINE.of(HEART);
-        Card thatcard1 = new Card(NINE, HEART);
-        Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
-        try{
-            session.beginTransaction();
-            session.save(thatcard);
-            session.save(thatcard1);
-            card = (Card) session.get(Card.class, (Serializable) thiscard);
-            card1 = (Card) session.get(Card.class, (Serializable) thiscard);
-            session.delete(thatcard);
-            session.delete(thatcard1);
-            session.getTransaction().commit();
-        }catch (HibernateException e) {
-            if (session.getTransaction()!=null) session.getTransaction().rollback();
-        }finally {
-            session.close();
-        }
-        assertThat(thiscard.compareTo(card), is(0));
-        assertThat(thiscard1.compareTo(card1), is(greaterThan(0)));
-    }
-
-    @Test
-    public void cardsFromStringTests(){
-        Card card1 = null;
-        Card thiscard = FIVE.of(DIAMOND);
-        Card card = Card.fromString("five of diamond");
-        Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
-        try{
-            session.beginTransaction();
-            session.save(card);
-            card1 = (Card) session.get(Card.class, (Serializable) thiscard);
-            session.delete(card);
-            session.getTransaction().commit();
-        }catch (HibernateException e) {
-            if (session.getTransaction()!=null) session.getTransaction().rollback();
-        }finally {
-            session.close();
-        }
-        assertThat(card1, is(FIVE.of(DIAMOND)));
+        assertThat(card1.compareTo(card1FromDB), is(0));
+        assertThat(card2.compareTo(card2FromDB), is(0));
     }
 
     @Test
     public void deckTests(){
-        List<Card> cards= new ArrayList<Card>();
+        Deck deck = new Deck();
         Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
         try{
             session.beginTransaction();
-            for(Rank rank : Rank.values()){
-                for(Suit suit : Suit.values()){
-                    Card card = new Card(rank, suit);
-                    session.save(card);
-                }
-            }
+            session.save(deck);
             session.getTransaction().commit();
         }catch (HibernateException e) {
             if (session.getTransaction()!=null) session.getTransaction().rollback();
         }finally {
             session.close();
-        }
-
-        Session session1 = HibernateUtil.getInstance().getSessionFactory().openSession();
-        Card card1 = null;
-        try{
-            session1.beginTransaction();
-            for(Rank rank : Rank.values()){
-                for(Suit suit : Suit.values()){
-                    Card card = new Card(rank, suit);
-                    card1 = (Card) session.get(Card.class, (Serializable) card);
-                    cards.add(card1);
-                }
-            }
-            session.getTransaction().commit();
-        }catch (HibernateException e) {
-            if (session.getTransaction()!=null) session.getTransaction().rollback();
-        }finally {
-            session.close();
-        }
-
-        int i = 0;
-        for(Rank rank : Rank.values()){
-            for(Suit suit : Suit.values()){
-                Card card = new Card(rank, suit);
-                assertThat(card,equalTo(cards.indexOf(i)));
-            }
         }
     }
 }

@@ -10,6 +10,7 @@ import TexasHoldem.domain.user.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.persistence.*;
 import java.util.*;
 
 import static TexasHoldem.domain.game.GameActions.*;
@@ -17,13 +18,28 @@ import static TexasHoldem.domain.game.GameActions.*;
 /**
  * Created by Hod and Rotem on 05/04/2017.
  */
+
+@Entity
+@Table(name="Player")
+@PrimaryKeyJoinColumn(name="id")
 public class Player extends Participant{
+    @Transient
     private static Logger logger = LoggerFactory.getLogger(Player.class);
 
+    @OneToMany
+    @JoinColumns ({ @JoinColumn( name="rank" ),@JoinColumn( name="suit" )})
     private Set<Card> cards;
+
+    @Column(name = "chipsAmount")
     private int chipsAmount;
+
+    @Column(name = "lastBetSinceCardOpen")
     private int lastBetSinceCardOpen;
+
+    @Column(name = "totalAmountPayedInRound")
     private int totalAmountPayedInRound;
+
+    @Column(name = "chipPolicy")
     private int chipPolicy;
 
     public Player(User user,int chipsAmount, int policy){
@@ -146,5 +162,17 @@ public class Player extends Participant{
 
     public void clearCards(){
         cards.clear();
+    }
+
+    public void setCards(Set<Card> cards) {
+        this.cards = cards;
+    }
+
+    public int getChipPolicy() {
+        return chipPolicy;
+    }
+
+    public void setChipPolicy(int chipPolicy) {
+        this.chipPolicy = chipPolicy;
     }
 }

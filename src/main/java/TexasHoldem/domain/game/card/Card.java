@@ -5,15 +5,17 @@ import javax.persistence.*;
 
 
 @Entity
-@Table(name = "cards")
+@Table(name = "card")
 public class Card implements Comparable<Card>{
-
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "card_id")
+    private int id;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "rank")
     private Rank rank;
 
-    @Id
     @Enumerated(EnumType.STRING)
     @Column(name = "suit")
     private Suit suit;
@@ -82,6 +84,14 @@ public class Card implements Comparable<Card>{
     public static Card fromString(String card){
         String[] arr = card.split(" ");
         return new Card(Rank.valueOf(arr[0].toUpperCase()), Suit.valueOf(arr[2].toUpperCase()));
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
 
