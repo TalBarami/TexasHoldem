@@ -16,7 +16,7 @@ public class ClientGameRequest {
         return messageContent;
     }
 
-    public void setMassage(String newMassage) {
+    public void setMessage(String newMassage) {
         this.messageContent = newMassage;
     }
 

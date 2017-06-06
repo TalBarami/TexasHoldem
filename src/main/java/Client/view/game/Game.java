@@ -1,7 +1,6 @@
 package Client.view.game;
 
 import Client.domain.SessionManager;
-import Client.domain.callbacks.ChatUpdateCallback;
 import Enumerations.Move;
 import Exceptions.EntityDoesNotExistsException;
 import Exceptions.GameException;
@@ -15,7 +14,9 @@ import Client.domain.MenuManager;
 import Client.view.ClientUtils;
 import Client.view.system.MainMenu;
 import NotificationMessages.ChatNotification;
+import NotificationMessages.GameUpdateNotification;
 import NotificationMessages.RoundUpdateNotification;
+import Server.domain.game.GameActions;
 
 import javax.swing.*;
 import javax.swing.text.NumberFormatter;
@@ -51,6 +52,7 @@ public class Game extends JFrame{
     private JSpinner raiseAmountSpinner;
     private JScrollPane chatScrollPane;
     private JComboBox<String> chatComboBox;
+    private JLabel eventsLabel;
 
     private List<JPanel> seats = Arrays.asList(bottomPanel, leftPanel, topPanel, rightPanel);
 
@@ -69,6 +71,7 @@ public class Game extends JFrame{
         ClientUtils.frameInit(this, contentPane);
         setTitle(gameManager.getGameDetails().getName());
         getRootPane().setDefaultButton(sendButton);
+        setSize(800, 600);
     }
 
     private void initializeGame(ClientGameDetails gameDetails){
@@ -76,6 +79,7 @@ public class Game extends JFrame{
         updatePlayersInformation(gameDetails.getPlayerList());
         potLabel.setText("0");
         cardsLabel.setText("");
+        eventsLabel.setText("");
     }
 
     private void initializeSeats(){
@@ -89,6 +93,7 @@ public class Game extends JFrame{
         SessionManager.getInstance().addUpdateCallback(this::generateUserInformation);
 
         gameManager.addGameUpdateCallback(this::updateTable);
+        gameManager.addRoundUpdateCallback(this::updateTable);
         gameManager.addMoveUpdateCallback(this::updateGameMoves);
         gameManager.addChatUpdateCallback(this::updateChatWindow);
 
@@ -119,8 +124,8 @@ public class Game extends JFrame{
     }
 
     private void generateUserInformation(ClientUserProfile user){
-        usernameLabel.setText(user.getUsername());
-        cashLabel.setText(String.valueOf(user.getBalance()));
+        usernameLabel.setText("Name: " + user.getUsername());
+        cashLabel.setText("Balance: " + String.valueOf(user.getBalance()));
     }
 
     private void updatePlayersInformation(List<ClientPlayer> players, String currentPlayerName){
@@ -132,6 +137,10 @@ public class Game extends JFrame{
             Player player = new Player(clientPlayer);
             if(clientPlayer.getPlayerName().equals(currentPlayerName)){
                 player.mark();
+            }
+            if(clientPlayer.getPlayerName().equals(SessionManager.getInstance().user().getUsername())){
+                player.showCards();
+                player.self();
             }
             JPanel playerComponent = player.getContainer();
             seats.get(i % 4).add(playerComponent);
@@ -147,6 +156,27 @@ public class Game extends JFrame{
         updatePlayersInformation(players, null);
     }
 
+    private void updateTable(GameUpdateNotification gameUpdateNotification){
+        updatePlayersInformation(gameUpdateNotification.getGameDetails().getPlayerList());
+        String action;
+        switch(gameUpdateNotification.getAction()){
+            case ENTER:
+                action = "joined";
+                break;
+            case EXIT:
+                action = "left";
+                break;
+            case NEWROUND:
+                action = "started";
+                startGameButton.setEnabled(false);
+                break;
+            default:
+                JOptionPane.showMessageDialog(null, "Undefined event occurred: " + gameUpdateNotification.toString(), "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+        }
+        eventsLabel.setText(String.format("%s has %s the game.", gameUpdateNotification.getGameActionInitiator(), action));
+    }
+
     private void updateTable(RoundUpdateNotification roundUpdateNotification){
         updatePlayersInformation(roundUpdateNotification.getCurrentPlayers(), roundUpdateNotification.getCurrentPlayerName());
 
@@ -154,8 +184,9 @@ public class Game extends JFrame{
         cardsLabel.setText(roundUpdateNotification.getCurrentOpenedCards().toString());
     }
 
-    private void updateChatWindow(ChatNotification ChatNotification){
-        chatPanel.setText(chatPanel.getText() + ChatNotification.getSenderUserName() + ": " + ChatNotification.getMessageContent() + "\n");
+    private void updateChatWindow(ChatNotification chatNotification){
+        chatPanel.setText(chatPanel.getText() + (chatNotification.isPrivate() ? "whisper from " : "" ) +
+                chatNotification.getSenderUserName() + ": " + chatNotification.getMessageContent() + "\n");
     }
 
     private void updateGameMoves(List<Move> possibleMoves){

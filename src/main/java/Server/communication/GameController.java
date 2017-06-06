@@ -112,7 +112,7 @@ public class GameController {
         }
         else
         {
-            if (!userNameToSend.isEmpty()) {
+            if (userNameToSend != null) {
                 gameService.sendWhisper(userName,gameName,messageContent,userNameToSend);
                 return new ResponseMessage("Whisper sent successfully", null);
             }

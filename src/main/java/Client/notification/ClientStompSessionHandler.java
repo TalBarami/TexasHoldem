@@ -1,9 +1,6 @@
 package Client.notification;
 
-import Client.domain.callbacks.ChatUpdateCallback;
-import Client.domain.callbacks.GameUpdateCallback;
-import Client.domain.callbacks.MoveUpdateCallback;
-import Client.domain.callbacks.UserUpdateCallback;
+import Client.domain.callbacks.*;
 import NotificationMessages.*;
 
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
@@ -20,6 +17,7 @@ import java.util.Map;
  */
 public class ClientStompSessionHandler extends StompSessionHandlerAdapter {
     private Map<String, GameUpdateCallback> gameUpdateCallbackMap;
+    private Map<String, RoundUpdateCallback> roundUpdateCallbackMap;
     private Map<String, ChatUpdateCallback> chatUpdateCallbackMap;
     private Map<String, MoveUpdateCallback> moveUpdateCallbackMap;
     private UserUpdateCallback userUpdateCallback;
@@ -28,6 +26,7 @@ public class ClientStompSessionHandler extends StompSessionHandlerAdapter {
         super();
 
         gameUpdateCallbackMap = new HashMap<>();
+        roundUpdateCallbackMap = new HashMap<>();
         chatUpdateCallbackMap = new HashMap<>();
         moveUpdateCallbackMap = new HashMap<>();
     }
@@ -84,7 +83,7 @@ public class ClientStompSessionHandler extends StompSessionHandlerAdapter {
             public void handleFrame(StompHeaders stompHeaders, Object o) {
                 RoundUpdateNotification notification = (RoundUpdateNotification)o;
                 String gameName = notification.getGameName();
-                gameUpdateCallbackMap.get(gameName).execute(notification);
+                roundUpdateCallbackMap.get(gameName).execute(notification);
             }
         });
 
@@ -96,13 +95,19 @@ public class ClientStompSessionHandler extends StompSessionHandlerAdapter {
 
             @Override
             public void handleFrame(StompHeaders stompHeaders, Object o) {
-                // TODO :: Call relevant callback
+                GameUpdateNotification notification = (GameUpdateNotification)o;
+                String gameName = notification.getGameName();
+                gameUpdateCallbackMap.get(gameName).execute(notification);
             }
         });
     }
 
-    public void addGameUpdateCallBack(String gameName, GameUpdateCallback callback) {
+    public void addGameUpdateCallback(String gameName, GameUpdateCallback callback){
         gameUpdateCallbackMap.put(gameName, callback);
+    }
+
+    public void addRoundUpdateCallback(String gameName, RoundUpdateCallback callback) {
+        roundUpdateCallbackMap.put(gameName, callback);
     }
 
     public void addChatUpdateCallback(String gameName, ChatUpdateCallback callback) {
