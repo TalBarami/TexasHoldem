@@ -1,5 +1,6 @@
 package Client.communication;
 
+import Client.Application;
 import MutualJsonObjects.*;
 import Exceptions.*;
 
@@ -19,7 +20,7 @@ import java.util.List;
  * Created by rotemwald on 14/05/17.
  */
 public class GameRequestHandler {
-    public final static String serviceURI = "http://localhost:8080/game";
+    public final static String serviceURI = "http://" + Application.serverAddress + "/game";
     private RestTemplate restTemplate;
     private ObjectMapper objectMapper;
 

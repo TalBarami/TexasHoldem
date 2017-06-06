@@ -1,5 +1,6 @@
 package Client.communication;
 
+import Client.Application;
 import MutualJsonObjects.ClientUserLoginDetails;
 import MutualJsonObjects.ResponseMessage;
 
@@ -22,7 +23,7 @@ import java.io.IOException;
  * Created by rotemwald on 14/05/17.
  */
 public class SessionRequestHandler {
-    public final static String serviceURI = "http://localhost:8080/session";
+    public final static String serviceURI = "http://" + Application.serverAddress + "/session";
     private RestTemplate restTemplate;
     private ObjectMapper objectMapper;
 
