@@ -267,8 +267,7 @@ public class Round {
 
         // We assume amount to raise includes the last bet, so
         // we need to add to the pot the difference between them
-        int maxLastBet = activePlayers.stream().max(Comparator.comparingInt(Player::getLastBetSinceCardOpen)).get().getLastBetSinceCardOpen();
-        potAmount += currentPlayer.payChips(amountToRaise + maxLastBet - lastBet);
+        potAmount += currentPlayer.payChips(amountToRaise - lastBet);
         logger.info("Player {} raised {}$", currentPlayer.getUser().getUsername(), amountToRaise);
 
         int newLastPlayerIndex = (currentPlayerIndex == 0) ? (activePlayers.size() - 1) : ((currentPlayerIndex - 1) % activePlayers.size());
