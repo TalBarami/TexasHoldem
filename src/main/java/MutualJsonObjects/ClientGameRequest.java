@@ -10,7 +10,7 @@ public class ClientGameRequest {
     private int amount;
     private boolean spectating;
     private String messageContent;
-    private String recepientMassage;
+    private String recipientUserName;
 
     public String getMassage() {
         return messageContent;
@@ -60,12 +60,12 @@ public class ClientGameRequest {
         this.amount = amount;
     }
 
-    public String getRecepientMassage() {
-        return recepientMassage;
+    public String getRecipientUserName() {
+        return recipientUserName;
     }
 
-    public void setRecepientMassage(String recepientMassage) {
-        this.recepientMassage = recepientMassage;
+    public void setRecipientUserName(String recipientUserName) {
+        this.recipientUserName = recipientUserName;
     }
 
 }

@@ -73,7 +73,7 @@ public class GameController {
         int amountForAction = gameRequest.getAmount();
         boolean spectateOption = gameRequest.getSpectating();
         String messageContent = gameRequest.getMassage();
-        String userNameToSend = gameRequest.getRecepientMassage();
+        String userNameToSend = gameRequest.getRecipientUserName();
 
         if (actionToPerform == 0) {
             gameService.playCheck(userName,gameName);
@@ -110,16 +110,17 @@ public class GameController {
             gameService.startGame(userName,gameName);
             return new ResponseMessage("Start game succeeded", null);
         }
-        else if(actionToPerform == 6)
-        {
-            gameService.sendWhisper(userName,gameName,messageContent,userNameToSend);
-            return new ResponseMessage("Message sent successfully", null);
-        }
-
         else
         {
-            gameService.sendMessage(userName,gameName,messageContent);
-            return new ResponseMessage("Message sent successfully", null);
+            if (!userNameToSend.isEmpty()) {
+                gameService.sendWhisper(userName,gameName,messageContent,userNameToSend);
+                return new ResponseMessage("Whisper sent successfully", null);
+            }
+
+            else {
+                gameService.sendMessage(userName, gameName, messageContent);
+                return new ResponseMessage("Message sent successfully", null);
+            }
         }
     }
 
