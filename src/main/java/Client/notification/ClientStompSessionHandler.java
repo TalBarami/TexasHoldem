@@ -4,10 +4,7 @@ import Client.domain.callbacks.ChatUpdateCallback;
 import Client.domain.callbacks.GameUpdateCallback;
 import Client.domain.callbacks.MoveUpdateCallback;
 import Client.domain.callbacks.UserUpdateCallback;
-import NotificationMessages.ChatNotification;
-import NotificationMessages.PlayMoveNotification;
-import NotificationMessages.RoundUpdateNotification;
-import NotificationMessages.UserProfileUpdateNotification;
+import NotificationMessages.*;
 
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
@@ -88,6 +85,18 @@ public class ClientStompSessionHandler extends StompSessionHandlerAdapter {
                 RoundUpdateNotification notification = (RoundUpdateNotification)o;
                 String gameName = notification.getGameName();
                 gameUpdateCallbackMap.get(gameName).execute(notification);
+            }
+        });
+
+        session.subscribe("/user/queue/game", new StompFrameHandler() {
+            @Override
+            public Type getPayloadType(StompHeaders stompHeaders) {
+                return GameUpdateNotification.class;
+            }
+
+            @Override
+            public void handleFrame(StompHeaders stompHeaders, Object o) {
+                // TODO :: Call relevant callback
             }
         });
     }

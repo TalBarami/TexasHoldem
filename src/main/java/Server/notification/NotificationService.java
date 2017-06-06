@@ -2,14 +2,13 @@ package Server.notification;
 
 import Enumerations.Move;
 import MutualJsonObjects.ClientCard;
+import MutualJsonObjects.ClientGameDetails;
 import MutualJsonObjects.ClientPlayer;
 import MutualJsonObjects.ClientUserProfile;
-import NotificationMessages.ChatNotification;
-import NotificationMessages.PlayMoveNotification;
-import NotificationMessages.RoundUpdateNotification;
-import NotificationMessages.UserProfileUpdateNotification;
+import NotificationMessages.*;
 import Server.SpringApplicationContext;
 import Server.communication.converters.CardClientCardConverter;
+import Server.communication.converters.GameClientGameDetailsConverter;
 import Server.communication.converters.PlayerClientPlayerConverter;
 import Server.domain.events.chatEvents.MessageEvent;
 import Server.domain.events.chatEvents.WhisperEvent;
@@ -126,6 +125,17 @@ public class NotificationService {
             String userName = p.getUser().getUsername();
             RoundUpdateNotification notification = new RoundUpdateNotification(userName, gameName, currentPotSize, currentPlayerName, currentPlayers, currentOpenedCards);
             messageSender.sendRoundUpdateNotification(notification);
+        }
+    }
+
+    public void sendGameUpdateNotification(GameActions action, String gameActionInitiator, Game game) {
+        String gameName = game.getName();
+        ClientGameDetails gameDetails = GameClientGameDetailsConverter.convert(game);
+
+        for (Player p : game.getPlayers()) {
+            String userName = p.getUser().getUsername();
+            GameUpdateNotification notification = new GameUpdateNotification(userName, gameName, action, gameActionInitiator, gameDetails);
+            messageSender.sendGameUpdateNotification(notification);
         }
     }
 }
