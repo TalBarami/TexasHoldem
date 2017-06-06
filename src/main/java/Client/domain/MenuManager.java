@@ -9,11 +9,7 @@ import Client.communication.UserRequestHandler;
 import Server.domain.user.Transaction;
 
 import java.util.ArrayList;
-import java.util.List;
 
-/**
- * Created by User on 15/05/2017.
- */
 public class MenuManager {
     private static MenuManager instance;
 
@@ -41,7 +37,7 @@ public class MenuManager {
 
     public void joinGame(String username, String gameName) throws GameException {
         ClientGameRequest request = new ClientGameRequest();
-        request.setGamename(gameName);
+        request.setGameName(gameName);
         request.setUsername(username);
         request.setAction(4);
 
@@ -50,7 +46,7 @@ public class MenuManager {
 
     public void spectateGame(String username, String gameName) throws GameException {
         ClientGameRequest request = new ClientGameRequest();
-        request.setGamename(gameName);
+        request.setGameName(gameName);
         request.setUsername(username);
         request.setAction(4);
         request.setSpectating(true);
@@ -60,7 +56,7 @@ public class MenuManager {
 
     public void replayGame(String gameName) throws GameException {
         ClientGameRequest request = new ClientGameRequest();
-        request.setGamename(gameName);
+        request.setGameName(gameName);
         request.setAction(-1);
 
         gameRequestHandler.requestGameEventSend(request);
