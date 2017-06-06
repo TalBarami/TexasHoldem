@@ -1,6 +1,6 @@
 package Client;
 
-import Client.view.access.Welcome;
+import Client.view.access.Address;
 
 import java.io.IOException;
 
@@ -9,6 +9,6 @@ import java.io.IOException;
  */
 public class Application {
     public static void main(String[] args) throws IOException {
-        Welcome w = new Welcome();
+        Address a = new Address();
     }
 }
