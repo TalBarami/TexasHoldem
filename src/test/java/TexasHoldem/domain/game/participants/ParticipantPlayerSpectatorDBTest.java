@@ -1,13 +1,20 @@
 package TexasHoldem.domain.game.participants;
 
 import TexasHoldem.data.Hybernate.HibernateUtil;
+import TexasHoldem.domain.game.card.Card;
+import TexasHoldem.domain.game.card.Rank;
+import TexasHoldem.domain.game.card.Suit;
 import TexasHoldem.domain.user.User;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.junit.Test;
 
 import java.time.LocalDate;
+import java.util.LinkedList;
+import java.util.List;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 
 /**
@@ -19,21 +26,31 @@ public class ParticipantPlayerSpectatorDBTest {
     public void testNewParticipantAsPlayerTest() throws Exception {
         User user = new User("achiad", "achiad", "achiad@gmail.com", LocalDate.of(1991,4,20),null);
         Player p = new Player(user, 1000, 0);
+        List<Card> playerCards = new LinkedList<>();
+        Card card = new Card(Rank.ACE, Suit.CLUB);
+        Card cardOfPlayer = null;
+        playerCards.add(card);
 
         Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
         try{
             session.beginTransaction();
             session.save(user);
+            session.save(card);
             session.save(p);
             p.setChipPolicy(100);
             p.setChipsAmount(200);
-            Player playerFromDb = (Player) session.get(Player.class, p.getId());
+            p.addCards(playerCards);
 
+            Player playerFromDb = (Player) session.get(Player.class, p.getId());
+            cardOfPlayer = playerFromDb.getCards().iterator().next();
+
+            assertThat(card.compareTo(cardOfPlayer), is(0));
             assertEquals(p.getChipPolicy(), playerFromDb.getChipPolicy());
             assertEquals(p.getChipsAmount(), playerFromDb.getChipsAmount());
             assertEquals(p.getUser().getUsername(), playerFromDb.getUser().getUsername());
 
             session.delete(p);
+            session.delete(card);
             User userFromDb = (User) session.get(User.class, user.getUsername());
             assertEquals(userFromDb.getUsername(), user.getUsername());
             session.delete(user);

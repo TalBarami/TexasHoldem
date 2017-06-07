@@ -10,6 +10,7 @@ import TexasHoldem.domain.game.participants.Player;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.persistence.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -18,8 +19,15 @@ import static TexasHoldem.domain.game.GameActions.*;
 /**
  * Created by Hod and Rotem on 05/04/2017.
  */
+@Entity
+@Table(name = "round")
 public class Round {
     private static Logger logger = LoggerFactory.getLogger(Round.class);
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "deck_id")
+    private int id;
 
     private boolean isRoundActive;
     private GameSettings gameSettings;
@@ -489,5 +497,57 @@ public class Round {
         return getActivePlayers().stream()
                 .filter(player -> player.getUser().getUsername().equals(userName))
                 .collect(Collectors.toList()).get(0).getChipsAmount();
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public GameSettings getGameSettings() {
+        return gameSettings;
+    }
+
+    public void setGameSettings(GameSettings gameSettings) {
+        this.gameSettings = gameSettings;
+    }
+
+    public void setActivePlayers(List<Player> activePlayers) {
+        this.activePlayers = activePlayers;
+    }
+
+    public void setOriginalPlayersInRound(List<Player> originalPlayersInRound) {
+        this.originalPlayersInRound = originalPlayersInRound;
+    }
+
+    public void setDealer(Dealer dealer) {
+        this.dealer = dealer;
+    }
+
+    public void setCurrentPlayer(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
+
+    public void setLastPlayer(Player lastPlayer) {
+        this.lastPlayer = lastPlayer;
+    }
+
+    public void setPotAmount(int potAmount) {
+        this.potAmount = potAmount;
+    }
+
+    public void setCurrentDealerPlayer(Player currentDealerPlayer) {
+        this.currentDealerPlayer = currentDealerPlayer;
+    }
+
+    public List<GameEvent> getEventList() {
+        return eventList;
+    }
+
+    public void setEventList(List<GameEvent> eventList) {
+        this.eventList = eventList;
     }
 }
