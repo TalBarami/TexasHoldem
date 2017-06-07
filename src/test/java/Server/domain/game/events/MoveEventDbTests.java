@@ -36,6 +36,8 @@ public class MoveEventDbTests {
             moveEvent.setAmountToRaise(60);
             MoveEvent moveEventFromDb = (MoveEvent) session.get(MoveEvent.class, moveEvent.getId());
             session.delete(moveEvent);
+            session.delete(p);
+            session.delete(user);
             session.getTransaction().commit();
             assertEquals(((Player) moveEventFromDb.getEventInitiator()).getChipPolicy(),p.getChipPolicy());
             assertEquals(((Player) moveEventFromDb.getEventInitiator()).getChipsAmount(),p.getChipsAmount());
