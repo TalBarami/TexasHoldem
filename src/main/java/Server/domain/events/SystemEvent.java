@@ -29,4 +29,9 @@ public class SystemEvent {
     public void setGameName(String gameName) {
         this.gameName = gameName;
     }
+
+    public void setEventInitiator(Participant newParticipant)
+    {
+        this.eventInitiator = newParticipant;
+    }
 }
