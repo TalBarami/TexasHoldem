@@ -1,8 +1,8 @@
 package Client.view.system;
 
-import Client.common.exceptions.ArgumentNotInBoundsException;
-import Client.common.exceptions.EntityDoesNotExistsException;
-import Client.common.exceptions.InvalidArgumentException;
+import Exceptions.ArgumentNotInBoundsException;
+import Exceptions.EntityDoesNotExistsException;
+import Exceptions.InvalidArgumentException;
 import Client.domain.MenuManager;
 import Client.domain.SessionManager;
 
@@ -49,10 +49,10 @@ public class Deposit extends JDialog {
     private void onOK() {
         try {
             String username = SessionManager.getInstance().user().getUsername();
-            MenuManager gameManager = MenuManager.getInstance();
+            MenuManager menuManager = MenuManager.getInstance();
+            menuManager.deposit(username, (int)amountSpinner.getValue());
             ancestor.init();
             dispose();
-            gameManager.deposit(username, (int)amountSpinner.getValue());
         } catch (InvalidArgumentException | ArgumentNotInBoundsException | EntityDoesNotExistsException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }

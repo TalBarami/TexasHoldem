@@ -1,11 +1,12 @@
 package Client.view.system;
 
-import Client.common.exceptions.EntityDoesNotExistsException;
-import Client.common.exceptions.GameException;
-import Client.common.exceptions.InvalidArgumentException;
-import Client.communication.entities.ClientGameDetails;
-import Client.communication.entities.ClientGamePolicy;
-import Client.communication.entities.ClientUserProfile;
+import MutualJsonObjects.ClientGameDetails;
+import MutualJsonObjects.ClientUserProfile;
+import Enumerations.GamePolicy;
+import Exceptions.EntityDoesNotExistsException;
+import Exceptions.GameException;
+import Exceptions.InvalidArgumentException;
+
 import Client.domain.MenuManager;
 import Client.domain.SearchManager;
 import Client.domain.SessionManager;
@@ -33,6 +34,8 @@ public class MainMenu extends JFrame {
     private List<String> selectionFields = Collections.singletonList(GAME_POLICY);
     private List<String> noFields = Arrays.asList(AVAILABLE, REPLAYABLE, SPECTATEABLE);
 
+    private List<Game> activeGames;
+
     private JLabel label_name;
     private JLabel label_cash;
     private JLabel label_picture;
@@ -50,18 +53,23 @@ public class MainMenu extends JFrame {
     private JButton depositButton;
     private JButton findButton;
     private JSpinner searchSpinner;
-    private JComboBox<ClientGamePolicy> searchComboBox;
+    private JComboBox<GamePolicy> searchComboBox;
     private JLabel searchValueLabel;
 
     public MainMenu() {
         init();
 
+        activeGames = new ArrayList<>();
+
+        generateUserInformation(SessionManager.getInstance().user());
         assignActionListeners();
         initSearchProperties();
         initTable();
     }
 
     private void assignActionListeners(){
+        SessionManager.getInstance().addUpdateCallback(this::generateUserInformation);
+
         profileButton.addActionListener(e -> onProfile());
         logoutButton.addActionListener(e -> onLogout());
         depositButton.addActionListener(e -> onDeposit());
@@ -93,7 +101,7 @@ public class MainMenu extends JFrame {
             searchTypeComboBox.addItem(type);
         }
 
-        for(ClientGamePolicy policy : ClientGamePolicy.values()){
+        for(GamePolicy policy : GamePolicy.values()){
             searchComboBox.addItem(policy);
         }
 
@@ -103,12 +111,12 @@ public class MainMenu extends JFrame {
     }
 
 
-    private void generateUserInformation(){
+    private void generateUserInformation(ClientUserProfile profile){
         ClientUserProfile user = SessionManager.getInstance().user();
         //ImageIcon icon = new ImageIcon(user.getImg().getScaledInstance(100, 100, 0));
         label_name.setText(user.getUsername());
         label_cash.setText(String.valueOf(user.getBalance()));
-        label_league.setText(String.valueOf(user.getLeague()));
+        label_league.setText(String.valueOf(user.getCurrLeague()));
         label_picture.setText("");
         //label_picture.setIcon(icon);
     }
@@ -152,7 +160,9 @@ public class MainMenu extends JFrame {
         try {
             MenuManager.getInstance().joinGame(username, gameName);
             Game game = new Game(this, gameName);
-        } catch (GameException | EntityDoesNotExistsException e) {
+            addGame(game);
+            game.init();
+        } catch (GameException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -163,7 +173,9 @@ public class MainMenu extends JFrame {
         try {
             MenuManager.getInstance().spectateGame(username, gameName);
             Game game = new Game(this, gameName);
-        } catch (GameException | EntityDoesNotExistsException e) {
+            addGame(game);
+            game.init();
+        } catch (GameException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -173,7 +185,9 @@ public class MainMenu extends JFrame {
         try {
             MenuManager.getInstance().replayGame(gameName);
             Game game = new Game(this, gameName);
-        } catch (GameException | EntityDoesNotExistsException e) {
+            addGame(game);
+            game.init();
+        } catch (GameException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -243,11 +257,26 @@ public class MainMenu extends JFrame {
     public void init(){
         ClientUtils.frameInit(this, contentPane);
         setTitle("Main menu");
-        generateUserInformation();
         ClientUtils.clearTextFields(searchTextField);
     }
 
     private void onExit(){
+        try {
+            for(int i=activeGames.size()-1; i>=0; i--){
+                activeGames.get(i).onExit();
+            }
+            SessionManager.getInstance().logout(SessionManager.getInstance().user().getUsername());
+        } catch (InvalidArgumentException e) {
+            e.printStackTrace();
+        }
         dispose();
+    }
+
+    public void addGame(Game game){
+        activeGames.add(game);
+    }
+
+    public void removeGame(Game game){
+        activeGames.remove(game);
     }
 }

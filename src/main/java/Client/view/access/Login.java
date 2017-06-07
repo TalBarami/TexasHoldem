@@ -1,14 +1,16 @@
 package Client.view.access;
 
-import Client.common.exceptions.EntityDoesNotExistsException;
-import Client.common.exceptions.InvalidArgumentException;
+import Exceptions.EntityDoesNotExistsException;
+import Exceptions.InvalidArgumentException;
+import Exceptions.LoginException;
+
 import Client.domain.SessionManager;
 import Client.view.ClientUtils;
 import Client.view.system.MainMenu;
 
-import javax.security.auth.login.LoginException;
 import javax.swing.*;
 import java.awt.event.KeyEvent;
+import java.util.concurrent.ExecutionException;
 
 public class Login {
     public Welcome ancestor;
@@ -42,7 +44,7 @@ public class Login {
             SessionManager.getInstance().login(text_username.getText(), new String(text_password.getPassword()));
             MainMenu menu = new MainMenu();
             ancestor.dispose();
-        } catch (LoginException | EntityDoesNotExistsException | InvalidArgumentException e) {
+        } catch (LoginException | EntityDoesNotExistsException | InvalidArgumentException | ExecutionException | InterruptedException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }

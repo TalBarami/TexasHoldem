@@ -1,11 +1,13 @@
 package Client.communication;
 
-import Client.common.exceptions.EntityDoesNotExistsException;
-import Client.common.exceptions.ExceptionObject;
-import Client.common.exceptions.InvalidArgumentException;
-import Client.common.exceptions.LoginException;
-import Client.communication.entities.ClientUserDetails;
-import Client.communication.entities.ResponseMessage;
+import MutualJsonObjects.ClientUserLoginDetails;
+import MutualJsonObjects.ResponseMessage;
+
+import Exceptions.EntityDoesNotExistsException;
+import Exceptions.ExceptionObject;
+import Exceptions.InvalidArgumentException;
+import Exceptions.LoginException;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -20,7 +22,7 @@ import java.io.IOException;
  * Created by rotemwald on 14/05/17.
  */
 public class SessionRequestHandler {
-    public final static String serviceURI = "http://localhost:8080/session";
+    public static String serviceURI;
     private RestTemplate restTemplate;
     private ObjectMapper objectMapper;
 
@@ -29,8 +31,8 @@ public class SessionRequestHandler {
         this.objectMapper = new ObjectMapper();
     }
 
-    public void requestUserLogin(ClientUserDetails loginDetails) throws javax.security.auth.login.LoginException, InvalidArgumentException, EntityDoesNotExistsException {
-        HttpEntity<ClientUserDetails> request = new HttpEntity<>(loginDetails);
+    public void requestUserLogin(ClientUserLoginDetails loginDetails) throws LoginException, InvalidArgumentException, EntityDoesNotExistsException {
+        HttpEntity<ClientUserLoginDetails> request = new HttpEntity<>(loginDetails);
 
         try {
             ResponseEntity<ResponseMessage> response = restTemplate.exchange(serviceURI, HttpMethod.POST, request, ResponseMessage.class);
@@ -57,8 +59,8 @@ public class SessionRequestHandler {
         }
     }
 
-    public void requestUserLogout(ClientUserDetails logoutDetails) throws InvalidArgumentException {
-        HttpEntity<ClientUserDetails> request = new HttpEntity<>(logoutDetails);
+    public void requestUserLogout(ClientUserLoginDetails logoutDetails) throws InvalidArgumentException {
+        HttpEntity<ClientUserLoginDetails> request = new HttpEntity<>(logoutDetails);
 
         try {
             ResponseEntity<ResponseMessage> response = restTemplate.exchange(serviceURI, HttpMethod.DELETE, request, ResponseMessage.class);

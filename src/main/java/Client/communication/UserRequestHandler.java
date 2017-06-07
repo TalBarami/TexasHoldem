@@ -1,12 +1,14 @@
 package Client.communication;
 
-import Client.common.exceptions.ArgumentNotInBoundsException;
-import Client.common.exceptions.EntityDoesNotExistsException;
-import Client.common.exceptions.ExceptionObject;
-import Client.common.exceptions.InvalidArgumentException;
-import Client.communication.entities.ClientUserProfile;
-import Client.communication.entities.ResponseMessage;
-import Client.communication.entities.ClientTransactionRequest;
+import MutualJsonObjects.ClientUserProfile;
+import MutualJsonObjects.ResponseMessage;
+import MutualJsonObjects.ClientTransactionRequest;
+
+import Exceptions.ArgumentNotInBoundsException;
+import Exceptions.EntityDoesNotExistsException;
+import Exceptions.ExceptionObject;
+import Exceptions.InvalidArgumentException;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -22,7 +24,7 @@ import java.io.IOException;
  * Created by user on 13/05/2017.
  */
 public class UserRequestHandler {
-    public final static String serviceURI = "http://localhost:8080/user";
+    public static String serviceURI;
     private RestTemplate restTemplate;
     private ObjectMapper objectMapper;
 
@@ -104,7 +106,7 @@ public class UserRequestHandler {
         }
     }
 
-    public Client.communication.entities.ClientUserProfile requestUserProfileEntity(String username) throws InvalidArgumentException {
+    public ClientUserProfile requestUserProfileEntity(String username) throws InvalidArgumentException {
         String addr = serviceURI + "/" + username;
 
         try {

@@ -1,7 +1,8 @@
 package Client.communication;
 
-import Client.common.exceptions.*;
-import Client.communication.entities.*;
+import MutualJsonObjects.*;
+import Exceptions.*;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -18,7 +19,7 @@ import java.util.List;
  * Created by rotemwald on 14/05/17.
  */
 public class GameRequestHandler {
-    public final static String serviceURI = "http://localhost:8080/game";
+    public static String serviceURI;
     private RestTemplate restTemplate;
     private ObjectMapper objectMapper;
 
@@ -89,7 +90,7 @@ public class GameRequestHandler {
     }
 
     public void requestGameEventSend(ClientGameRequest gameRequest) throws GameException {
-        String addr = serviceURI + "/" + gameRequest.getGamename();
+        String addr = serviceURI + "/" + gameRequest.getGameName();
         HttpEntity<ClientGameRequest> request = new HttpEntity<>(gameRequest);
 
         try {

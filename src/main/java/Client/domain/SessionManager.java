@@ -1,28 +1,42 @@
 package Client.domain;
 
-import Client.common.exceptions.EntityDoesNotExistsException;
-import Client.common.exceptions.InvalidArgumentException;
+import Client.domain.callbacks.UserUpdateCallback;
+import Client.notification.ClientStompSessionHandler;
+import Client.notification.SubscriptionManager;
+import MutualJsonObjects.ClientUserLoginDetails;
+import MutualJsonObjects.ClientUserProfile;
+
+import Exceptions.EntityDoesNotExistsException;
+import Exceptions.InvalidArgumentException;
+import Exceptions.LoginException;
+
 import Client.communication.SessionRequestHandler;
 import Client.communication.UserRequestHandler;
-import Client.communication.entities.ClientUserDetails;
-import Client.communication.entities.ClientUserProfile;
-import TexasHoldem.common.SystemUtils;
+import Server.common.SystemUtils;
+import org.springframework.messaging.simp.stomp.StompSession;
 
-import javax.security.auth.login.LoginException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
-/**
- * Created by User on 14/05/2017.
- */
 public class SessionManager {
     private static SessionManager instance;
+
+    private StompSession stompSession;
+    private String ipAddress;
 
     private ClientUserProfile user;
     private SessionRequestHandler sessionRequestHandler;
     private UserRequestHandler userRequestHandler;
 
+    private List<UserUpdateCallback> updateCallbacks;
+
     private SessionManager(){
         sessionRequestHandler = new SessionRequestHandler();
         userRequestHandler = new UserRequestHandler();
+        stompSession = null;
+
+        updateCallbacks = new ArrayList<>();
     }
 
     public static SessionManager getInstance(){
@@ -30,6 +44,14 @@ public class SessionManager {
             instance = new SessionManager();
         }
         return instance;
+    }
+
+    public void setIpAddress(String ipAddress){
+        this.ipAddress = ipAddress;
+    }
+
+    public String getIpAddress(){
+        return ipAddress;
     }
 
     public void register(String username, String password, String email, String birthday, String localImagePath) throws InvalidArgumentException {
@@ -59,23 +81,30 @@ public class SessionManager {
         }
         /*if(newImage == null || newImage.isEmpty())
             newImage = user.getImage();*/
-        ClientUserProfile profile = new ClientUserProfile(user.getUsername(), newPassword, newEmail, day, month, year, user.getBalance(), user.getLeague(), user.getNumOfGamesPlayed(), user.getAmountEarnedInLeague());
+        ClientUserProfile profile = new ClientUserProfile(user.getUsername(), newPassword, newEmail, day, month, year, user.getBalance(), user.getCurrLeague(), user.getNumOfGamesPlayed(), user.getAmountEarnedInLeague());
         userRequestHandler.requestUserProfileUpdate(user.getUsername(), profile);
 
         user = userRequestHandler.requestUserProfileEntity(user.getUsername());
     }
 
-    public void login(String username, String password) throws LoginException, EntityDoesNotExistsException, InvalidArgumentException {
-        ClientUserDetails details = new ClientUserDetails(username, password);
+    public void login(String username, String password) throws LoginException, EntityDoesNotExistsException, InvalidArgumentException, ExecutionException, InterruptedException {
+        ClientUserLoginDetails details = new ClientUserLoginDetails(username, password);
         sessionRequestHandler.requestUserLogin(details);
 
         user = userRequestHandler.requestUserProfileEntity(username);
+        stompSession = SubscriptionManager.subscribe(user.getUsername());
+        SubscriptionManager.getStompSessionHandler().setUserUpdateCallback(this::updateUserDetails);
     }
 
     public void logout(String username) throws InvalidArgumentException {
-        ClientUserDetails details = new ClientUserDetails(username, "");
+        ClientUserLoginDetails details = new ClientUserLoginDetails(username, "");
         sessionRequestHandler.requestUserLogout(details);
         user = null;
+
+        if (stompSession != null && stompSession.isConnected()) {
+            stompSession.disconnect();
+        }
+        stompSession = null;
     }
 
     public ClientUserProfile user(){
@@ -85,5 +114,18 @@ public class SessionManager {
     void verifyStrings(String... strings) throws InvalidArgumentException {
         if(SystemUtils.hasNullOrEmptyOrSpecialChars(strings))
             throw new InvalidArgumentException("Null/Empty fields or invalid characters are not allowed.");
+    }
+
+    public void updateUserDetails(ClientUserProfile profile){
+        user = profile;
+        updateCallbacks.parallelStream().forEach(c -> c.execute(profile));
+    }
+
+    public void addUpdateCallback(UserUpdateCallback callback){
+        updateCallbacks.add(callback);
+    }
+
+    public ClientStompSessionHandler getSessionHandler(){
+        return SubscriptionManager.getStompSessionHandler();
     }
 }

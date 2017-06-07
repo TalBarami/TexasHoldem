@@ -1,17 +1,15 @@
 package Client.domain;
 
-import Client.common.exceptions.*;
+import Enumerations.GamePolicy;
+import MutualJsonObjects.*;
+import Exceptions.*;
+
 import Client.communication.GameRequestHandler;
 import Client.communication.UserRequestHandler;
-import Client.communication.entities.*;
-import TexasHoldem.domain.game.GamePolicy;
-import TexasHoldem.domain.user.Transaction;
+import Server.domain.user.Transaction;
 
 import java.util.ArrayList;
 
-/**
- * Created by User on 15/05/2017.
- */
 public class MenuManager {
     private static MenuManager instance;
 
@@ -29,17 +27,17 @@ public class MenuManager {
         return instance;
     }
 
-    public void createGame(String gameName, ClientGamePolicy gamePolicy, int policyLimit, int minBet, int buyInPolicy, int chipPolicy,
+    public void createGame(String gameName, GamePolicy gamePolicy, int policyLimit, int minBet, int buyInPolicy, int chipPolicy,
                            int minPlayerAmount, int maxPlayerAmount, boolean specAccept) throws InvalidArgumentException, EntityDoesNotExistsException, NoBalanceForBuyInException, ArgumentNotInBoundsException {
         ClientGameDetails gameDetails = new ClientGameDetails(SessionManager.getInstance().user().getUsername(),
-                gameName, gamePolicy.value(), policyLimit, minBet, buyInPolicy,
+                gameName, gamePolicy.getPolicy(), policyLimit, minBet, buyInPolicy,
                 chipPolicy, minPlayerAmount, maxPlayerAmount, specAccept, new ArrayList<>());
         gameRequestHandler.requestGameCreation(gameDetails);
     }
 
     public void joinGame(String username, String gameName) throws GameException {
         ClientGameRequest request = new ClientGameRequest();
-        request.setGamename(gameName);
+        request.setGameName(gameName);
         request.setUsername(username);
         request.setAction(4);
 
@@ -48,7 +46,7 @@ public class MenuManager {
 
     public void spectateGame(String username, String gameName) throws GameException {
         ClientGameRequest request = new ClientGameRequest();
-        request.setGamename(gameName);
+        request.setGameName(gameName);
         request.setUsername(username);
         request.setAction(4);
         request.setSpectating(true);
@@ -58,7 +56,7 @@ public class MenuManager {
 
     public void replayGame(String gameName) throws GameException {
         ClientGameRequest request = new ClientGameRequest();
-        request.setGamename(gameName);
+        request.setGameName(gameName);
         request.setAction(-1);
 
         gameRequestHandler.requestGameEventSend(request);
