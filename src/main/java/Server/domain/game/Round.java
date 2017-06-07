@@ -44,6 +44,7 @@ public class Round {
     private Player currentDealerPlayer;
     private RoundState currentState;
     private List<GameEvent> eventList;
+    private List<Player> winnerList;
 
     public Round(List<Player> players, GameSettings settings, int dealerIndex) {
         this.gameSettings = settings;
@@ -56,6 +57,7 @@ public class Round {
         this.openedCards = new ArrayList<Card>();
         this.currentState = RoundState.PREFLOP;
         this.eventList = new ArrayList<>();
+        this.winnerList = new ArrayList<>();
 
         int startingPlayerIndex = (dealerIndex + 3) % activePlayers.size();
         this.currentPlayer = activePlayers.get(startingPlayerIndex);
@@ -562,4 +564,12 @@ public class Round {
         this.eventList = eventList;
     }
 
+
+    public List<Player> getWinnerList() {
+        return winnerList;
+    }
+
+    public void setWinnerList(List<Player> winnerList) {
+        this.winnerList = winnerList;
+    }
 }
