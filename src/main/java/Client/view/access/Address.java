@@ -1,5 +1,9 @@
 package Client.view.access;
 
+import Client.communication.GameRequestHandler;
+import Client.communication.SessionRequestHandler;
+import Client.communication.UserRequestHandler;
+import Client.domain.GameManager;
 import Client.domain.SessionManager;
 import Client.view.ClientUtils;
 
@@ -32,6 +36,11 @@ public class Address extends JFrame {
 
     public void onEnter(){
         SessionManager.getInstance().setIpAddress(IPAddressTextField.getText());
+
+        GameRequestHandler.serviceURI = "http://" + SessionManager.getInstance().getIpAddress() + "/game";
+        SessionRequestHandler.serviceURI = "http://" + SessionManager.getInstance().getIpAddress() + "/session";
+        UserRequestHandler.serviceURI = "http://" + SessionManager.getInstance().getIpAddress() + "/user";
+
         Welcome w = new Welcome();
         dispose();
     }

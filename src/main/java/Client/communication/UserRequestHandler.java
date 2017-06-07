@@ -24,7 +24,7 @@ import java.io.IOException;
  * Created by user on 13/05/2017.
  */
 public class UserRequestHandler {
-    public final static String serviceURI = "http://localhost:8080/user";
+    public static String serviceURI;
     private RestTemplate restTemplate;
     private ObjectMapper objectMapper;
 

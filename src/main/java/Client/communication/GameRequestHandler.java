@@ -19,7 +19,7 @@ import java.util.List;
  * Created by rotemwald on 14/05/17.
  */
 public class GameRequestHandler {
-    public final static String serviceURI = "http://localhost:8080/game";
+    public static String serviceURI;
     private RestTemplate restTemplate;
     private ObjectMapper objectMapper;
 

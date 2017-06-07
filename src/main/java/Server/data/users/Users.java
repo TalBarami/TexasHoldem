@@ -43,6 +43,8 @@ public class Users implements IUsers, IUsersForDistributionAlgorithm {
 
         _userList.remove(oldUser);
         _userList.put(user.getUsername(),user);
+
+        user.notifyObservers();
     }
 
     public void deleteUser(User user) {

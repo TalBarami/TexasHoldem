@@ -159,8 +159,6 @@ public class Round {
 
             if (isLastPlayerPlayed) {
                 endFlow();
-                // Send RoundUpdateNotification
-                NotificationService.getInstance().sendRoundUpdateNotification(this);
             } else {
                 // Send RoundUpdateNotification
                 NotificationService.getInstance().sendRoundUpdateNotification(this);
@@ -231,6 +229,8 @@ public class Round {
         int newCurrentPlayerIndex = (dealerIndex + 1) % (activePlayers.size());
         currentPlayer = activePlayers.get(newCurrentPlayerIndex);
 
+        // Send RoundUpdateNotification
+        NotificationService.getInstance().sendRoundUpdateNotification(this);
         // Call communication layer to send currentPlayer a message which requests him to play
         NotificationService.getInstance().sendPlayMoveNotification(gameSettings.getName(), currentPlayer, calculateTurnOptions());
     }

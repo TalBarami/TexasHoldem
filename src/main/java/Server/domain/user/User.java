@@ -141,10 +141,12 @@ public class User extends Observable {
 
     public void setUsername(String username) {
         this.username = username;
+        setChanged();
     }
 
     public void setPassword(String password) {
         this.password = password;
+        setChanged();
     }
 
     public String getEmail() {
@@ -157,10 +159,12 @@ public class User extends Observable {
 
     public void setEmail(String email) {
         this.email = email;
+        setChanged();
     }
 
     public void setDateOfBirth(LocalDate date) {
         this.dateOfBirth = date;
+        setChanged();
     }
 
     public Map<Game,Participant> getGamePlayerMappings(){
@@ -193,6 +197,8 @@ public class User extends Observable {
 
     public void setCurrLeague(int currLeague) {
         this.currLeague = currLeague;
+        setChanged();
+        notifyObservers();
     }
 
     public BufferedImage getImg() {
@@ -209,6 +215,8 @@ public class User extends Observable {
 
     public void updateGamesPlayed() {
         this.numOfGamesPlayed++;
+        setChanged();
+        notifyObservers();
     }
 
     public int getTotalProfit() {
