@@ -45,22 +45,24 @@ public class GameEventDbTests {
     public void testNewGameEvent2Test() throws Exception {
         User user = new User("achiad", "achiad", "achiad@gmail.com", LocalDate.of(1991, 4, 20), null);
         Player p = new Player(user, 13, 4);
-        GameEvent gameevent = new GameEvent(p, GameActions.RAISE, "achiad-poker-game");
+        GameEvent gameEvent = new GameEvent(p, GameActions.RAISE, "achiad-poker-game");
         Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
         try {
             session.beginTransaction();
+            session.save(user);
             session.save(p);
-            session.save(gameevent);
-            gameevent.setEventAction(GameActions.CHECK);
+            session.save(gameEvent);
+            gameEvent.setEventAction(GameActions.CHECK);
             p.setChipPolicy(100);
             p.setChipsAmount(200);
-            gameevent.setEventInitiator(p);
-            GameEvent gameEventFromDb = (GameEvent) session.get(GameEvent.class, gameevent.getId());
+            GameEvent gameEventFromDb = (GameEvent) session.get(GameEvent.class, gameEvent.getId());
             session.delete(gameEventFromDb);
+            session.delete(p);
+            session.delete(user);
             session.getTransaction().commit();
-            assertEquals(gameevent.getEventAction(), gameEventFromDb.getEventAction());
-            assertEquals(((Player) gameevent.getEventInitiator()).getChipPolicy(),p.getChipPolicy());
-            assertEquals(((Player) gameevent.getEventInitiator()).getChipsAmount(),p.getChipsAmount());
+            assertEquals(GameActions.CHECK, gameEventFromDb.getEventAction());
+            assertEquals(((Player) gameEvent.getEventInitiator()).getChipPolicy(),100);
+            assertEquals(((Player) gameEvent.getEventInitiator()).getChipsAmount(),200);
         } catch (HibernateException e) {
             if (session.getTransaction() != null) session.getTransaction().rollback();
         } finally {

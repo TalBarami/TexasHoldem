@@ -23,5 +23,7 @@
         <mapping class="Server.domain.game.participants.Spectator"/>
         <mapping class="Server.domain.game.participants.Player"/>
         <mapping class="Server.domain.game.GameSettings"/>
+        <mapping class="Server.domain.events.SystemEvent"/>
+        <mapping class="Server.domain.events.gameFlowEvents.GameEvent"/>
     </session-factory>
 </hibernate-configuration>

@@ -27,15 +27,19 @@ public class SystemEventDbTests {
         Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
         try {
             session.beginTransaction();
+            session.save(user);
+            session.save(p);
             session.save(systemEvent);
             p.setChipPolicy(147);
             p.setChipsAmount(236);
             systemEvent.setEventInitiator(p);
             SystemEvent systemEventFromDb = (SystemEvent) session.get(SystemEvent.class, systemEvent.getId());
             session.delete(systemEvent);
+            session.delete(p);
+            session.delete(user);
             session.getTransaction().commit();
-            assertEquals(((Player) systemEvent.getEventInitiator()).getChipPolicy(),p.getChipPolicy());
-            assertEquals(((Player) systemEvent.getEventInitiator()).getChipsAmount(),p.getChipsAmount());
+            assertEquals(((Player) systemEventFromDb.getEventInitiator()).getChipPolicy(),p.getChipPolicy());
+            assertEquals(((Player) systemEventFromDb.getEventInitiator()).getChipsAmount(),p.getChipsAmount());
         } catch (HibernateException e) {
             if (session.getTransaction() != null) session.getTransaction().rollback();
         } finally {

@@ -11,6 +11,7 @@ import javax.persistence.*;
  */
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "game_event")
 @PrimaryKeyJoinColumn(name="system_event_id")
 public class GameEvent extends SystemEvent {

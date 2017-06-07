@@ -2,6 +2,7 @@ package Server.domain.events;
 
 import Server.domain.game.participants.Participant;
 import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
@@ -20,6 +21,7 @@ public class SystemEvent {
     private int id;
 
     @Column(name = "creation_date")
+    @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime eventTime;
 
     @OneToOne
