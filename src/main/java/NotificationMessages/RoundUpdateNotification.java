@@ -13,13 +13,17 @@ public class RoundUpdateNotification extends GameNotification {
     private String currentPlayerName;
     private List<ClientPlayer> currentPlayers;
     private List<ClientCard> currentOpenedCards;
+    private List<ClientPlayer> winnerPlayers;
+    private boolean isFinished;
 
-    public RoundUpdateNotification(String recipientUserName, String gameName, int currentPotSize, String currentPlayerName, List<ClientPlayer> currentPlayers, List<ClientCard> currentOpenedCards) {
+    public RoundUpdateNotification(String recipientUserName, String gameName, int currentPotSize, String currentPlayerName, List<ClientPlayer> currentPlayers, List<ClientCard> currentOpenedCards, List<ClientPlayer> winnerPlayers, boolean isFinished) {
         super(recipientUserName, gameName);
         this.currentPotSize = currentPotSize;
         this.currentPlayerName = currentPlayerName;
         this.currentPlayers = currentPlayers;
         this.currentOpenedCards = currentOpenedCards;
+        this.winnerPlayers = winnerPlayers;
+        this.isFinished = isFinished;
     }
 
     public RoundUpdateNotification() {
@@ -55,5 +59,21 @@ public class RoundUpdateNotification extends GameNotification {
 
     public void setCurrentOpenedCards(List<ClientCard> currentOpenedCards) {
         this.currentOpenedCards = currentOpenedCards;
+    }
+
+    public List<ClientPlayer> getWinnerPlayers() {
+        return winnerPlayers;
+    }
+
+    public void setWinnerPlayers(List<ClientPlayer> winnerPlayers) {
+        this.winnerPlayers = winnerPlayers;
+    }
+
+    public boolean isFinished() {
+        return isFinished;
+    }
+
+    public void setFinished(boolean finished) {
+        isFinished = finished;
     }
 }
