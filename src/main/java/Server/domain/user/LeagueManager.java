@@ -99,16 +99,18 @@ public class LeagueManager {
         return maxLeague;
     }
 
-    //    public void moveUserToLeague(User userToMove, int newLeague){
-//        putUserInLeague(userToMove, newLeague);
-//    }
-//    public boolean checkIfHasPermissions(User user){
-//        return user.getCurrLeague() == maxLeague;
-//    }
-//    public void setCriteriaToMovingLeague(int criteriaToMovingLeague) {
-//        this.criteriaToMovingLeague = criteriaToMovingLeague;
-//    }
-//    public void setDefaultLeagueForNewUsers(int defaultLeagueForNewUsers) {
-//        this.defaultLeagueForNewUsers = defaultLeagueForNewUsers;
-//    }
+   /*
+     -- DEPRECATED--
+    public void moveUserToLeague(User userToMove, int newLeague){
+        putUserInLeague(userToMove, newLeague);
+    }
+    public boolean checkIfHasPermissions(User user){
+        return user.getCurrLeague() == maxLeague;
+    }
+    public void setCriteriaToMovingLeague(int criteriaToMovingLeague) {
+       this.criteriaToMovingLeague = criteriaToMovingLeague;
+    }
+    public void setDefaultLeagueForNewUsers(int defaultLeagueForNewUsers) {
+       this.defaultLeagueForNewUsers = defaultLeagueForNewUsers;
+    }*/
 }
