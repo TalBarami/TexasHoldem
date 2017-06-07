@@ -1,4 +1,4 @@
-package TexasHoldem.data.Hybernate;
+package Server.data.Hybernate;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;

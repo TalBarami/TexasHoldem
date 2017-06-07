@@ -1,22 +1,17 @@
-package TexasHoldem.domain.game.card;
-import TexasHoldem.common.Exceptions.InvalidArgumentException;
-import TexasHoldem.data.Hybernate.HibernateUtil;
-import TexasHoldem.domain.user.User;
+package Server.domain.game.card;
+import Exceptions.InvalidArgumentException;
+import Server.data.Hybernate.HibernateUtil;
+import Server.domain.user.User;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.junit.Assert;
 import org.junit.Test;
 
-import javax.validation.constraints.AssertTrue;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
-import static TexasHoldem.domain.game.card.Rank.FIVE;
-import static TexasHoldem.domain.game.card.Rank.NINE;
-import static TexasHoldem.domain.game.card.Rank.TEN;
-import static TexasHoldem.domain.game.card.Suit.DIAMOND;
-import static TexasHoldem.domain.game.card.Suit.HEART;
+import static Server.domain.game.card.Rank.FIVE;
+import static Server.domain.game.card.Rank.NINE;
+import static Server.domain.game.card.Rank.TEN;
+import static Server.domain.game.card.Suit.DIAMOND;
+import static Server.domain.game.card.Suit.HEART;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 

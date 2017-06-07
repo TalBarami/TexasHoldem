@@ -1,10 +1,10 @@
-package TexasHoldem.domain.game.participants;
+package Server.domain.game.participants;
 
-import TexasHoldem.data.Hybernate.HibernateUtil;
-import TexasHoldem.domain.game.card.Card;
-import TexasHoldem.domain.game.card.Rank;
-import TexasHoldem.domain.game.card.Suit;
-import TexasHoldem.domain.user.User;
+import Server.data.Hybernate.HibernateUtil;
+import Server.domain.game.card.Card;
+import Server.domain.game.card.Rank;
+import Server.domain.game.card.Suit;
+import Server.domain.user.User;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.junit.Test;
@@ -15,7 +15,7 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by אחיעד on 30/05/2017.

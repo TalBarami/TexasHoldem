@@ -1,6 +1,6 @@
 package Server.domain.user;
 
-import Server.common.Exceptions.ArgumentNotInBoundsException;
+import Exceptions.ArgumentNotInBoundsException;
 import Server.domain.game.Game;
 import Server.domain.game.participants.Participant;
 import org.hibernate.annotations.*;

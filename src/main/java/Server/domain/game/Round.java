@@ -562,7 +562,4 @@ public class Round {
         this.eventList = eventList;
     }
 
-    public GameSettings getGameSettings() {
-        return gameSettings;
-    }
 }

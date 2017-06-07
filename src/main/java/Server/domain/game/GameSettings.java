@@ -124,4 +124,12 @@ public class GameSettings {
     public void setAcceptSpectating(boolean acceptSpectating) {
         this.acceptSpectating = acceptSpectating;
     }
+
+    public int getMinAmountPlayers() {
+        return minAmountPlayers;
+    }
+
+    public int getMaxAmountPlayers() {
+        return maxAmountPlayers;
+    }
 }

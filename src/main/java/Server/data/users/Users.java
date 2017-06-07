@@ -4,6 +4,7 @@ import Exceptions.EntityDoesNotExistsException;
 import Exceptions.InvalidArgumentException;
 import Exceptions.LoginException;
 
+import Server.data.Hybernate.HibernateUtil;
 import Server.domain.user.User;
 
 import java.time.LocalDate;
