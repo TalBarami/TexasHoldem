@@ -1,6 +1,6 @@
 package Client;
 
-import Client.view.access.Welcome;
+import Client.view.access.Address;
 
 import java.io.IOException;
 
@@ -11,6 +11,6 @@ public class Application {
     public static String serverAddress = "localhost:8080";
 
     public static void main(String[] args) throws IOException {
-        Welcome w = new Welcome();
+        Address a = new Address();
     }
 }

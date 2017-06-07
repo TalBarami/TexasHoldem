@@ -23,6 +23,7 @@ public class SessionManager {
     private static SessionManager instance;
 
     private StompSession stompSession;
+    private String ipAddress;
 
     private ClientUserProfile user;
     private SessionRequestHandler sessionRequestHandler;
@@ -43,6 +44,14 @@ public class SessionManager {
             instance = new SessionManager();
         }
         return instance;
+    }
+
+    public void setIpAddress(String ipAddress){
+        this.ipAddress = ipAddress;
+    }
+
+    public String getIpAddress(){
+        return ipAddress;
     }
 
     public void register(String username, String password, String email, String birthday, String localImagePath) throws InvalidArgumentException {

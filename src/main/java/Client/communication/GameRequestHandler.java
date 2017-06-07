@@ -91,7 +91,7 @@ public class GameRequestHandler {
     }
 
     public void requestGameEventSend(ClientGameRequest gameRequest) throws GameException {
-        String addr = serviceURI + "/" + gameRequest.getGamename();
+        String addr = serviceURI + "/" + gameRequest.getGameName();
         HttpEntity<ClientGameRequest> request = new HttpEntity<>(gameRequest);
 
         try {

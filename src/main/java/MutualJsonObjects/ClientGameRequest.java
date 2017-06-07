@@ -5,19 +5,19 @@ package MutualJsonObjects;
  */
 public class ClientGameRequest {
     private String username;
-    private String gamename;
+    private String gameName;
     private int action;
     private int amount;
     private boolean spectating;
     private String messageContent;
     private String recipientUserName;
 
-    public String getMassage() {
+    public String getMessage() {
         return messageContent;
     }
 
-    public void setMessage(String newMassage) {
-        this.messageContent = newMassage;
+    public void setMessage(String newMessage) {
+        this.messageContent = newMessage;
     }
 
     public boolean getSpectating() {
@@ -28,12 +28,12 @@ public class ClientGameRequest {
         this.spectating = spectating;
     }
 
-    public String getGamename() {
-        return gamename;
+    public String getGameName() {
+        return gameName;
     }
 
-    public void setGamename(String gamename) {
-        this.gamename = gamename;
+    public void setGameName(String gameName) {
+        this.gameName = gameName;
     }
 
     public String getUsername() {

@@ -62,7 +62,7 @@ public class GameController {
 
     @RequestMapping(method=PUT, value="/game/{roomname}")
     public ResponseMessage handleGameEvent(@PathVariable("roomname") String roomName, @RequestBody ClientGameRequest gameRequest) throws GameException {
-        String gameName = gameRequest.getGamename();
+        String gameName = gameRequest.getGameName();
 
         if (!roomName.equals(gameName)) {
             throw new InvalidArgumentException("Room name is not compatible with request data.");
@@ -72,7 +72,7 @@ public class GameController {
         int actionToPerform = gameRequest.getAction();
         int amountForAction = gameRequest.getAmount();
         boolean spectateOption = gameRequest.getSpectating();
-        String messageContent = gameRequest.getMassage();
+        String messageContent = gameRequest.getMessage();
         String userNameToSend = gameRequest.getRecipientUserName();
 
         if (actionToPerform == 0) {
@@ -112,7 +112,7 @@ public class GameController {
         }
         else
         {
-            if (userNameToSend != null) {
+            if (!userNameToSend.isEmpty()) {
                 gameService.sendWhisper(userName,gameName,messageContent,userNameToSend);
                 return new ResponseMessage("Whisper sent successfully", null);
             }

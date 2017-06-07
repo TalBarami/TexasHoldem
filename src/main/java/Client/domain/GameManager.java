@@ -53,7 +53,7 @@ public class GameManager {
 
     public void startGame() throws GameException {
         ClientGameRequest request = new ClientGameRequest();
-        request.setGamename(gameDetails.getName());
+        request.setGameName(gameDetails.getName());
         request.setUsername(SessionManager.getInstance().user().getUsername());
         request.setAction(5);
 
@@ -62,7 +62,7 @@ public class GameManager {
 
     public void playCheck() throws GameException {
         ClientGameRequest request = new ClientGameRequest();
-        request.setGamename(gameDetails.getName());
+        request.setGameName(gameDetails.getName());
         request.setUsername(SessionManager.getInstance().user().getUsername());
         request.setAction(0);
 
@@ -71,7 +71,7 @@ public class GameManager {
 
     public void playCall() throws GameException {
         ClientGameRequest request = new ClientGameRequest();
-        request.setGamename(gameDetails.getName());
+        request.setGameName(gameDetails.getName());
         request.setUsername(SessionManager.getInstance().user().getUsername());
         request.setAction(2);
 
@@ -80,9 +80,9 @@ public class GameManager {
 
     public void playRaise(String amount) throws GameException {
         ClientGameRequest request = new ClientGameRequest();
-        request.setGamename(gameDetails.getName());
+        request.setGameName(gameDetails.getName());
         request.setUsername(SessionManager.getInstance().user().getUsername());
-        request.setAction(Integer.parseInt(amount));
+        request.setAmount(Integer.parseInt(amount));
         request.setAction(1);
 
         gameRequestHandler.requestGameEventSend(request);
@@ -90,7 +90,7 @@ public class GameManager {
 
     public void playFold() throws GameException {
         ClientGameRequest request = new ClientGameRequest();
-        request.setGamename(gameDetails.getName());
+        request.setGameName(gameDetails.getName());
         request.setUsername(SessionManager.getInstance().user().getUsername());
         request.setAction(3);
 
@@ -99,9 +99,10 @@ public class GameManager {
 
     public void sendMessage(String message) throws GameException {
         ClientGameRequest request = new ClientGameRequest();
-        request.setGamename(gameDetails.getName());
+        request.setGameName(gameDetails.getName());
         request.setUsername(SessionManager.getInstance().user().getUsername());
         request.setMessage(message);
+        request.setRecipientUserName("");
         request.setAction(9);
 
         gameRequestHandler.requestGameEventSend(request);
@@ -109,7 +110,7 @@ public class GameManager {
 
     public void sentPrivateMessage(String message, String playerName) throws GameException{
         ClientGameRequest request = new ClientGameRequest();
-        request.setGamename(gameDetails.getName());
+        request.setGameName(gameDetails.getName());
         request.setUsername(SessionManager.getInstance().user().getUsername());
         request.setMessage(message);
         request.setRecipientUserName(playerName);

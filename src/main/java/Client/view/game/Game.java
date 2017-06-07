@@ -23,6 +23,7 @@ import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -170,6 +171,7 @@ public class Game extends JFrame{
                 action = "started";
                 startGameButton.setEnabled(false);
                 break;
+            // TODO: Handle case when round is finished.
             default:
                 JOptionPane.showMessageDialog(null, "Undefined event occurred: " + gameUpdateNotification.toString(), "Error", JOptionPane.ERROR_MESSAGE);
                 return;
@@ -182,6 +184,18 @@ public class Game extends JFrame{
 
         potLabel.setText(String.valueOf(roundUpdateNotification.getCurrentPotSize()));
         cardsLabel.setText(roundUpdateNotification.getCurrentOpenedCards().toString());
+
+        int maxBet = roundUpdateNotification.getCurrentPlayers().stream()
+                .map(ClientPlayer::getLastBetSinceCardOpen)
+                .max(Integer::compareTo)
+                .orElse(0);
+        int minRaise = maxBet + gameManager.getGameDetails().getMinimumBet();
+
+        raiseAmountSpinner.setModel(new SpinnerNumberModel(minRaise, minRaise , Integer.MAX_VALUE, 1));
+        JFormattedTextField txt = ((JSpinner.NumberEditor) raiseAmountSpinner.getEditor()).getTextField();
+        ((NumberFormatter) txt.getFormatter()).setAllowsInvalid(false);
+
+        eventsLabel.setText(String.format("It's %s turn.", roundUpdateNotification.getCurrentPlayerName()));
     }
 
     private void updateChatWindow(ChatNotification chatNotification){
