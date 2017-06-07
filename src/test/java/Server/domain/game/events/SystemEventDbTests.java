@@ -20,7 +20,7 @@ import static org.junit.Assert.assertEquals;
 public class SystemEventDbTests {
 
     @Test
-    public void testNewGameEventTest() throws Exception {
+    public void testNewSystemEventTest() throws Exception {
         User user = new User("achiad", "achiad", "achiad@gmail.com", LocalDate.of(1991, 4, 20), null);
         Player p = new Player(user, 1000, 0);
         SystemEvent systemEvent = new SystemEvent(p,"Achiad-poker-game");
