@@ -36,6 +36,7 @@ public class Round {
     private Player currentDealerPlayer;
     private RoundState currentState;
     private List<GameEvent> eventList;
+    private List<Player> winnerList;
 
     public Round(List<Player> players, GameSettings settings, int dealerIndex) {
         this.gameSettings = settings;
@@ -48,6 +49,7 @@ public class Round {
         this.openedCards = new ArrayList<Card>();
         this.currentState = RoundState.PREFLOP;
         this.eventList = new ArrayList<>();
+        this.winnerList = new ArrayList<>();
 
         int startingPlayerIndex = (dealerIndex + 3) % activePlayers.size();
         this.currentPlayer = activePlayers.get(startingPlayerIndex);
@@ -101,6 +103,7 @@ public class Round {
         if (activePlayers.size() == 1) {
             Player winner = activePlayers.get(0);
             winner.addChips(potAmount);
+            this.winnerList.add(winner);
             logger.info("{} is the winner!!!", winner.getUser().getUsername());
         }
         else {
@@ -110,6 +113,9 @@ public class Round {
         initPlayersTotalAmountPayedInRound();
         updatePlayersGamesPlayed();
         setRoundActive(false);
+
+        // Send round update notification
+        NotificationService.getInstance().sendRoundUpdateNotification(this);
     }
 
     private void paySmallAndBigBlind() {
@@ -369,6 +375,7 @@ public class Round {
         sumToDivide =  sumToDivide/winners.size();
         for(Player p : winners) {
             p.addChips(sumToDivide);
+            winnerList.add(p);
             logger.info("Player {} earned {}$", p.getUser().getUsername(), sumToDivide);
         }
     }
@@ -504,5 +511,13 @@ public class Round {
 
     public GameSettings getGameSettings() {
         return gameSettings;
+    }
+
+    public List<Player> getWinnerList() {
+        return winnerList;
+    }
+
+    public void setWinnerList(List<Player> winnerList) {
+        this.winnerList = winnerList;
     }
 }

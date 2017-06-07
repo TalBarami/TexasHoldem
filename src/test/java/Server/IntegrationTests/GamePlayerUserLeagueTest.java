@@ -111,7 +111,7 @@ public class GamePlayerUserLeagueTest {
         game.joinGameAsPlayer(testUser2);
         game.joinGameAsPlayer(testUser3);
         assertThat(game.getDealerIndex(),is(0));
-        game.startGame(null);
+        game.startGame((Player)testUser1.getGamePlayerMappings().get(game));
         assertThat(game.getDealerIndex(),is(1));
         assertThat(game.getRounds().size(),is(1));
     }

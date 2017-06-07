@@ -35,6 +35,9 @@ public class SpringApplicationContext implements ApplicationContextAware {
      * @return an Object reference to the named bean.
      */
     public static Object getBean(String beanName) {
+        if (CONTEXT == null)
+            return null;
+
         return CONTEXT.getBean(beanName);
     }
 }
