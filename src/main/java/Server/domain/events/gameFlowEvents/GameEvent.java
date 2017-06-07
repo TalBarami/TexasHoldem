@@ -11,29 +11,17 @@ import javax.persistence.*;
  */
 
 @Entity
-@Table(name = "gameevent")
+@Table(name = "game_event")
+@PrimaryKeyJoinColumn(name="system_event_id")
 public class GameEvent extends SystemEvent {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "gameevent_id")
-    private int id;
-
     @Enumerated(EnumType.STRING)
-    @Column(name = "gameaction")
+    @Column(name = "game_action")
     private GameActions eventAction;
 
     public GameEvent(Participant eventInitiator, GameActions action, String gameName) {
         super(eventInitiator, gameName);
         this.eventAction = action;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public void setEventAction(GameActions eventAction) {

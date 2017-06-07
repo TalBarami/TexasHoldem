@@ -11,10 +11,6 @@ import javax.persistence.*;
 @Entity
 @Table(name="spectator")
 @PrimaryKeyJoinColumn(name="participant_id")
-//@AttributeOverrides({
-//        @AttributeOverride(name="participant_id", column=@Column(name="participant_id")),
-//        @AttributeOverride(name="userName", column=@Column(name="userName"))
-//})
 public class Spectator extends Participant {
 
     public Spectator(User user){

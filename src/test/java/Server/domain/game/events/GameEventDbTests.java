@@ -1,8 +1,9 @@
-package Server.domain.game;
+package Server.domain.game.events;
 
 import Enumerations.GamePolicy;
 import Server.data.Hybernate.HibernateUtil;
 import Server.domain.events.gameFlowEvents.GameEvent;
+import Server.domain.game.GameActions;
 import Server.domain.game.participants.Participant;
 import Server.domain.game.participants.Player;
 import Server.domain.user.User;
