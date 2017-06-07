@@ -1,6 +1,7 @@
 package Client.notification;
 
 import Client.Application;
+import Client.domain.SessionManager;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
@@ -33,7 +34,8 @@ public class SubscriptionManager {
         WebSocketStompClient stompClient = new WebSocketStompClient(sockJsClient);
         stompClient.setMessageConverter(new MappingJackson2MessageConverter());
 
-        String url = "ws://" + Application.serverAddress + "/subscribe";
+        String serverAddress = SessionManager.getInstance().getIpAddress();
+        String url = "ws://" + serverAddress + "/subscribe";
 
         WebSocketHttpHeaders webSocketHttpHeaders = new WebSocketHttpHeaders();
         StompHeaders stompHeaders = new StompHeaders();

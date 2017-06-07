@@ -1,6 +1,5 @@
 package Client.communication;
 
-import Client.Application;
 import MutualJsonObjects.ClientUserProfile;
 import MutualJsonObjects.ResponseMessage;
 import MutualJsonObjects.ClientTransactionRequest;
@@ -25,7 +24,7 @@ import java.io.IOException;
  * Created by user on 13/05/2017.
  */
 public class UserRequestHandler {
-    public final static String serviceURI = "http://" + Application.serverAddress + "/user";
+    public static String serviceURI;
     private RestTemplate restTemplate;
     private ObjectMapper objectMapper;
 
