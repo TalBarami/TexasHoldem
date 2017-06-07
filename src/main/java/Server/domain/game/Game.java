@@ -12,25 +12,58 @@ import Server.domain.game.participants.Player;
 import Server.domain.game.participants.Spectator;
 import Server.domain.user.User;
 import Server.notification.NotificationService;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class Game {
 
+    @Transient
     private static Logger logger = LoggerFactory.getLogger(Game.class);
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "game_name")
+    @Cascade( {org.hibernate.annotations.CascadeType.DELETE_ORPHAN} )
     private GameSettings settings;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "game_id")
     private int id;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "players_in_game", joinColumns = @JoinColumn(name = "game_id"), inverseJoinColumns = { @JoinColumn(name = "participant_id") })
     private List<Player> players;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "rounds_in_game", joinColumns = @JoinColumn(name = "game_id"), inverseJoinColumns = { @JoinColumn(name = "round_id") })
     private List<Round> rounds;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "spectators_in_game", joinColumns = @JoinColumn(name = "game_id"), inverseJoinColumns = { @JoinColumn(name = "participant_id") })
     private List<Spectator> spectators;
+
+    @Column(name = "dealer_index_in_tablr")
     private int dealerIndex;
+
+    @Transient
     private LeagueManager leagueManager;
+
+    @Column(name = "is_game_active")
+    @Type(type = "org.hibernate.type.NumericBooleanType")
     private boolean isActive;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "game_events_in_game", joinColumns = @JoinColumn(name = "game_id"), inverseJoinColumns = { @JoinColumn(name = "system_event_id") })
     private List<GameEvent> gameEvents;
+
+    @Column(name = "num_players_started_game")
     private int numPlayersStarted;
 
     public Game(GameSettings settings, User creator, LeagueManager leagueManager){
