@@ -35,58 +35,58 @@ public class Round {
     @Column(name = "round_id")
     private int id;
 
-    @Column(name = "is_round_active")
+    @Column(name = "is_active")
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private boolean isRoundActive;
 
     @Transient
     private GameSettings gameSettings;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "active_player_in_round", joinColumns = @JoinColumn(name = "round_id"), inverseJoinColumns = { @JoinColumn(name = "participant_id") })
+    @OneToMany
+    @JoinTable(name = "active_players_in_round", joinColumns = @JoinColumn(name = "round_id"), inverseJoinColumns = { @JoinColumn(name = "participant_id") })
     private List<Player> activePlayers;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "original_player_in_round", joinColumns = @JoinColumn(name = "round_id"), inverseJoinColumns = { @JoinColumn(name = "participant_id") })
+    @OneToMany
+    @JoinTable(name = "original_players_in_round", joinColumns = @JoinColumn(name = "round_id"), inverseJoinColumns = { @JoinColumn(name = "participant_id") })
     private List<Player> originalPlayersInRound;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "dealer_Id")
+    @JoinColumn(name = "dealer_id")
     @Cascade( {org.hibernate.annotations.CascadeType.DELETE_ORPHAN} )
     private Dealer dealer;
 
     @Column(name = "chips_to_call")
     private int chipsToCall;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "participant_Id")
+    @OneToOne
+    @JoinColumn(name = "curr_player_id")
     private Player currentPlayer;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "participant_Id")
+    @OneToOne
+    @JoinColumn(name = "last_player_id")
     private Player lastPlayer;
 
     @Column(name = "pot_amount")
     private int potAmount;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany
     @JoinTable(name = "opened_cards_in_round", joinColumns = @JoinColumn(name = "round_id"), inverseJoinColumns = { @JoinColumn(name = "card_id") })
     private List<Card> openedCards;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "participant_Id")
+    @OneToOne
+    @JoinColumn(name = "dealer_player_id")
     private Player currentDealerPlayer;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "current_round_state")
+    @Column(name = "current_state")
     private RoundState currentState;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "event_list_in_round", joinColumns = @JoinColumn(name = "round_id"), inverseJoinColumns = { @JoinColumn(name = "system_event_id") })
+    @JoinTable(name = "events_in_round", joinColumns = @JoinColumn(name = "round_id"), inverseJoinColumns = { @JoinColumn(name = "system_event_id") })
     private List<GameEvent> eventList;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "winner_list_in_round", joinColumns = @JoinColumn(name = "round_id"), inverseJoinColumns = { @JoinColumn(name = "participant_id") })
+    @OneToMany
+    @JoinTable(name = "winners_in_round", joinColumns = @JoinColumn(name = "round_id"), inverseJoinColumns = { @JoinColumn(name = "participant_id") })
     private List<Player> winnerList;
 
     public Round(List<Player> players, GameSettings settings, int dealerIndex) {

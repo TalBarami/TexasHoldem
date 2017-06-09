@@ -55,7 +55,7 @@ public class Game {
     @Transient
     private LeagueManager leagueManager;
 
-    @Column(name = "is_game_active")
+    @Column(name = "is_active")
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private boolean isActive;
 
