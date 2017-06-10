@@ -41,7 +41,9 @@ public class User extends Observable {
     @Cascade( {org.hibernate.annotations.CascadeType.DELETE_ORPHAN} )
     private Wallet wallet;
 
-    @Transient
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "users_in_game", joinColumns = @JoinColumn(name = "userName"), inverseJoinColumns =  @JoinColumn(name = "participant_id"))
+    @MapKeyJoinColumn(name="game_id")
     private Map<Game,Participant> gameMapping;
 
     @Column(name = "amountEarnedInLeague")
@@ -168,8 +170,6 @@ public class User extends Observable {
         return username;
     }
 
-
-
     public Wallet getWallet() {
         return wallet;
     }
@@ -178,7 +178,6 @@ public class User extends Observable {
         this.username = username;
         setChanged();
     }
-
 
     public void setPassword(String password) {
         this.password = password;
@@ -201,10 +200,6 @@ public class User extends Observable {
     public void setDateOfBirth(LocalDate date) {
         this.dateOfBirth = date;
         setChanged();
-    }
-
-    public Map<Game,Participant> getGamePlayerMappings(){
-        return gameMapping;
     }
 
     public void addGameParticipant(Game game,Participant p){
@@ -291,13 +286,19 @@ public class User extends Observable {
         this.numOfGamesPlayed = numOfGamesPlayed;
     }
 
-
-
     public double getAvgNetoProfit(){
         return getNumOfGamesPlayed() != 0 ? getTotalNetoProfit()/getNumOfGamesPlayed() : 0;
     }
 
     public double getAvgGrossProfit(){
         return getNumOfGamesPlayed() != 0 ? getTotalGrossProfit()/getNumOfGamesPlayed() : 0;
+    }
+
+    public void setGameMapping(Map<Game, Participant> gameMapping) {
+        this.gameMapping = gameMapping;
+    }
+
+    public Map<Game, Participant> getGameMapping() {
+        return gameMapping;
     }
 }

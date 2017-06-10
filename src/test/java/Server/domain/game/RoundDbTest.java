@@ -61,6 +61,7 @@ public class RoundDbTest {
 
         }catch (HibernateException e) {
             if (session.getTransaction()!=null) session.getTransaction().rollback();
+            assertEquals(0,1);
         }finally {
             session.close();
         }
@@ -122,17 +123,18 @@ public class RoundDbTest {
             p1.setChipsAmount(1000);
             card.setRank(Rank.KING);
 
-//            session.delete(round);
-//            session.delete(gameSettings);
-//            session.delete(p1);
-//            session.delete(p2);
-//            session.delete(user1);
-//            session.delete(user2);
-//            session.delete(card);
+            session.delete(round);
+            session.delete(gameSettings);
+            session.delete(p1);
+            session.delete(p2);
+            session.delete(user1);
+            session.delete(user2);
+            session.delete(card);
             session.getTransaction().commit();
 
         }catch (HibernateException e) {
             if (session.getTransaction()!=null) session.getTransaction().rollback();
+            assertEquals(0,1);
         }finally {
             session.close();
         }

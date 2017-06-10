@@ -19,7 +19,7 @@ public abstract class Participant {
     @Column(name = "participant_id")
     private int id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST )
     @JoinColumn(name = "userName")
     protected User user;
 

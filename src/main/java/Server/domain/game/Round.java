@@ -42,11 +42,11 @@ public class Round {
     @Transient
     private GameSettings gameSettings;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "active_players_in_round", joinColumns = @JoinColumn(name = "round_id"), inverseJoinColumns = { @JoinColumn(name = "participant_id") })
     private List<Player> activePlayers;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "original_players_in_round", joinColumns = @JoinColumn(name = "round_id"), inverseJoinColumns = { @JoinColumn(name = "participant_id") })
     private List<Player> originalPlayersInRound;
 
@@ -69,7 +69,7 @@ public class Round {
     @Column(name = "pot_amount")
     private int potAmount;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "opened_cards_in_round", joinColumns = @JoinColumn(name = "round_id"), inverseJoinColumns = { @JoinColumn(name = "card_id") })
     private List<Card> openedCards;
 
@@ -85,7 +85,7 @@ public class Round {
     @JoinTable(name = "events_in_round", joinColumns = @JoinColumn(name = "round_id"), inverseJoinColumns = { @JoinColumn(name = "system_event_id") })
     private List<GameEvent> eventList;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "winners_in_round", joinColumns = @JoinColumn(name = "round_id"), inverseJoinColumns = { @JoinColumn(name = "participant_id") })
     private List<Player> winnerList;
 

@@ -1,5 +1,6 @@
 package Server.domain.game.card;
 
+import org.hibernate.annotations.Cascade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +27,7 @@ public class Deck {
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "card_in_deck", joinColumns = @JoinColumn(name = "deck_id"), inverseJoinColumns = { @JoinColumn(name = "card_id") })
+    @Cascade( {org.hibernate.annotations.CascadeType.DELETE_ORPHAN} )
     private List<Card> cards;
 
     public Deck(){

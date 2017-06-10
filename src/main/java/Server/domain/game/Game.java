@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Entity
+@Table(name = "game")
 public class Game {
 
     @Transient
@@ -37,6 +39,10 @@ public class Game {
     @Column(name = "game_id")
     private int id;
 
+    @Column(name = "game_over")
+    @Type(type = "org.hibernate.type.NumericBooleanType")
+    private boolean game_over;
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "players_in_game", joinColumns = @JoinColumn(name = "game_id"), inverseJoinColumns = { @JoinColumn(name = "participant_id") })
     private List<Player> players;
@@ -49,7 +55,7 @@ public class Game {
     @JoinTable(name = "spectators_in_game", joinColumns = @JoinColumn(name = "game_id"), inverseJoinColumns = { @JoinColumn(name = "participant_id") })
     private List<Spectator> spectators;
 
-    @Column(name = "dealer_index_in_tablr")
+    @Column(name = "dealer_index_in_table")
     private int dealerIndex;
 
     @Transient
@@ -76,6 +82,7 @@ public class Game {
         this.leagueManager = leagueManager;
         this.isActive=true;
         this.numPlayersStarted=0;
+        this.game_over = false;
         //Automatically the creator is added to the room.
         logger.info("A new game '{}' created by the user {}.",getName(),creator.getUsername());
         addPlayer(creator);
@@ -349,6 +356,62 @@ public class Game {
             p.setLastBetSinceCardOpen(0);
             p.setTotalAmountPayedInRound(0);
         }
+    }
+
+    public void setSettings(GameSettings settings) {
+        this.settings = settings;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setPlayers(List<Player> players) {
+        this.players = players;
+    }
+
+    public void setRounds(List<Round> rounds) {
+        this.rounds = rounds;
+    }
+
+    public void setSpectators(List<Spectator> spectators) {
+        this.spectators = spectators;
+    }
+
+    public void setDealerIndex(int dealerIndex) {
+        this.dealerIndex = dealerIndex;
+    }
+
+    public LeagueManager getLeagueManager() {
+        return leagueManager;
+    }
+
+    public void setLeagueManager(LeagueManager leagueManager) {
+        this.leagueManager = leagueManager;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    public void setGameEvents(List<GameEvent> gameEvents) {
+        this.gameEvents = gameEvents;
+    }
+
+    public int getNumPlayersStarted() {
+        return numPlayersStarted;
+    }
+
+    public void setNumPlayersStarted(int numPlayersStarted) {
+        this.numPlayersStarted = numPlayersStarted;
+    }
+
+    public boolean isGame_over() {
+        return game_over;
+    }
+
+    public void setGame_over(boolean game_over) {
+        this.game_over = game_over;
     }
 }
 

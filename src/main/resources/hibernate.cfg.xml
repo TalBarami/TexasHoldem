@@ -27,5 +27,6 @@
         <mapping class="Server.domain.events.gameFlowEvents.GameEvent"/>
         <mapping class="Server.domain.events.gameFlowEvents.MoveEvent"/>
         <mapping class="Server.domain.game.Round"/>
+        <mapping class="Server.domain.game.Game"/>
     </session-factory>
 </hibernate-configuration>

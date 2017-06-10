@@ -140,21 +140,21 @@ public class GameCenterTest {
         gc.registerUser(testUser2,testUser2Pass,testUser2Email,now,null);
         gc.login(testUser1,testUser1Pass);
         gc.login(testUser2,testUser2Pass);
-        assertTrue(gc.getUser(testUser1).getGamePlayerMappings().isEmpty());
-        assertTrue(gc.getUser(testUser2).getGamePlayerMappings().isEmpty());
+        assertTrue(gc.getUser(testUser1).getGameMapping().isEmpty());
+        assertTrue(gc.getUser(testUser2).getGameMapping().isEmpty());
 
         gc.getUser(testUser1).deposit(10000000,true);
         gc.createGame(testUser1,tournamentGameSettings);
         gc.joinGame(testUser2,tournamentGameSettings.getName(),true);
-        assertFalse(gc.getUser(testUser1).getGamePlayerMappings().isEmpty());
-        assertFalse(gc.getUser(testUser2).getGamePlayerMappings().isEmpty());
+        assertFalse(gc.getUser(testUser1).getGameMapping().isEmpty());
+        assertFalse(gc.getUser(testUser2).getGameMapping().isEmpty());
         Game game=gc.getGameByName(tournamentGameSettings.getName());
         assertTrue(game.getSpectators().get(0).getUser().getUsername().equals(testUser2));
         assertTrue(game.getPlayers().get(0).getUser().getUsername().equals(testUser1));
         gc.logout(testUser1);
         gc.logout(testUser2);
-        assertTrue(gc.getUser(testUser1).getGamePlayerMappings().isEmpty());
-        assertTrue(gc.getUser(testUser2).getGamePlayerMappings().isEmpty());
+        assertTrue(gc.getUser(testUser1).getGameMapping().isEmpty());
+        assertTrue(gc.getUser(testUser2).getGameMapping().isEmpty());
         assertTrue(game.getSpectators().isEmpty());
         assertTrue(game.getPlayers().isEmpty());
     }
@@ -269,7 +269,7 @@ public class GameCenterTest {
         gc.createGame(testUser1,tournamentGameSettings);
         User user=gc.getUser(testUser1);
         Game game=gc.getGameByName(tournamentGameSettings.getName());
-        assertTrue(user.getGamePlayerMappings().containsKey(game));
+        assertTrue(user.getGameMapping().containsKey(game));
         assertThat(user.getBalance(),is(100));
         assertThat(game.getLeague(),is(user.getCurrLeague()));
         assertThat(game.getPlayers().size(),is(1));
@@ -343,7 +343,7 @@ public class GameCenterTest {
 
         Game g=gc.getGameByName(tournamentGameSettings.getName());
         User u=gc.getUser(testUser2);
-        assertTrue(u.getGamePlayerMappings().containsKey(g));
+        assertTrue(u.getGameMapping().containsKey(g));
         assertThat(u.getBalance(),is(100));
         assertThat(g.getPlayers().size(),is(2));
         assertThat(g.getSpectators().size(),is(0));
@@ -395,8 +395,8 @@ public class GameCenterTest {
         assertThat(g.getPlayers().get(0).getUser().getUsername(),is(testUser1));
         User u1=gc.getUser(testUser1);
         User u2=gc.getUser(testUser2);
-        assertTrue(u1.getGamePlayerMappings().containsKey(g));
-        assertTrue(!u2.getGamePlayerMappings().containsKey(g));
+        assertTrue(u1.getGameMapping().containsKey(g));
+        assertTrue(!u2.getGameMapping().containsKey(g));
     }
 
     @Test

@@ -67,7 +67,7 @@ public class GamePlayerUserLeagueTest {
         game.joinGameAsPlayer(testUser2);
         assertThat(game.getPlayers().size(),is(2));
         assertThat(testUser2.getBalance(),is(previousUserBalance- tournamentGameSettings.getBuyInPolicy()));
-        Assert.assertTrue(testUser2.getGamePlayerMappings().containsKey(game));
+        Assert.assertTrue(testUser2.getGameMapping().containsKey(game));
         Assert.assertTrue(game.getSpectators().isEmpty());
     }
 
@@ -76,11 +76,11 @@ public class GamePlayerUserLeagueTest {
         Game game=new Game(realMoneyGameSettings,testUser1,leagueManager);
         int previousUserBalance=testUser2.getBalance();
         assertThat(game.getPlayers().size(),is(1));//Creator automatically joins the game
-        assertFalse(testUser2.getGamePlayerMappings().containsKey(game));
+        assertFalse(testUser2.getGameMapping().containsKey(game));
         game.joinGameAsPlayer(testUser2);
         assertThat(game.getPlayers().size(),is(2));
         assertThat(testUser2.getBalance(),is(previousUserBalance));
-        Assert.assertTrue(testUser2.getGamePlayerMappings().containsKey(game));
+        Assert.assertTrue(testUser2.getGameMapping().containsKey(game));
         Assert.assertTrue(game.getSpectators().isEmpty());
     }
 
@@ -90,13 +90,13 @@ public class GamePlayerUserLeagueTest {
         int previousUserBalance=testUser2.getBalance();
         assertThat(game.getPlayers().size(),is(1));//Creator automatically joins the game
         Assert.assertTrue(game.getSpectators().isEmpty());
-        assertFalse(testUser2.getGamePlayerMappings().containsKey(game));
+        assertFalse(testUser2.getGameMapping().containsKey(game));
         game.joinGameAsSpectator(testUser2);
         assertThat(game.getPlayers().size(),is(1));
         assertThat(game.getSpectators().size(),is(1));
-        Assert.assertTrue(testUser2.getGamePlayerMappings().containsKey(game));
+        Assert.assertTrue(testUser2.getGameMapping().containsKey(game));
         assertThat(testUser2.getBalance(),is(previousUserBalance));
-        Assert.assertTrue(testUser2.getGamePlayerMappings().containsKey(game));
+        Assert.assertTrue(testUser2.getGameMapping().containsKey(game));
 
         assertFalse(game.isFull());
         game.joinGameAsSpectator(testUser3);
@@ -111,7 +111,7 @@ public class GamePlayerUserLeagueTest {
         game.joinGameAsPlayer(testUser2);
         game.joinGameAsPlayer(testUser3);
         assertThat(game.getDealerIndex(),is(0));
-        game.startGame((Player)testUser1.getGamePlayerMappings().get(game));
+        game.startGame((Player)testUser1.getGameMapping().get(game));
         assertThat(game.getDealerIndex(),is(1));
         assertThat(game.getRounds().size(),is(1));
     }

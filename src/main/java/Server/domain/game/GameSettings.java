@@ -2,13 +2,15 @@ package Server.domain.game;
 
 import Enumerations.GamePolicy;
 import org.apache.commons.lang3.tuple.Pair;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "game_settings")
-public class GameSettings {
+@DynamicUpdate
+public class GameSettings implements java.io.Serializable {
 
     @Id
     @Column(name = "game_name")

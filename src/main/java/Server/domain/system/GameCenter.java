@@ -77,9 +77,9 @@ public class GameCenter {
             throw new InvalidArgumentException(String.format("'%s' isn't logged in, so can't log out.",userName));
 
         //remove from all playing rooms
-        loggedInUsers.forEach(user -> {
+        for(User user: loggedInUsers){
             if(user.getUsername().equals(userName)) {
-                Map<Game, Participant> mappings = user.getGamePlayerMappings();
+                Map<Game, Participant> mappings = user.getGameMapping();
                 Iterator<Map.Entry<Game, Participant>> it = mappings.entrySet().iterator();
                 while (it.hasNext()) {
                     Map.Entry<Game, Participant> keyValue = it.next();
@@ -89,7 +89,7 @@ public class GameCenter {
                     it.remove();
                 }
             }
-        });
+        }
         //remove from logged in user
         loggedInUsers=loggedInUsers.stream().filter(user -> !user.getUsername().equals(userName)).collect(Collectors.toList());
         logger.info("{} has logged out from the system, attempting to notify played games if needed.",userName);
@@ -108,7 +108,7 @@ public class GameCenter {
     public void startGame(String userName,String gameName) throws GameException {
         User user=getSpecificUserIfExist(userName);
         Game game= getSpecificGameIfExist(gameName);
-        Player playerInGame=(Player)user.getGamePlayerMappings().get(game);
+        Player playerInGame=(Player)user.getGameMapping().get(game);
         if(playerInGame==null)
             throw new GameException(String.format("User '%s' is not currently playing in game '%s",userName,gameName));
 
@@ -138,7 +138,7 @@ public class GameCenter {
         Game toJoin = getSpecificGameIfExist(gameName);
         User user = getSpecificUserIfExist(userName);
 
-        if(user.getGamePlayerMappings().containsKey(toJoin))
+        if(user.getGameMapping().containsKey(toJoin))
             throw new GameException(String.format("User '%s' is already in game '%s'.", userName, gameName));
 
         if (asSpectator){
@@ -154,12 +154,12 @@ public class GameCenter {
         User user=getSpecificUserIfExist(userName);
         Game game= getSpecificGameIfExist(gameName);
 
-        if(!user.getGamePlayerMappings().containsKey(game))
+        if(!user.getGameMapping().containsKey(game))
             throw new GameException(String.format("User '%s' can't leave game '%s', since he is not playing inside.",userName,gameName));
 
-        Participant participant=user.getGamePlayerMappings().get(game);
+        Participant participant=user.getGameMapping().get(game);
         participant.removeFromGame(game);
-        user.getGamePlayerMappings().remove(game);
+        user.getGameMapping().remove(game);
 
         if(game.canBeArchived()){
             gamesDb.archiveGame(game); // todo : notify someway to spectators of the room that room is closed?
@@ -176,7 +176,7 @@ public class GameCenter {
                 .filter(game -> game.getLeague() == user.getCurrLeague() &&
                         (game.realMoneyGame() || (!game.realMoneyGame() && game.isActive() && (game.getBuyInPolicy() <= user.getBalance()))) &&
                         game.getPlayers().size() < game.getMaximalAmountOfPlayers() &&
-                        !user.getGamePlayerMappings().containsKey(game))
+                        !user.getGameMapping().containsKey(game))
                 .collect(Collectors.toList());
     }
 

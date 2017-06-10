@@ -17,10 +17,8 @@ import org.hibernate.query.Query;
 
 
 public class Users implements IUsers, IUsersForDistributionAlgorithm {
-    private HashMap<String, User> _userList;
 
     public Users() {
-        _userList = new HashMap<String, User>();
     }
 
     public void addUser(User user) throws InvalidArgumentException {
