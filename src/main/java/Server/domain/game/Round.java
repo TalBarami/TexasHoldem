@@ -1,6 +1,7 @@
 package Server.domain.game;
 
 import Enumerations.GamePolicy;
+import Exceptions.InvalidArgumentException;
 import Server.domain.events.gameFlowEvents.MoveEvent;
 import Server.domain.events.gameFlowEvents.GameEvent;
 import Server.domain.game.card.Card;
@@ -143,7 +144,6 @@ public class Round {
 
         boolean isLastPlayerPlayed = false;
         if (isRoundActive) {
-            eventList.add(playerMoveEvent);
             GameActions chosenAction = playerMoveEvent.getEventAction();
 
             isLastPlayerPlayed = isLastPlayerPlayed(playerMoveEvent);
@@ -162,6 +162,8 @@ public class Round {
                     playerCallTurn();
                     break;
             }
+
+            eventList.add(playerMoveEvent);
 
             if (isLastPlayerPlayed) {
                 endFlow();
@@ -266,7 +268,11 @@ public class Round {
         }
     }
 
-    private void playerRaiseTurn(int amountToRaise) {
+    private void playerRaiseTurn(int amountToRaise) throws IllegalArgumentException {
+        if(gameSettings.getGameType() == GamePolicy.LIMIT && amountToRaise - chipsToCall > gameSettings.getGameTypeLimit())
+            throw new IllegalArgumentException("OOPS you raised more than the limit was decided, please try again");
+        if(gameSettings.getGameType() == GamePolicy.POTLIMIT && amountToRaise - chipsToCall > potAmount)
+            throw new IllegalArgumentException("OOPS you raised more than the current pot, please try again");
         int currentPlayerIndex = activePlayers.indexOf(currentPlayer);
         int nextPlayerIndex = (currentPlayerIndex + 1) % (activePlayers.size());
         int lastBet = currentPlayer.getLastBetSinceCardOpen();
