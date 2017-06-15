@@ -7,6 +7,8 @@ import Exceptions.LoginException;
 import Server.data.Hybernate.HibernateUtil;
 import Server.domain.user.User;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -51,8 +53,19 @@ public class Users implements IUsers, IUsersForDistributionAlgorithm {
 
             if(!userToUpdate.getUsername().equals(newUser))
                 userToUpdate.setUsername(newUser);
-            if(!userToUpdate.getPassword().equals(pass))
-                userToUpdate.setPassword(pass);
+
+            try {
+                MessageDigest md = MessageDigest.getInstance("MD5");
+                md.update(pass.getBytes());
+                byte[] digest = md.digest();
+                String password = new String(digest);
+
+                if(!userToUpdate.getPassword().equals(password))
+                    userToUpdate.setPassword(pass);
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+
             if(!userToUpdate.getEmail().equals(email))
                 userToUpdate.setEmail(email);
             if(!userToUpdate.getDateOfBirth().isEqual(date))
@@ -191,8 +204,19 @@ public class Users implements IUsers, IUsersForDistributionAlgorithm {
         User user=getUserByUserName(userName);
         if(user == null)
             throw new EntityDoesNotExistsException(String.format("'%s' doesn't exist in the system.",userName));
-        else if(!password.equals(user.getPassword()))
-            throw new LoginException("Wrong password.");
+        else {
+            try {
+                MessageDigest md = MessageDigest.getInstance("MD5");
+                md.update(password.getBytes());
+                byte[] digest = md.digest();
+                String pass = new String(digest);
+
+                if(!pass.equals(user.getPassword()))
+                    throw new LoginException("Wrong password.");
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+        }
         return user;
     }
 
