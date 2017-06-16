@@ -5,7 +5,7 @@ import Exceptions.InvalidArgumentException;
 import Exceptions.LoginException;
 
 import Client.domain.SessionManager;
-import Client.view.ClientUtils;
+import Client.ClientUtils;
 import Client.view.system.MainMenu;
 
 import javax.swing.*;

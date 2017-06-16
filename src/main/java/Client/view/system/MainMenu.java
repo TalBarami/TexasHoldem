@@ -10,7 +10,7 @@ import Exceptions.InvalidArgumentException;
 import Client.domain.MenuManager;
 import Client.domain.SearchManager;
 import Client.domain.SessionManager;
-import Client.view.ClientUtils;
+import Client.ClientUtils;
 import Client.view.access.Welcome;
 import Client.view.game.Game;
 

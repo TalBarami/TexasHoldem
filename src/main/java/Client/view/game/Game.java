@@ -11,25 +11,28 @@ import MutualJsonObjects.ClientUserProfile;
 
 import Client.domain.GameManager;
 import Client.domain.MenuManager;
-import Client.view.ClientUtils;
+import Client.ClientUtils;
 import Client.view.system.MainMenu;
 import NotificationMessages.ChatNotification;
 import NotificationMessages.GameUpdateNotification;
 import NotificationMessages.RoundUpdateNotification;
 import Server.domain.game.GameActions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 
 /**
  * Created by User on 14/05/2017.
  */
 public class Game extends JFrame{
+    private static Logger logger = LoggerFactory.getLogger(Game.class);
+
     private MainMenu ancestor;
     private GameManager gameManager;
 
@@ -61,8 +64,6 @@ public class Game extends JFrame{
         this.ancestor = ancestor;
         gameManager = new GameManager(gameName);
 
-        disableGameActions();
-        initializeSeats();
         assignActionListeners();
         initializeGame(gameManager.getGameDetails());
     }
@@ -76,26 +77,43 @@ public class Game extends JFrame{
     }
 
     private void initializeGame(ClientGameDetails gameDetails){
+        logger.info("Initializing game.");
         generateUserInformation(SessionManager.getInstance().user());
-        updatePlayersInformation(gameDetails.getPlayerList());
+        initializeSeats(gameDetails);
+        reconfigureStartButton(gameManager.getGameDetails().getPlayerList());
+        disableGameActions();
         potLabel.setText("0");
         cardsLabel.setText("");
         eventsLabel.setText("");
     }
 
-    private void initializeSeats(){
+    private void initializeSeats(ClientGameDetails gameDetails){
+        logger.info("Initializing seats.");
         bottomPanel.setLayout(new GridLayout(1, 0));
         leftPanel.setLayout(new GridLayout(0, 1));
         topPanel.setLayout(new GridLayout(1, 0));
         rightPanel.setLayout(new GridLayout(0, 1));
+        updatePlayersInformation(gameDetails.getPlayerList());
     }
 
     private void assignActionListeners(){
+        logger.info("Assigning action listeners.");
         SessionManager.getInstance().addUpdateCallback(this::generateUserInformation);
 
-        gameManager.addGameUpdateCallback(this::updateTable);
+        gameManager.addGameUpdateCallback(this::notifyPlayers);
+        gameManager.addGameUpdateCallback(this::handleGameSession);
+        gameManager.addGameUpdateCallback(gameUpdateNotification -> updatePlayersInformation(gameUpdateNotification.getGameDetails().getPlayerList()));
+        gameManager.addGameUpdateCallback(gameUpdateNotification -> reconfigureStartButton(gameUpdateNotification.getGameDetails().getPlayerList()));
+
+        gameManager.addRoundUpdateCallback(this::notifyPlayers);
+        gameManager.addRoundUpdateCallback(this::handleGameSession);
         gameManager.addRoundUpdateCallback(this::updateTable);
+        gameManager.addRoundUpdateCallback(this::reconfigureRaiseButton);
+        gameManager.addRoundUpdateCallback(roundUpdateNotification -> updatePlayersInformation(roundUpdateNotification.getCurrentPlayers(), roundUpdateNotification.getCurrentPlayerName()));
+        gameManager.addRoundUpdateCallback(roundUpdateNotification -> reconfigureStartButton(roundUpdateNotification.getCurrentPlayers()));
+
         gameManager.addMoveUpdateCallback(this::updateGameMoves);
+
         gameManager.addChatUpdateCallback(this::updateChatWindow);
 
         raiseAmountSpinner.setModel(new SpinnerNumberModel(10, 1, Integer.MAX_VALUE, 1));
@@ -125,21 +143,23 @@ public class Game extends JFrame{
     }
 
     private void generateUserInformation(ClientUserProfile user){
+        logger.info("Adding user information.");
         usernameLabel.setText("Name: " + user.getUsername());
         cashLabel.setText("Balance: " + String.valueOf(user.getBalance()));
     }
 
     private void updatePlayersInformation(List<ClientPlayer> players, String currentPlayerName){
+        logger.info("Updating players information.");
         seats.forEach(Container::removeAll);
         chatComboBox.removeAllItems();
 
         for (int i = 0; i < players.size(); i++) {
             ClientPlayer clientPlayer = players.get(i);
             Player player = new Player(clientPlayer);
-            if(clientPlayer.getPlayerName().equals(currentPlayerName)){
+            if(isTurnOf(clientPlayer, currentPlayerName)){
                 player.mark();
             }
-            if(clientPlayer.getPlayerName().equals(SessionManager.getInstance().user().getUsername())){
+            if(isClientPlaying(clientPlayer)){
                 player.showCards();
                 player.self();
             }
@@ -157,8 +177,7 @@ public class Game extends JFrame{
         updatePlayersInformation(players, null);
     }
 
-    private void updateTable(GameUpdateNotification gameUpdateNotification){
-        updatePlayersInformation(gameUpdateNotification.getGameDetails().getPlayerList());
+    private void notifyPlayers(GameUpdateNotification gameUpdateNotification){
         String action;
         switch(gameUpdateNotification.getAction()){
             case ENTER:
@@ -169,9 +188,7 @@ public class Game extends JFrame{
                 break;
             case NEWROUND:
                 action = "started";
-                startGameButton.setEnabled(false);
                 break;
-            // TODO: Handle case when round is finished.
             default:
                 JOptionPane.showMessageDialog(null, "Undefined event occurred: " + gameUpdateNotification.toString(), "Error", JOptionPane.ERROR_MESSAGE);
                 return;
@@ -179,12 +196,24 @@ public class Game extends JFrame{
         eventsLabel.setText(String.format("%s has %s the game.", gameUpdateNotification.getGameActionInitiator(), action));
     }
 
+    private void handleGameSession(GameUpdateNotification gameUpdateNotification){
+        if(gameUpdateNotification.getAction().equals(GameActions.NEWROUND)){
+            gameManager.setGameRunning(true);
+        }
+    }
+
     private void updateTable(RoundUpdateNotification roundUpdateNotification){
-        updatePlayersInformation(roundUpdateNotification.getCurrentPlayers(), roundUpdateNotification.getCurrentPlayerName());
-
         potLabel.setText(String.valueOf(roundUpdateNotification.getCurrentPotSize()));
-        cardsLabel.setText(roundUpdateNotification.getCurrentOpenedCards().toString());
+        cardsLabel.setText(ClientUtils.prettyList(roundUpdateNotification.getCurrentOpenedCards()));
+    }
 
+    private void handleGameSession(RoundUpdateNotification roundUpdateNotification){
+        if(roundUpdateNotification.isFinished()){
+            gameManager.setGameRunning(false);
+        }
+    }
+
+    private void reconfigureRaiseButton(RoundUpdateNotification roundUpdateNotification){
         int maxBet = roundUpdateNotification.getCurrentPlayers().stream()
                 .map(ClientPlayer::getLastBetSinceCardOpen)
                 .max(Integer::compareTo)
@@ -194,8 +223,14 @@ public class Game extends JFrame{
         raiseAmountSpinner.setModel(new SpinnerNumberModel(minRaise, minRaise , Integer.MAX_VALUE, 1));
         JFormattedTextField txt = ((JSpinner.NumberEditor) raiseAmountSpinner.getEditor()).getTextField();
         ((NumberFormatter) txt.getFormatter()).setAllowsInvalid(false);
+    }
 
-        eventsLabel.setText(String.format("It's %s turn.", roundUpdateNotification.getCurrentPlayerName()));
+    private void notifyPlayers(RoundUpdateNotification roundUpdateNotification){
+        if(roundUpdateNotification.isFinished()){
+            eventsLabel.setText(String.format("Round is finished. Winners are: %s", ClientUtils.prettyList(roundUpdateNotification.getWinnerPlayers())));
+        } else {
+            eventsLabel.setText(String.format("It's %s turn.", roundUpdateNotification.getCurrentPlayerName()));
+        }
     }
 
     private void updateChatWindow(ChatNotification chatNotification){
@@ -277,10 +312,27 @@ public class Game extends JFrame{
         }
     }
 
+    private boolean isTurnOf(ClientPlayer player, String currentPlayerName){
+        return player.getPlayerName().equals(currentPlayerName);
+    }
+
+    private boolean isClientPlaying(ClientPlayer ... players){
+        return Arrays.stream(players).anyMatch(player -> SessionManager.getInstance().user().getUsername().equals(player.getPlayerName()));
+    }
+
     private void disableGameActions(){
         foldButton.setEnabled(false);
         callButton.setEnabled(false);
         raiseButton.setEnabled(false);
         checkButton.setEnabled(false);
+    }
+
+    private void reconfigureStartButton(List<ClientPlayer> players){
+        boolean isPlayerPlaying = isClientPlaying(players.toArray(new ClientPlayer[0]));
+        boolean isGameRunning = gameManager.isGameRunning();
+        boolean hasEnoughPlayers =  gameManager.getGameDetails().getMinimumPlayersAmount() < players.size() &&
+                players.size() < gameManager.getGameDetails().getMaximumPlayersAmount();
+
+        startGameButton.setEnabled(isPlayerPlaying && !isGameRunning && hasEnoughPlayers);
     }
 }
