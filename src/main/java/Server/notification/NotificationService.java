@@ -132,7 +132,7 @@ public class NotificationService {
                 currentOpenedCards.add(CardClientCardConverter.convert(c));
             }
 
-            for (Player p : round.getActivePlayers()) {
+            for (Player p : round.getOriginalPlayersInRound()) {
                 String userName = p.getUser().getUsername();
                 sendRelevantRoundUpdateNotification(round, gameName, currentPotSize, currentPlayerName, currentPlayers, currentOpenedCards, userName);
             }
