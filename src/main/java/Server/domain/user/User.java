@@ -40,6 +40,7 @@ public class User extends Observable {
         this.dateOfBirth = date;
         this.img = image;
         this.gameMapping = new HashMap<>();
+        this.currLeague = LeagueManager.defaultLeagueForNewUsers;
         this.numOfGamesPlayed = 0;
         this.totalNetoProfit = 0;
         this.totalGrossProfit = 0;
@@ -197,11 +198,8 @@ public class User extends Observable {
 
     public void setCurrLeague(int currLeague) {
         this.currLeague = currLeague;
-
-        if (currLeague != LeagueManager.defaultLeagueForNewUsers) {
-            setChanged();
-            notifyObservers();
-        }
+        setChanged();
+        notifyObservers();
     }
 
     public BufferedImage getImg() {
