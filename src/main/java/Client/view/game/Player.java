@@ -28,6 +28,8 @@ public class Player {
         container.add(nameLabel);
         container.add(chipAmountLabel);
         container.add(lastBetLabel);
+
+        container.setBackground(Color.lightGray);
     }
 
     public void mark(){

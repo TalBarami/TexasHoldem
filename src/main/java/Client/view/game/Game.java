@@ -26,6 +26,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by User on 14/05/2017.
@@ -82,6 +83,9 @@ public class Game extends JFrame{
         initializeSeats(gameDetails);
         reconfigureStartButton(gameManager.getGameDetails().getPlayerList());
         disableGameActions();
+        sendButton.setEnabled(isClientPlaying(gameManager.getGameDetails().getPlayerList()));
+        chatComboBox.setEnabled(isClientPlaying(gameManager.getGameDetails().getPlayerList()));
+
         potLabel.setText("0");
         cardsLabel.setText("");
         eventsLabel.setText("");
@@ -227,7 +231,10 @@ public class Game extends JFrame{
 
     private void notifyPlayers(RoundUpdateNotification roundUpdateNotification){
         if(roundUpdateNotification.isFinished()){
-            eventsLabel.setText(String.format("Round is finished. Winners are: %s", ClientUtils.prettyList(roundUpdateNotification.getWinnerPlayers())));
+            List<String> winnersNames = roundUpdateNotification.getWinnerPlayers().stream().map(ClientPlayer::getPlayerName).collect(Collectors.toList());
+
+            eventsLabel.setText(winnersNames.size() > 1 ? String.format("Round is finished. Winners are: %s", ClientUtils.prettyList(winnersNames))
+                                : String.format("Round is finished. Winner is: %s", winnersNames.get(0)));
         } else {
             eventsLabel.setText(String.format("It's %s turn.", roundUpdateNotification.getCurrentPlayerName()));
         }
@@ -317,7 +324,11 @@ public class Game extends JFrame{
     }
 
     private boolean isClientPlaying(ClientPlayer ... players){
-        return Arrays.stream(players).anyMatch(player -> SessionManager.getInstance().user().getUsername().equals(player.getPlayerName()));
+        return isClientPlaying(Arrays.asList(players));
+    }
+
+    private boolean isClientPlaying(List<ClientPlayer> players){
+        return players.stream().anyMatch(player -> SessionManager.getInstance().user().getUsername().equals(player.getPlayerName()));
     }
 
     private void disableGameActions(){
@@ -328,11 +339,11 @@ public class Game extends JFrame{
     }
 
     private void reconfigureStartButton(List<ClientPlayer> players){
-        boolean isPlayerPlaying = isClientPlaying(players.toArray(new ClientPlayer[0]));
+        boolean isClientPlaying = isClientPlaying(players);
         boolean isGameRunning = gameManager.isGameRunning();
-        boolean hasEnoughPlayers =  gameManager.getGameDetails().getMinimumPlayersAmount() < players.size() &&
-                players.size() < gameManager.getGameDetails().getMaximumPlayersAmount();
-
-        startGameButton.setEnabled(isPlayerPlaying && !isGameRunning && hasEnoughPlayers);
+        boolean hasEnoughPlayers =  gameManager.getGameDetails().getMinimumPlayersAmount() <= players.size() &&
+                players.size() <= gameManager.getGameDetails().getMaximumPlayersAmount();
+        logger.info("Client is player: {}, Game running: {}, Game has enough players: {}", isClientPlaying, isGameRunning, hasEnoughPlayers);
+        startGameButton.setEnabled(isClientPlaying && !isGameRunning && hasEnoughPlayers);
     }
 }
