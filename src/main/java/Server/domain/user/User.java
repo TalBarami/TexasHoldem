@@ -197,8 +197,11 @@ public class User extends Observable {
 
     public void setCurrLeague(int currLeague) {
         this.currLeague = currLeague;
-        setChanged();
-        notifyObservers();
+
+        if (currLeague != LeagueManager.defaultLeagueForNewUsers) {
+            setChanged();
+            notifyObservers();
+        }
     }
 
     public BufferedImage getImg() {
