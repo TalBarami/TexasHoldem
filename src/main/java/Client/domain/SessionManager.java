@@ -31,6 +31,8 @@ public class SessionManager {
 
     private List<UserUpdateCallback> updateCallbacks;
 
+    private String sessionID;
+
     private SessionManager(){
         sessionRequestHandler = new SessionRequestHandler();
         userRequestHandler = new UserRequestHandler();
@@ -89,7 +91,7 @@ public class SessionManager {
 
     public void login(String username, String password) throws LoginException, EntityDoesNotExistsException, InvalidArgumentException, ExecutionException, InterruptedException {
         ClientUserLoginDetails details = new ClientUserLoginDetails(username, password);
-        sessionRequestHandler.requestUserLogin(details);
+        sessionID = sessionRequestHandler.requestUserLogin(details);
 
         user = userRequestHandler.requestUserProfileEntity(username);
         stompSession = SubscriptionManager.subscribe(user.getUsername());
@@ -98,7 +100,7 @@ public class SessionManager {
 
     public void logout(String username) throws InvalidArgumentException {
         ClientUserLoginDetails details = new ClientUserLoginDetails(username, "");
-        sessionRequestHandler.requestUserLogout(details);
+        sessionRequestHandler.requestUserLogout(details,sessionID);
         user = null;
 
         if (stompSession != null && stompSession.isConnected()) {
@@ -128,4 +130,6 @@ public class SessionManager {
     public ClientStompSessionHandler getSessionHandler(){
         return SubscriptionManager.getStompSessionHandler();
     }
+
+    public String getSessionID(){return this.sessionID;}
 }

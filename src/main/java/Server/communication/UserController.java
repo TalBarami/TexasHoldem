@@ -9,6 +9,7 @@ import Exceptions.InvalidArgumentException;
 import Server.communication.converters.UserClientUserProfileConverter;
 import Server.domain.user.Transaction;
 import Server.service.UserService;
+import org.apache.catalina.SessionIdGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

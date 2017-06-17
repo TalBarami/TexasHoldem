@@ -9,10 +9,7 @@ import Exceptions.InvalidArgumentException;
 import Exceptions.LoginException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
@@ -31,11 +28,12 @@ public class SessionRequestHandler {
         this.objectMapper = new ObjectMapper();
     }
 
-    public void requestUserLogin(ClientUserLoginDetails loginDetails) throws LoginException, InvalidArgumentException, EntityDoesNotExistsException {
+    public String requestUserLogin(ClientUserLoginDetails loginDetails) throws LoginException, InvalidArgumentException, EntityDoesNotExistsException {
         HttpEntity<ClientUserLoginDetails> request = new HttpEntity<>(loginDetails);
 
         try {
             ResponseEntity<ResponseMessage> response = restTemplate.exchange(serviceURI, HttpMethod.POST, request, ResponseMessage.class);
+            return response.getBody().getData().toString();
         }
         catch (HttpStatusCodeException e) {
             String responseBody = e.getResponseBodyAsString();
@@ -59,8 +57,10 @@ public class SessionRequestHandler {
         }
     }
 
-    public void requestUserLogout(ClientUserLoginDetails logoutDetails) throws InvalidArgumentException {
-        HttpEntity<ClientUserLoginDetails> request = new HttpEntity<>(logoutDetails);
+    public void requestUserLogout(ClientUserLoginDetails logoutDetails, String sessionID) throws InvalidArgumentException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("SESSION_ID", sessionID);
+        HttpEntity<ClientUserLoginDetails> request = new HttpEntity<>(logoutDetails, headers);
 
         try {
             ResponseEntity<ResponseMessage> response = restTemplate.exchange(serviceURI, HttpMethod.DELETE, request, ResponseMessage.class);

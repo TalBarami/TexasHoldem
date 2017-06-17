@@ -58,6 +58,7 @@ public class UserRequestHandler {
         String addr = serviceURI + "/" + oldUserName;
         HttpEntity<ClientUserProfile> request = new HttpEntity<>(userProfile);
 
+
         try {
             ResponseEntity<ResponseMessage> response = restTemplate.exchange(addr, HttpMethod.PUT, request, ResponseMessage.class);
         }
