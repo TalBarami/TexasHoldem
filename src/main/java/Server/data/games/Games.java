@@ -152,7 +152,7 @@ public class Games implements IGames {
         try{
             session.beginTransaction();
             String sql = "FROM game";
-            games = session.createSQLQuery(sql).list();
+            games = session.createCriteria(Game.class).list();;
             session.getTransaction().commit();
         }catch (HibernateException e) {
             if (session.getTransaction()!=null) session.getTransaction().rollback();

@@ -1,8 +1,10 @@
 package Server.domain.user;
 
 import Exceptions.ArgumentNotInBoundsException;
+import Server.data.Hybernate.HibernateUtil;
 import Server.domain.game.Game;
 import Server.domain.game.participants.Participant;
+import org.hibernate.Session;
 import org.hibernate.annotations.*;
 import Server.notification.NotificationService;
 
@@ -301,4 +303,5 @@ public class User extends Observable {
     public Map<Game, Participant> getGameMapping() {
         return gameMapping;
     }
+
 }
