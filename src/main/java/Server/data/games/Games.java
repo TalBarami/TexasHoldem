@@ -17,14 +17,14 @@ import java.util.function.Predicate;
  * Created by RotemWald on 05/04/2017.
  */
 public class Games implements IGames {
-    private HashMap<Integer, Game> _games;
-    private List<Game> archivedGames;
-    int _newGameId;
+ //   private HashMap<Integer, Game> _games;
+  //  private List<Game> archivedGames;
+   // int _newGameId;
 
     public Games() {
-        _games = new HashMap<Integer, Game>();
-        archivedGames=new ArrayList<>();
-        _newGameId = 0;
+     //   _games = new HashMap<Integer, Game>();
+      //  archivedGames=new ArrayList<>();
+      //  _newGameId = 0;
     }
 
     public boolean addGame(Game game) throws InvalidArgumentException {
@@ -173,7 +173,7 @@ public class Games implements IGames {
    // }
 
 
-    public List<Game> getArchivedGames(){ return archivedGames; }
+  //  public List<Game> getArchivedGames(){ return archivedGames; }
 
 //    public boolean isArchived(Game g){
 //        return archivedGames.contains(g);
