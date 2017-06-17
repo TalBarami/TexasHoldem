@@ -7,6 +7,7 @@ import Server.domain.game.Game;
 import Enumerations.GamePolicy;
 import Server.service.GameService;
 import Server.service.SearchService;
+import Server.service.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,11 +24,13 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 public class GameController {
     private GameService gameService;
     private SearchService searchService;
+    private SessionManager manager;
 
     @Autowired
     public GameController(GameService gameService, SearchService searchService) {
         this.gameService = gameService;
         this.searchService = searchService;
+        this.manager = SessionManager.getInstance();
     }
 
     @RequestMapping(method=GET, value="/game/{roomname}")
@@ -39,14 +42,15 @@ public class GameController {
     }
 
     @RequestMapping(method=POST, value="/game/{roomname}")
-    public ResponseMessage createGame(@PathVariable("roomname") String roomName, @RequestBody ClientGameDetails gameDetails) throws InvalidArgumentException, NoBalanceForBuyInException, ArgumentNotInBoundsException, EntityDoesNotExistsException {
+    public ResponseMessage createGame(@PathVariable("roomname") String roomName, @RequestBody ClientGameDetails gameDetails,@RequestHeader("SESSION_ID") String sessionID) throws InvalidArgumentException, NoBalanceForBuyInException, ArgumentNotInBoundsException, EntityDoesNotExistsException {
+        String userName = gameDetails.getUsername();
         String gameName = gameDetails.getName();
+        manager.validate(userName, sessionID);
 
         if (!roomName.equals(gameName)) {
             throw new InvalidArgumentException("Room name is not compatible with request data.");
         }
 
-        String userName = gameDetails.getUsername();
         int policyType = gameDetails.getPolicyType();
         int policyLimitAmount = gameDetails.getPolicyLimitAmount();
         int minimumBet = gameDetails.getMinimumBet();

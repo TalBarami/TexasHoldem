@@ -32,7 +32,7 @@ public class MenuManager {
         ClientGameDetails gameDetails = new ClientGameDetails(SessionManager.getInstance().user().getUsername(),
                 gameName, gamePolicy.getPolicy(), policyLimit, minBet, buyInPolicy,
                 chipPolicy, minPlayerAmount, maxPlayerAmount, specAccept, new ArrayList<>());
-        gameRequestHandler.requestGameCreation(gameDetails);
+        gameRequestHandler.requestGameCreation(gameDetails, SessionManager.getInstance().getSessionID());
     }
 
     public void joinGame(String username, String gameName) throws GameException {

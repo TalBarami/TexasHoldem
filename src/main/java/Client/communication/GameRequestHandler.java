@@ -5,10 +5,7 @@ import Exceptions.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
@@ -54,9 +51,11 @@ public class GameRequestHandler {
         }
     }
 
-    public void requestGameCreation(ClientGameDetails gameDetails) throws InvalidArgumentException, NoBalanceForBuyInException, ArgumentNotInBoundsException, EntityDoesNotExistsException {
+    public void requestGameCreation(ClientGameDetails gameDetails, String sessionID) throws InvalidArgumentException, NoBalanceForBuyInException, ArgumentNotInBoundsException, EntityDoesNotExistsException {
         String addr = serviceURI + "/" + gameDetails.getName();
-        HttpEntity<ClientGameDetails> request = new HttpEntity<>(gameDetails);
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("SESSION_ID", sessionID);
+        HttpEntity<ClientGameDetails> request = new HttpEntity<>(gameDetails, headers);
 
         try {
             ResponseEntity<ResponseMessage> response = restTemplate.exchange(addr, HttpMethod.POST, request, ResponseMessage.class);
