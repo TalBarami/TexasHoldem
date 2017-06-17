@@ -9,6 +9,7 @@ import Server.domain.game.card.Dealer;
 import Server.domain.game.hand.Hand;
 import Server.domain.game.hand.HandCalculator;
 import Server.domain.game.participants.Player;
+import Server.domain.game.participants.Spectator;
 import Server.notification.NotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +29,7 @@ public class Round {
     private GameSettings gameSettings;
     private List<Player> activePlayers;
     private List<Player> originalPlayersInRound;
+    private List<Spectator> spectatorList;
     private Dealer dealer;
     private int chipsToCall;
     private Player currentPlayer;
@@ -43,6 +45,7 @@ public class Round {
         this.gameSettings = settings;
         this.activePlayers = new ArrayList<Player>(players);
         this.originalPlayersInRound = new ArrayList<Player>(players);
+        this.spectatorList = null;
         this.dealer = new Dealer();
         this.currentDealerPlayer = activePlayers.get(dealerIndex);
         this.chipsToCall = gameSettings.getMinBet();
@@ -525,5 +528,13 @@ public class Round {
 
     public void setWinnerList(List<Player> winnerList) {
         this.winnerList = winnerList;
+    }
+
+    public List<Spectator> getSpectatorList() {
+        return spectatorList;
+    }
+
+    public void setSpectatorList(List<Spectator> spectatorList) {
+        this.spectatorList = spectatorList;
     }
 }

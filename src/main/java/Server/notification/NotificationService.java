@@ -18,6 +18,7 @@ import Server.domain.game.Round;
 import Server.domain.game.card.Card;
 import Server.domain.game.participants.Participant;
 import Server.domain.game.participants.Player;
+import Server.domain.game.participants.Spectator;
 import Server.domain.user.User;
 
 import java.util.LinkedList;
@@ -131,23 +132,14 @@ public class NotificationService {
                 currentOpenedCards.add(CardClientCardConverter.convert(c));
             }
 
-            for (Player p : round.getActivePlayers()) {
+            for (Player p : round.getOriginalPlayersInRound()) {
                 String userName = p.getUser().getUsername();
+                sendRelevantRoundUpdateNotification(round, gameName, currentPotSize, currentPlayerName, currentPlayers, currentOpenedCards, userName);
+            }
 
-                if (round.isRoundActive()) {
-                    RoundUpdateNotification notification = new RoundUpdateNotification(userName, gameName, currentPotSize, currentPlayerName, currentPlayers, currentOpenedCards, null, false);
-                    messageSender.sendRoundUpdateNotification(notification);
-                }
-
-                else {
-                    List<ClientPlayer> winnerList = new LinkedList<>();
-                    for (Player p1 : round.getWinnerList()) {
-                        winnerList.add(PlayerClientPlayerConverter.convert(p1));
-                    }
-
-                    RoundUpdateNotification notification = new RoundUpdateNotification(userName, gameName, currentPotSize, currentPlayerName, currentPlayers, currentOpenedCards, winnerList, true);
-                    messageSender.sendRoundUpdateNotification(notification);
-                }
+            for (Spectator s : round.getSpectatorList()) {
+                String userName = s.getUser().getUsername();
+                sendRelevantRoundUpdateNotification(round, gameName, currentPotSize, currentPlayerName, currentPlayers, currentOpenedCards, userName);
             }
         }
     }
@@ -159,9 +151,35 @@ public class NotificationService {
 
             for (Player p : game.getPlayers()) {
                 String userName = p.getUser().getUsername();
-                GameUpdateNotification notification = new GameUpdateNotification(userName, gameName, action, gameActionInitiator, gameDetails);
-                messageSender.sendGameUpdateNotification(notification);
+                sendRelevantGameUpdateNotification(action, gameActionInitiator, gameName, gameDetails, userName);
+            }
+
+            for (Spectator s : game.getSpectators()) {
+                String userName = s.getUser().getUsername();
+                sendRelevantGameUpdateNotification(action, gameActionInitiator, gameName, gameDetails, userName);
             }
         }
+    }
+
+    private void sendRelevantRoundUpdateNotification(Round round, String gameName, int currentPotSize, String currentPlayerName, List<ClientPlayer> currentPlayers, List<ClientCard> currentOpenedCards, String userName) {
+        if (round.isRoundActive()) {
+            RoundUpdateNotification notification = new RoundUpdateNotification(userName, gameName, currentPotSize, currentPlayerName, currentPlayers, currentOpenedCards, null, false);
+            messageSender.sendRoundUpdateNotification(notification);
+        }
+
+        else {
+            List<ClientPlayer> winnerList = new LinkedList<>();
+            for (Player p1 : round.getWinnerList()) {
+                winnerList.add(PlayerClientPlayerConverter.convert(p1));
+            }
+
+            RoundUpdateNotification notification = new RoundUpdateNotification(userName, gameName, currentPotSize, currentPlayerName, currentPlayers, currentOpenedCards, winnerList, true);
+            messageSender.sendRoundUpdateNotification(notification);
+        }
+    }
+
+    private void sendRelevantGameUpdateNotification(GameActions action, String gameActionInitiator, String gameName, ClientGameDetails gameDetails, String userName) {
+        GameUpdateNotification notification = new GameUpdateNotification(userName, gameName, action, gameActionInitiator, gameDetails);
+        messageSender.sendGameUpdateNotification(notification);
     }
 }

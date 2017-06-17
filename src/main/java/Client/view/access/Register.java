@@ -3,7 +3,7 @@ package Client.view.access;
 import Exceptions.InvalidArgumentException;
 
 import Client.domain.SessionManager;
-import Client.view.ClientUtils;
+import Client.ClientUtils;
 import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
 import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
 import net.sourceforge.jdatepicker.impl.UtilDateModel;

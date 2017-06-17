@@ -1,7 +1,7 @@
 package Client.view.access;
 
 
-import Client.view.ClientUtils;
+import Client.ClientUtils;
 
 import javax.swing.*;
 import java.awt.event.*;

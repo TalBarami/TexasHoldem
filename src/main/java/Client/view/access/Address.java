@@ -3,9 +3,8 @@ package Client.view.access;
 import Client.communication.GameRequestHandler;
 import Client.communication.SessionRequestHandler;
 import Client.communication.UserRequestHandler;
-import Client.domain.GameManager;
 import Client.domain.SessionManager;
-import Client.view.ClientUtils;
+import Client.ClientUtils;
 
 import javax.swing.*;
 
