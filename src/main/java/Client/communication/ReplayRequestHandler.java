@@ -27,7 +27,7 @@ public class ReplayRequestHandler {
         this.objectMapper = new ObjectMapper();
     }
 
-    public List<ClientGameEvent> requestGameReplay(String gameName) throws EntityDoesNotExistsException{
+    public List<ClientGameEvent> requestGameReplay(String gameName) throws EntityDoesNotExistsException {
         String addr = serviceURI + "/" + gameName;
 
         try {
