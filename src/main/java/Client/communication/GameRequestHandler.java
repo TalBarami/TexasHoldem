@@ -88,9 +88,11 @@ public class GameRequestHandler {
         }
     }
 
-    public void requestGameEventSend(ClientGameRequest gameRequest) throws GameException {
+    public void requestGameEventSend(ClientGameRequest gameRequest, String sessionID) throws GameException {
         String addr = serviceURI + "/" + gameRequest.getGameName();
-        HttpEntity<ClientGameRequest> request = new HttpEntity<>(gameRequest);
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("SESSION_ID", sessionID);
+        HttpEntity<ClientGameRequest> request = new HttpEntity<>(gameRequest, headers);
 
         try {
             ResponseEntity<ResponseMessage> response = restTemplate.exchange(addr, HttpMethod.PUT, request, ResponseMessage.class);
@@ -109,9 +111,11 @@ public class GameRequestHandler {
         }
     }
 
-    public void requestGameLeave(ClientLeaveGameDetails leaveGameDetails) throws GameException {
+    public void requestGameLeave(ClientLeaveGameDetails leaveGameDetails, String sessionID) throws GameException {
         String addr = serviceURI + "/" + leaveGameDetails.getGameName();
-        HttpEntity<ClientLeaveGameDetails> request = new HttpEntity<>(leaveGameDetails);
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("SESSION_ID", sessionID);
+        HttpEntity<ClientLeaveGameDetails> request = new HttpEntity<>(leaveGameDetails, headers);
 
         try {
             ResponseEntity<ResponseMessage> response = restTemplate.exchange(addr, HttpMethod.DELETE, request, ResponseMessage.class);

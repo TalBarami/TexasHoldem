@@ -84,7 +84,7 @@ public class SessionManager {
         /*if(newImage == null || newImage.isEmpty())
             newImage = user.getImage();*/
         ClientUserProfile profile = new ClientUserProfile(user.getUsername(), newPassword, newEmail, day, month, year, user.getBalance(), user.getCurrLeague(), user.getNumOfGamesPlayed(), user.getAmountEarnedInLeague());
-        userRequestHandler.requestUserProfileUpdate(user.getUsername(), profile);
+        userRequestHandler.requestUserProfileUpdate(user.getUsername(), profile, sessionID);
 
         user = userRequestHandler.requestUserProfileEntity(user.getUsername());
     }

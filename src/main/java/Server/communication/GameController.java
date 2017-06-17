@@ -65,14 +65,17 @@ public class GameController {
     }
 
     @RequestMapping(method=PUT, value="/game/{roomname}")
-    public ResponseMessage handleGameEvent(@PathVariable("roomname") String roomName, @RequestBody ClientGameRequest gameRequest) throws GameException {
+    public ResponseMessage handleGameEvent(@PathVariable("roomname") String roomName, @RequestBody ClientGameRequest gameRequest,@RequestHeader("SESSION_ID") String sessionID) throws GameException {
         String gameName = gameRequest.getGameName();
+        String userName = gameRequest.getUsername();
+
+        manager.validate(userName, sessionID);
 
         if (!roomName.equals(gameName)) {
             throw new InvalidArgumentException("Room name is not compatible with request data.");
         }
 
-        String userName = gameRequest.getUsername();
+
         int actionToPerform = gameRequest.getAction();
         int amountForAction = gameRequest.getAmount();
         boolean spectateOption = gameRequest.getSpectating();
@@ -129,9 +132,11 @@ public class GameController {
     }
 
     @RequestMapping(method = DELETE, value = "/game/{roomname}")
-    public ResponseMessage leaveGame(@PathVariable("roomname") String roomName, @RequestBody ClientLeaveGameDetails leaveDetails) throws GameException {
+    public ResponseMessage leaveGame(@PathVariable("roomname") String roomName, @RequestBody ClientLeaveGameDetails leaveDetails,@RequestHeader("SESSION_ID") String sessionID) throws GameException {
         String gameName = leaveDetails.getGameName();
         String userName = leaveDetails.getUsername();
+
+        manager.validate(userName, sessionID);
 
         if (!roomName.equals(gameName)) {
             throw new InvalidArgumentException("Room name is not compatible with request data.");

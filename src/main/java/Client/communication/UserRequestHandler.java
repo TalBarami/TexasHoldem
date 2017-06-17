@@ -11,10 +11,7 @@ import Exceptions.InvalidArgumentException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
@@ -54,9 +51,11 @@ public class UserRequestHandler {
         }
     }
 
-    public void requestUserProfileUpdate(String oldUserName, ClientUserProfile userProfile) throws InvalidArgumentException, EntityDoesNotExistsException {
+    public void requestUserProfileUpdate(String oldUserName, ClientUserProfile userProfile, String sessionID) throws InvalidArgumentException, EntityDoesNotExistsException {
         String addr = serviceURI + "/" + oldUserName;
-        HttpEntity<ClientUserProfile> request = new HttpEntity<>(userProfile);
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("SESSION_ID", sessionID);
+        HttpEntity<ClientUserProfile> request = new HttpEntity<>(userProfile,headers);
 
 
         try {
@@ -128,9 +127,11 @@ public class UserRequestHandler {
         }
     }
 
-    public void requestUserTransaction(String username, ClientTransactionRequest transaction) throws EntityDoesNotExistsException, ArgumentNotInBoundsException, InvalidArgumentException {
+    public void requestUserTransaction(String username, ClientTransactionRequest transaction, String sessionID) throws EntityDoesNotExistsException, ArgumentNotInBoundsException, InvalidArgumentException {
         String addr = serviceURI + "/" + username + "/balance";
-        HttpEntity<ClientTransactionRequest> request = new HttpEntity<>(transaction);
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("SESSION_ID", sessionID);
+        HttpEntity<ClientTransactionRequest> request = new HttpEntity<>(transaction, headers);
 
         try {
             ResponseEntity<ResponseMessage> response = restTemplate.exchange(addr, HttpMethod.PUT, request, ResponseMessage.class);
