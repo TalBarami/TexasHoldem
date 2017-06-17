@@ -5,9 +5,7 @@ import Enumerations.Move;
 import Exceptions.EntityDoesNotExistsException;
 import Exceptions.GameException;
 import Exceptions.InvalidArgumentException;
-import MutualJsonObjects.ClientGameDetails;
-import MutualJsonObjects.ClientPlayer;
-import MutualJsonObjects.ClientUserProfile;
+import MutualJsonObjects.*;
 
 import Client.domain.GameManager;
 import Client.domain.MenuManager;
@@ -21,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.awt.event.*;
@@ -53,11 +52,11 @@ public class Game extends JFrame{
     private JLabel usernameLabel;
     private JLabel cashLabel;
     private JLabel potLabel;
-    private JLabel cardsLabel;
     private JSpinner raiseAmountSpinner;
     private JScrollPane chatScrollPane;
     private JComboBox<String> chatComboBox;
     private JLabel eventsLabel;
+    private JPanel cardsPanel;
 
     private List<JPanel> seats = Arrays.asList(bottomPanel, leftPanel, topPanel, rightPanel);
 
@@ -81,13 +80,14 @@ public class Game extends JFrame{
         logger.info("Initializing game.");
         generateUserInformation(SessionManager.getInstance().user());
         initializeSeats(gameDetails);
+        cardsPanel.setLayout(new BoxLayout(cardsPanel, BoxLayout.X_AXIS));
+        cardsPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         reconfigureStartButton(gameManager.getGameDetails().getPlayerList());
         disableGameActions();
         sendButton.setEnabled(isClientPlaying(gameManager.getGameDetails().getPlayerList()));
         chatComboBox.setEnabled(isClientPlaying(gameManager.getGameDetails().getPlayerList()));
 
         potLabel.setText("0");
-        cardsLabel.setText("");
         eventsLabel.setText("");
     }
 
@@ -207,8 +207,13 @@ public class Game extends JFrame{
     }
 
     private void updateTable(RoundUpdateNotification roundUpdateNotification){
-        potLabel.setText(String.valueOf(roundUpdateNotification.getCurrentPotSize()));
-        cardsLabel.setText(ClientUtils.prettyList(roundUpdateNotification.getCurrentOpenedCards()));
+        cardsPanel.removeAll();
+        potLabel.setText("Pot size: " + String.valueOf(roundUpdateNotification.getCurrentPotSize()));
+        List<ClientCard> tableCards = roundUpdateNotification.getCurrentOpenedCards();
+
+        for(ClientCard card : tableCards){
+            cardsPanel.add(new JLabel(CardsImages.getImage(card)));
+        }
     }
 
     private void handleGameSession(RoundUpdateNotification roundUpdateNotification){

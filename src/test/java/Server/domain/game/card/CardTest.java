@@ -18,19 +18,19 @@ public class CardTest {
 
     @Test
     public void equality() throws Exception{
-        Card card1 = TEN.of(HEATS);
-        Card card2 = new Card(TEN, HEATS);
+        Card card1 = TEN.of(HEARTS);
+        Card card2 = new Card(TEN, HEARTS);
         assertThat(card1, equalTo(card2));
     }
 
     @Test
     public void compareRank() throws Exception {
-        Card thisCard = TEN.of(HEATS);
-        Card thatCard = NINE.of(HEATS);
+        Card thisCard = TEN.of(HEARTS);
+        Card thatCard = NINE.of(HEARTS);
         logger.info("Testing {} against {} (Expected: {})", thisCard, thatCard, thisCard);
         assertThat(thisCard.compareTo(thatCard), is(greaterThan(0)));
 
-        thisCard = TEN.of(HEATS);
+        thisCard = TEN.of(HEARTS);
         thatCard = TEN.of(CLUBS);
         logger.info("Testing {} against {} (Expected: Tie)", thisCard, thatCard);
         assertThat(thisCard.compareTo(thatCard), is(0));

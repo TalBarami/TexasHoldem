@@ -2,7 +2,6 @@ package MutualJsonObjects;
 
 import Server.domain.game.card.Rank;
 import Server.domain.game.card.Suit;
-
 /**
  * Created by rotemwald on 15/05/17.
  */
@@ -40,6 +39,7 @@ public class ClientCard {
     }
 
     public String getImageName(){
-        return String.format("%s_of_%s", rank.getRank() <= 10 ? String.valueOf(rank.getRank()) : rank.toString(), suit).toLowerCase();
+        return String.format("%s_of_%s.png", rank.getRank() <= 10 ? String.valueOf(rank.getRank()) : rank.toString(), suit).toLowerCase();
     }
+
 }
