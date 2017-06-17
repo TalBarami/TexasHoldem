@@ -229,10 +229,10 @@ public class RoundTest {
         Set<Card> player1CardSet = new HashSet<Card>();
         Set<Card> player2CardSet = new HashSet<Card>();
 
-        player1CardSet.add(new Card(Rank.NINE, Suit.DIAMOND));
-        player1CardSet.add(new Card(Rank.TEN, Suit.DIAMOND));
-        player2CardSet.add(new Card(Rank.ACE, Suit.HEART));
-        player2CardSet.add(new Card(Rank.KING, Suit.HEART));
+        player1CardSet.add(new Card(Rank.NINE, Suit.DIAMONDS));
+        player1CardSet.add(new Card(Rank.TEN, Suit.DIAMONDS));
+        player2CardSet.add(new Card(Rank.ACE, Suit.HEATS));
+        player2CardSet.add(new Card(Rank.KING, Suit.HEATS));
 
         when(player1.getUser()).thenReturn(user1);
         when(player2.getUser()).thenReturn(user2);
@@ -241,11 +241,11 @@ public class RoundTest {
         when(player2.getCards()).thenReturn(player2CardSet);
 
         List<Card> openedCards = new LinkedList<Card>();
-        openedCards.add(new Card(Rank.JACK, Suit.SPADE));
-        openedCards.add(new Card(Rank.QUEEN, Suit.SPADE));
-        openedCards.add(new Card(Rank.KING, Suit.CLUB));
-        openedCards.add(new Card(Rank.ACE, Suit.DIAMOND));
-        openedCards.add(new Card(Rank.FOUR, Suit.SPADE));
+        openedCards.add(new Card(Rank.JACK, Suit.SPADES));
+        openedCards.add(new Card(Rank.QUEEN, Suit.SPADES));
+        openedCards.add(new Card(Rank.KING, Suit.CLUBS));
+        openedCards.add(new Card(Rank.ACE, Suit.DIAMONDS));
+        openedCards.add(new Card(Rank.FOUR, Suit.SPADES));
 
         when(player1.getTotalAmountPayedInRound()).thenReturn(50, 50, 50, 50, 50, 0);
         when(player2.getTotalAmountPayedInRound()).thenReturn(50, 50, 50, 0);
@@ -277,10 +277,10 @@ public class RoundTest {
         Set<Card> player1CardSet = new HashSet<Card>();
         Set<Card> player2CardSet = new HashSet<Card>();
 
-        player1CardSet.add(new Card(Rank.NINE, Suit.DIAMOND));
-        player1CardSet.add(new Card(Rank.TEN, Suit.DIAMOND));
-        player2CardSet.add(new Card(Rank.NINE, Suit.HEART));
-        player2CardSet.add(new Card(Rank.TEN, Suit.HEART));
+        player1CardSet.add(new Card(Rank.NINE, Suit.DIAMONDS));
+        player1CardSet.add(new Card(Rank.TEN, Suit.DIAMONDS));
+        player2CardSet.add(new Card(Rank.NINE, Suit.HEATS));
+        player2CardSet.add(new Card(Rank.TEN, Suit.HEATS));
 
         when(player1.getUser()).thenReturn(user1);
         when(player2.getUser()).thenReturn(user2);
@@ -289,11 +289,11 @@ public class RoundTest {
         when(player2.getCards()).thenReturn(player2CardSet);
 
         List<Card> openedCards = new LinkedList<Card>();
-        openedCards.add(new Card(Rank.JACK, Suit.SPADE));
-        openedCards.add(new Card(Rank.QUEEN, Suit.SPADE));
-        openedCards.add(new Card(Rank.KING, Suit.CLUB));
-        openedCards.add(new Card(Rank.ACE, Suit.DIAMOND));
-        openedCards.add(new Card(Rank.FOUR, Suit.SPADE));
+        openedCards.add(new Card(Rank.JACK, Suit.SPADES));
+        openedCards.add(new Card(Rank.QUEEN, Suit.SPADES));
+        openedCards.add(new Card(Rank.KING, Suit.CLUBS));
+        openedCards.add(new Card(Rank.ACE, Suit.DIAMONDS));
+        openedCards.add(new Card(Rank.FOUR, Suit.SPADES));
 
         when(player1.getTotalAmountPayedInRound()).thenReturn(50, 50, 50, 50, 50, 0);
         when(player2.getTotalAmountPayedInRound()).thenReturn(50, 50, 50, 0);
@@ -330,12 +330,12 @@ public class RoundTest {
         Set<Card> player2CardSet = new HashSet<Card>();
         Set<Card> player3CardSet = new HashSet<Card>();
 
-        player1CardSet.add(new Card(Rank.NINE, Suit.DIAMOND));
-        player1CardSet.add(new Card(Rank.TEN, Suit.DIAMOND));
-        player2CardSet.add(new Card(Rank.KING, Suit.HEART));
-        player2CardSet.add(new Card(Rank.SEVEN, Suit.HEART));
-        player3CardSet.add(new Card(Rank.ACE, Suit.CLUB));
-        player3CardSet.add(new Card(Rank.EIGHT, Suit.CLUB));
+        player1CardSet.add(new Card(Rank.NINE, Suit.DIAMONDS));
+        player1CardSet.add(new Card(Rank.TEN, Suit.DIAMONDS));
+        player2CardSet.add(new Card(Rank.KING, Suit.HEATS));
+        player2CardSet.add(new Card(Rank.SEVEN, Suit.HEATS));
+        player3CardSet.add(new Card(Rank.ACE, Suit.CLUBS));
+        player3CardSet.add(new Card(Rank.EIGHT, Suit.CLUBS));
 
         when(player1.getUser()).thenReturn(user1);
         when(player2.getUser()).thenReturn(user2);
@@ -346,11 +346,11 @@ public class RoundTest {
         when(player3.getCards()).thenReturn(player3CardSet).thenReturn(player3CardSet);
 
         List<Card> openedCards = new LinkedList<Card>();
-        openedCards.add(new Card(Rank.JACK, Suit.SPADE));
-        openedCards.add(new Card(Rank.QUEEN, Suit.SPADE));
-        openedCards.add(new Card(Rank.KING, Suit.CLUB));
-        openedCards.add(new Card(Rank.ACE, Suit.DIAMOND));
-        openedCards.add(new Card(Rank.FOUR, Suit.SPADE));
+        openedCards.add(new Card(Rank.JACK, Suit.SPADES));
+        openedCards.add(new Card(Rank.QUEEN, Suit.SPADES));
+        openedCards.add(new Card(Rank.KING, Suit.CLUBS));
+        openedCards.add(new Card(Rank.ACE, Suit.DIAMONDS));
+        openedCards.add(new Card(Rank.FOUR, Suit.SPADES));
 
         when(player1.getTotalAmountPayedInRound()).thenReturn(20, 20, 20, 20, 20, 0);
         when(player2.getTotalAmountPayedInRound()).thenReturn(50, 50, 50, 30, 30, 0);

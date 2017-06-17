@@ -38,4 +38,8 @@ public class ClientCard {
     public String toString() {
         return rank + " of " + suit;
     }
+
+    public String getImageName(){
+        return String.format("%s_of_%s", rank.getRank() <= 10 ? String.valueOf(rank.getRank()) : rank.toString(), suit).toLowerCase();
+    }
 }

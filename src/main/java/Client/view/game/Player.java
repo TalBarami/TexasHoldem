@@ -1,10 +1,12 @@
 package Client.view.game;
 
+import Client.ClientUtils;
 import Client.domain.SessionManager;
 import MutualJsonObjects.ClientPlayer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,6 +28,8 @@ public class Player {
         container.add(nameLabel);
         container.add(chipAmountLabel);
         container.add(lastBetLabel);
+
+        container.setBackground(Color.lightGray);
     }
 
     public void mark(){
@@ -34,7 +38,7 @@ public class Player {
     }
 
     public void showCards(){
-        JLabel cardsLabel = new JLabel(player.getPlayerCards().toString());
+        JLabel cardsLabel = new JLabel(ClientUtils.prettyList(new ArrayList<>(player.getPlayerCards())));
         container.add(cardsLabel);
     }
 

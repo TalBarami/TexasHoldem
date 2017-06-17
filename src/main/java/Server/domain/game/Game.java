@@ -89,6 +89,7 @@ public class Game {
     private void handleNewRound(){
         initPlayersBeforeStartNewRound();
         Round rnd=new Round(players,settings,dealerIndex);
+        rnd.setSpectatorList(this.spectators);
         dealerIndex=(dealerIndex+1)%players.size();
         rounds.add(rnd);
         rnd.startRound();
