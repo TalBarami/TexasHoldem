@@ -13,6 +13,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.awt.image.BufferedImage;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
@@ -71,7 +73,16 @@ public class User extends Observable {
     public User(String user, String pass, String email, LocalDate date, BufferedImage image)
     {
         this.username = user;
-        this.password = pass;
+
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(pass.getBytes());
+            byte[] digest = md.digest();
+            this.password = new String(digest);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
         this.wallet = new Wallet();
         this.email = email;
         this.dateOfBirth = date;
@@ -182,8 +193,15 @@ public class User extends Observable {
     }
 
     public void setPassword(String password) {
-        this.password = password;
-        setChanged();
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(password.getBytes());
+            byte[] digest = md.digest();
+            this.password = new String(digest);
+            setChanged();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getEmail() {
