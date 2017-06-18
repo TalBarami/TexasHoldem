@@ -5,10 +5,7 @@ import Exceptions.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
@@ -54,9 +51,11 @@ public class GameRequestHandler {
         }
     }
 
-    public void requestGameCreation(ClientGameDetails gameDetails) throws InvalidArgumentException, NoBalanceForBuyInException, ArgumentNotInBoundsException, EntityDoesNotExistsException {
+    public void requestGameCreation(ClientGameDetails gameDetails, String sessionID) throws InvalidArgumentException, NoBalanceForBuyInException, ArgumentNotInBoundsException, EntityDoesNotExistsException {
         String addr = serviceURI + "/" + gameDetails.getName();
-        HttpEntity<ClientGameDetails> request = new HttpEntity<>(gameDetails);
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("SESSION_ID", sessionID);
+        HttpEntity<ClientGameDetails> request = new HttpEntity<>(gameDetails, headers);
 
         try {
             ResponseEntity<ResponseMessage> response = restTemplate.exchange(addr, HttpMethod.POST, request, ResponseMessage.class);
@@ -89,9 +88,11 @@ public class GameRequestHandler {
         }
     }
 
-    public void requestGameEventSend(ClientGameRequest gameRequest) throws GameException {
+    public void requestGameEventSend(ClientGameRequest gameRequest, String sessionID) throws GameException {
         String addr = serviceURI + "/" + gameRequest.getGameName();
-        HttpEntity<ClientGameRequest> request = new HttpEntity<>(gameRequest);
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("SESSION_ID", sessionID);
+        HttpEntity<ClientGameRequest> request = new HttpEntity<>(gameRequest, headers);
 
         try {
             ResponseEntity<ResponseMessage> response = restTemplate.exchange(addr, HttpMethod.PUT, request, ResponseMessage.class);
@@ -110,9 +111,11 @@ public class GameRequestHandler {
         }
     }
 
-    public void requestGameLeave(ClientLeaveGameDetails leaveGameDetails) throws GameException {
+    public void requestGameLeave(ClientLeaveGameDetails leaveGameDetails, String sessionID) throws GameException {
         String addr = serviceURI + "/" + leaveGameDetails.getGameName();
-        HttpEntity<ClientLeaveGameDetails> request = new HttpEntity<>(leaveGameDetails);
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("SESSION_ID", sessionID);
+        HttpEntity<ClientLeaveGameDetails> request = new HttpEntity<>(leaveGameDetails, headers);
 
         try {
             ResponseEntity<ResponseMessage> response = restTemplate.exchange(addr, HttpMethod.DELETE, request, ResponseMessage.class);
