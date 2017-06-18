@@ -253,7 +253,7 @@ public class Game {
     }
 
     public boolean canBeArchived(){
-        return players.isEmpty();
+        return players.isEmpty() && spectators.isEmpty();
     }
 
     private void setIsActive(boolean selection){
