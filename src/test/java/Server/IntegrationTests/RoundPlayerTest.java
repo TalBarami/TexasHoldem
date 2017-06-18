@@ -367,4 +367,65 @@ public class RoundPlayerTest {
         Assert.assertEquals(oldChipsAmount2, player2.getChipsAmount());
         Assert.assertEquals(oldChipsAmount3 + 60, player3.getChipsAmount());
     }
+
+
+    @Test
+    public void round1_testCalculateWinner_oneWinner2() throws Exception {
+        User user1 = new User("waldr", "1234", "waldr@post.bgu.ac.il", LocalDate.now(), null);
+        User user2 = new User("hodbub", "1234", "hobdud@post.bgu.ac.il", LocalDate.now(), null);
+        User user3 = new User("achiadg", "1234", "achiadg@gmail.com",LocalDate.now(), null);
+
+        Player player1 = new Player(user1, 100, 100);
+        Player player2 = new Player(user2, 100, 100);
+        Player player3 = new Player(user3, 20,100);
+
+        List<Player> playerList1 = new LinkedList<Player>();
+        playerList1.add(player1);
+        playerList1.add(player2);
+        playerList1.add(player3);
+
+        GameSettings settings1 = new GameSettings("Game1", GamePolicy.NOLIMIT, 100, 10, 5, 100, 2, 9, false);
+        Round round1 = new Round(playerList1, settings1, 0);
+
+        Set<Card> player1CardSet = new HashSet<Card>();
+        Set<Card> player2CardSet = new HashSet<Card>();
+        Set<Card> player3CardSet = new HashSet<Card>();
+
+        player1CardSet.add(new Card(Rank.TEN, Suit.CLUBS));
+        player1CardSet.add(new Card(Rank.SIX, Suit.CLUBS));
+        player2CardSet.add(new Card(Rank.NINE, Suit.DIAMONDS));
+        player2CardSet.add(new Card(Rank.NINE, Suit.SPADES));
+        player3CardSet.add(new Card(Rank.TWO, Suit.DIAMONDS));
+        player3CardSet.add(new Card(Rank.TWO, Suit.SPADES));
+
+
+
+        player1.addCards(player1CardSet);
+        player2.addCards(player2CardSet);
+        player3.addCards(player3CardSet);
+
+        List<Card> openedCards = new LinkedList<Card>();
+        openedCards.add(new Card(Rank.KING, Suit.DIAMONDS));
+        openedCards.add(new Card(Rank.THREE, Suit.SPADES));
+        openedCards.add(new Card(Rank.NINE, Suit.CLUBS));
+        openedCards.add(new Card(Rank.THREE, Suit.CLUBS));
+        openedCards.add(new Card(Rank.NINE, Suit.HEARTS));
+        round1.setOpenedCards(openedCards);
+
+        player1.setTotalAmountPayedInRound(50);
+        player2.setTotalAmountPayedInRound(50);
+        player3.setTotalAmountPayedInRound(20);
+        int oldChipsAmount1 = player1.getChipsAmount();
+        int oldChipsAmount2 = player2.getChipsAmount();
+        int oldChipsAmount3 = player3.getChipsAmount();
+
+        Method method = Round.class.getDeclaredMethod("calculateWinner", null);
+        method.setAccessible(true);
+        method.invoke(round1, null);
+
+        Assert.assertEquals(oldChipsAmount2 + 120, player2.getChipsAmount());
+        Assert.assertEquals(oldChipsAmount1, player1.getChipsAmount());
+        Assert.assertEquals(oldChipsAmount3, player3.getChipsAmount());
+    }
+
 }
