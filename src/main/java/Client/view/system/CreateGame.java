@@ -109,7 +109,7 @@ public class CreateGame extends JDialog {
     }
 
     private void onPolicyChange(){
-        if(policyComboBox.getSelectedItem().equals("Limit")){
+        if(policyComboBox.getSelectedItem().toString().equalsIgnoreCase("Limit")){
             raiseLimitLabel.setVisible(true);
             raiseLimitSpinner.setVisible(true);
         } else{
