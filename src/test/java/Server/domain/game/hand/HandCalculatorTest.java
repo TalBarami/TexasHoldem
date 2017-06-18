@@ -19,8 +19,8 @@ public class HandCalculatorTest {
 
     @Test
     public void getHand(){
-        Hand actualHand = HandCalculator.getHand(TEN.of(HEATS), TEN.of(SPADES), TEN.of(DIAMONDS), TEN.of(CLUBS), TWO.of(DIAMONDS), FIVE.of(CLUBS), ACE.of(HEATS));
-        Hand expectedHand = new Hand(TEN.of(HEATS), TEN.of(SPADES), TEN.of(DIAMONDS), TEN.of(CLUBS), ACE.of(HEATS));
+        Hand actualHand = HandCalculator.getHand(TEN.of(HEARTS), TEN.of(SPADES), TEN.of(DIAMONDS), TEN.of(CLUBS), TWO.of(DIAMONDS), FIVE.of(CLUBS), ACE.of(HEARTS));
+        Hand expectedHand = new Hand(TEN.of(HEARTS), TEN.of(SPADES), TEN.of(DIAMONDS), TEN.of(CLUBS), ACE.of(HEARTS));
         assertThat(actualHand, is(expectedHand));
     }
 }

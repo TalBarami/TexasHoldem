@@ -1,6 +1,7 @@
 package Client.view.access;
 
 import Client.communication.GameRequestHandler;
+import Client.communication.ReplayRequestHandler;
 import Client.communication.SessionRequestHandler;
 import Client.communication.UserRequestHandler;
 import Client.domain.SessionManager;
@@ -39,6 +40,7 @@ public class Address extends JFrame {
         GameRequestHandler.serviceURI = "http://" + SessionManager.getInstance().getIpAddress() + "/game";
         SessionRequestHandler.serviceURI = "http://" + SessionManager.getInstance().getIpAddress() + "/session";
         UserRequestHandler.serviceURI = "http://" + SessionManager.getInstance().getIpAddress() + "/user";
+        ReplayRequestHandler.serviceURI = "http://" + SessionManager.getInstance().getIpAddress() + "/replay";
 
         Welcome w = new Welcome();
         dispose();

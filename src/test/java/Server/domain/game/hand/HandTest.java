@@ -16,10 +16,10 @@ public class HandTest {
     @Test
     public void twoPair(){
         logger.info("Testing combinations of two pairs:");
-        Hand h1 = new Hand(TWO.of(DIAMONDS), TWO.of(HEATS), FIVE.of(SPADES), FIVE.of(CLUBS), ACE.of(HEATS));
-        Hand h2 = new Hand(TWO.of(DIAMONDS), TWO.of(HEATS), FIVE.of(SPADES), FIVE.of(CLUBS), ACE.of(HEATS));
-        Hand h3 = new Hand(TWO.of(DIAMONDS), TWO.of(HEATS), FIVE.of(SPADES), FIVE.of(CLUBS), SIX.of(CLUBS));
-        Hand h4 = new Hand(THREE.of(DIAMONDS), THREE.of(HEATS), FOUR.of(SPADES), FOUR.of(CLUBS), ACE.of(HEATS));
+        Hand h1 = new Hand(TWO.of(DIAMONDS), TWO.of(HEARTS), FIVE.of(SPADES), FIVE.of(CLUBS), ACE.of(HEARTS));
+        Hand h2 = new Hand(TWO.of(DIAMONDS), TWO.of(HEARTS), FIVE.of(SPADES), FIVE.of(CLUBS), ACE.of(HEARTS));
+        Hand h3 = new Hand(TWO.of(DIAMONDS), TWO.of(HEARTS), FIVE.of(SPADES), FIVE.of(CLUBS), SIX.of(CLUBS));
+        Hand h4 = new Hand(THREE.of(DIAMONDS), THREE.of(HEARTS), FOUR.of(SPADES), FOUR.of(CLUBS), ACE.of(HEARTS));
         assertThat(h1.compareTo(h2), is(0));
         assertThat(h1.compareTo(h3), is(greaterThan(0)));
         assertThat(h1.compareTo(h4), is(greaterThan(0)));
@@ -38,10 +38,10 @@ public class HandTest {
     @Test
     public void fourOfAKind(){
         logger.info("Testing combinations of four of a kind:");
-        Hand h1 = new Hand(FIVE.of(DIAMONDS), FIVE.of(HEATS), FIVE.of(SPADES), FIVE.of(CLUBS), QUEEN.of(HEATS));
-        Hand h2 = new Hand(FIVE.of(DIAMONDS), FIVE.of(HEATS), FIVE.of(SPADES), FIVE.of(CLUBS), FIVE.of(DIAMONDS));
-        Hand h3 = new Hand(TWO.of(DIAMONDS), TWO.of(HEATS), TWO.of(SPADES), TWO.of(CLUBS), ACE.of(CLUBS));
-        Hand h4 = new Hand(FIVE.of(DIAMONDS), FIVE.of(HEATS), FIVE.of(SPADES), FIVE.of(CLUBS), QUEEN.of(DIAMONDS));
+        Hand h1 = new Hand(FIVE.of(DIAMONDS), FIVE.of(HEARTS), FIVE.of(SPADES), FIVE.of(CLUBS), QUEEN.of(HEARTS));
+        Hand h2 = new Hand(FIVE.of(DIAMONDS), FIVE.of(HEARTS), FIVE.of(SPADES), FIVE.of(CLUBS), FIVE.of(DIAMONDS));
+        Hand h3 = new Hand(TWO.of(DIAMONDS), TWO.of(HEARTS), TWO.of(SPADES), TWO.of(CLUBS), ACE.of(CLUBS));
+        Hand h4 = new Hand(FIVE.of(DIAMONDS), FIVE.of(HEARTS), FIVE.of(SPADES), FIVE.of(CLUBS), QUEEN.of(DIAMONDS));
 
         assertThat(h1.compareTo(h2), is(greaterThan(0)));
         assertThat(h1.compareTo(h3), is(greaterThan(0)));
@@ -51,9 +51,9 @@ public class HandTest {
     @Test
     public void highCard(){
         logger.info("Testing combinations of high card:");
-        Hand h1 = new Hand(TWO.of(DIAMONDS), ACE.of(HEATS), FIVE.of(SPADES), SIX.of(CLUBS), TEN.of(DIAMONDS));
-        Hand h2 = new Hand(TWO.of(SPADES), ACE.of(DIAMONDS), FIVE.of(CLUBS), SIX.of(CLUBS), TEN.of(HEATS));
-        Hand h3 = new Hand(TEN.of(HEATS), FIVE.of(CLUBS), SIX.of(DIAMONDS), QUEEN.of(HEATS), TWO.of(SPADES));
+        Hand h1 = new Hand(TWO.of(DIAMONDS), ACE.of(HEARTS), FIVE.of(SPADES), SIX.of(CLUBS), TEN.of(DIAMONDS));
+        Hand h2 = new Hand(TWO.of(SPADES), ACE.of(DIAMONDS), FIVE.of(CLUBS), SIX.of(CLUBS), TEN.of(HEARTS));
+        Hand h3 = new Hand(TEN.of(HEARTS), FIVE.of(CLUBS), SIX.of(DIAMONDS), QUEEN.of(HEARTS), TWO.of(SPADES));
         assertThat(h1.compareTo(h2), is(0));
         assertThat(h1.compareTo(h3), is(greaterThan(0)));
     }

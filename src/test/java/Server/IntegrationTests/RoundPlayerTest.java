@@ -235,8 +235,8 @@ public class RoundPlayerTest {
 
         player1CardSet.add(new Card(Rank.NINE, Suit.DIAMONDS));
         player1CardSet.add(new Card(Rank.TEN, Suit.DIAMONDS));
-        player2CardSet.add(new Card(Rank.ACE, Suit.HEATS));
-        player2CardSet.add(new Card(Rank.KING, Suit.HEATS));
+        player2CardSet.add(new Card(Rank.ACE, Suit.HEARTS));
+        player2CardSet.add(new Card(Rank.KING, Suit.HEARTS));
 
         player1.addCards(player1CardSet);
         player2.addCards(player2CardSet);
@@ -283,8 +283,8 @@ public class RoundPlayerTest {
 
         player1CardSet.add(new Card(Rank.NINE, Suit.DIAMONDS));
         player1CardSet.add(new Card(Rank.TEN, Suit.DIAMONDS));
-        player2CardSet.add(new Card(Rank.NINE, Suit.HEATS));
-        player2CardSet.add(new Card(Rank.TEN, Suit.HEATS));
+        player2CardSet.add(new Card(Rank.NINE, Suit.HEARTS));
+        player2CardSet.add(new Card(Rank.TEN, Suit.HEARTS));
 
         player1.addCards(player1CardSet);
         player2.addCards(player2CardSet);
@@ -335,8 +335,8 @@ public class RoundPlayerTest {
 
         player1CardSet.add(new Card(Rank.NINE, Suit.DIAMONDS));
         player1CardSet.add(new Card(Rank.TEN, Suit.DIAMONDS));
-        player2CardSet.add(new Card(Rank.KING, Suit.HEATS));
-        player2CardSet.add(new Card(Rank.SEVEN, Suit.HEATS));
+        player2CardSet.add(new Card(Rank.KING, Suit.HEARTS));
+        player2CardSet.add(new Card(Rank.SEVEN, Suit.HEARTS));
         player3CardSet.add(new Card(Rank.ACE, Suit.CLUBS));
         player3CardSet.add(new Card(Rank.EIGHT, Suit.CLUBS));
 
