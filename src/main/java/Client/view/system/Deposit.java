@@ -26,6 +26,10 @@ public class Deposit extends JDialog {
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
 
+        assignActionListeners();
+    }
+
+    public void assignActionListeners(){
         buttonOK.addActionListener(e -> onOK());
 
         buttonCancel.addActionListener(e -> onCancel());
