@@ -1,7 +1,9 @@
 package Server.domain.game;
 
 import Enumerations.GamePolicy;
+import Exceptions.EntityDoesNotExistsException;
 import Exceptions.InvalidArgumentException;
+import Server.SpringApplicationContext;
 import Server.domain.events.gameFlowEvents.MoveEvent;
 import Server.domain.events.gameFlowEvents.GameEvent;
 import Server.domain.game.card.Card;
@@ -11,6 +13,7 @@ import Server.domain.game.hand.HandCalculator;
 import Server.domain.game.participants.Player;
 import Server.domain.game.participants.Spectator;
 import Server.notification.NotificationService;
+import Server.service.SearchService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -118,6 +121,14 @@ public class Round {
         updatePlayersGamesPlayed();
         setRoundActive(false);
 
+        // Update list of players
+        try {
+            SearchService bean = (SearchService)SpringApplicationContext.getBean("SearchService");
+            Game g = bean.findGameByName(gameSettings.getName());
+            activePlayers = g.getPlayers();
+        } catch (Exception e) {
+        }
+
         // Send round update notification
         NotificationService.getInstance().sendRoundUpdateNotification(this);
     }
@@ -167,6 +178,9 @@ public class Round {
             }
 
             eventList.add(playerMoveEvent);
+
+            if (!isRoundActive)
+                return;
 
             if (isLastPlayerPlayed) {
                 endFlow();

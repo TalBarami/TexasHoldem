@@ -46,7 +46,7 @@ public class SearchManager {
         return Collections.singletonList(gameRequestHandler.requestGameEntity(gameName));
     }
 
-    public List<ClientGameDetails> findSpectatableGames(String ignore) throws EntityDoesNotExistsException, InvalidArgumentException {
+    public List<ClientGameDetails> findSpectateableGames(String ignore) throws EntityDoesNotExistsException, InvalidArgumentException {
         ClientGamePreferences pref = new ClientGamePreferences();
         pref.setSerachBySpectatingAvailable(true);
         return gameRequestHandler.requestGameSearch(pref);
@@ -126,7 +126,7 @@ public class SearchManager {
         searchPolicies.put(MIN_PLAYERS, this::findGamesByMinimumPlayers);
         searchPolicies.put(MAX_PLAYERS, this::findGamesByMaximumPlayers);
         searchPolicies.put(AVAILABLE, this::findAvailableGames);
-        searchPolicies.put(SPECTATEABLE, this::findSpectatableGames);
+        searchPolicies.put(SPECTATEABLE, this::findSpectateableGames);
         searchPolicies.put(REPLAYABLE, this::findReplayableGames);
     }
 

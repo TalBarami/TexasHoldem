@@ -57,28 +57,26 @@ public class GameManager {
     }
 
     public void startGame() throws GameException {
-        ClientGameRequest request = new ClientGameRequest();
-        request.setGameName(gameDetails.getName());
-        request.setUsername(SessionManager.getInstance().user().getUsername());
-        request.setAction(5);
-
-        gameRequestHandler.requestGameEventSend(request);
+        handleGameAction(5);
     }
 
     public void playCheck() throws GameException {
-        ClientGameRequest request = new ClientGameRequest();
-        request.setGameName(gameDetails.getName());
-        request.setUsername(SessionManager.getInstance().user().getUsername());
-        request.setAction(0);
-
-        gameRequestHandler.requestGameEventSend(request);
+        handleGameAction(0);
     }
 
     public void playCall() throws GameException {
+        handleGameAction(2);
+    }
+
+    public void playFold() throws GameException {
+        handleGameAction(3);
+    }
+
+    public void handleGameAction(int actionID) throws GameException {
         ClientGameRequest request = new ClientGameRequest();
         request.setGameName(gameDetails.getName());
         request.setUsername(SessionManager.getInstance().user().getUsername());
-        request.setAction(2);
+        request.setAction(actionID);
 
         gameRequestHandler.requestGameEventSend(request);
     }
@@ -93,32 +91,20 @@ public class GameManager {
         gameRequestHandler.requestGameEventSend(request);
     }
 
-    public void playFold() throws GameException {
-        ClientGameRequest request = new ClientGameRequest();
-        request.setGameName(gameDetails.getName());
-        request.setUsername(SessionManager.getInstance().user().getUsername());
-        request.setAction(3);
-
-        gameRequestHandler.requestGameEventSend(request);
-    }
-
     public void sendMessage(String message) throws GameException {
-        ClientGameRequest request = new ClientGameRequest();
-        request.setGameName(gameDetails.getName());
-        request.setUsername(SessionManager.getInstance().user().getUsername());
-        request.setMessage(message);
-        request.setRecipientUserName("");
-        request.setAction(9);
-
-        gameRequestHandler.requestGameEventSend(request);
+        sendMessageHandler(message, "");
     }
 
     public void sentPrivateMessage(String message, String playerName) throws GameException{
+        sendMessageHandler(message, playerName);
+    }
+
+    private void sendMessageHandler(String message,String recipientUser) throws GameException {
         ClientGameRequest request = new ClientGameRequest();
         request.setGameName(gameDetails.getName());
         request.setUsername(SessionManager.getInstance().user().getUsername());
         request.setMessage(message);
-        request.setRecipientUserName(playerName);
+        request.setRecipientUserName(recipientUser);
         request.setAction(9);
 
         gameRequestHandler.requestGameEventSend(request);
