@@ -127,7 +127,6 @@ public class Round {
             Game g = bean.findGameByName(gameSettings.getName());
             activePlayers = g.getPlayers();
         } catch (Exception e) {
-            e.printStackTrace();
         }
 
         // Send round update notification
