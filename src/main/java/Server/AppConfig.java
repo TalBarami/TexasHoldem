@@ -41,7 +41,7 @@ public class AppConfig {
         return service.gameService();
     }
 
-    @Bean
+    @Bean("SearchService")
     public SearchService getSearchServiceBean(){
         return service.searchService();
     }
