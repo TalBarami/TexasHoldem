@@ -31,8 +31,6 @@ public class SessionManager {
 
     private List<UserUpdateCallback> updateCallbacks;
 
-    private String sessionID;
-
     private SessionManager(){
         sessionRequestHandler = new SessionRequestHandler();
         userRequestHandler = new UserRequestHandler();
@@ -84,14 +82,14 @@ public class SessionManager {
         /*if(newImage == null || newImage.isEmpty())
             newImage = user.getImage();*/
         ClientUserProfile profile = new ClientUserProfile(user.getUsername(), newPassword, newEmail, day, month, year, user.getBalance(), user.getCurrLeague(), user.getNumOfGamesPlayed(), user.getAmountEarnedInLeague());
-        userRequestHandler.requestUserProfileUpdate(user.getUsername(), profile, sessionID);
+        userRequestHandler.requestUserProfileUpdate(user.getUsername(), profile);
 
         user = userRequestHandler.requestUserProfileEntity(user.getUsername());
     }
 
     public void login(String username, String password) throws LoginException, EntityDoesNotExistsException, InvalidArgumentException, ExecutionException, InterruptedException {
         ClientUserLoginDetails details = new ClientUserLoginDetails(username, password);
-        sessionID = sessionRequestHandler.requestUserLogin(details);
+        sessionRequestHandler.requestUserLogin(details);
 
         user = userRequestHandler.requestUserProfileEntity(username);
         stompSession = SubscriptionManager.subscribe(user.getUsername());
@@ -100,7 +98,7 @@ public class SessionManager {
 
     public void logout(String username) throws InvalidArgumentException {
         ClientUserLoginDetails details = new ClientUserLoginDetails(username, "");
-        sessionRequestHandler.requestUserLogout(details,sessionID);
+        sessionRequestHandler.requestUserLogout(details);
         user = null;
 
         if (stompSession != null && stompSession.isConnected()) {
@@ -131,5 +129,4 @@ public class SessionManager {
         return SubscriptionManager.getStompSessionHandler();
     }
 
-    public String getSessionID(){return this.sessionID;}
 }

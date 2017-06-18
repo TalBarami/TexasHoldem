@@ -25,11 +25,7 @@ import java.util.List;
  * Created by User on 15/05/2017.
  */
 public class GameManager {
-
-    private SessionManager manager;
-
     private static Logger logger = LoggerFactory.getLogger(GameManager.class);
-
 
     private ClientGameDetails gameDetails;
     private boolean isGameRunning;
@@ -42,8 +38,6 @@ public class GameManager {
     private List<ChatUpdateCallback> chatUpdateCallbacks;
 
     public GameManager(String gameName) throws EntityDoesNotExistsException, InvalidArgumentException {
-        manager = SessionManager.getInstance();
-
         gameDetails = SearchManager.getInstance().findGameByName(gameName).get(0);
         gameRequestHandler = new GameRequestHandler();
 
@@ -52,10 +46,10 @@ public class GameManager {
         moveUpdateCallbacks = new ArrayList<>();
         chatUpdateCallbacks = new ArrayList<>();
 
-        manager.getSessionHandler().addGameUpdateCallback(gameName, this::updateGameDetails);
-        manager.getSessionHandler().addRoundUpdateCallback(gameName, this::updateRoundDetails);
-        manager.getSessionHandler().addChatUpdateCallback(gameName, this::updateChat);
-        manager.getSessionHandler().addMoveUpdateCallback(gameName, this::updateGameMoves);
+        SessionManager.getInstance().getSessionHandler().addGameUpdateCallback(gameName, this::updateGameDetails);
+        SessionManager.getInstance().getSessionHandler().addRoundUpdateCallback(gameName, this::updateRoundDetails);
+        SessionManager.getInstance().getSessionHandler().addChatUpdateCallback(gameName, this::updateChat);
+        SessionManager.getInstance().getSessionHandler().addMoveUpdateCallback(gameName, this::updateGameMoves);
     }
 
     public ClientGameDetails getGameDetails(){
@@ -81,20 +75,20 @@ public class GameManager {
     public void handleGameAction(int actionID) throws GameException {
         ClientGameRequest request = new ClientGameRequest();
         request.setGameName(gameDetails.getName());
-        request.setUsername(manager.user().getUsername());
+        request.setUsername(SessionManager.getInstance().user().getUsername());
         request.setAction(actionID);
 
-        gameRequestHandler.requestGameEventSend(request, manager.getSessionID());
+        gameRequestHandler.requestGameEventSend(request);
     }
 
     public void playRaise(String amount) throws GameException {
         ClientGameRequest request = new ClientGameRequest();
         request.setGameName(gameDetails.getName());
-        request.setUsername(manager.user().getUsername());
+        request.setUsername(SessionManager.getInstance().user().getUsername());
         request.setAmount(Integer.parseInt(amount));
         request.setAction(1);
 
-        gameRequestHandler.requestGameEventSend(request, manager.getSessionID());
+        gameRequestHandler.requestGameEventSend(request);
     }
 
     public void sendMessage(String message) throws GameException {
@@ -108,12 +102,12 @@ public class GameManager {
     private void sendMessageHandler(String message,String recipientUser) throws GameException {
         ClientGameRequest request = new ClientGameRequest();
         request.setGameName(gameDetails.getName());
-        request.setUsername(manager.user().getUsername());
+        request.setUsername(SessionManager.getInstance().user().getUsername());
         request.setMessage(message);
         request.setRecipientUserName(recipientUser);
         request.setAction(9);
 
-        gameRequestHandler.requestGameEventSend(request, manager.getSessionID());
+        gameRequestHandler.requestGameEventSend(request);
     }
 
     public boolean isGameRunning(){

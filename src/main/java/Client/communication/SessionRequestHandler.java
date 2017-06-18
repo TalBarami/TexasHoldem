@@ -23,17 +23,20 @@ public class SessionRequestHandler {
     private RestTemplate restTemplate;
     private ObjectMapper objectMapper;
 
+    private SessionStorage seStorage;
+
     public SessionRequestHandler() {
         this.restTemplate = new RestTemplate();
         this.objectMapper = new ObjectMapper();
+        this.seStorage = SessionStorage.getInstance();
     }
 
-    public String requestUserLogin(ClientUserLoginDetails loginDetails) throws LoginException, InvalidArgumentException, EntityDoesNotExistsException {
+    public void requestUserLogin(ClientUserLoginDetails loginDetails) throws LoginException, InvalidArgumentException, EntityDoesNotExistsException {
         HttpEntity<ClientUserLoginDetails> request = new HttpEntity<>(loginDetails);
 
         try {
             ResponseEntity<ResponseMessage> response = restTemplate.exchange(serviceURI, HttpMethod.POST, request, ResponseMessage.class);
-            return response.getBody().getData().toString();
+            seStorage.setSessionID(response.getBody().getData().toString());
         }
         catch (HttpStatusCodeException e) {
             String responseBody = e.getResponseBodyAsString();
@@ -57,9 +60,9 @@ public class SessionRequestHandler {
         }
     }
 
-    public void requestUserLogout(ClientUserLoginDetails logoutDetails, String sessionID) throws InvalidArgumentException {
+    public void requestUserLogout(ClientUserLoginDetails logoutDetails) throws InvalidArgumentException {
         HttpHeaders headers = new HttpHeaders();
-        headers.set("SESSION_ID", sessionID);
+        headers.set("SESSION_ID", seStorage.getSessionId());
         HttpEntity<ClientUserLoginDetails> request = new HttpEntity<>(logoutDetails, headers);
 
         try {
