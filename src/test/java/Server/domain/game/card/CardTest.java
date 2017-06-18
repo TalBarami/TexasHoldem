@@ -18,25 +18,25 @@ public class CardTest {
 
     @Test
     public void equality() throws Exception{
-        Card card1 = TEN.of(HEART);
-        Card card2 = new Card(TEN, HEART);
+        Card card1 = TEN.of(HEARTS);
+        Card card2 = new Card(TEN, HEARTS);
         assertThat(card1, equalTo(card2));
     }
 
     @Test
     public void compareRank() throws Exception {
-        Card thisCard = TEN.of(HEART);
-        Card thatCard = NINE.of(HEART);
+        Card thisCard = TEN.of(HEARTS);
+        Card thatCard = NINE.of(HEARTS);
         logger.info("Testing {} against {} (Expected: {})", thisCard, thatCard, thisCard);
         assertThat(thisCard.compareTo(thatCard), is(greaterThan(0)));
 
-        thisCard = TEN.of(HEART);
-        thatCard = TEN.of(CLUB);
+        thisCard = TEN.of(HEARTS);
+        thatCard = TEN.of(CLUBS);
         logger.info("Testing {} against {} (Expected: Tie)", thisCard, thatCard);
         assertThat(thisCard.compareTo(thatCard), is(0));
 
-        thisCard = ACE.of(CLUB);
-        thatCard = ACE.of(CLUB);
+        thisCard = ACE.of(CLUBS);
+        thatCard = ACE.of(CLUBS);
         logger.info("Testing {} against {} (Expected: Tie)", thisCard, thatCard);
         assertThat(thisCard.compareTo(thatCard), is(0));
     }
@@ -44,7 +44,7 @@ public class CardTest {
     @Test
     public void fromString() throws Exception{
         Card card = Card.fromString("five of diamond");
-        assertThat(card, is(FIVE.of(DIAMOND)));
+        assertThat(card, is(FIVE.of(DIAMONDS)));
     }
 
     @Test

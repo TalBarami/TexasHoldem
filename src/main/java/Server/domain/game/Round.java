@@ -1,7 +1,9 @@
 package Server.domain.game;
 
 import Enumerations.GamePolicy;
+import Exceptions.EntityDoesNotExistsException;
 import Exceptions.InvalidArgumentException;
+import Server.SpringApplicationContext;
 import Server.domain.events.gameFlowEvents.MoveEvent;
 import Server.domain.events.gameFlowEvents.GameEvent;
 import Server.domain.game.card.Card;
@@ -9,7 +11,9 @@ import Server.domain.game.card.Dealer;
 import Server.domain.game.hand.Hand;
 import Server.domain.game.hand.HandCalculator;
 import Server.domain.game.participants.Player;
+import Server.domain.game.participants.Spectator;
 import Server.notification.NotificationService;
+import Server.service.SearchService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,6 +32,7 @@ public class Round {
     private GameSettings gameSettings;
     private List<Player> activePlayers;
     private List<Player> originalPlayersInRound;
+    private List<Spectator> spectatorList;
     private Dealer dealer;
     private int chipsToCall;
     private Player currentPlayer;
@@ -43,6 +48,7 @@ public class Round {
         this.gameSettings = settings;
         this.activePlayers = new ArrayList<Player>(players);
         this.originalPlayersInRound = new ArrayList<Player>(players);
+        this.spectatorList = null;
         this.dealer = new Dealer();
         this.currentDealerPlayer = activePlayers.get(dealerIndex);
         this.chipsToCall = gameSettings.getMinBet();
@@ -115,6 +121,14 @@ public class Round {
         updatePlayersGamesPlayed();
         setRoundActive(false);
 
+        // Update list of players
+        try {
+            SearchService bean = (SearchService)SpringApplicationContext.getBean("SearchService");
+            Game g = bean.findGameByName(gameSettings.getName());
+            activePlayers = g.getPlayers();
+        } catch (Exception e) {
+        }
+
         // Send round update notification
         NotificationService.getInstance().sendRoundUpdateNotification(this);
     }
@@ -164,6 +178,9 @@ public class Round {
             }
 
             eventList.add(playerMoveEvent);
+
+            if (!isRoundActive)
+                return;
 
             if (isLastPlayerPlayed) {
                 endFlow();
@@ -525,5 +542,13 @@ public class Round {
 
     public void setWinnerList(List<Player> winnerList) {
         this.winnerList = winnerList;
+    }
+
+    public List<Spectator> getSpectatorList() {
+        return spectatorList;
+    }
+
+    public void setSpectatorList(List<Spectator> spectatorList) {
+        this.spectatorList = spectatorList;
     }
 }

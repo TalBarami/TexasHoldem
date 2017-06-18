@@ -89,6 +89,7 @@ public class Game {
     private void handleNewRound(){
         initPlayersBeforeStartNewRound();
         Round rnd=new Round(players,settings,dealerIndex);
+        rnd.setSpectatorList(this.spectators);
         dealerIndex=(dealerIndex+1)%players.size();
         rounds.add(rnd);
         rnd.startRound();
@@ -124,7 +125,7 @@ public class Game {
         addGameEvent(player,GameActions.EXIT);
 
         // Send notification about the action
-        NotificationService.getInstance().sendGameUpdateNotification(GameActions.ENTER, player.getUser().getUsername(),this);
+        NotificationService.getInstance().sendGameUpdateNotification(GameActions.EXIT, player.getUser().getUsername(),this);
     }
 
     public boolean isFull(){
@@ -252,7 +253,7 @@ public class Game {
     }
 
     public boolean canBeArchived(){
-        return players.isEmpty();
+        return players.isEmpty() && spectators.isEmpty();
     }
 
     private void setIsActive(boolean selection){

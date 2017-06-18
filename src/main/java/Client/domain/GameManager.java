@@ -15,6 +15,8 @@ import Client.communication.GameRequestHandler;
 import NotificationMessages.ChatNotification;
 import NotificationMessages.GameUpdateNotification;
 import NotificationMessages.RoundUpdateNotification;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +25,10 @@ import java.util.List;
  * Created by User on 15/05/2017.
  */
 public class GameManager {
+    private static Logger logger = LoggerFactory.getLogger(GameManager.class);
+
     private ClientGameDetails gameDetails;
+    private boolean isGameRunning;
 
     private GameRequestHandler gameRequestHandler;
 
@@ -105,8 +110,18 @@ public class GameManager {
         gameRequestHandler.requestGameEventSend(request);
     }
 
+    public boolean isGameRunning(){
+        return isGameRunning;
+    }
+
+    public void setGameRunning(Boolean isGameRunning){
+        this.isGameRunning = isGameRunning;
+    }
+
     private void updateGameDetails(GameUpdateNotification gameUpdateNotification){
-        gameUpdateCallbacks.parallelStream().forEach(c -> c.execute(gameUpdateNotification));
+        logger.info("Received game update notification: {}", gameUpdateNotification);
+        gameDetails = gameUpdateNotification.getGameDetails();
+        gameUpdateCallbacks.forEach(c -> c.execute(gameUpdateNotification));
     }
 
     public void addGameUpdateCallback(GameUpdateCallback callback){
@@ -114,7 +129,8 @@ public class GameManager {
     }
 
     private void updateRoundDetails(RoundUpdateNotification roundUpdateNotification){
-        roundUpdateCallbacks.parallelStream().forEach(c -> c.execute(roundUpdateNotification));
+        logger.info("Received round update notification: {}", roundUpdateNotification);
+        roundUpdateCallbacks.forEach(c -> c.execute(roundUpdateNotification));
     }
 
     public void addRoundUpdateCallback(RoundUpdateCallback callback){
@@ -122,7 +138,8 @@ public class GameManager {
     }
 
     private void updateChat(ChatNotification message){
-        chatUpdateCallbacks.parallelStream().forEach(c -> c.execute(message));
+        logger.info("Received chat update notification: {}", message);
+        chatUpdateCallbacks.forEach(c -> c.execute(message));
     }
 
     public void addChatUpdateCallback(ChatUpdateCallback callback){
@@ -130,7 +147,8 @@ public class GameManager {
     }
 
     private void updateGameMoves(List<Move> possibleMoves){
-        moveUpdateCallbacks.parallelStream().forEach(c -> c.execute(possibleMoves));
+        logger.info("Received moves update notification: {}", possibleMoves);
+        moveUpdateCallbacks.forEach(c -> c.execute(possibleMoves));
     }
 
     public void addMoveUpdateCallback(MoveUpdateCallback callback){
