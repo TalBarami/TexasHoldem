@@ -1,7 +1,6 @@
 package Server.domain.game;
 
 import Enumerations.GamePolicy;
-import Exceptions.InvalidArgumentException;
 import Server.domain.events.gameFlowEvents.MoveEvent;
 import Server.domain.events.gameFlowEvents.GameEvent;
 import Server.domain.game.card.Card;
@@ -167,6 +166,9 @@ public class Round {
             }
 
             eventList.add(playerMoveEvent);
+
+            if (!isRoundActive)
+                return;
 
             if (isLastPlayerPlayed) {
                 endFlow();
