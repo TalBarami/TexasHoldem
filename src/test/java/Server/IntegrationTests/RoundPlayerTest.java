@@ -427,5 +427,4 @@ public class RoundPlayerTest {
         Assert.assertEquals(oldChipsAmount1, player1.getChipsAmount());
         Assert.assertEquals(oldChipsAmount3, player3.getChipsAmount());
     }
-
 }
