@@ -25,12 +25,15 @@ public class GameDbTest {
         User user = new User("hod", "hod", "hod@gmail.com", LocalDate.of(1991,4,20),null);
         GameSettings gamesettings = new GameSettings("hod-poker-game", GamePolicy.NOLIMIT,0,10,100,10000,2,9,true);
         GameSettings gameSettingsFromDb = null;
-        Game game = new Game(gamesettings, user, lm);
+
         Game gameFromDb = null;
         Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
         try{
             session.beginTransaction();
             session.save(user);
+            session.getTransaction().commit();
+            session.beginTransaction();
+            Game game = new Game(gamesettings, user, lm);
             session.save(gamesettings);
             session.save(game);
 
@@ -70,14 +73,17 @@ public class GameDbTest {
         User user2 = new User("achiad", "achiad", "achiad@gmail.com", LocalDate.of(1991,4,20),null);
         User user3 = new User("rotem", "rotem", "rotem@gmail.com", LocalDate.of(1991,4,20),null);
         GameSettings gamesettings = new GameSettings("hod-poker-game", GamePolicy.NOLIMIT,0,10,100,0,2,9,true);
-        Game game = new Game(gamesettings, user1, lm);
         Game gameFromDb = null;
+        Game game = null;
         Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
         try{
             session.beginTransaction();
             session.save(user1);
             session.save(user2);
             session.save(user3);
+            session.getTransaction().commit();
+            session.beginTransaction();
+            game = new Game(gamesettings, user1, lm);
             session.save(gamesettings);
             session.save(game);
 
@@ -86,11 +92,6 @@ public class GameDbTest {
             game.joinGameAsPlayer(user2);
             game.joinGameAsSpectator(user3);
 
-            session.delete(gamesettings);
-            session.delete(game);
-            session.delete(user1);
-            session.delete(user2);
-            session.delete(user3);
             session.getTransaction().commit();
 
         }catch (HibernateException e) {
@@ -111,5 +112,22 @@ public class GameDbTest {
         assertEquals("achiad@gmail.com", player2.getUser().getEmail());
         assertEquals("rotem@gmail.com", spectator.getUser().getEmail());
         assertEquals(player1.getId(), round.getActivePlayers().get(0).getId());
+
+        session = HibernateUtil.getInstance().getSessionFactory().openSession();
+        try{
+            session.beginTransaction();
+            session.delete(gamesettings);
+            session.delete(game);
+            session.delete(user1);
+            session.delete(user2);
+            session.delete(user3);
+            session.getTransaction().commit();
+
+        }catch (HibernateException e) {
+            if (session.getTransaction()!=null) session.getTransaction().rollback();
+            assertEquals(0,1);
+        }finally {
+            session.close();
+        }
     }
 }

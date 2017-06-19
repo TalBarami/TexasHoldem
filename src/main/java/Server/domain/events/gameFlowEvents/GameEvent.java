@@ -25,6 +25,9 @@ public class GameEvent extends SystemEvent {
         this.eventAction = action;
     }
 
+    public GameEvent() {
+    }
+
     public void setEventAction(GameActions eventAction) {
         this.eventAction = eventAction;
     }

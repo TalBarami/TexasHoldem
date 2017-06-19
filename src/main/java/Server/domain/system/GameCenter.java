@@ -79,13 +79,13 @@ public class GameCenter {
         //remove from all playing rooms
         for(User user: loggedInUsers){
             if(user.getUsername().equals(userName)) {
-                Map<Game, Participant> mappings = user.getGameMapping();
-                Iterator<Map.Entry<Game, Participant>> it = mappings.entrySet().iterator();
+                Map<String, Participant> mappings = user.getGameMapping();
+                Iterator<Map.Entry<String, Participant>> it = mappings.entrySet().iterator();
                 while (it.hasNext()) {
-                    Map.Entry<Game, Participant> keyValue = it.next();
-                    Game g = keyValue.getKey();
-                    Participant p = mappings.get(g);
-                    p.removeFromGame(g);
+                    Map.Entry<String, Participant> keyValue = it.next();
+                    String gameName = keyValue.getKey();
+                    Participant p = mappings.get(gameName);
+                    p.removeFromGame(gamesDb.getActiveGamesByName(gameName).get(0));
                     it.remove();
                 }
             }
@@ -154,12 +154,12 @@ public class GameCenter {
         User user=getSpecificUserIfExist(userName);
         Game game= getSpecificGameIfExist(gameName);
 
-        if(!user.getGameMapping().containsKey(game))
+        if(!user.getGameMapping().containsKey(gameName))
             throw new GameException(String.format("User '%s' can't leave game '%s', since he is not playing inside.",userName,gameName));
 
-        Participant participant=user.getGameMapping().get(game);
+        Participant participant=user.getGameMapping().get(gameName);
         participant.removeFromGame(game);
-        user.getGameMapping().remove(game);
+        user.getGameMapping().remove(gameName);
 
         if(game.canBeArchived()){
             gamesDb.archiveGame(game); // todo : notify someway to spectators of the room that room is closed?

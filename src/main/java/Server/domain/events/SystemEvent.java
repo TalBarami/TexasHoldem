@@ -24,7 +24,7 @@ public class SystemEvent {
     @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime eventTime;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "participant_id")
     private Participant eventInitiator;
 
@@ -35,6 +35,9 @@ public class SystemEvent {
         this.eventTime = DateTime.now();
         this.eventInitiator = eventInitiator;
         this.gameName = gameName;
+    }
+
+    public SystemEvent() {
     }
 
     public DateTime getEventTime() {

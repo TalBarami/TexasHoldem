@@ -3,6 +3,7 @@ package Server.domain.game.participants;
 import Server.domain.game.Game;
 import Server.domain.game.chat.Message;
 import Server.domain.user.User;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 
@@ -19,7 +20,7 @@ public abstract class Participant {
     @Column(name = "participant_id")
     private int id;
 
-    @ManyToOne(cascade = CascadeType.PERSIST )
+    @ManyToOne(cascade = CascadeType.ALL )
     @JoinColumn(name = "userName")
     protected User user;
 

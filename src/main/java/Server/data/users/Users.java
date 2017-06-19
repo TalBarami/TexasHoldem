@@ -5,6 +5,8 @@ import Exceptions.InvalidArgumentException;
 import Exceptions.LoginException;
 
 import Server.data.Hybernate.HibernateUtil;
+import Server.domain.game.Game;
+import Server.domain.game.participants.Participant;
 import Server.domain.user.User;
 
 import java.security.MessageDigest;
@@ -19,6 +21,7 @@ import org.hibernate.query.Query;
 
 
 public class Users implements IUsers, IUsersForDistributionAlgorithm {
+    private static Map<String, Map<String, Participant>> usersInGame = new HashMap<>(); //mapped by user name then game name
 
     public Users() {
     }
@@ -33,6 +36,19 @@ public class Users implements IUsers, IUsersForDistributionAlgorithm {
         }catch (HibernateException e) {
             if (session.getTransaction()!=null) session.getTransaction().rollback();
             throw new InvalidArgumentException("Invalid Arguments");
+        }finally {
+            session.close();
+        }
+    }
+
+    public static void updateUser(User user) {
+        Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
+        try{
+            session.beginTransaction();
+            session.update(user);
+            session.getTransaction().commit();
+        }catch (HibernateException e) {
+            if (session.getTransaction()!=null) session.getTransaction().rollback();
         }finally {
             session.close();
         }
@@ -252,5 +268,15 @@ public class Users implements IUsers, IUsersForDistributionAlgorithm {
             session.close();
         }
         return Users;
+    }
+
+    public static void addGameParticipant(User user, Game game, Participant p) {
+        usersInGame.putIfAbsent(user.getUsername(), new HashMap<String, Participant>());
+        usersInGame.get(user.getUsername()).put(game.getName(), p);
+    }
+
+
+    public static Map<String,Participant> getGameParticipant(User user) {
+        return usersInGame.get(user.getUsername());
     }
 }

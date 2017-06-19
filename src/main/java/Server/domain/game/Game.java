@@ -43,16 +43,18 @@ public class Game {
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private boolean game_over;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "players_in_game", joinColumns = @JoinColumn(name = "game_id"), inverseJoinColumns = { @JoinColumn(name = "participant_id") })
+//    @OneToMany(cascade = CascadeType.ALL)
+//    @JoinTable(name = "players_in_game", joinColumns = @JoinColumn(name = "game_id"), inverseJoinColumns = { @JoinColumn(name = "participant_id") })
+    @Transient
     private List<Player> players;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "rounds_in_game", joinColumns = @JoinColumn(name = "game_id"), inverseJoinColumns = { @JoinColumn(name = "round_id") })
     private List<Round> rounds;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "spectators_in_game", joinColumns = @JoinColumn(name = "game_id"), inverseJoinColumns = { @JoinColumn(name = "participant_id") })
+//    @OneToMany(cascade = CascadeType.ALL)
+//    @JoinTable(name = "spectators_in_game", joinColumns = @JoinColumn(name = "game_id"), inverseJoinColumns = { @JoinColumn(name = "participant_id") })
+    @Transient
     private List<Spectator> spectators;
 
     @Column(name = "dealer_index_in_table")
