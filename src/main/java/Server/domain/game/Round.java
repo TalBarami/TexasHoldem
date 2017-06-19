@@ -9,12 +9,9 @@ import Server.domain.game.hand.Hand;
 import Server.domain.game.hand.HandCalculator;
 import Server.domain.game.participants.Player;
 import Server.notification.NotificationService;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.persistence.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -23,70 +20,21 @@ import static Server.domain.game.GameActions.*;
 /**
  * Created by Hod and Rotem on 05/04/2017.
  */
-@Entity
-@Table(name = "round")
 public class Round {
-
-    @Transient
     private static Logger logger = LoggerFactory.getLogger(Round.class);
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "round_id")
-    private int id;
-
-    @Column(name = "is_active")
-    @Type(type = "org.hibernate.type.NumericBooleanType")
     private boolean isRoundActive;
-
-    @Transient
     private GameSettings gameSettings;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "active_players_in_round", joinColumns = @JoinColumn(name = "round_id"), inverseJoinColumns = { @JoinColumn(name = "participant_id") })
     private List<Player> activePlayers;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "original_players_in_round", joinColumns = @JoinColumn(name = "round_id"), inverseJoinColumns = { @JoinColumn(name = "participant_id") })
     private List<Player> originalPlayersInRound;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "dealer_id")
-    @Cascade( {org.hibernate.annotations.CascadeType.DELETE_ORPHAN} )
     private Dealer dealer;
-
-    @Column(name = "chips_to_call")
     private int chipsToCall;
-
-    @OneToOne
-    @JoinColumn(name = "curr_player_id")
     private Player currentPlayer;
-
-    @OneToOne
-    @JoinColumn(name = "last_player_id")
     private Player lastPlayer;
-
-    @Column(name = "pot_amount")
     private int potAmount;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "opened_cards_in_round", joinColumns = @JoinColumn(name = "round_id"), inverseJoinColumns = { @JoinColumn(name = "card_id") })
     private List<Card> openedCards;
-
-    @OneToOne
-    @JoinColumn(name = "dealer_player_id")
     private Player currentDealerPlayer;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "current_state")
     private RoundState currentState;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "events_in_round", joinColumns = @JoinColumn(name = "round_id"), inverseJoinColumns = { @JoinColumn(name = "system_event_id") })
     private List<GameEvent> eventList;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "winners_in_round", joinColumns = @JoinColumn(name = "round_id"), inverseJoinColumns = { @JoinColumn(name = "participant_id") })
     private List<Player> winnerList;
 
     public Round(List<Player> players, GameSettings settings, int dealerIndex) {
@@ -554,14 +502,6 @@ public class Round {
         return getActivePlayers().stream()
                 .filter(player -> player.getUser().getUsername().equals(userName))
                 .collect(Collectors.toList()).get(0).getChipsAmount();
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public GameSettings getGameSettings() {

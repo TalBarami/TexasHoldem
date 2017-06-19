@@ -49,7 +49,7 @@ public class userDbTest {
             session.close();
         }
 
-        Participant part = userFromDb.getGameMapping().get(gameFromDb);
+        Participant part = userFromDb.getGameMapping().get(gameFromDb.getSettings().getName());
         assertEquals("hod", part.getUser().getUsername());
         assertEquals("bub@gmail.com", part.getUser().getEmail());
     }

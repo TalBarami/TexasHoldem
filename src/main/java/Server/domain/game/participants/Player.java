@@ -7,34 +7,19 @@ import Server.domain.user.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.persistence.*;
 import java.util.*;
 
 /**
  * Created by Hod and Rotem on 05/04/2017.
  */
 
-@Entity
-@Table(name="player")
-@PrimaryKeyJoinColumn(name="participant_id")
+
 public class Player extends Participant{
-    @Transient
     private static Logger logger = LoggerFactory.getLogger(Player.class);
-
-    @OneToMany
-    @JoinTable(name = "player_cards", joinColumns = @JoinColumn(name = "participant_id"), inverseJoinColumns = { @JoinColumn(name = "card_id") })
     private Set<Card> cards;
-
-    @Column(name = "chips_amount")
     private int chipsAmount;
-
-    @Column(name = "last_bet_since_card_open")
     private int lastBetSinceCardOpen;
-
-    @Column(name = "total_amount_payed_in_round")
     private int totalAmountPayedInRound;
-
-    @Column(name = "chip_policy")
     private int chipPolicy;
 
     public Player(User user,int chipsAmount, int policy){

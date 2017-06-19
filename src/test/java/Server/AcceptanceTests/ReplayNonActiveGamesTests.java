@@ -39,6 +39,7 @@ public class ReplayNonActiveGamesTests extends ProjectTest {
         usersJoinsGames();
         List<GameEvent> ans=this.replaynonactivegame("achiadg-poker-game");
         assertNull(ans);
+        leaveGames();
     }
 
     @Test

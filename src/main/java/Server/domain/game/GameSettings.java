@@ -2,47 +2,17 @@ package Server.domain.game;
 
 import Enumerations.GamePolicy;
 import org.apache.commons.lang3.tuple.Pair;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.Type;
 
-import javax.persistence.*;
-
-@Entity
-@Table(name = "game_settings")
-@DynamicUpdate
 public class GameSettings implements java.io.Serializable {
-
-    @Id
-    @Column(name = "game_name")
     private String name;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "game_type")
     private GamePolicy gameType;
-
-    @Column(name = "game_type_limit")
     private int gameTypeLimit;
-
-    @Column(name = "min_bet")
     private int minBet;
-
-    @Column(name = "buy_in")
     private int buyInPolicy;
-
-    @Column(name = "chip_policy")
     private int chipPolicy;
-
-    @Column(name = "min_amount_players")
     private int minAmountPlayers;
-
-    @Column(name = "max_amount_players")
     private int maxAmountPlayers;
-
-    @Column(name = "accept_spectating")
-    @Type(type = "org.hibernate.type.NumericBooleanType")
     private boolean acceptSpectating;
-
-    @Column(name = "league_criteria")
     private int leagueCriteria;
 
     public GameSettings(String name, GamePolicy policy,int limit, int minBet, int buyInPolicy, int chipPolicy, int minPlyerAmount, int maxPlayerAmount, boolean specAccept){

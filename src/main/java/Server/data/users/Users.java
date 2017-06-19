@@ -277,6 +277,15 @@ public class Users implements IUsers, IUsersForDistributionAlgorithm {
 
 
     public static Map<String,Participant> getGameParticipant(User user) {
+        usersInGame.putIfAbsent(user.getUsername(), new HashMap<String, Participant>());
         return usersInGame.get(user.getUsername());
+    }
+
+    public static void deleteGameMapping(String gameName) {
+        for(String userName : usersInGame.keySet())
+        {
+            if(usersInGame.get(userName).containsKey(gameName))
+                usersInGame.get(userName).remove(gameName);
+        }
     }
 }

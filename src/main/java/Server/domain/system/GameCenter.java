@@ -108,7 +108,7 @@ public class GameCenter {
     public void startGame(String userName,String gameName) throws GameException {
         User user=getSpecificUserIfExist(userName);
         Game game= getSpecificGameIfExist(gameName);
-        Player playerInGame=(Player)user.getGameMapping().get(game);
+        Player playerInGame=(Player)user.getGameMapping().get(game.getSettings().getName());
         if(playerInGame==null)
             throw new GameException(String.format("User '%s' is not currently playing in game '%s",userName,gameName));
 
@@ -138,7 +138,7 @@ public class GameCenter {
         Game toJoin = getSpecificGameIfExist(gameName);
         User user = getSpecificUserIfExist(userName);
 
-        if(user.getGameMapping().containsKey(toJoin))
+        if(user.getGameMapping().containsKey(toJoin.getSettings().getName()))
             throw new GameException(String.format("User '%s' is already in game '%s'.", userName, gameName));
 
         if (asSpectator){
@@ -176,7 +176,7 @@ public class GameCenter {
                 .filter(game -> game.getLeague() == user.getCurrLeague() &&
                         (game.realMoneyGame() || (!game.realMoneyGame() && game.isActive() && (game.getBuyInPolicy() <= user.getBalance()))) &&
                         game.getPlayers().size() < game.getMaximalAmountOfPlayers() &&
-                        !user.getGameMapping().containsKey(game))
+                        !user.getGameMapping().containsKey(game.getSettings().getName()))
                 .collect(Collectors.toList());
     }
 

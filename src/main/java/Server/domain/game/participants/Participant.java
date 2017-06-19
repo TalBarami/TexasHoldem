@@ -11,17 +11,8 @@ import javax.persistence.*;
  * Created by RonenB on 4/11/2017.
  */
 
-@Entity
-@Table(name = "participant")
-@Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Participant {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "participant_id")
-    private int id;
 
-    @ManyToOne(cascade = CascadeType.ALL )
-    @JoinColumn(name = "userName")
+public abstract class Participant {
     protected User user;
 
     Participant(User user){
@@ -36,14 +27,6 @@ public abstract class Participant {
 
     public User getUser(){
         return user;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public void setUser(User user) {

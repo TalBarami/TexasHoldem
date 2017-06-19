@@ -12,66 +12,25 @@ import Server.domain.game.participants.Player;
 import Server.domain.game.participants.Spectator;
 import Server.domain.user.User;
 import Server.notification.NotificationService;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Entity
-@Table(name = "game")
 public class Game {
-
-    @Transient
     private static Logger logger = LoggerFactory.getLogger(Game.class);
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "game_name")
-    @Cascade( {org.hibernate.annotations.CascadeType.DELETE_ORPHAN} )
+    private int gameId;
     private GameSettings settings;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "game_id")
-    private int id;
-
-    @Column(name = "game_over")
-    @Type(type = "org.hibernate.type.NumericBooleanType")
     private boolean game_over;
-
-//    @OneToMany(cascade = CascadeType.ALL)
-//    @JoinTable(name = "players_in_game", joinColumns = @JoinColumn(name = "game_id"), inverseJoinColumns = { @JoinColumn(name = "participant_id") })
-    @Transient
     private List<Player> players;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "rounds_in_game", joinColumns = @JoinColumn(name = "game_id"), inverseJoinColumns = { @JoinColumn(name = "round_id") })
     private List<Round> rounds;
-
-//    @OneToMany(cascade = CascadeType.ALL)
-//    @JoinTable(name = "spectators_in_game", joinColumns = @JoinColumn(name = "game_id"), inverseJoinColumns = { @JoinColumn(name = "participant_id") })
-    @Transient
     private List<Spectator> spectators;
-
-    @Column(name = "dealer_index_in_table")
     private int dealerIndex;
-
-    @Transient
     private LeagueManager leagueManager;
-
-    @Column(name = "is_active")
-    @Type(type = "org.hibernate.type.NumericBooleanType")
     private boolean isActive;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "game_events_in_game", joinColumns = @JoinColumn(name = "game_id"), inverseJoinColumns = { @JoinColumn(name = "system_event_id") })
     private List<GameEvent> gameEvents;
-
-    @Column(name = "num_players_started_game")
     private int numPlayersStarted;
 
     public Game(GameSettings settings, User creator, LeagueManager leagueManager){
@@ -241,10 +200,6 @@ public class Game {
         return isActive;
     }
 
-    public void setGameId(int gameId){
-        this.id=gameId;
-    }
-
     public List<Player> getPlayers() {
         return players;
     }
@@ -287,10 +242,6 @@ public class Game {
 
     public List<Spectator> getSpectators() {
         return spectators;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public boolean canBeArchived(){
@@ -364,10 +315,6 @@ public class Game {
         this.settings = settings;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public void setPlayers(List<Player> players) {
         this.players = players;
     }
@@ -414,6 +361,18 @@ public class Game {
 
     public void setGame_over(boolean game_over) {
         this.game_over = game_over;
+    }
+
+    public int getGameId() {
+        return gameId;
+    }
+
+    public int getId() {
+        return gameId;
+    }
+
+    public void setGameId(int gameId) {
+        this.gameId = gameId;
     }
 }
 

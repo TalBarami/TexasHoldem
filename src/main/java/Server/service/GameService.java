@@ -64,7 +64,7 @@ public class GameService {
         verifyStrings(username,gameName);
         Round currentRound = gameCenter.getGameByName(gameName).getLastRound();
         User user = gameCenter.getUser(username);
-        Optional<Player> optPlayer = currentRound.getActivePlayers().stream().filter(p -> p.getUser().equals(user)).findFirst();
+        Optional<Player> optPlayer = currentRound.getActivePlayers().stream().filter(p -> p.getUser().getUsername().equals(user.getUsername())).findFirst();
         optPlayer.ifPresent(player -> currentRound.playTurnOfPlayer(new MoveEvent(username, GameActions.CALL, 0, gameName)));
     }
 
@@ -72,7 +72,7 @@ public class GameService {
         verifyStrings(username,gameName);
         Round currentRound = gameCenter.getGameByName(gameName).getLastRound();
         User user = gameCenter.getUser(username);
-        Optional<Player> optPlayer = currentRound.getActivePlayers().stream().filter(p -> p.getUser().equals(user)).findFirst();
+        Optional<Player> optPlayer = currentRound.getActivePlayers().stream().filter(p -> p.getUser().getUsername().equals(user.getUsername())).findFirst();
         optPlayer.ifPresent(player -> currentRound.playTurnOfPlayer(new MoveEvent(username, GameActions.CHECK, 0, gameName)));
     }
 
@@ -80,7 +80,7 @@ public class GameService {
         verifyStrings(username,gameName);
         Round currentRound = gameCenter.getGameByName(gameName).getLastRound();
         User user = gameCenter.getUser(username);
-        Optional<Player> optPlayer = currentRound.getActivePlayers().stream().filter(p -> p.getUser().equals(user)).findFirst();
+        Optional<Player> optPlayer = currentRound.getActivePlayers().stream().filter(p -> p.getUser().getUsername().equals(user.getUsername())).findFirst();
         optPlayer.ifPresent(player -> currentRound.playTurnOfPlayer(new MoveEvent(username, GameActions.FOLD, 0, gameName)));
     }
 
@@ -89,7 +89,7 @@ public class GameService {
         verifyPositiveNumbers(amount);
         Round currentRound = gameCenter.getGameByName(gameName).getLastRound();
         User user = gameCenter.getUser(username);
-        Optional<Player> optPlayer = currentRound.getActivePlayers().stream().filter(p -> p.getUser().equals(user)).findFirst();
+        Optional<Player> optPlayer = currentRound.getActivePlayers().stream().filter(p -> p.getUser().getUsername().equals(user.getUsername())).findFirst();
         optPlayer.ifPresent(player -> currentRound.playTurnOfPlayer(new MoveEvent(username, GameActions.RAISE, amount, gameName)));
     }
 
@@ -115,12 +115,12 @@ public class GameService {
         allPlayersInGame.addAll(game.getPlayers());
 
         try { //check if he is a player
-            Player player = allPlayersInGame.stream().filter(p -> p.getUser().equals(user)).findFirst().get();
+            Player player = allPlayersInGame.stream().filter(p -> p.getUser().getUsername().equals(user.getUsername())).findFirst().get();
             game.handleMessageFromPlayer(new MessageEvent(username, new Message(content), gameName));
         }catch (NoSuchElementException e){
             List<Spectator> allSpectators = new ArrayList<>();
             allSpectators.addAll(game.getSpectators());
-            Spectator spectator = allSpectators.stream().filter(p -> p.getUser().equals(user)).findFirst().get();
+            Spectator spectator = allSpectators.stream().filter(p -> p.getUser().getUsername().equals(user.getUsername())).findFirst().get();
             game.handleMessageFromSpectator(new MessageEvent(username, new Message(content), gameName));
         }
     }
@@ -140,12 +140,12 @@ public class GameService {
         allPlayersInGame.addAll(game.getPlayers());
 
         try { //check the sender is a player
-            Player player = allPlayersInGame.stream().filter(p -> p.getUser().equals(user)).findFirst().get();
+            Player player = allPlayersInGame.stream().filter(p -> p.getUser().getUsername().equals(user.getUsername())).findFirst().get();
             game.handleWhisperFromPlayer(new WhisperEvent(username, new Message(content), parToSendTo, gameName));
         }catch (NoSuchElementException e){
             List<Spectator> allSpectators = new ArrayList<>();
             allSpectators.addAll(game.getSpectators());
-            Spectator spectator = allSpectators.stream().filter(p -> p.getUser().equals(user)).findFirst().get();
+            Spectator spectator = allSpectators.stream().filter(p -> p.getUser().getUsername().equals(user.getUsername())).findFirst().get();
             game.handleWhisperFromSpectator(spectator, new WhisperEvent(username, new Message(content), parToSendTo, gameName));
         }
     }
