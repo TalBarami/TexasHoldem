@@ -87,7 +87,7 @@ public class CreateGame extends JDialog {
         MenuHandler menuHandler = MenuHandler.getInstance();
         try {
             menuHandler.createGame(nameTextField.getText(), (GamePolicy)policyComboBox.getSelectedItem(), (int)raiseLimitSpinner.getValue(), (int)minBetSpinner.getValue(),
-                    (int)buyInPolicySpinner.getValue(), tournamentCheckBox.isSelected() ? 0 : (int)chipPolicySpinner.getValue(), (int)minSpinner.getValue(), (int)maxSpinner.getValue(), allowSpectatingCheckBox.isSelected());
+                    (int)buyInPolicySpinner.getValue(), tournamentCheckBox.isSelected() ? (int)chipPolicySpinner.getValue() : 0, (int)minSpinner.getValue(), (int)maxSpinner.getValue(), allowSpectatingCheckBox.isSelected());
             Game game = new Game(ancestor, nameTextField.getText());
             ancestor.addGame(game);
             dispose();

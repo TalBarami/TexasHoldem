@@ -74,7 +74,7 @@ public class Game extends JFrame{
         setLocationRelativeTo(ancestor);
         setTitle(gameHandler.getGameDetails().getName());
         getRootPane().setDefaultButton(sendButton);
-        setSize(800, 600);
+        pack();
     }
 
     private void initializeGame(ClientGameDetails gameDetails){
@@ -83,6 +83,7 @@ public class Game extends JFrame{
         initializeSeats(gameDetails);
 
         cardsPanel.setLayout(new BoxLayout(cardsPanel, BoxLayout.X_AXIS));
+        cardsPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         cardsPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
         eventsPanel.setLayout(new BoxLayout(eventsPanel, BoxLayout.Y_AXIS));
@@ -181,6 +182,8 @@ public class Game extends JFrame{
         for(ClientPlayer player : players){
             chatComboBox.addItem(player.getPlayerName());
         }
+        pack();
+        revalidate();
     }
 
     private void updatePlayersInformation(List<ClientPlayer> players) {
@@ -192,6 +195,8 @@ public class Game extends JFrame{
         for(String message : gameHandler.getNotiicationMessages()){
             eventsPanel.add(new JLabel(message));
         }
+        pack();
+        revalidate();
     }
 
     private void handleGameSession(GameUpdateNotification gameUpdateNotification){
@@ -208,6 +213,8 @@ public class Game extends JFrame{
         for(ClientCard card : tableCards){
             cardsPanel.add(new JLabel(CardsImages.getImage(card)));
         }
+        pack();
+        revalidate();
     }
 
     private void handleGameSession(RoundUpdateNotification roundUpdateNotification){
