@@ -211,11 +211,16 @@ public class MainMenu extends JFrame {
     }
 
     private void tableSelectionChange(){
-        joinSelectedGameButton.setEnabled(!gamesTable.getSelectionModel().isSelectionEmpty());
-        spectateSelectedGameButton.setEnabled(String.valueOf(searchTypeComboBox.getSelectedItem()).equals(SPECTATEABLE) && !gamesTable.getSelectionModel().isSelectionEmpty());
-        replaySelectedGameButton.setEnabled(String.valueOf(searchTypeComboBox.getSelectedItem()).equals(REPLAYABLE) && !gamesTable.getSelectionModel().isSelectionEmpty());
-
-        handleButtonsAvailability();
+        Vector selected = (Vector)((DefaultTableModel) gamesTable.getModel()).getDataVector().elementAt(gamesTable.getSelectedRow());
+        if(gamesTable.getSelectionModel().isSelectionEmpty()){
+            for(JButton button : Arrays.asList(joinSelectedGameButton, spectateSelectedGameButton, replaySelectedGameButton)){
+                button.setEnabled(false);
+            }
+        } else{
+            joinSelectedGameButton.setEnabled(true); // FIXME: !isRunning() or available(myself) or something.
+            spectateSelectedGameButton.setEnabled((boolean)selected.get(7));
+            replaySelectedGameButton.setEnabled(String.valueOf(searchTypeComboBox.getSelectedItem()).equals(REPLAYABLE)); // FIXME: !archived
+        }
     }
 
     private void onSearchTypeChange(){
@@ -226,14 +231,6 @@ public class MainMenu extends JFrame {
         searchComboBox.setVisible(selectionFields.contains(selectedItem));
         searchValueLabel.setVisible(!noFields.contains(selectedItem));
         revalidate();
-
-        handleButtonsAvailability();
-    }
-
-    private void handleButtonsAvailability(){
-        joinSelectedGameButton.setEnabled(!gamesTable.getSelectionModel().isSelectionEmpty());
-        spectateSelectedGameButton.setEnabled(String.valueOf(searchTypeComboBox.getSelectedItem()).equals(SPECTATEABLE) && !gamesTable.getSelectionModel().isSelectionEmpty());
-        replaySelectedGameButton.setEnabled(String.valueOf(searchTypeComboBox.getSelectedItem()).equals(REPLAYABLE) && !gamesTable.getSelectionModel().isSelectionEmpty());
     }
 
     private void initTable(){

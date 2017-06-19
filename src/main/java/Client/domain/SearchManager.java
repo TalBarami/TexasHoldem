@@ -68,6 +68,7 @@ public class SearchManager {
     public List<ClientGameDetails> findGamesByPotSize(String potSize) throws EntityDoesNotExistsException, InvalidArgumentException {
         ClientGamePreferences pref = new ClientGamePreferences();
         // FIXME: Set pot size & boolean field
+
         return gameRequestHandler.requestGameSearch(pref);
     }
 
