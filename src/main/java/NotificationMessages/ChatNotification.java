@@ -41,4 +41,13 @@ public class ChatNotification extends GameNotification {
     public void setPrivate(boolean aPrivate) {
         isPrivate = aPrivate;
     }
+
+    @Override
+    public String toString() {
+        return "ChatNotification{" +
+                "senderUserName='" + senderUserName + '\'' +
+                ", messageContent='" + messageContent + '\'' +
+                ", isPrivate=" + isPrivate +
+                '}';
+    }
 }

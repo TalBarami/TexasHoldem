@@ -122,4 +122,21 @@ public class ClientGameDetails {
     public void setPlayerList(List<ClientPlayer> playerList) {
         this.playerList = playerList;
     }
+
+    @Override
+    public String toString() {
+        return "ClientGameDetails{" +
+                "username='" + username + '\'' +
+                ", name='" + name + '\'' +
+                ", policyType=" + policyType +
+                ", policyLimitAmount=" + policyLimitAmount +
+                ", minimumBet=" + minimumBet +
+                ", buyInAmount=" + buyInAmount +
+                ", chipPolicyAmount=" + chipPolicyAmount +
+                ", minimumPlayersAmount=" + minimumPlayersAmount +
+                ", maximumPlayersAmount=" + maximumPlayersAmount +
+                ", isSpectateValid=" + isSpectateValid +
+                ", playerList=" + playerList +
+                '}';
+    }
 }

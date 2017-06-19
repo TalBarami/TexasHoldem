@@ -25,7 +25,6 @@ public class ClientUtils {
     public static void frameInit(JFrame frame, Container contentPane){
         frame.setContentPane(contentPane);
         frame.pack();
-        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         frame.revalidate();
     }

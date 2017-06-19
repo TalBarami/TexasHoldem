@@ -7,12 +7,14 @@ import Exceptions.EntityDoesNotExistsException;
 import Exceptions.GameException;
 import Exceptions.InvalidArgumentException;
 
-import Client.domain.MenuManager;
-import Client.domain.SearchManager;
-import Client.domain.SessionManager;
+import Client.domain.MenuHandler;
+import Client.domain.SearchHandler;
+import Client.domain.SessionHandler;
 import Client.ClientUtils;
 import Client.view.access.Welcome;
 import Client.view.game.Game;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -21,12 +23,14 @@ import java.awt.event.*;
 import java.util.*;
 import java.util.List;
 
-import static Client.domain.SearchManager.*;
+import static Client.domain.SearchHandler.*;
 
 /**
  * Created by User on 12/05/2017.
  */
 public class MainMenu extends JFrame {
+    private static Logger logger = LoggerFactory.getLogger(MainMenu.class);
+
     private Profile profile;
 
     private List<String> textFields = Arrays.asList(GAME_NAME, USERNAME);
@@ -58,17 +62,18 @@ public class MainMenu extends JFrame {
 
     public MainMenu() {
         init();
+        setLocationRelativeTo(null);
 
         activeGames = new ArrayList<>();
 
-        generateUserInformation(SessionManager.getInstance().user());
+        generateUserInformation(SessionHandler.getInstance().user());
         assignActionListeners();
         initSearchProperties();
         initTable();
     }
 
     private void assignActionListeners(){
-        SessionManager.getInstance().addUpdateCallback(this::generateUserInformation);
+        SessionHandler.getInstance().addUpdateCallback(this::generateUserInformation);
 
         profileButton.addActionListener(e -> onProfile());
         logoutButton.addActionListener(e -> onLogout());
@@ -95,7 +100,7 @@ public class MainMenu extends JFrame {
 
 
     private void initSearchProperties(){
-        Set<String> searchPolicies = SearchManager.getInstance().getPoliciesNames();
+        Set<String> searchPolicies = SearchHandler.getInstance().getPoliciesNames();
 
         for(String type : searchPolicies){
             searchTypeComboBox.addItem(type);
@@ -112,11 +117,11 @@ public class MainMenu extends JFrame {
 
 
     private void generateUserInformation(ClientUserProfile profile){
-        ClientUserProfile user = SessionManager.getInstance().user();
+        ClientUserProfile user = SessionHandler.getInstance().user();
         //ImageIcon icon = new ImageIcon(user.getImg().getScaledInstance(100, 100, 0));
-        label_name.setText(user.getUsername());
-        label_cash.setText(String.valueOf(user.getBalance()));
-        label_league.setText(String.valueOf(user.getCurrLeague()));
+        label_name.setText("Name: " + user.getUsername());
+        label_cash.setText("Cash: " + String.valueOf(user.getBalance()));
+        label_league.setText("League: " + String.valueOf(user.getCurrLeague()));
         label_picture.setText("");
         //label_picture.setIcon(icon);
     }
@@ -136,7 +141,7 @@ public class MainMenu extends JFrame {
 
     private void onLogout() {
         try {
-            SessionManager.getInstance().logout(SessionManager.getInstance().user().getUsername());
+            SessionHandler.getInstance().logout(SessionHandler.getInstance().user().getUsername());
             Welcome welcome = new Welcome();
             welcome.pack();
             welcome.setLocationRelativeTo(null);
@@ -156,9 +161,9 @@ public class MainMenu extends JFrame {
 
     private void onJoinGame(){
         String gameName = String.valueOf(gamesTable.getValueAt(gamesTable.getSelectedRow(), 0));
-        String username = SessionManager.getInstance().user().getUsername();
+        String username = SessionHandler.getInstance().user().getUsername();
         try {
-            MenuManager.getInstance().joinGame(username, gameName);
+            MenuHandler.getInstance().joinGame(username, gameName);
             Game game = new Game(this, gameName);
             addGame(game);
             game.init();
@@ -169,9 +174,9 @@ public class MainMenu extends JFrame {
 
     private void onSpectateGame(){
         String gameName = String.valueOf(gamesTable.getValueAt(gamesTable.getSelectedRow(), 0));
-        String username = SessionManager.getInstance().user().getUsername();
+        String username = SessionHandler.getInstance().user().getUsername();
         try {
-            MenuManager.getInstance().spectateGame(username, gameName);
+            MenuHandler.getInstance().spectateGame(username, gameName);
             Game game = new Game(this, gameName);
             addGame(game);
             game.init();
@@ -183,7 +188,7 @@ public class MainMenu extends JFrame {
     private void onReplayGame(){
         String gameName = String.valueOf(gamesTable.getValueAt(gamesTable.getSelectedRow(), 0));
         try {
-            MenuManager.getInstance().replayGame(gameName);
+            MenuHandler.getInstance().replayGame(gameName);
             Game game = new Game(this, gameName);
             addGame(game);
             game.init();
@@ -202,8 +207,8 @@ public class MainMenu extends JFrame {
                 : searchComboBox.isVisible() ? String.valueOf(searchComboBox.getSelectedItem())
                 : "";
         try {
-            SearchManager searchManager = SearchManager.getInstance();
-            List<ClientGameDetails> found = searchManager.getPolicy(searchType).find(searchValue);
+            SearchHandler searchHandler = SearchHandler.getInstance();
+            List<ClientGameDetails> found = searchHandler.getPolicy(searchType).find(searchValue);
             refreshTable(found);
         } catch (EntityDoesNotExistsException | InvalidArgumentException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -211,11 +216,19 @@ public class MainMenu extends JFrame {
     }
 
     private void tableSelectionChange(){
-        joinSelectedGameButton.setEnabled(!gamesTable.getSelectionModel().isSelectionEmpty());
-        spectateSelectedGameButton.setEnabled(String.valueOf(searchTypeComboBox.getSelectedItem()).equals(SPECTATEABLE) && !gamesTable.getSelectionModel().isSelectionEmpty());
-        replaySelectedGameButton.setEnabled(String.valueOf(searchTypeComboBox.getSelectedItem()).equals(REPLAYABLE) && !gamesTable.getSelectionModel().isSelectionEmpty());
-
-        handleButtonsAvailability();
+        if(gamesTable.getSelectionModel().isSelectionEmpty()){
+            for(JButton button : Arrays.asList(joinSelectedGameButton, spectateSelectedGameButton, replaySelectedGameButton)){
+                button.setEnabled(false);
+            }
+        } else{
+            List<ClientGameDetails> games = SearchHandler.getInstance().getLastSearchedGames();
+            logger.info("Games in table: {}", games.toString());
+            int selectedIndex = gamesTable.getSelectedRow();
+            logger.info("Selected row: {}, Game: {}", selectedIndex, games.get(selectedIndex));
+            joinSelectedGameButton.setEnabled(true); // FIXME: !isRunning() or available(myself) or something.
+            spectateSelectedGameButton.setEnabled(games.get(selectedIndex).isSpectateValid());
+            replaySelectedGameButton.setEnabled(String.valueOf(searchTypeComboBox.getSelectedItem()).equals(REPLAYABLE)); // FIXME: !archived
+        }
     }
 
     private void onSearchTypeChange(){
@@ -226,14 +239,6 @@ public class MainMenu extends JFrame {
         searchComboBox.setVisible(selectionFields.contains(selectedItem));
         searchValueLabel.setVisible(!noFields.contains(selectedItem));
         revalidate();
-
-        handleButtonsAvailability();
-    }
-
-    private void handleButtonsAvailability(){
-        joinSelectedGameButton.setEnabled(!gamesTable.getSelectionModel().isSelectionEmpty());
-        spectateSelectedGameButton.setEnabled(String.valueOf(searchTypeComboBox.getSelectedItem()).equals(SPECTATEABLE) && !gamesTable.getSelectionModel().isSelectionEmpty());
-        replaySelectedGameButton.setEnabled(String.valueOf(searchTypeComboBox.getSelectedItem()).equals(REPLAYABLE) && !gamesTable.getSelectionModel().isSelectionEmpty());
     }
 
     private void initTable(){
@@ -242,6 +247,8 @@ public class MainMenu extends JFrame {
         for(String header : tableHeader){
             model.addColumn(header);
         }
+        gamesTable.setRowSelectionAllowed(true);
+        gamesTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
     private void refreshTable(List<ClientGameDetails> games){
@@ -265,7 +272,7 @@ public class MainMenu extends JFrame {
             for(int i=activeGames.size()-1; i>=0; i--){
                 activeGames.get(i).onExit();
             }
-            SessionManager.getInstance().logout(SessionManager.getInstance().user().getUsername());
+            SessionHandler.getInstance().logout(SessionHandler.getInstance().user().getUsername());
         } catch (InvalidArgumentException e) {
             e.printStackTrace();
         }

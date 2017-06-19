@@ -25,9 +25,12 @@ public class UserRequestHandler {
     private RestTemplate restTemplate;
     private ObjectMapper objectMapper;
 
+    private SessionStorage seStorage;
+
     public UserRequestHandler() {
         this.restTemplate = new RestTemplate();
         this.objectMapper = new ObjectMapper();
+        this.seStorage = SessionStorage.getInstance();
     }
 
     public void requestUserProfileRegistration(ClientUserProfile userProfile) throws InvalidArgumentException {
@@ -51,10 +54,10 @@ public class UserRequestHandler {
         }
     }
 
-    public void requestUserProfileUpdate(String oldUserName, ClientUserProfile userProfile, String sessionID) throws InvalidArgumentException, EntityDoesNotExistsException {
+    public void requestUserProfileUpdate(String oldUserName, ClientUserProfile userProfile) throws InvalidArgumentException, EntityDoesNotExistsException {
         String addr = serviceURI + "/" + oldUserName;
         HttpHeaders headers = new HttpHeaders();
-        headers.set("SESSION_ID", sessionID);
+        headers.set("SESSION_ID", seStorage.getSessionId());
         HttpEntity<ClientUserProfile> request = new HttpEntity<>(userProfile,headers);
 
 
@@ -127,10 +130,10 @@ public class UserRequestHandler {
         }
     }
 
-    public void requestUserTransaction(String username, ClientTransactionRequest transaction, String sessionID) throws EntityDoesNotExistsException, ArgumentNotInBoundsException, InvalidArgumentException {
+    public void requestUserTransaction(String username, ClientTransactionRequest transaction) throws EntityDoesNotExistsException, ArgumentNotInBoundsException, InvalidArgumentException {
         String addr = serviceURI + "/" + username + "/balance";
         HttpHeaders headers = new HttpHeaders();
-        headers.set("SESSION_ID", sessionID);
+        headers.set("SESSION_ID", seStorage.getSessionId());
         HttpEntity<ClientTransactionRequest> request = new HttpEntity<>(transaction, headers);
 
         try {

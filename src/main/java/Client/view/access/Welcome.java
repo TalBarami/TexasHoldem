@@ -16,6 +16,7 @@ public class Welcome extends JFrame {
 
     public Welcome() {
         init();
+        setLocationRelativeTo(null);
 
         getRootPane().setDefaultButton(buttonLogin);
 

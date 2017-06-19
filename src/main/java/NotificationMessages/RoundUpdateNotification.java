@@ -76,4 +76,16 @@ public class RoundUpdateNotification extends GameNotification {
     public void setFinished(boolean finished) {
         isFinished = finished;
     }
+
+    @Override
+    public String toString() {
+        return "RoundUpdateNotification{" +
+                "currentPotSize=" + currentPotSize +
+                ", currentPlayerName='" + currentPlayerName + '\'' +
+                ", currentPlayers=" + currentPlayers +
+                ", currentOpenedCards=" + currentOpenedCards +
+                ", winnerPlayers=" + winnerPlayers +
+                ", isFinished=" + isFinished +
+                '}';
+    }
 }

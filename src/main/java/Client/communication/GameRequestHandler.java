@@ -20,9 +20,12 @@ public class GameRequestHandler {
     private RestTemplate restTemplate;
     private ObjectMapper objectMapper;
 
+    private SessionStorage seStorage;
+
     public GameRequestHandler() {
         this.restTemplate = new RestTemplate();
         this.objectMapper = new ObjectMapper();
+        this.seStorage = SessionStorage.getInstance();
     }
 
     public ClientGameDetails requestGameEntity(String gameName) throws EntityDoesNotExistsException, InvalidArgumentException {
@@ -51,10 +54,10 @@ public class GameRequestHandler {
         }
     }
 
-    public void requestGameCreation(ClientGameDetails gameDetails, String sessionID) throws InvalidArgumentException, NoBalanceForBuyInException, ArgumentNotInBoundsException, EntityDoesNotExistsException {
+    public void requestGameCreation(ClientGameDetails gameDetails) throws InvalidArgumentException, NoBalanceForBuyInException, ArgumentNotInBoundsException, EntityDoesNotExistsException {
         String addr = serviceURI + "/" + gameDetails.getName();
         HttpHeaders headers = new HttpHeaders();
-        headers.set("SESSION_ID", sessionID);
+        headers.set("SESSION_ID", seStorage.getSessionId());
         HttpEntity<ClientGameDetails> request = new HttpEntity<>(gameDetails, headers);
 
         try {
@@ -88,10 +91,10 @@ public class GameRequestHandler {
         }
     }
 
-    public void requestGameEventSend(ClientGameRequest gameRequest, String sessionID) throws GameException {
+    public void requestGameEventSend(ClientGameRequest gameRequest) throws GameException {
         String addr = serviceURI + "/" + gameRequest.getGameName();
         HttpHeaders headers = new HttpHeaders();
-        headers.set("SESSION_ID", sessionID);
+        headers.set("SESSION_ID", seStorage.getSessionId());
         HttpEntity<ClientGameRequest> request = new HttpEntity<>(gameRequest, headers);
 
         try {
@@ -111,10 +114,10 @@ public class GameRequestHandler {
         }
     }
 
-    public void requestGameLeave(ClientLeaveGameDetails leaveGameDetails, String sessionID) throws GameException {
+    public void requestGameLeave(ClientLeaveGameDetails leaveGameDetails) throws GameException {
         String addr = serviceURI + "/" + leaveGameDetails.getGameName();
         HttpHeaders headers = new HttpHeaders();
-        headers.set("SESSION_ID", sessionID);
+        headers.set("SESSION_ID", seStorage.getSessionId());
         HttpEntity<ClientLeaveGameDetails> request = new HttpEntity<>(leaveGameDetails, headers);
 
         try {

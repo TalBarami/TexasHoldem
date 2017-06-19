@@ -10,32 +10,29 @@ import Server.domain.user.Transaction;
 
 import java.util.ArrayList;
 
-public class MenuManager {
-    private static MenuManager instance;
+public class MenuHandler {
+    private static MenuHandler instance;
 
     private GameRequestHandler gameRequestHandler;
     private UserRequestHandler userRequestHandler;
 
-    private SessionManager manager;
-
-    private MenuManager(){
+    private MenuHandler(){
         gameRequestHandler = new GameRequestHandler();
         userRequestHandler = new UserRequestHandler();
-        manager = SessionManager.getInstance();
     }
 
-    public static MenuManager getInstance(){
+    public static MenuHandler getInstance(){
         if(instance == null)
-            instance = new MenuManager();
+            instance = new MenuHandler();
         return instance;
     }
 
     public void createGame(String gameName, GamePolicy gamePolicy, int policyLimit, int minBet, int buyInPolicy, int chipPolicy,
                            int minPlayerAmount, int maxPlayerAmount, boolean specAccept) throws InvalidArgumentException, EntityDoesNotExistsException, NoBalanceForBuyInException, ArgumentNotInBoundsException {
-        ClientGameDetails gameDetails = new ClientGameDetails(SessionManager.getInstance().user().getUsername(),
+        ClientGameDetails gameDetails = new ClientGameDetails(SessionHandler.getInstance().user().getUsername(),
                 gameName, gamePolicy.getPolicy(), policyLimit, minBet, buyInPolicy,
                 chipPolicy, minPlayerAmount, maxPlayerAmount, specAccept, new ArrayList<>());
-        gameRequestHandler.requestGameCreation(gameDetails, manager.getSessionID());
+        gameRequestHandler.requestGameCreation(gameDetails);
     }
 
     public void joinGame(String username, String gameName) throws GameException {
@@ -44,7 +41,7 @@ public class MenuManager {
         request.setUsername(username);
         request.setAction(4);
 
-        gameRequestHandler.requestGameEventSend(request, manager.getSessionID());
+        gameRequestHandler.requestGameEventSend(request);
     }
 
     public void spectateGame(String username, String gameName) throws GameException {
@@ -54,7 +51,7 @@ public class MenuManager {
         request.setAction(4);
         request.setSpectating(true);
 
-        gameRequestHandler.requestGameEventSend(request, manager.getSessionID());
+        gameRequestHandler.requestGameEventSend(request);
     }
 
     public void replayGame(String gameName) throws GameException {
@@ -62,20 +59,20 @@ public class MenuManager {
         request.setGameName(gameName);
         request.setAction(-1);
 
-        gameRequestHandler.requestGameEventSend(request, manager.getSessionID());
+        gameRequestHandler.requestGameEventSend(request);
     }
 
     public void leaveGame(String username, String gameName) throws GameException {
         ClientLeaveGameDetails leaveGameDetails = new ClientLeaveGameDetails();
         leaveGameDetails.setGameName(gameName);
         leaveGameDetails.setUsername(username);
-        gameRequestHandler.requestGameLeave(leaveGameDetails, manager.getSessionID());
+        gameRequestHandler.requestGameLeave(leaveGameDetails);
     }
 
     public void deposit(String username, int amount) throws InvalidArgumentException, ArgumentNotInBoundsException, EntityDoesNotExistsException {
         ClientTransactionRequest request = new ClientTransactionRequest();
         request.setAction(Transaction.DEPOSIT);
         request.setAmount(amount);
-        userRequestHandler.requestUserTransaction(username, request, manager.getSessionID());
+        userRequestHandler.requestUserTransaction(username, request);
     }
 }

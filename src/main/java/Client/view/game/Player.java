@@ -1,7 +1,5 @@
 package Client.view.game;
 
-import Client.ClientUtils;
-import Client.domain.SessionManager;
 import MutualJsonObjects.CardsImages;
 import MutualJsonObjects.ClientCard;
 import MutualJsonObjects.ClientPlayer;

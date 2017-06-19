@@ -4,7 +4,7 @@ import MutualJsonObjects.ClientUserProfile;
 import Exceptions.EntityDoesNotExistsException;
 import Exceptions.InvalidArgumentException;
 
-import Client.domain.SessionManager;
+import Client.domain.SessionHandler;
 import Client.ClientUtils;
 import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
 import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
@@ -45,7 +45,7 @@ public class Profile {
     public Profile(MainMenu ancestor) {
         this.ancestor = ancestor;
 
-        generateUserInformation(SessionManager.getInstance().user());
+        generateUserInformation(SessionHandler.getInstance().user());
         assignActionListeners();
     }
 
@@ -56,7 +56,7 @@ public class Profile {
     }
 
     private void assignActionListeners(){
-        SessionManager.getInstance().addUpdateCallback(this::generateUserInformation);
+        SessionHandler.getInstance().addUpdateCallback(this::generateUserInformation);
 
         buttonApply.addActionListener(e -> onApply());
 
@@ -87,7 +87,7 @@ public class Profile {
 
     private void onApply() {
         try {
-            SessionManager.getInstance().editProfile(new String(newPasswordPasswordField.getPassword()), newEmailTextField.getText(), newBirthdayDatePicker.getJFormattedTextField().getText(), newPictureTextField.getText());
+            SessionHandler.getInstance().editProfile(new String(newPasswordPasswordField.getPassword()), newEmailTextField.getText(), newBirthdayDatePicker.getJFormattedTextField().getText(), newPictureTextField.getText());
             ancestor.init();
         } catch (InvalidArgumentException | EntityDoesNotExistsException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

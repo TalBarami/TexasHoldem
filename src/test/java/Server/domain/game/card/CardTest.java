@@ -43,7 +43,7 @@ public class CardTest {
 
     @Test
     public void fromString() throws Exception{
-        Card card = Card.fromString("five of diamond");
+        Card card = Card.fromString("five of diamonds");
         assertThat(card, is(FIVE.of(DIAMONDS)));
     }
 
