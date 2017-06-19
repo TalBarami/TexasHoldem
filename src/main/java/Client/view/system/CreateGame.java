@@ -5,7 +5,7 @@ import Exceptions.EntityDoesNotExistsException;
 import Exceptions.InvalidArgumentException;
 import Exceptions.NoBalanceForBuyInException;
 import Enumerations.GamePolicy;
-import Client.domain.MenuManager;
+import Client.domain.MenuHandler;
 import Client.view.game.Game;
 
 import javax.swing.*;
@@ -79,13 +79,14 @@ public class CreateGame extends JDialog {
             ((NumberFormatter) txt.getFormatter()).setAllowsInvalid(false);
         }
 
+        onTournament();
     }
 
     private void onOK() {
         // add your code here
-        MenuManager menuManager = MenuManager.getInstance();
+        MenuHandler menuHandler = MenuHandler.getInstance();
         try {
-            menuManager.createGame(nameTextField.getText(), (GamePolicy)policyComboBox.getSelectedItem(), (int)raiseLimitSpinner.getValue(), (int)minBetSpinner.getValue(),
+            menuHandler.createGame(nameTextField.getText(), (GamePolicy)policyComboBox.getSelectedItem(), (int)raiseLimitSpinner.getValue(), (int)minBetSpinner.getValue(),
                     (int)buyInPolicySpinner.getValue(), tournamentCheckBox.isSelected() ? 0 : (int)chipPolicySpinner.getValue(), (int)minSpinner.getValue(), (int)maxSpinner.getValue(), allowSpectatingCheckBox.isSelected());
             Game game = new Game(ancestor, nameTextField.getText());
             ancestor.addGame(game);
@@ -102,10 +103,13 @@ public class CreateGame extends JDialog {
     }
 
     private void onTournament(){
-        buyInPolicyLabel.setVisible(!buyInPolicyLabel.isVisible());
-        buyInPolicySpinner.setVisible(!buyInPolicySpinner.isVisible());
-        chipPolicyLabel.setVisible(!chipPolicyLabel.isVisible());
-        chipPolicySpinner.setVisible(!chipPolicySpinner.isVisible());
+        boolean isSelected = tournamentCheckBox.isSelected();
+        buyInPolicyLabel.setVisible(isSelected);
+        buyInPolicySpinner.setVisible(isSelected);
+        chipPolicyLabel.setVisible(isSelected);
+        chipPolicySpinner.setVisible(isSelected);
+        pack();
+        revalidate();
     }
 
     private void onPolicyChange(){
@@ -116,5 +120,7 @@ public class CreateGame extends JDialog {
             raiseLimitLabel.setVisible(false);
             raiseLimitSpinner.setVisible(false);
         }
+        pack();
+        revalidate();
     }
 }

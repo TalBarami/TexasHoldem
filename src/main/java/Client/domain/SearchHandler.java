@@ -13,33 +13,35 @@ import java.util.*;
 /**
  * Created by User on 14/05/2017.
  */
-public class SearchManager {
-    private static SearchManager instance;
+public class SearchHandler {
+    private static SearchHandler instance;
     private GameRequestHandler gameRequestHandler;
     private Map<String, SearchPolicy> searchPolicies;
+
+    private List<ClientGameDetails> lastSearchedGames;
 
     public static final String GAME_NAME ="Game name", USERNAME = "User name", GAME_POLICY = "Game policy",
             POT_SIZE = "Pot size", MAX_BUYIN = "Maximum buy-in", CHIP_POLICY = "Chip policy", MIN_BET = "Minimum bet",
             MIN_PLAYERS = "Minimum players", MAX_PLAYERS = "Maximum players",
             AVAILABLE = "Available", SPECTATEABLE = "Spectateable", REPLAYABLE = "Replayable";
 
-    private SearchManager(){
+    private SearchHandler(){
         gameRequestHandler = new GameRequestHandler();
         generateSearchTypes();
     }
 
-    public static SearchManager getInstance(){
+    public static SearchHandler getInstance(){
         if(instance == null)
-            instance = new SearchManager();
+            instance = new SearchHandler();
         return instance;
     }
 
     public List<ClientGameDetails> findAvailableGames(String ignore) throws EntityDoesNotExistsException, InvalidArgumentException {
         ClientGamePreferences pref = new ClientGamePreferences();
         pref.setDisplayAllAvailableGames(true);
-        String sessionUser = SessionManager.getInstance().user().getUsername();
+        String sessionUser = SessionHandler.getInstance().user().getUsername();
         pref.setUsername(sessionUser);
-        return gameRequestHandler.requestGameSearch(pref);
+        return sendSearchRequest(pref);
     }
 
     public List<ClientGameDetails> findGameByName(String gameName) throws EntityDoesNotExistsException, InvalidArgumentException {
@@ -49,69 +51,78 @@ public class SearchManager {
     public List<ClientGameDetails> findSpectateableGames(String ignore) throws EntityDoesNotExistsException, InvalidArgumentException {
         ClientGamePreferences pref = new ClientGamePreferences();
         pref.setSerachBySpectatingAvailable(true);
-        return gameRequestHandler.requestGameSearch(pref);
+        return sendSearchRequest(pref);
     }
 
     public List<ClientGameDetails> findReplayableGames(String ignore) throws EntityDoesNotExistsException, InvalidArgumentException {
         ClientGamePreferences pref = new ClientGamePreferences();
         // FIXME: Add "find replayable"
-        return gameRequestHandler.requestGameSearch(pref);
+        return sendSearchRequest(pref);
     }
 
     public List<ClientGameDetails> findGamesByUsername(String username) throws EntityDoesNotExistsException, InvalidArgumentException {
         ClientGamePreferences pref = new ClientGamePreferences();
         pref.setSearchByUsername(true);
         pref.setUsernameToSearch(username);
-        return gameRequestHandler.requestGameSearch(pref);
+        return sendSearchRequest(pref);
     }
 
     public List<ClientGameDetails> findGamesByPotSize(String potSize) throws EntityDoesNotExistsException, InvalidArgumentException {
         ClientGamePreferences pref = new ClientGamePreferences();
         // FIXME: Set pot size & boolean field
 
-        return gameRequestHandler.requestGameSearch(pref);
+        return sendSearchRequest(pref);
     }
 
     public List<ClientGameDetails> findGamesByGamePolicy(String policy) throws EntityDoesNotExistsException, InvalidArgumentException {
         ClientGamePreferences pref = new ClientGamePreferences();
         pref.setSearchByTypePolicy(true);
         pref.setPolicyNumberToSearch(GamePolicy.valueOf(policy).getPolicy());
-        return gameRequestHandler.requestGameSearch(pref);
+        return sendSearchRequest(pref);
     }
 
     public List<ClientGameDetails> findGamesByMaximumBuyIn(String maximumBuyIn) throws EntityDoesNotExistsException, InvalidArgumentException {
         ClientGamePreferences pref = new ClientGamePreferences();
         pref.setSearchByBuyIn(true);
         pref.setBuyInAmount(Integer.parseInt(maximumBuyIn));
-        return gameRequestHandler.requestGameSearch(pref);
+        return sendSearchRequest(pref);
     }
 
     public List<ClientGameDetails> findGamesByChipPolicy(String chipPolicy) throws EntityDoesNotExistsException, InvalidArgumentException {
         ClientGamePreferences pref = new ClientGamePreferences();
         pref.setSearchByChipPolicy(true);
         pref.setChipPolicyAmount(Integer.parseInt(chipPolicy));
-        return gameRequestHandler.requestGameSearch(pref);
+        return sendSearchRequest(pref);
     }
 
     public List<ClientGameDetails> findGamesByMinimumBet(String minimumBet) throws EntityDoesNotExistsException, InvalidArgumentException {
         ClientGamePreferences pref = new ClientGamePreferences();
         pref.setSearchByMinimumBet(true);
         pref.setMinimumBetAmount(Integer.parseInt(minimumBet));
-        return gameRequestHandler.requestGameSearch(pref);
+        return sendSearchRequest(pref);
     }
 
     public List<ClientGameDetails> findGamesByMinimumPlayers(String minimumPlayers) throws EntityDoesNotExistsException, InvalidArgumentException {
         ClientGamePreferences pref = new ClientGamePreferences();
         pref.setSearchByMinimumPlayersAmount(true);
         pref.setMinimumPlayersAmount(Integer.parseInt(minimumPlayers));
-        return gameRequestHandler.requestGameSearch(pref);
+        return sendSearchRequest(pref);
     }
 
     public List<ClientGameDetails> findGamesByMaximumPlayers(String maximumPlayers) throws EntityDoesNotExistsException, InvalidArgumentException {
         ClientGamePreferences pref = new ClientGamePreferences();
         pref.setSearchByMaximumPlayersAmount(true);
         pref.setMaximumPlayersAmount(Integer.parseInt(maximumPlayers));
-        return gameRequestHandler.requestGameSearch(pref);
+        return sendSearchRequest(pref);
+    }
+
+    public List<ClientGameDetails> getLastSearchedGames(){
+        return lastSearchedGames;
+    }
+
+    private List<ClientGameDetails> sendSearchRequest(ClientGamePreferences pref) throws EntityDoesNotExistsException, InvalidArgumentException {
+        lastSearchedGames = gameRequestHandler.requestGameSearch(pref);
+        return lastSearchedGames;
     }
 
     private void generateSearchTypes(){

@@ -3,8 +3,8 @@ package Client.view.system;
 import Exceptions.ArgumentNotInBoundsException;
 import Exceptions.EntityDoesNotExistsException;
 import Exceptions.InvalidArgumentException;
-import Client.domain.MenuManager;
-import Client.domain.SessionManager;
+import Client.domain.MenuHandler;
+import Client.domain.SessionHandler;
 
 import javax.swing.*;
 import javax.swing.text.NumberFormatter;
@@ -52,9 +52,9 @@ public class Deposit extends JDialog {
 
     private void onOK() {
         try {
-            String username = SessionManager.getInstance().user().getUsername();
-            MenuManager menuManager = MenuManager.getInstance();
-            menuManager.deposit(username, (int)amountSpinner.getValue());
+            String username = SessionHandler.getInstance().user().getUsername();
+            MenuHandler menuHandler = MenuHandler.getInstance();
+            menuHandler.deposit(username, (int)amountSpinner.getValue());
             ancestor.init();
             dispose();
         } catch (InvalidArgumentException | ArgumentNotInBoundsException | EntityDoesNotExistsException e) {

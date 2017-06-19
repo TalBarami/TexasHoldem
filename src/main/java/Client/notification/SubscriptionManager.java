@@ -1,12 +1,9 @@
 package Client.notification;
 
-import Client.Application;
-import Client.domain.SessionManager;
+import Client.domain.SessionHandler;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
-import org.springframework.messaging.simp.stomp.StompSessionHandler;
-import org.springframework.messaging.support.NativeMessageHeaderAccessor;
 import org.springframework.web.socket.WebSocketHttpHeaders;
 import org.springframework.web.socket.client.WebSocketClient;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
@@ -34,7 +31,7 @@ public class SubscriptionManager {
         WebSocketStompClient stompClient = new WebSocketStompClient(sockJsClient);
         stompClient.setMessageConverter(new MappingJackson2MessageConverter());
 
-        String serverAddress = SessionManager.getInstance().getIpAddress();
+        String serverAddress = SessionHandler.getInstance().getIpAddress();
         String url = "ws://" + serverAddress + "/subscribe";
 
         WebSocketHttpHeaders webSocketHttpHeaders = new WebSocketHttpHeaders();

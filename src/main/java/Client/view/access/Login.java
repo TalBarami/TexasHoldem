@@ -4,7 +4,7 @@ import Exceptions.EntityDoesNotExistsException;
 import Exceptions.InvalidArgumentException;
 import Exceptions.LoginException;
 
-import Client.domain.SessionManager;
+import Client.domain.SessionHandler;
 import Client.ClientUtils;
 import Client.view.system.MainMenu;
 
@@ -41,7 +41,7 @@ public class Login {
 
     private void onOK() {
         try {
-            SessionManager.getInstance().login(text_username.getText(), new String(text_password.getPassword()));
+            SessionHandler.getInstance().login(text_username.getText(), new String(text_password.getPassword()));
             MainMenu menu = new MainMenu();
             ancestor.dispose();
         } catch (LoginException | EntityDoesNotExistsException | InvalidArgumentException | ExecutionException | InterruptedException e) {

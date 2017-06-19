@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class SessionManager {
-    private static SessionManager instance;
+public class SessionHandler {
+    private static SessionHandler instance;
 
     private StompSession stompSession;
     private String ipAddress;
@@ -31,7 +31,7 @@ public class SessionManager {
 
     private List<UserUpdateCallback> updateCallbacks;
 
-    private SessionManager(){
+    private SessionHandler(){
         sessionRequestHandler = new SessionRequestHandler();
         userRequestHandler = new UserRequestHandler();
         stompSession = null;
@@ -39,9 +39,9 @@ public class SessionManager {
         updateCallbacks = new ArrayList<>();
     }
 
-    public static SessionManager getInstance(){
+    public static SessionHandler getInstance(){
         if(instance == null){
-            instance = new SessionManager();
+            instance = new SessionHandler();
         }
         return instance;
     }
