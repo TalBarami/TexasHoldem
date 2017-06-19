@@ -13,6 +13,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -67,8 +68,10 @@ public class Users implements IUsers, IUsersForDistributionAlgorithm {
         try{
             session.beginTransaction();
 
+            /*
             if(!userToUpdate.getUsername().equals(newUser))
                 userToUpdate.setUsername(newUser);
+            */
 
             try {
                 MessageDigest md = MessageDigest.getInstance("MD5");
@@ -242,7 +245,7 @@ public class Users implements IUsers, IUsersForDistributionAlgorithm {
         List<User> allUsers = null;
         try{
             session.beginTransaction();
-            allUsers = session.createCriteria(User.class).list();;
+            allUsers = session.createCriteria(User.class).list();
             session.getTransaction().commit();
         }catch (HibernateException e) {
             if (session.getTransaction()!=null) session.getTransaction().rollback();
@@ -255,19 +258,8 @@ public class Users implements IUsers, IUsersForDistributionAlgorithm {
     public List<User> getUsersByLeague(int leagueNum) {
 
         Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
-        List<User> Users = null;
-        try{
-            session.beginTransaction();
-            String stringQuery = "FROM users WHERE currLeague = " + leagueNum;
-            Query query = session.createSQLQuery(stringQuery);
-            Users = query.list();
-            session.getTransaction().commit();
-        }catch (HibernateException e) {
-            if (session.getTransaction()!=null) session.getTransaction().rollback();
-        }finally {
-            session.close();
-        }
-        return Users;
+        List<User> Users = getAllUsersInList();
+        return Users.stream().filter(user -> user.getCurrLeague() == leagueNum).collect(Collectors.toList());
     }
 
     public static void addGameParticipant(User user, Game game, Participant p) {
@@ -287,5 +279,9 @@ public class Users implements IUsers, IUsersForDistributionAlgorithm {
             if(usersInGame.get(userName).containsKey(gameName))
                 usersInGame.get(userName).remove(gameName);
         }
+    }
+
+    public static Map<String, Map<String, Participant>> getUsersInGame() {
+        return usersInGame;
     }
 }

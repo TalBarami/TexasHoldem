@@ -27,7 +27,7 @@ public class ReplayNonActiveGamesTests extends ProjectTest {
     }
 
     @After
-    public void teardown(){
+    public void tearDown() {
         logoutUsers();
         deleteUsers();
     }

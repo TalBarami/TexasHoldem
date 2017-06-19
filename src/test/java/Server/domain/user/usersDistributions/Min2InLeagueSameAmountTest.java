@@ -78,10 +78,10 @@ public class Min2InLeagueSameAmountTest {
 
         distribute.distribute(3);
 
-        assertEquals(2, gameCenter.getUser("waldr").getCurrLeague());
+        assertEquals(3, gameCenter.getUser("waldr").getCurrLeague());
         assertEquals(3, gameCenter.getUser("hodbub").getCurrLeague());
         assertEquals(2, gameCenter.getUser("achiadg").getCurrLeague());
-        assertEquals(3, gameCenter.getUser("ronenb").getCurrLeague());
+        assertEquals(2, gameCenter.getUser("ronenb").getCurrLeague());
 
         gameCenter.deleteUser("waldr");
         gameCenter.deleteUser("hodbub");
@@ -187,8 +187,8 @@ public class Min2InLeagueSameAmountTest {
         assertEquals(2, gameCenter.getUser("achiadg").getCurrLeague());
         assertEquals(1, gameCenter.getUser("ronenb").getCurrLeague());
         assertEquals(2, gameCenter.getUser("talb").getCurrLeague());
-        assertEquals(0, gameCenter.getUser("avig").getCurrLeague());
-        assertEquals(1, gameCenter.getUser("yossih").getCurrLeague());
+        assertEquals(1, gameCenter.getUser("avig").getCurrLeague());
+        assertEquals(0, gameCenter.getUser("yossih").getCurrLeague());
 
         gameCenter.deleteUser("waldr");
         gameCenter.deleteUser("hodbub");

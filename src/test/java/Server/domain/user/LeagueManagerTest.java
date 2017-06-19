@@ -1,8 +1,11 @@
 package Server.domain.user;
 
+import Server.data.users.Users;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.time.LocalDate;
 
 import static org.junit.Assert.*;
 
@@ -12,14 +15,19 @@ import static org.junit.Assert.*;
 public class LeagueManagerTest {
     User user;
     LeagueManager leagueManager;
+    Users usersDb;
+
     @Before
     public void setUp() throws Exception {
-        user = new User("hod", "1234", "hod.bub@gmail.com", null, null);
+        user = new User("hod", "1234", "hod.bub@gmail.com", LocalDate.now(), null);
         leagueManager = new LeagueManager();
+        usersDb = new Users();
+        usersDb.addUser(user);
     }
 
     @After
     public void tearDown() throws Exception {
+        usersDb.deleteUser(user);
     }
 
     @Test

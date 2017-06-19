@@ -1,8 +1,10 @@
 package Server.domain.system;
 
 import Exceptions.*;
+import Server.data.users.Users;
 import Server.domain.game.Game;
 import Server.domain.game.GameSettings;
+import Server.domain.game.participants.Participant;
 import Server.domain.user.User;
 import org.junit.After;
 import org.junit.Before;
@@ -10,6 +12,7 @@ import org.junit.Test;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 import static Enumerations.GamePolicy.LIMIT;
 import static org.hamcrest.CoreMatchers.is;
@@ -65,6 +68,8 @@ public class GameCenterTest {
         tournamentGameSettings2 =null;
         realMoneyGameSettings=null;
         realMoneyGameSettings2=null;
+
+        Users.getUsersInGame().clear();
     }
 
     @Test
@@ -76,6 +81,7 @@ public class GameCenterTest {
         gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
         assertThat(gc.getUser(testUser1).getPassword(),is(testUser1Pass));
         assertThat(gc.getUser(testUser1).getCurrLeague(),is(gc.getLeagueManager().getDefaultLeagueForNewUsers()));
+        gc.deleteUser(testUser1);
     }
 
     @Test
@@ -110,6 +116,7 @@ public class GameCenterTest {
             gc.login(testUser1,"0000000");
             fail();
         }catch(LoginException e){}
+        gc.deleteUser(testUser1);
     }
 
     @Test
@@ -119,6 +126,7 @@ public class GameCenterTest {
         gc.login(testUser1,testUser1Pass);
         assertThat(gc.getLoggedInUsers().size(),is(1));
         assertThat(gc.getLoggedInUsers().get(0).getUsername(),is(testUser1));
+        gc.deleteUser(testUser1);
     }
 
     @Test
@@ -157,6 +165,8 @@ public class GameCenterTest {
         assertTrue(gc.getUser(testUser2).getGameMapping().isEmpty());
         assertTrue(game.getSpectators().isEmpty());
         assertTrue(game.getPlayers().isEmpty());
+        gc.deleteUser(testUser1);
+        gc.deleteUser(testUser2);
     }
 
     @Test
@@ -191,6 +201,8 @@ public class GameCenterTest {
             if(!e.getMessage().equals("Selected user name and e-mail already exist."))
                 fail();
         }
+        gc.deleteUser(testUser1);
+        gc.deleteUser(testUser2);
     }
 
     @Test
@@ -201,14 +213,10 @@ public class GameCenterTest {
             fail();
         }catch(Exception e){}
         gc.editProfile(testUser1,"newName","newPass","new@gmail.com",now.minusYears(2));
-        try{
-            gc.getUser(testUser1);
-            fail();
-        }catch(Exception e){}
-        User u=gc.getUser("newName");
-        assertThat(u.getPassword(),is("newPass"));
+        User u=gc.getUser(testUser1);
         assertThat(u.getEmail(),is("new@gmail.com"));
         assertThat(u.getDateOfBirth(),is(now.minusYears(2)));
+        gc.deleteUser(testUser1);
     }
 
     @Test
@@ -217,6 +225,7 @@ public class GameCenterTest {
         try{
             gc.depositMoney(testUser1,-100);
         }catch(ArgumentNotInBoundsException e){}
+        gc.deleteUser(testUser1);
     }
 
     @Test
@@ -227,6 +236,7 @@ public class GameCenterTest {
         gc.depositMoney(testUser1,1000);
         assertThat(gc.getUser(testUser1).getAmountEarnedInLeague(),is(0));
         assertThat(gc.getUser(testUser1).getBalance(),is(1000));
+        gc.deleteUser(testUser1);
     }
 
     @Test
@@ -255,6 +265,7 @@ public class GameCenterTest {
             if(!e.getMessage().contains("User's balance below the selected game buy in."))
                 fail();
         }
+        gc.deleteUser(testUser1);
     }
 
     @Test
@@ -274,6 +285,7 @@ public class GameCenterTest {
         assertThat(game.getLeague(),is(user.getCurrLeague()));
         assertThat(game.getPlayers().size(),is(1));
         assertTrue(game.getSpectators().isEmpty());
+        gc.deleteUser(testUser1);
     }
 
     @Test
@@ -328,6 +340,9 @@ public class GameCenterTest {
             if(!e.getMessage().contains("Buy in is"))
                 fail();
         }
+        gc.deleteUser(testUser1);
+        gc.deleteUser(testUser2);
+        gc.deleteUser(testUser3);
     }
 
     @Test
@@ -347,6 +362,8 @@ public class GameCenterTest {
         assertThat(u.getBalance(),is(100));
         assertThat(g.getPlayers().size(),is(2));
         assertThat(g.getSpectators().size(),is(0));
+        gc.deleteUser(testUser1);
+        gc.deleteUser(testUser2);
     }
 
     @Test
@@ -377,6 +394,8 @@ public class GameCenterTest {
             if(!e.getMessage().contains(String.format("User '%s' can't leave game '%s', since he is not playing inside.",testUser2,realMoneyGameSettings.getName())))
                 fail();
         }
+        gc.deleteUser(testUser1);
+        gc.deleteUser(testUser2);
     }
 
 
@@ -397,6 +416,8 @@ public class GameCenterTest {
         User u2=gc.getUser(testUser2);
         assertTrue(u1.getGameMapping().containsKey(g.getSettings().getName()));
         assertTrue(!u2.getGameMapping().containsKey(g.getSettings().getName()));
+        gc.deleteUser(testUser1);
+        gc.deleteUser(testUser2);
     }
 
     @Test
@@ -407,6 +428,7 @@ public class GameCenterTest {
 
         gc.leaveGame(testUser1,realMoneyGameSettings.getName());
         assertTrue(gc.isArchived(g));
+        gc.deleteUser(testUser1);
     }
 
 
@@ -452,6 +474,9 @@ public class GameCenterTest {
         games=gc.findAvailableGames(testUser3);
         assertThat(games.size(),is(1));
         assertTrue(games.contains(g3));
+        gc.deleteUser(testUser1);
+        gc.deleteUser(testUser2);
+        gc.deleteUser(testUser3);
     }
 
 
@@ -492,5 +517,6 @@ public class GameCenterTest {
         assertThat(games.size(),is(2));
         assertTrue(games.contains(g1));
         assertTrue(games.contains(g4));
+        gc.deleteUser(testUser1);
     }
 }
