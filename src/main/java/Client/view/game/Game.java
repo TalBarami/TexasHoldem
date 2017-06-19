@@ -55,8 +55,8 @@ public class Game extends JFrame{
     private JSpinner raiseAmountSpinner;
     private JScrollPane chatScrollPane;
     private JComboBox<String> chatComboBox;
-    private JLabel eventsLabel;
     private JPanel cardsPanel;
+    private JPanel eventsPanel;
 
     private List<JPanel> seats = Arrays.asList(bottomPanel, leftPanel, topPanel, rightPanel);
 
@@ -81,15 +81,20 @@ public class Game extends JFrame{
         logger.info("Initializing game.");
         generateUserInformation(SessionHandler.getInstance().user());
         initializeSeats(gameDetails);
+
         cardsPanel.setLayout(new BoxLayout(cardsPanel, BoxLayout.X_AXIS));
         cardsPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+
+        eventsPanel.setLayout(new BoxLayout(eventsPanel, BoxLayout.Y_AXIS));
+        eventsPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        eventsPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+
         reconfigureStartButton(gameHandler.getGameDetails().getPlayerList());
         disableGameActions();
         sendButton.setEnabled(isClientPlaying(gameHandler.getGameDetails().getPlayerList()));
         chatComboBox.setEnabled(isClientPlaying(gameHandler.getGameDetails().getPlayerList()));
 
         potLabel.setText("0");
-        eventsLabel.setText("");
     }
 
     private void initializeSeats(ClientGameDetails gameDetails){
@@ -105,12 +110,12 @@ public class Game extends JFrame{
         logger.info("Assigning action listeners.");
         SessionHandler.getInstance().addUpdateCallback(this::generateUserInformation);
 
-        gameHandler.addGameUpdateCallback(this::notifyPlayers);
+        gameHandler.addGameUpdateCallback(gameUpdateNotification -> notifyPlayers());
         gameHandler.addGameUpdateCallback(this::handleGameSession);
         gameHandler.addGameUpdateCallback(gameUpdateNotification -> updatePlayersInformation(gameUpdateNotification.getGameDetails().getPlayerList()));
         gameHandler.addGameUpdateCallback(gameUpdateNotification -> reconfigureStartButton(gameUpdateNotification.getGameDetails().getPlayerList()));
 
-        gameHandler.addRoundUpdateCallback(this::notifyPlayers);
+        gameHandler.addRoundUpdateCallback(roundUpdateNotification -> notifyPlayers());
         gameHandler.addRoundUpdateCallback(this::handleGameSession);
         gameHandler.addRoundUpdateCallback(this::updateTable);
         gameHandler.addRoundUpdateCallback(this::reconfigureRaiseButton);
@@ -182,23 +187,11 @@ public class Game extends JFrame{
         updatePlayersInformation(players, null);
     }
 
-    private void notifyPlayers(GameUpdateNotification gameUpdateNotification){
-        String action;
-        switch(gameUpdateNotification.getAction()){
-            case ENTER:
-                action = "joined";
-                break;
-            case EXIT:
-                action = "left";
-                break;
-            case NEWROUND:
-                action = "started";
-                break;
-            default:
-                JOptionPane.showMessageDialog(null, "Undefined event occurred: " + gameUpdateNotification.toString(), "Error", JOptionPane.ERROR_MESSAGE);
-                return;
+    private void notifyPlayers(){
+        eventsPanel.removeAll();
+        for(String message : gameHandler.getNotiicationMessages()){
+            eventsPanel.add(new JLabel(message));
         }
-        eventsLabel.setText(String.format("%s has %s the game.", gameUpdateNotification.getGameActionInitiator(), action));
     }
 
     private void handleGameSession(GameUpdateNotification gameUpdateNotification){
@@ -233,17 +226,6 @@ public class Game extends JFrame{
         raiseAmountSpinner.setModel(new SpinnerNumberModel(minRaise, minRaise , Integer.MAX_VALUE, 1));
         JFormattedTextField txt = ((JSpinner.NumberEditor) raiseAmountSpinner.getEditor()).getTextField();
         ((NumberFormatter) txt.getFormatter()).setAllowsInvalid(false);
-    }
-
-    private void notifyPlayers(RoundUpdateNotification roundUpdateNotification){
-        if(roundUpdateNotification.isFinished()){
-            List<String> winnersNames = roundUpdateNotification.getWinnerPlayers().stream().map(ClientPlayer::getPlayerName).collect(Collectors.toList());
-
-            eventsLabel.setText(winnersNames.size() > 1 ? String.format("Round is finished. Winners are: %s", ClientUtils.prettyList(winnersNames))
-                                : String.format("Round is finished. Winner is: %s", winnersNames.get(0)));
-        } else {
-            eventsLabel.setText(String.format("It's %s turn.", roundUpdateNotification.getCurrentPlayerName()));
-        }
     }
 
     private void updateChatWindow(ChatNotification chatNotification){

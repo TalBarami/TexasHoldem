@@ -13,6 +13,8 @@ import Client.domain.SessionHandler;
 import Client.ClientUtils;
 import Client.view.access.Welcome;
 import Client.view.game.Game;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -27,6 +29,8 @@ import static Client.domain.SearchHandler.*;
  * Created by User on 12/05/2017.
  */
 public class MainMenu extends JFrame {
+    private static Logger logger = LoggerFactory.getLogger(MainMenu.class);
+
     private Profile profile;
 
     private List<String> textFields = Arrays.asList(GAME_NAME, USERNAME);
@@ -218,7 +222,9 @@ public class MainMenu extends JFrame {
             }
         } else{
             List<ClientGameDetails> games = SearchHandler.getInstance().getLastSearchedGames();
+            logger.info("Games in table: {}", games.toString());
             int selectedIndex = gamesTable.getSelectedRow();
+            logger.info("Selected row: {}, Game: {}", selectedIndex, games.get(selectedIndex));
             joinSelectedGameButton.setEnabled(true); // FIXME: !isRunning() or available(myself) or something.
             spectateSelectedGameButton.setEnabled(games.get(selectedIndex).isSpectateValid());
             replaySelectedGameButton.setEnabled(String.valueOf(searchTypeComboBox.getSelectedItem()).equals(REPLAYABLE)); // FIXME: !archived
@@ -241,6 +247,8 @@ public class MainMenu extends JFrame {
         for(String header : tableHeader){
             model.addColumn(header);
         }
+        gamesTable.setRowSelectionAllowed(true);
+        gamesTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
     private void refreshTable(List<ClientGameDetails> games){
