@@ -10,8 +10,8 @@ import Server.domain.game.participants.Participant;
 public class MessageEvent extends SystemEvent {
     Message content;
 
-    public MessageEvent(Participant eventInitiator, Message content, String gameName) {
-        super(eventInitiator, gameName);
+    public MessageEvent(String creatorUserName, Message content, String gameName) {
+        super(creatorUserName, gameName);
         this.content = content;
     }
 

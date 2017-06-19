@@ -72,13 +72,13 @@ public class ReplayNonActiveGamesTests extends ProjectTest {
         usersJoinsGames();
         leaveGames();
         List<GameEvent> ans=this.replaynonactivegame("achiadg-poker-game");
-        assertTrue(ans.get(0).getEventInitiator().getUser().getUsername().equals("achiadg"));
-        assertTrue(ans.get(1).getEventInitiator().getUser().getUsername().equals("hodbub"));
-        assertTrue(ans.get(2).getEventInitiator().getUser().getUsername().equals("rotemw"));
-        assertTrue(ans.get(3).getEventInitiator().getUser().getUsername().equals("achiadg"));
-        assertTrue(ans.get(4).getEventInitiator().getUser().getUsername().equals("rotemw"));
-        assertTrue(ans.get(5).getEventInitiator().getUser().getUsername().equals("hodbub"));
-        assertTrue(ans.get(6).getEventInitiator().getUser().getUsername().equals("hodbub"));
+        assertTrue(ans.get(0).getCreatorUserName().equals("achiadg"));
+        assertTrue(ans.get(1).getCreatorUserName().equals("hodbub"));
+        assertTrue(ans.get(2).getCreatorUserName().equals("rotemw"));
+        assertTrue(ans.get(3).getCreatorUserName().equals("achiadg"));
+        assertTrue(ans.get(4).getCreatorUserName().equals("rotemw"));
+        assertTrue(ans.get(5).getCreatorUserName().equals("hodbub"));
+        assertTrue(ans.get(6).getCreatorUserName().equals("hodbub"));
     }
 
     @Test
@@ -131,26 +131,26 @@ public class ReplayNonActiveGamesTests extends ProjectTest {
         String gameName = playTournamentAllIn();
         List<GameEvent> ans=this.replaynonactivegame(gameName);
         int x=5;
-        assertTrue(ans.get(0).getEventInitiator().getUser().getUsername().equals("achiadg"));
-        assertTrue(ans.get(1).getEventInitiator().getUser().getUsername().equals("hodbub"));
-        assertTrue(ans.get(2).getEventInitiator().getUser().getUsername().equals("rotemw"));
-        assertTrue(ans.get(3).getEventInitiator().getUser().getUsername().equals("achiadg"));
-        assertTrue(ans.get(4).getEventInitiator().getUser().getUsername().equals("achiadg"));
-        assertTrue(ans.get(5).getEventInitiator().getUser().getUsername().equals("hodbub"));
-        assertTrue(ans.get(6).getEventInitiator().getUser().getUsername().equals("rotemw"));
-        assertTrue(ans.get(7).getEventInitiator().getUser().getUsername().equals("hodbub"));
-        assertTrue(ans.get(8).getEventInitiator().getUser().getUsername().equals("rotemw"));
-        assertTrue(ans.get(9).getEventInitiator().getUser().getUsername().equals("achiadg"));
-        assertTrue(ans.get(10).getEventInitiator().getUser().getUsername().equals("hodbub"));
-        assertTrue(ans.get(11).getEventInitiator().getUser().getUsername().equals("rotemw"));
-        assertTrue(ans.get(12).getEventInitiator().getUser().getUsername().equals("achiadg"));
-        assertTrue(ans.get(13).getEventInitiator().getUser().getUsername().equals("hodbub"));
-        assertTrue(ans.get(14).getEventInitiator().getUser().getUsername().equals("rotemw"));
-        assertTrue(ans.get(15).getEventInitiator().getUser().getUsername().equals("achiadg"));
-        assertTrue(ans.get(16).getEventInitiator().getUser().getUsername().equals("achiadg"));
-        assertTrue(ans.get(17).getEventInitiator().getUser().getUsername().equals("rotemw"));
-        assertTrue(ans.get(18).getEventInitiator().getUser().getUsername().equals("hodbub"));
-        assertTrue(ans.get(19).getEventInitiator().getUser().getUsername().equals("hodbub"));
+        assertTrue(ans.get(0).getCreatorUserName().equals("achiadg"));
+        assertTrue(ans.get(1).getCreatorUserName().equals("hodbub"));
+        assertTrue(ans.get(2).getCreatorUserName().equals("rotemw"));
+        assertTrue(ans.get(3).getCreatorUserName().equals("achiadg"));
+        assertTrue(ans.get(4).getCreatorUserName().equals("achiadg"));
+        assertTrue(ans.get(5).getCreatorUserName().equals("hodbub"));
+        assertTrue(ans.get(6).getCreatorUserName().equals("rotemw"));
+        assertTrue(ans.get(7).getCreatorUserName().equals("hodbub"));
+        assertTrue(ans.get(8).getCreatorUserName().equals("rotemw"));
+        assertTrue(ans.get(9).getCreatorUserName().equals("achiadg"));
+        assertTrue(ans.get(10).getCreatorUserName().equals("hodbub"));
+        assertTrue(ans.get(11).getCreatorUserName().equals("rotemw"));
+        assertTrue(ans.get(12).getCreatorUserName().equals("achiadg"));
+        assertTrue(ans.get(13).getCreatorUserName().equals("hodbub"));
+        assertTrue(ans.get(14).getCreatorUserName().equals("rotemw"));
+        assertTrue(ans.get(15).getCreatorUserName().equals("achiadg"));
+        assertTrue(ans.get(16).getCreatorUserName().equals("achiadg"));
+        assertTrue(ans.get(17).getCreatorUserName().equals("rotemw"));
+        assertTrue(ans.get(18).getCreatorUserName().equals("hodbub"));
+        assertTrue(ans.get(19).getCreatorUserName().equals("hodbub"));
     }
 
     @Test

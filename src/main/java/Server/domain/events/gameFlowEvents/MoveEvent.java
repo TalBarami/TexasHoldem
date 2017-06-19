@@ -20,8 +20,8 @@ public class MoveEvent extends GameEvent {
     @Column(name = "amount_to_raise")
     private int amountToRaise;
 
-    public MoveEvent(Player eventInitiator, GameActions eventAction, int amountToRaise, String gameName) {
-        super(eventInitiator,eventAction,gameName);
+    public MoveEvent(String creatorUserName, GameActions eventAction, int amountToRaise, String gameName) {
+        super(creatorUserName,eventAction,gameName);
         this.amountToRaise = amountToRaise; // Should  be zero if unless eventAction is of type RAISE
     }
 

@@ -1,33 +1,14 @@
 package Server.domain.game.card;
 
-import org.hibernate.annotations.Cascade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.persistence.*;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-@Entity
-@Table(name = "deck")
 public class Deck {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "deck_id")
-    private int id;
-
-    @Transient
     private static Logger logger = LoggerFactory.getLogger(Deck.class);
-
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "card_in_deck", joinColumns = @JoinColumn(name = "deck_id"), inverseJoinColumns = { @JoinColumn(name = "card_id") })
-    @Cascade( {org.hibernate.annotations.CascadeType.DELETE_ORPHAN} )
     private List<Card> cards;
 
     public Deck(){
@@ -63,15 +44,5 @@ public class Deck {
     public void setCards(List<Card> cards)
     {
         this.cards = cards;
-    }
-
-    public int getId()
-    {
-        return id;
-    }
-
-    public void setId(int id)
-    {
-        this.id = id;
     }
 }

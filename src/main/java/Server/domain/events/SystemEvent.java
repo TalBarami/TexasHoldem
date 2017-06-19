@@ -1,7 +1,6 @@
 package Server.domain.events;
 
 import Server.domain.game.participants.Participant;
-import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
@@ -24,16 +23,15 @@ public class SystemEvent {
     @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime eventTime;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "participant_id")
-    private Participant eventInitiator;
+    @Column(name = "creator_user_name")
+    private String creatorUserName;
 
     @Column(name = "game_name")
     private String gameName;
 
-    public SystemEvent(Participant eventInitiator, String gameName) {
+    public SystemEvent(String creatorUserName, String gameName) {
         this.eventTime = DateTime.now();
-        this.eventInitiator = eventInitiator;
+        this.creatorUserName = creatorUserName;
         this.gameName = gameName;
     }
 
@@ -43,7 +41,7 @@ public class SystemEvent {
     public DateTime getEventTime() {
         return eventTime;
     }
-    public Participant getEventInitiator(){return eventInitiator;}
+    public String getCreatorUserName(){return creatorUserName;}
 
     public String getGameName() {
         return gameName;
@@ -53,9 +51,9 @@ public class SystemEvent {
         this.gameName = gameName;
     }
 
-    public void setEventInitiator(Participant newParticipant)
+    public void setCreatorUserName(String newCreatorUserName)
     {
-        this.eventInitiator = newParticipant;
+        this.creatorUserName = newCreatorUserName;
     }
 
     public int getId() {

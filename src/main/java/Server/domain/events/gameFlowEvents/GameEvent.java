@@ -20,8 +20,8 @@ public class GameEvent extends SystemEvent {
     @Column(name = "game_action")
     private GameActions eventAction;
 
-    public GameEvent(Participant eventInitiator, GameActions action, String gameName) {
-        super(eventInitiator, gameName);
+    public GameEvent(String creatorUserName, GameActions action, String gameName) {
+        super(creatorUserName, gameName);
         this.eventAction = action;
     }
 

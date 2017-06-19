@@ -182,9 +182,9 @@ public class Round {
     }
 
     public void playTurnOfPlayer(MoveEvent playerMoveEvent) throws IllegalArgumentException{
-        if(currentPlayer != playerMoveEvent.getEventInitiator())
+        Player creatorPlayer = activePlayers.stream().filter(player -> player.getUser().getUsername().equals(playerMoveEvent.getCreatorUserName())).collect(Collectors.toList()).get(0);
+        if(currentPlayer != creatorPlayer)
             throw new IllegalArgumentException("This is not your turn");
-
         if(!calculateTurnOptions().contains(playerMoveEvent.getEventAction()))
             throw new IllegalArgumentException("Your move is Invalid");
 
@@ -298,7 +298,8 @@ public class Round {
     }
 
     private boolean isLastPlayerPlayed(MoveEvent playerMoveEvent) {
-        return (playerMoveEvent.getEventInitiator() == lastPlayer && playerMoveEvent.getEventAction() != GameActions.RAISE);
+        Player creatorPlayer = activePlayers.stream().filter(player -> player.getUser().getUsername().equals(playerMoveEvent.getCreatorUserName())).collect(Collectors.toList()).get(0);
+        return (creatorPlayer == lastPlayer && playerMoveEvent.getEventAction() != GameActions.RAISE);
     }
 
     private int getMaxAmountToRaise() {
