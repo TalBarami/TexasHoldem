@@ -78,9 +78,9 @@ public class Min2InLeagueSameAmountTest {
 
         distribute.distribute(3);
 
-        assertEquals(3, gameCenter.getUser("waldr").getCurrLeague());
+        assertEquals(2, gameCenter.getUser("waldr").getCurrLeague());
         assertEquals(3, gameCenter.getUser("hodbub").getCurrLeague());
-        assertEquals(2, gameCenter.getUser("achiadg").getCurrLeague());
+        assertEquals(3, gameCenter.getUser("achiadg").getCurrLeague());
         assertEquals(2, gameCenter.getUser("ronenb").getCurrLeague());
 
         gameCenter.deleteUser("waldr");
