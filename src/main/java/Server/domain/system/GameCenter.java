@@ -6,6 +6,8 @@ import Server.data.games.IGames;
 import Server.data.users.IUsers;
 import Server.data.users.IUsersForDistributionAlgorithm;
 import Server.data.users.Users;
+import Server.domain.events.gameFlowEvents.GameEvent;
+import Server.domain.events.gameFlowEvents.MoveEvent;
 import Server.domain.game.Game;
 import Server.domain.game.GameActions;
 import Enumerations.GamePolicy;
@@ -162,9 +164,9 @@ public class GameCenter {
         user.getGameMapping().remove(gameName);
 
         if(game.canBeArchived()){
+            game.addGameEvent(participant, GameActions.CLOSED);
             gamesDb.archiveGame(game); // todo : notify someway to spectators of the room that room is closed?
             logger.info("Game '{}' is archived, since all players left.",gameName);
-            game.addGameEvent(participant, GameActions.CLOSED);
         }
     }
 
@@ -273,6 +275,14 @@ public class GameCenter {
     public List<Game> getArchivedGames(){
         return gamesDb.getArchivedGames();
     }
+
+    public List<GameEvent> getAllGameEvents(String gameName) {
+        return gamesDb.getAllGameEvents(gameName);
+    }
+
+//    public List<MoveEvent> getAllMoveEvents(String gameName) {
+//        return gamesDb.getAllMoveEvents(gameName);
+//    }
 
     public void redistributeUsersInLeagues(DistributionAlgorithm da) {
         leagueManager.redistributeUsersInLeagues(da);

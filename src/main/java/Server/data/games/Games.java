@@ -4,8 +4,11 @@ import Exceptions.InvalidArgumentException;
 import Server.data.Hybernate.HibernateUtil;
 import Server.data.users.Users;
 import Server.domain.events.gameFlowEvents.GameEvent;
+import Server.domain.events.gameFlowEvents.MoveEvent;
 import Server.domain.game.Game;
 import Enumerations.GamePolicy;
+import Server.domain.game.Round;
+import Server.domain.user.User;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 
@@ -41,10 +44,42 @@ public class Games implements IGames {
     }
 
     public void archiveGame(Game game){
+        saveAllGameEvents(game);
+        saveAllMoveEvents(game);
         archivedGames.add(game);
         _games.remove(game.getGameId());
         Users.deleteGameMapping(game.getSettings().getName());
     }
+
+    public List<GameEvent> getAllGameEvents(String gameName) {
+        Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
+        List<GameEvent> events = null;
+        try{
+            session.beginTransaction();
+            events = session.createCriteria(GameEvent.class).list();
+            session.getTransaction().commit();
+        }catch (HibernateException e) {
+            if (session.getTransaction()!=null) session.getTransaction().rollback();
+        }finally {
+            session.close();
+        }
+        return events.stream().filter(e -> e.getGameName().equals(gameName)).collect(Collectors.toList());
+    }
+
+//    public List<MoveEvent> getAllMoveEvents(String gameName) {
+//        Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
+//        List<MoveEvent> events = null;
+//        try{
+//            session.beginTransaction();
+//            events = session.createCriteria(MoveEvent.class).list();
+//            session.getTransaction().commit();
+//        }catch (HibernateException e) {
+//            if (session.getTransaction()!=null) session.getTransaction().rollback();
+//        }finally {
+//            session.close();
+//        }
+//        return events.stream().filter(e -> e.getGameName().equals(gameName)).collect(Collectors.toList());
+//    }
 
     private void saveAllGameEvents(Game game) {
         List<GameEvent> gameEvents = game.getGameEvents();
@@ -54,6 +89,24 @@ public class Games implements IGames {
             session.beginTransaction();
             for (GameEvent e : gameEvents) {
                 session.save(e);
+            }
+            session.getTransaction().commit();
+        }catch (HibernateException e) {
+            if (session.getTransaction()!=null) session.getTransaction().rollback();
+        }finally {
+            session.close();
+        }
+    }
+
+    private void saveAllMoveEvents(Game game) {
+        Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
+
+        try{
+            session.beginTransaction();
+            for (Round r : game.getRounds()) {
+                for (GameEvent e : r.getEventList()) {
+                    session.save((MoveEvent)e);
+                }
             }
             session.getTransaction().commit();
         }catch (HibernateException e) {

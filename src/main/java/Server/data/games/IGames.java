@@ -1,6 +1,8 @@
 package Server.data.games;
 
 import Exceptions.InvalidArgumentException;
+import Server.domain.events.gameFlowEvents.GameEvent;
+import Server.domain.events.gameFlowEvents.MoveEvent;
 import Server.domain.game.Game;
 import Enumerations.GamePolicy;
 
@@ -26,4 +28,6 @@ public interface IGames {
     List<Game> getActiveGamesByMaximumPlayersAmount(int maximumPlayersAmount);
     List<Game> getActiveGamesBySpectationAllowed(boolean spectationAllowed);
     List<Game> getArchivedGames();
+    List<GameEvent> getAllGameEvents(String gameName);
+//    List<MoveEvent> getAllMoveEvents(String gameName);
 }

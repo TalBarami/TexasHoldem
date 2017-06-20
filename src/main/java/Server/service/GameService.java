@@ -151,14 +151,13 @@ public class GameService {
     }
 
     public List<GameEvent> replayGame(String gameName) throws EntityDoesNotExistsException {
-        Game game = gameCenter.getArchivedGames().stream().filter(g -> g.getName().equals(gameName)).findFirst().orElse(null);
-        if(game==null)
+        List<GameEvent> gameEvents = gameCenter.getAllGameEvents(gameName);
+//        List<MoveEvent> moveEvents = gameCenter.getAllMoveEvents(gameName);
+
+        if (gameEvents.isEmpty())
             throw new EntityDoesNotExistsException(String.format("There is no archived game with the name '%s'.",gameName));
 
-        return Stream.concat(
-                    game.getGameEvents().stream(),
-                    game.getRounds().stream()
-                        .flatMap(r -> r.getEvents().stream()))
+        return gameEvents.stream()
                 .sorted(Comparator.comparing(GameEvent::getEventTime))
                 .collect(Collectors.toList());
     }

@@ -25,6 +25,7 @@ public class MoveEvent extends GameEvent {
         this.amountToRaise = amountToRaise; // Should  be zero if unless eventAction is of type RAISE
     }
 
+    public MoveEvent(){}
     public int getAmountToRaise() {
         return amountToRaise;
     }
