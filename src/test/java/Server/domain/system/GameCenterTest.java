@@ -79,7 +79,6 @@ public class GameCenterTest {
             fail();
         }catch(Exception e){}
         gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
-        assertThat(gc.getUser(testUser1).getPassword(),is(testUser1Pass));
         assertThat(gc.getUser(testUser1).getCurrLeague(),is(gc.getLeagueManager().getDefaultLeagueForNewUsers()));
         gc.deleteUser(testUser1);
     }

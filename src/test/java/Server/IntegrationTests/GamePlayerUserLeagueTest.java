@@ -1,5 +1,6 @@
 package Server.IntegrationTests;
 
+import Server.data.users.Users;
 import Server.domain.game.Game;
 import Server.domain.game.GameSettings;
 import Server.domain.game.participants.Player;
@@ -33,15 +34,21 @@ public class GamePlayerUserLeagueTest {
     private User testUser2;
     private User testUser3;
     private User testUser4;
+    Users userDB;
 
     @Before
     public void setUp() throws Exception {
+        userDB = new Users();
         tournamentGameSettings =new GameSettings("tournamentTest",LIMIT,100,100,100,100,2,4,true);
         realMoneyGameSettings =new GameSettings("realMoneyTest",LIMIT,100,100,100,0,2,4,false);
         testUser1=new User("testUser1","00000","test1@gmail.com", LocalDate.of(1111,10,10),null);
         testUser2=new User("testUser2","11111","test2@gmail.com", LocalDate.of(2222,10,10),null);
         testUser3=new User("testUser3","22222","test3@gmail.com", LocalDate.of(3333,10,10),null);
         testUser4=new User("testUser4","33333","test4@gmail.com", LocalDate.of(4444,10,10),null);
+        userDB.addUser(testUser1);
+        userDB.addUser(testUser2);
+        userDB.addUser(testUser3);
+        userDB.addUser(testUser4);
         testUser1.deposit(1500,true);
         testUser2.deposit(2500,true);
         leagueManager=new LeagueManager();
@@ -49,6 +56,11 @@ public class GamePlayerUserLeagueTest {
 
     @After
     public void tearDown() throws Exception {
+        Users.getUsersInGame().clear();
+        userDB.deleteUser(testUser1);
+        userDB.deleteUser(testUser2);
+        userDB.deleteUser(testUser3);
+        userDB.deleteUser(testUser4);
         tournamentGameSettings =null;
         realMoneyGameSettings=null;
         testUser1=null;

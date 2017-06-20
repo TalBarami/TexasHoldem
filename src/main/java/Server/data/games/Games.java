@@ -1,16 +1,18 @@
 package Server.data.games;
 
 import Exceptions.InvalidArgumentException;
+import Server.data.Hybernate.HibernateUtil;
 import Server.data.users.Users;
+import Server.domain.events.gameFlowEvents.GameEvent;
 import Server.domain.game.Game;
 import Enumerations.GamePolicy;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by RotemWald on 05/04/2017.
@@ -42,6 +44,23 @@ public class Games implements IGames {
         archivedGames.add(game);
         _games.remove(game.getGameId());
         Users.deleteGameMapping(game.getSettings().getName());
+    }
+
+    private void saveAllGameEvents(Game game) {
+        List<GameEvent> gameEvents = game.getGameEvents();
+        Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
+
+        try{
+            session.beginTransaction();
+            for (GameEvent e : gameEvents) {
+                session.save(e);
+            }
+            session.getTransaction().commit();
+        }catch (HibernateException e) {
+            if (session.getTransaction()!=null) session.getTransaction().rollback();
+        }finally {
+            session.close();
+        }
     }
 
     public LinkedList<Game> getActiveGamesByPlayerName(String playerName) {
