@@ -1,11 +1,11 @@
 package Client.view.access;
 
 import Client.communication.GameRequestHandler;
+import Client.communication.ReplayRequestHandler;
 import Client.communication.SessionRequestHandler;
 import Client.communication.UserRequestHandler;
-import Client.domain.GameManager;
-import Client.domain.SessionManager;
-import Client.view.ClientUtils;
+import Client.domain.SessionHandler;
+import Client.ClientUtils;
 
 import javax.swing.*;
 
@@ -27,6 +27,7 @@ public class Address extends JFrame {
 
     private void init(){
         ClientUtils.frameInit(this, contentPane);
+        setLocationRelativeTo(null);
         setTitle("Texas Hold'em");
     }
 
@@ -35,11 +36,12 @@ public class Address extends JFrame {
     }
 
     public void onEnter(){
-        SessionManager.getInstance().setIpAddress(IPAddressTextField.getText());
+        SessionHandler.getInstance().setIpAddress(IPAddressTextField.getText());
 
-        GameRequestHandler.serviceURI = "http://" + SessionManager.getInstance().getIpAddress() + "/game";
-        SessionRequestHandler.serviceURI = "http://" + SessionManager.getInstance().getIpAddress() + "/session";
-        UserRequestHandler.serviceURI = "http://" + SessionManager.getInstance().getIpAddress() + "/user";
+        GameRequestHandler.serviceURI = "http://" + SessionHandler.getInstance().getIpAddress() + "/game";
+        SessionRequestHandler.serviceURI = "http://" + SessionHandler.getInstance().getIpAddress() + "/session";
+        UserRequestHandler.serviceURI = "http://" + SessionHandler.getInstance().getIpAddress() + "/user";
+        ReplayRequestHandler.serviceURI = "http://" + SessionHandler.getInstance().getIpAddress() + "/replay";
 
         Welcome w = new Welcome();
         dispose();

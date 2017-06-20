@@ -1,11 +1,9 @@
 package Server.domain.user;
 
 import Exceptions.ArgumentNotInBoundsException;
-import Server.data.Hybernate.HibernateUtil;
 import Server.data.users.Users;
 import Server.domain.game.Game;
 import Server.domain.game.participants.Participant;
-import org.hibernate.Session;
 import org.hibernate.annotations.*;
 import Server.notification.NotificationService;
 
@@ -17,7 +15,6 @@ import java.awt.image.BufferedImage;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
@@ -45,10 +42,6 @@ public class User extends Observable {
     @JoinColumn(name = "walletId")
     @Cascade( {org.hibernate.annotations.CascadeType.DELETE_ORPHAN} )
     private Wallet wallet;
-
-//    @OneToMany(fetch = FetchType.EAGER)
-//    @JoinTable(name = "users_in_game", joinColumns = @JoinColumn(name = "userName"), inverseJoinColumns =  @JoinColumn(name = "participant_id"))
-//    @MapKeyJoinColumn(name="game_id")
 
     @Column(name = "amountEarnedInLeague")
     private int amountEarnedInLeague;
@@ -91,6 +84,7 @@ public class User extends Observable {
         this.totalNetoProfit = 0;
         this.totalGrossProfit = 0;
         this.highestCashGain = 0;
+        this.currLeague = LeagueManager.defaultLeagueForNewUsers;
 
         User thisUser = this;
         addObserver(new Observer() {
@@ -138,38 +132,6 @@ public class User extends Observable {
 
         return amountToReduce;
     }
-
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//
-//        User user = (User) o;
-//
-//        if (amountEarnedInLeague != user.amountEarnedInLeague) return false;
-//        if (currLeague != user.currLeague) return false;
-//        if (username != null ? !username.equals(user.username) : user.username != null) return false;
-//        if (password != null ? !password.equals(user.password) : user.password != null) return false;
-//        if (email != null ? !email.equals(user.email) : user.email != null) return false;
-//        if (dateOfBirth != null ? !dateOfBirth.equals(user.dateOfBirth) : user.dateOfBirth != null) return false;
-//        if (img != null ? !img.equals(user.img) : user.img != null) return false;
-//        if (wallet != null ? !wallet.equals(user.wallet) : user.wallet != null) return false;
-//        return gameMapping != null ? gameMapping.equals(user.gameMapping) : user.gameMapping == null;
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        int result = username != null ? username.hashCode() : 0;
-//        result = 31 * result + (password != null ? password.hashCode() : 0);
-//        result = 31 * result + (email != null ? email.hashCode() : 0);
-//        result = 31 * result + (dateOfBirth != null ? dateOfBirth.hashCode() : 0);
-//        result = 31 * result + (img != null ? img.hashCode() : 0);
-//        result = 31 * result + (wallet != null ? wallet.hashCode() : 0);
-//        result = 31 * result + (gameMapping != null ? gameMapping.hashCode() : 0);
-//        result = 31 * result + amountEarnedInLeague;
-//        result = 31 * result + currLeague;
-//        return result;
-//    }
 
     private void updateHighestCashGain(int amount) {
         if(amount > highestCashGain) {

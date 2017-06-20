@@ -19,8 +19,22 @@ public class HandCalculatorTest {
 
     @Test
     public void getHand(){
-        Hand actualHand = HandCalculator.getHand(TEN.of(HEART), TEN.of(SPADE), TEN.of(DIAMOND), TEN.of(CLUB), TWO.of(DIAMOND), FIVE.of(CLUB), ACE.of(HEART));
-        Hand expectedHand = new Hand(TEN.of(HEART), TEN.of(SPADE), TEN.of(DIAMOND), TEN.of(CLUB), ACE.of(HEART));
+        Hand actualHand = HandCalculator.getHand(TEN.of(HEARTS), TEN.of(SPADES), TEN.of(DIAMONDS), TEN.of(CLUBS), TWO.of(DIAMONDS), FIVE.of(CLUBS), ACE.of(HEARTS));
+        Hand expectedHand = new Hand(TEN.of(HEARTS), TEN.of(SPADES), TEN.of(DIAMONDS), TEN.of(CLUBS), ACE.of(HEARTS));
         assertThat(actualHand, is(expectedHand));
+    }
+
+    @Test
+    public void fourOfAKind_vs_twoPair(){
+        Hand A = HandCalculator.getHand(KING.of(DIAMONDS), THREE.of(SPADES), THREE.of(CLUBS), NINE.of(HEARTS), NINE.of(CLUBS), NINE.of(SPADES), NINE.of(DIAMONDS));
+        Hand B = HandCalculator.getHand(KING.of(DIAMONDS), THREE.of(SPADES), THREE.of(CLUBS), NINE.of(HEARTS), NINE.of(CLUBS), TEN.of(CLUBS), SIX.of(CLUBS));
+
+        Hand expectedA = new Hand(NINE.of(HEARTS), NINE.of(CLUBS), NINE.of(SPADES), NINE.of(DIAMONDS), KING.of(DIAMONDS));
+        Hand expectedB = new Hand(KING.of(DIAMONDS), THREE.of(SPADES), THREE.of(CLUBS), NINE.of(HEARTS), NINE.of(CLUBS));
+
+        assertThat(A, is(expectedA));
+        assertThat(B, is(expectedB));
+
+        assertThat(A.compareTo(B), is(greaterThan(0)));
     }
 }

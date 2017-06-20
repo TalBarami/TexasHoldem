@@ -2,8 +2,8 @@ package Client.view.access;
 
 import Exceptions.InvalidArgumentException;
 
-import Client.domain.SessionManager;
-import Client.view.ClientUtils;
+import Client.domain.SessionHandler;
+import Client.ClientUtils;
 import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
 import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
 import net.sourceforge.jdatepicker.impl.UtilDateModel;
@@ -49,7 +49,7 @@ public class Register {
 
     private void onOK() {
         try {
-            SessionManager.getInstance().register(text_name.getText(), new String(text_password.getPassword()), text_email.getText(), datePicker_birthday.getJFormattedTextField().getText(), text_picture.getText());
+            SessionHandler.getInstance().register(text_name.getText(), new String(text_password.getPassword()), text_email.getText(), datePicker_birthday.getJFormattedTextField().getText(), text_picture.getText());
             ancestor.showLogin();
         } catch (InvalidArgumentException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

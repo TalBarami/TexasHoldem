@@ -1,6 +1,9 @@
 package Server.domain.game;
 
 import Enumerations.GamePolicy;
+import Exceptions.EntityDoesNotExistsException;
+import Exceptions.InvalidArgumentException;
+import Server.SpringApplicationContext;
 import Server.domain.events.gameFlowEvents.MoveEvent;
 import Server.domain.events.gameFlowEvents.GameEvent;
 import Server.domain.game.card.Card;
@@ -8,7 +11,9 @@ import Server.domain.game.card.Dealer;
 import Server.domain.game.hand.Hand;
 import Server.domain.game.hand.HandCalculator;
 import Server.domain.game.participants.Player;
+import Server.domain.game.participants.Spectator;
 import Server.notification.NotificationService;
+import Server.service.SearchService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,10 +27,12 @@ import static Server.domain.game.GameActions.*;
  */
 public class Round {
     private static Logger logger = LoggerFactory.getLogger(Round.class);
+
     private boolean isRoundActive;
     private GameSettings gameSettings;
     private List<Player> activePlayers;
     private List<Player> originalPlayersInRound;
+    private List<Spectator> spectatorList;
     private Dealer dealer;
     private int chipsToCall;
     private Player currentPlayer;
@@ -41,6 +48,7 @@ public class Round {
         this.gameSettings = settings;
         this.activePlayers = new ArrayList<Player>(players);
         this.originalPlayersInRound = new ArrayList<Player>(players);
+        this.spectatorList = null;
         this.dealer = new Dealer();
         this.currentDealerPlayer = activePlayers.get(dealerIndex);
         this.chipsToCall = gameSettings.getMinBet();
@@ -102,6 +110,7 @@ public class Round {
         if (activePlayers.size() == 1) {
             Player winner = activePlayers.get(0);
             winner.addChips(potAmount);
+            this.winnerList.add(winner);
             logger.info("{} is the winner!!!", winner.getUser().getUsername());
         }
         else {
@@ -111,6 +120,17 @@ public class Round {
         initPlayersTotalAmountPayedInRound();
         updatePlayersGamesPlayed();
         setRoundActive(false);
+
+        // Update list of players
+        try {
+            SearchService bean = (SearchService)SpringApplicationContext.getBean("SearchService");
+            Game g = bean.findGameByName(gameSettings.getName());
+            activePlayers = g.getPlayers();
+        } catch (Exception e) {
+        }
+
+        // Send round update notification
+        NotificationService.getInstance().sendRoundUpdateNotification(this);
     }
 
     private void paySmallAndBigBlind() {
@@ -133,12 +153,12 @@ public class Round {
         Player creatorPlayer = activePlayers.stream().filter(player -> player.getUser().getUsername().equals(playerMoveEvent.getCreatorUserName())).collect(Collectors.toList()).get(0);
         if(currentPlayer != creatorPlayer)
             throw new IllegalArgumentException("This is not your turn");
+
         if(!calculateTurnOptions().contains(playerMoveEvent.getEventAction()))
             throw new IllegalArgumentException("Your move is Invalid");
 
         boolean isLastPlayerPlayed = false;
         if (isRoundActive) {
-            eventList.add(playerMoveEvent);
             GameActions chosenAction = playerMoveEvent.getEventAction();
 
             isLastPlayerPlayed = isLastPlayerPlayed(playerMoveEvent);
@@ -157,6 +177,11 @@ public class Round {
                     playerCallTurn();
                     break;
             }
+
+            eventList.add(playerMoveEvent);
+
+            if (!isRoundActive)
+                return;
 
             if (isLastPlayerPlayed) {
                 endFlow();
@@ -262,7 +287,11 @@ public class Round {
         }
     }
 
-    private void playerRaiseTurn(int amountToRaise) {
+    private void playerRaiseTurn(int amountToRaise) throws IllegalArgumentException {
+        if(gameSettings.getGameType() == GamePolicy.LIMIT && amountToRaise - chipsToCall > gameSettings.getGameTypeLimit())
+            throw new IllegalArgumentException("OOPS you raised more than the limit was decided, please try again");
+        if(gameSettings.getGameType() == GamePolicy.POTLIMIT && amountToRaise - chipsToCall > potAmount)
+            throw new IllegalArgumentException("OOPS you raised more than the current pot, please try again");
         int currentPlayerIndex = activePlayers.indexOf(currentPlayer);
         int nextPlayerIndex = (currentPlayerIndex + 1) % (activePlayers.size());
         int lastBet = currentPlayer.getLastBetSinceCardOpen();
@@ -371,6 +400,7 @@ public class Round {
         sumToDivide =  sumToDivide/winners.size();
         for(Player p : winners) {
             p.addChips(sumToDivide);
+            winnerList.add(p);
             logger.info("Player {} earned {}$", p.getUser().getUsername(), sumToDivide);
         }
     }
@@ -555,5 +585,13 @@ public class Round {
 
     public void setWinnerList(List<Player> winnerList) {
         this.winnerList = winnerList;
+    }
+
+    public List<Spectator> getSpectatorList() {
+        return spectatorList;
+    }
+
+    public void setSpectatorList(List<Spectator> spectatorList) {
+        this.spectatorList = spectatorList;
     }
 }

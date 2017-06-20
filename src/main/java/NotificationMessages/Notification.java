@@ -20,4 +20,11 @@ public class Notification {
     public void setRecipientUserName(String recipientUserName) {
         this.recipientUserName = recipientUserName;
     }
+
+    @Override
+    public String toString() {
+        return "Notification{" +
+                "recipientUserName='" + recipientUserName + '\'' +
+                '}';
+    }
 }

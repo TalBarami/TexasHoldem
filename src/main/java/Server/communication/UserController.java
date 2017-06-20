@@ -8,7 +8,9 @@ import Exceptions.EntityDoesNotExistsException;
 import Exceptions.InvalidArgumentException;
 import Server.communication.converters.UserClientUserProfileConverter;
 import Server.domain.user.Transaction;
+import Server.service.SessionManager;
 import Server.service.UserService;
+import org.apache.catalina.SessionIdGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,10 +27,12 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 @RestController
 public class UserController {
     private UserService service;
+    private SessionManager manager;
 
     @Autowired
     public UserController(UserService service) {
         this.service = service;
+        this.manager = SessionManager.getInstance();
     }
 
     @RequestMapping(method=POST, value="/user/{username}")
@@ -49,12 +53,14 @@ public class UserController {
     }
 
     @RequestMapping(method=PUT, value="/user/{username}")
-    public ResponseMessage updateUser(@PathVariable("username") String oldUserName, @RequestBody ClientUserProfile user) throws InvalidArgumentException, EntityDoesNotExistsException {
+    public ResponseMessage updateUser(@PathVariable("username") String oldUserName, @RequestBody ClientUserProfile user, @RequestHeader("SESSION_ID") String sessionID) throws InvalidArgumentException, EntityDoesNotExistsException {
         String userName = user.getUsername();
         String password = user.getPassword();
         String email = user.getEmail();
         LocalDate dateOfBirth = LocalDate.of(user.getYearOfBirth(), user.getMonthOfBirth(), user.getDayOfBirth());
         BufferedImage img = null;
+
+        manager.validate(userName, sessionID);
 
         // TODO :: Verify username and password
         service.editProfile(oldUserName, userName, password, email, dateOfBirth);
@@ -62,7 +68,9 @@ public class UserController {
     }
 
     @RequestMapping(method=PUT, value="/user/{username}/balance")
-    public ResponseMessage updateUserBalance(@PathVariable("username") String username, @RequestBody ClientTransactionRequest transaction) throws EntityDoesNotExistsException, ArgumentNotInBoundsException, InvalidArgumentException {
+    public ResponseMessage updateUserBalance(@PathVariable("username") String username, @RequestBody ClientTransactionRequest transaction, @RequestHeader("SESSION_ID") String sessionID) throws EntityDoesNotExistsException, ArgumentNotInBoundsException, InvalidArgumentException {
+        manager.validate(username, sessionID);
+
         if (transaction.getAction() == Transaction.DEPOSIT) {
             service.deposit(username, transaction.getAmount());
         }

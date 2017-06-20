@@ -25,4 +25,11 @@ public class PlayMoveNotification extends GameNotification {
     public void setMoveList(List<Move> moveList) {
         this.moveList = moveList;
     }
+
+    @Override
+    public String toString() {
+        return "PlayMoveNotification{" +
+                "moveList=" + moveList +
+                '}';
+    }
 }

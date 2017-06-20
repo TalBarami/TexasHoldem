@@ -44,4 +44,13 @@ public class GameUpdateNotification extends GameNotification {
     public void setGameDetails(ClientGameDetails gameDetails) {
         this.gameDetails = gameDetails;
     }
+
+    @Override
+    public String toString() {
+        return "GameUpdateNotification{" +
+                "action=" + action +
+                ", gameActionInitiator='" + gameActionInitiator + '\'' +
+                ", gameDetails=" + gameDetails +
+                '}';
+    }
 }

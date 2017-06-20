@@ -4,6 +4,8 @@ import Exceptions.InvalidArgumentException;
 import Server.common.SystemUtils;
 import Server.domain.system.GameCenter;
 
+import java.time.LocalDate;
+
 /**
  * Created by Tal on 12/04/2017.
  */
@@ -21,7 +23,19 @@ public class TexasHoldemService {
         userService = new UserService(gameCenter);
         searchService = new SearchService(gameCenter);
         statisticsService = new StatisticsService(gameCenter);
-     //   leagueService = new LeagueService(gameCenter);
+
+        try {
+            userService.register("user1", "123", "tal@gmail", LocalDate.now(), null);
+            userService.register("user2", "123", "ronen@gmail", LocalDate.now().plusDays(2), null);
+            userService.register("user3", "123", "achiad@gmail", LocalDate.now().plusDays(3), null);
+            userService.register("user4", "123", "hod@gmail", LocalDate.now().plusDays(4), null);
+            userService.register("user5", "123", "rotem@gmail", LocalDate.now().plusDays(5), null);
+            userService.register("user6", "123", "a@gmail", LocalDate.now().plusDays(6), null);
+            userService.register("user7", "123", "b@gmail", LocalDate.now().plusDays(7), null);
+            userService.register("user8", "123", "c@gmail", LocalDate.now().plusDays(8), null);
+        } catch(InvalidArgumentException e){
+            System.out.println("ERROR! INVALID ARGUMENT!");
+        }
     }
 
     public GameService gameService(){

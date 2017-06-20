@@ -19,7 +19,7 @@ public class LeagueManager {
     }
 
     public void addNewUserToLeague(User user){
-        putUserInLeague(user, defaultLeagueForNewUsers);
+        user.setAmountEarnedInLeague(0);
     }
 
     //can also relegate

@@ -1,7 +1,7 @@
 package Client.view.access;
 
 
-import Client.view.ClientUtils;
+import Client.ClientUtils;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -16,6 +16,7 @@ public class Welcome extends JFrame {
 
     public Welcome() {
         init();
+        setLocationRelativeTo(null);
 
         getRootPane().setDefaultButton(buttonLogin);
 

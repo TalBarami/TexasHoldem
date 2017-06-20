@@ -23,4 +23,11 @@ public class UserProfileUpdateNotification extends Notification {
     public void setClientUserProfile(ClientUserProfile clientUserProfile) {
         this.clientUserProfile = clientUserProfile;
     }
+
+    @Override
+    public String toString() {
+        return "UserProfileUpdateNotification{" +
+                "clientUserProfile=" + clientUserProfile +
+                '}';
+    }
 }

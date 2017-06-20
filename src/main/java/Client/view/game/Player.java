@@ -1,10 +1,13 @@
 package Client.view.game;
 
-import Client.domain.SessionManager;
+import MutualJsonObjects.CardsImages;
+import MutualJsonObjects.ClientCard;
 import MutualJsonObjects.ClientPlayer;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,9 +26,22 @@ public class Player {
         JLabel lastBetLabel = new JLabel("Last Bet: " + String.valueOf(player.getLastBetSinceCardOpen()));
 
         container = new JPanel();
-        container.add(nameLabel);
-        container.add(chipAmountLabel);
-        container.add(lastBetLabel);
+        container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
+        container.setBorder(new EmptyBorder(10, 10, 10, 10));
+        container.setBackground(Color.lightGray);
+
+        JPanel labelsPanel = new JPanel();
+        labelsPanel.setLayout(new BoxLayout(labelsPanel, BoxLayout.X_AXIS));
+        labelsPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        labelsPanel.setBackground(Color.lightGray);
+
+        labelsPanel.add(nameLabel);
+        labelsPanel.add(Box.createRigidArea(new Dimension(5, 0)));
+        labelsPanel.add(chipAmountLabel);
+        labelsPanel.add(Box.createRigidArea(new Dimension(5, 0)));
+        labelsPanel.add(lastBetLabel);
+
+        container.add(labelsPanel);
     }
 
     public void mark(){
@@ -34,8 +50,17 @@ public class Player {
     }
 
     public void showCards(){
-        JLabel cardsLabel = new JLabel(player.getPlayerCards().toString());
-        container.add(cardsLabel);
+        JPanel cardsPanel = new JPanel();
+        cardsPanel.setLayout(new BoxLayout(cardsPanel, BoxLayout.X_AXIS));
+        cardsPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        cardsPanel.setBackground(Color.lightGray);
+
+        List<ClientCard> cards = new ArrayList<>(player.getPlayerCards());
+        for(ClientCard card : cards){
+            JLabel cardLabel = new JLabel(CardsImages.getImage(card));
+            cardsPanel.add(cardLabel);
+        }
+        container.add(cardsPanel);
     }
 
     public void self(){
