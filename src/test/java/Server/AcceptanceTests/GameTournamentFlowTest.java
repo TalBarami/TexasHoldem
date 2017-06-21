@@ -1,6 +1,8 @@
 package Server.AcceptanceTests;
 
 import Enumerations.GamePolicy;
+import Server.data.users.Users;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,6 +19,13 @@ public class GameTournamentFlowTest extends ProjectTest {
     public void setUp()
     {
         super.setUp();
+    }
+
+    @After
+    public void tearDown() {
+        Users.getUsersInGame().clear();
+        super.clearAllEventsFromDB();
+        super.clearAllUsersFromDB();
     }
 
     @Test

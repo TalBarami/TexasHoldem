@@ -1,11 +1,17 @@
 package Server.domain.system;
 
 import Exceptions.*;
+import Server.data.Hybernate.HibernateUtil;
 import Server.data.users.Users;
+import Server.domain.events.SystemEvent;
+import Server.domain.events.gameFlowEvents.GameEvent;
+import Server.domain.events.gameFlowEvents.MoveEvent;
 import Server.domain.game.Game;
 import Server.domain.game.GameSettings;
 import Server.domain.game.participants.Participant;
 import Server.domain.user.User;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -70,6 +76,7 @@ public class GameCenterTest {
         realMoneyGameSettings2=null;
 
         Users.getUsersInGame().clear();
+        clearAllEventsFromDB();
     }
 
     @Test
@@ -517,5 +524,26 @@ public class GameCenterTest {
         assertTrue(games.contains(g1));
         assertTrue(games.contains(g4));
         gc.deleteUser(testUser1);
+    }
+
+    private void clearAllEventsFromDB(){
+        SessionFactory sessionFactory = HibernateUtil.getInstance().getSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+
+        List<?> instances = session.createCriteria(MoveEvent.class).list();
+        for (Object obj : instances) {
+            session.delete(obj);
+        }
+        instances = session.createCriteria(GameEvent.class).list();
+        for (Object obj : instances) {
+            session.delete(obj);
+        }
+        instances = session.createCriteria(SystemEvent.class).list();
+        for (Object obj : instances) {
+            session.delete(obj);
+        }
+
+        session.getTransaction().commit();
     }
 }

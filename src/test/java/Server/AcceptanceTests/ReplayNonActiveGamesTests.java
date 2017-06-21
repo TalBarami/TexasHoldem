@@ -40,27 +40,10 @@ public class ReplayNonActiveGamesTests extends ProjectTest {
         logoutUsers();
         deleteUsers();
         Users.getUsersInGame().clear();
-
-        SessionFactory sessionFactory = HibernateUtil.getInstance().getSessionFactory();
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-
-        List<?> instances = session.createCriteria(MoveEvent.class).list();
-        for (Object obj : instances) {
-            session.delete(obj);
-        }
-        instances = session.createCriteria(GameEvent.class).list();
-        for (Object obj : instances) {
-            session.delete(obj);
-        }
-        instances = session.createCriteria(SystemEvent.class).list();
-        for (Object obj : instances) {
-            session.delete(obj);
-        }
-
-        session.getTransaction().commit();
+        super.clearAllEventsFromDB();
+        super.clearAllUsersFromDB();
     }
-
+    
     @Test
     public void testNoReplayForActiveGames()
     {

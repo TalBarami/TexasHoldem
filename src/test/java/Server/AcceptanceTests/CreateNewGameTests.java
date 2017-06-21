@@ -2,11 +2,20 @@ package Server.AcceptanceTests;
 
 
 import Enumerations.GamePolicy;
+import Server.data.Hybernate.HibernateUtil;
+import Server.data.users.Users;
+import Server.domain.events.SystemEvent;
+import Server.domain.events.gameFlowEvents.GameEvent;
+import Server.domain.events.gameFlowEvents.MoveEvent;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * Created by אחיעד on 08/04/2017.
@@ -17,6 +26,13 @@ public class CreateNewGameTests extends ProjectTest {
     public void setUp()
     {
         super.setUp();
+    }
+
+    @After
+    public void tearDown() {
+        Users.getUsersInGame().clear();
+        super.clearAllEventsFromDB();
+        super.clearAllUsersFromDB();
     }
 
     @Test
