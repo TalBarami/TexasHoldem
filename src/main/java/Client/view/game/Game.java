@@ -62,7 +62,7 @@ public class Game extends JFrame{
 
     public Game(MainMenu ancestor, String gameName) throws EntityDoesNotExistsException, InvalidArgumentException {
         this.ancestor = ancestor;
-        gameHandler = new GameHandler(gameName);
+        this.gameHandler = new GameHandler(gameName);
 
         assignActionListeners();
         initializeGame(gameHandler.getGameDetails());
@@ -112,12 +112,10 @@ public class Game extends JFrame{
         SessionHandler.getInstance().addUpdateCallback(this::generateUserInformation);
 
         gameHandler.addGameUpdateCallback(gameUpdateNotification -> notifyPlayers());
-        gameHandler.addGameUpdateCallback(this::handleGameSession);
         gameHandler.addGameUpdateCallback(gameUpdateNotification -> updatePlayersInformation(gameUpdateNotification.getGameDetails().getPlayerList()));
         gameHandler.addGameUpdateCallback(gameUpdateNotification -> reconfigureStartButton(gameUpdateNotification.getGameDetails().getPlayerList()));
 
         gameHandler.addRoundUpdateCallback(roundUpdateNotification -> notifyPlayers());
-        gameHandler.addRoundUpdateCallback(this::handleGameSession);
         gameHandler.addRoundUpdateCallback(this::updateTable);
         gameHandler.addRoundUpdateCallback(this::reconfigureRaiseButton);
         gameHandler.addRoundUpdateCallback(roundUpdateNotification -> updatePlayersInformation(roundUpdateNotification.getCurrentPlayers(), roundUpdateNotification.getCurrentPlayerName()));
@@ -199,11 +197,6 @@ public class Game extends JFrame{
         revalidate();
     }
 
-    private void handleGameSession(GameUpdateNotification gameUpdateNotification){
-        if(gameUpdateNotification.getAction().equals(GameActions.NEWROUND)){
-            gameHandler.setGameRunning(true);
-        }
-    }
 
     private void updateTable(RoundUpdateNotification roundUpdateNotification){
         cardsPanel.removeAll();
@@ -215,12 +208,6 @@ public class Game extends JFrame{
         }
         pack();
         revalidate();
-    }
-
-    private void handleGameSession(RoundUpdateNotification roundUpdateNotification){
-        if(roundUpdateNotification.isFinished()){
-            gameHandler.setGameRunning(false);
-        }
     }
 
     private void reconfigureRaiseButton(RoundUpdateNotification roundUpdateNotification){
@@ -335,7 +322,7 @@ public class Game extends JFrame{
 
     private void reconfigureStartButton(List<ClientPlayer> players){
         boolean isClientPlaying = isClientPlaying(players);
-        boolean isGameRunning = gameHandler.isGameRunning();
+        boolean isGameRunning = false;
         boolean hasEnoughPlayers =  gameHandler.getGameDetails().getMinimumPlayersAmount() <= players.size() &&
                 players.size() <= gameHandler.getGameDetails().getMaximumPlayersAmount();
         logger.info("Client is player: {}, Game running: {}, Game has enough players: {}", isClientPlaying, isGameRunning, hasEnoughPlayers);

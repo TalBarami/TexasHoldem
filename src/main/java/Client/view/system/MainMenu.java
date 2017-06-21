@@ -1,6 +1,8 @@
 package Client.view.system;
 
+import Client.view.game.Replay;
 import MutualJsonObjects.ClientGameDetails;
+import MutualJsonObjects.ClientGameEvent;
 import MutualJsonObjects.ClientUserProfile;
 import Enumerations.GamePolicy;
 import Exceptions.EntityDoesNotExistsException;
@@ -188,10 +190,9 @@ public class MainMenu extends JFrame {
     private void onReplayGame(){
         String gameName = String.valueOf(gamesTable.getValueAt(gamesTable.getSelectedRow(), 0));
         try {
-            MenuHandler.getInstance().replayGame(gameName);
-            Game game = new Game(this, gameName);
-            addGame(game);
-            game.init();
+            List<ClientGameEvent> events = MenuHandler.getInstance().replayGame(gameName);
+            Replay replay = new Replay(this, gameName, events);
+            replay.init();
         } catch (GameException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -227,7 +228,7 @@ public class MainMenu extends JFrame {
             logger.info("Selected row: {}, Game: {}", selectedIndex, games.get(selectedIndex));
             joinSelectedGameButton.setEnabled(true); // FIXME: !isRunning() or available(myself) or something.
             spectateSelectedGameButton.setEnabled(games.get(selectedIndex).isSpectateValid());
-            replaySelectedGameButton.setEnabled(String.valueOf(searchTypeComboBox.getSelectedItem()).equals(REPLAYABLE)); // FIXME: !archived
+            replaySelectedGameButton.setEnabled(true); // FIXME: !archived
         }
     }
 

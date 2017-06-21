@@ -1,5 +1,6 @@
 package Client.domain;
 
+import Client.communication.ReplayRequestHandler;
 import Enumerations.GamePolicy;
 import MutualJsonObjects.*;
 import Exceptions.*;
@@ -9,16 +10,19 @@ import Client.communication.UserRequestHandler;
 import Server.domain.user.Transaction;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MenuHandler {
     private static MenuHandler instance;
 
     private GameRequestHandler gameRequestHandler;
     private UserRequestHandler userRequestHandler;
+    private ReplayRequestHandler replayRequestHandler;
 
     private MenuHandler(){
         gameRequestHandler = new GameRequestHandler();
         userRequestHandler = new UserRequestHandler();
+        replayRequestHandler = new ReplayRequestHandler();
     }
 
     public static MenuHandler getInstance(){
@@ -31,7 +35,7 @@ public class MenuHandler {
                            int minPlayerAmount, int maxPlayerAmount, boolean specAccept) throws InvalidArgumentException, EntityDoesNotExistsException, NoBalanceForBuyInException, ArgumentNotInBoundsException {
         ClientGameDetails gameDetails = new ClientGameDetails(SessionHandler.getInstance().user().getUsername(),
                 gameName, gamePolicy.getPolicy(), policyLimit, minBet, buyInPolicy,
-                chipPolicy, minPlayerAmount, maxPlayerAmount, specAccept, new ArrayList<>());
+                chipPolicy, minPlayerAmount, maxPlayerAmount, specAccept, new ArrayList<>(), false);
         gameRequestHandler.requestGameCreation(gameDetails);
     }
 
@@ -54,12 +58,8 @@ public class MenuHandler {
         gameRequestHandler.requestGameEventSend(request);
     }
 
-    public void replayGame(String gameName) throws GameException {
-        ClientGameRequest request = new ClientGameRequest();
-        request.setGameName(gameName);
-        request.setAction(-1);
-
-        gameRequestHandler.requestGameEventSend(request);
+    public List<ClientGameEvent> replayGame(String gameName) throws GameException {
+        return replayRequestHandler.requestGameReplay(gameName);
     }
 
     public void leaveGame(String username, String gameName) throws GameException {
