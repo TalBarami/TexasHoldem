@@ -348,6 +348,8 @@ public class Round {
     }
 
     private void calculateWinner() {
+        boolean firstWinnerFound = false;
+
         while(!activePlayers.isEmpty()) {
             List<Player> winners = new LinkedList<Player>();
             Player currentPlayer = activePlayers.get(0);
@@ -376,6 +378,14 @@ public class Round {
                 }
             }
 
+            if (!firstWinnerFound) {
+                for (Player p : winners) {
+                    winnerList.add(p);
+                }
+
+                firstWinnerFound = true;
+            }
+
             Player winnerWithMinChips = findMinWinner(winners);
             divideWinningsBetweenWinners(winners, winnerWithMinChips);
             updateActivePlayers();
@@ -400,7 +410,6 @@ public class Round {
         sumToDivide =  sumToDivide/winners.size();
         for(Player p : winners) {
             p.addChips(sumToDivide);
-            winnerList.add(p);
             logger.info("Player {} earned {}$", p.getUser().getUsername(), sumToDivide);
         }
     }
