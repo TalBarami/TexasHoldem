@@ -32,7 +32,6 @@ public class GameHandler {
     private static Logger logger = LoggerFactory.getLogger(GameHandler.class);
 
     private ClientGameDetails gameDetails;
-    private boolean isGameRunning;
 
     private GameRequestHandler gameRequestHandler;
 
@@ -105,14 +104,6 @@ public class GameHandler {
 
     public void sentPrivateMessage(String message, String playerName) throws GameException{
         sendMessageHandler(message, playerName);
-    }
-
-    public boolean isGameRunning(){
-        return isGameRunning;
-    }
-
-    public void setGameRunning(Boolean isGameRunning){
-        this.isGameRunning = isGameRunning;
     }
 
     private void addNotificationsMessages(GameUpdateNotification gameUpdateNotification) {

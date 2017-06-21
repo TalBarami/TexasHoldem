@@ -15,6 +15,7 @@ import Client.communication.UserRequestHandler;
 import Server.common.SystemUtils;
 import org.springframework.messaging.simp.stomp.StompSession;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -56,8 +57,8 @@ public class SessionHandler {
 
     public void register(String username, String password, String email, String birthday, String localImagePath) throws InvalidArgumentException {
         verifyStrings(username, password, email, birthday, localImagePath);
-        String[] date = birthday.split("/");
-        ClientUserProfile profile = new ClientUserProfile(username, password, email, Integer.parseInt(date[0]), Integer.parseInt(date[1]), Integer.parseInt(date[2]), -1, -1, -1, -1);
+        LocalDate date = LocalDate.parse(birthday);
+        ClientUserProfile profile = new ClientUserProfile(username, password, email, date.getDayOfMonth(), date.getMonthValue(), date.getYear(), -1, -1, -1, -1);
         userRequestHandler.requestUserProfileRegistration(profile);
 
         user = userRequestHandler.requestUserProfileEntity(username);
