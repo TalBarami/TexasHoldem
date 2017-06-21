@@ -31,10 +31,16 @@ public class GameClientGameDetailsConverter {
         }
         cgd.setPlayerList(clientPlayerList);
 
-        if (game.getLastRound().isRoundActive()) {
+        if (game.getLastRound() != null && game.getLastRound().isRoundActive()) {
             cgd.setRunning(true);
         } else {
             cgd.setRunning(false);
+        }
+
+        if (game.canBeArchived()) {
+            cgd.setArchived(true);
+        } else {
+            cgd.setArchived(false);
         }
 
         return cgd;

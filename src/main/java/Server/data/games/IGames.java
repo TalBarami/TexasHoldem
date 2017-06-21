@@ -27,7 +27,7 @@ public interface IGames {
     List<Game> getActiveGamesByMinimumPlayersAmount(int minimumPlayersAmount);
     List<Game> getActiveGamesByMaximumPlayersAmount(int maximumPlayersAmount);
     List<Game> getActiveGamesBySpectationAllowed(boolean spectationAllowed);
-    List<Game> getArchivedGames();
+    List<String> getArchivedGames();
     List<GameEvent> getAllGameEvents(String gameName);
 //    List<MoveEvent> getAllMoveEvents(String gameName);
 }

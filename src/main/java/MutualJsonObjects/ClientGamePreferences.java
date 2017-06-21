@@ -24,6 +24,7 @@ public class ClientGamePreferences {
     private boolean serachBySpectatingAvailable;
     private boolean searchByPotSize;
     private int potSizeToSearch;
+    private boolean searchForReplayableGames;
 
     public String getUsername() {
         return username;
@@ -175,5 +176,13 @@ public class ClientGamePreferences {
 
     public void setPotSizeToSearch(int potSizeToSearch) {
         this.potSizeToSearch = potSizeToSearch;
+    }
+
+    public boolean isSearchForReplayableGames() {
+        return searchForReplayableGames;
+    }
+
+    public void setSearchForReplayableGames(boolean searchForReplayableGames) {
+        this.searchForReplayableGames = searchForReplayableGames;
     }
 }

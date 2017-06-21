@@ -70,7 +70,7 @@ public class SearchService {
         return gameCenter.findGamesByMaximumPlayers(maximumPlayers);
     }
 
-    public List<String> findArchivedGamesNames(){
-       return gameCenter.getArchivedGames().stream().map(x->x.getName()).collect(Collectors.toList());
+    public List<String> findArchivedGamesNames() throws EntityDoesNotExistsException {
+       return gameCenter.getArchivedGames();
     }
 }

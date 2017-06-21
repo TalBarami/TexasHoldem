@@ -272,8 +272,13 @@ public class GameCenter {
     }
 
 
-    public List<Game> getArchivedGames(){
-        return gamesDb.getArchivedGames();
+    public List<String> getArchivedGames() throws EntityDoesNotExistsException {
+        List<String> gameNames = gamesDb.getArchivedGames();
+
+        if (gameNames.isEmpty())
+            throw new EntityDoesNotExistsException("No archived games available");
+
+        return gameNames;
     }
 
     public List<GameEvent> getAllGameEvents(String gameName) {

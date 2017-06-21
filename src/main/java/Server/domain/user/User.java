@@ -61,7 +61,15 @@ public class User extends Observable {
     @Column(name = "numOfGamesPlayed")
     private int numOfGamesPlayed;
 
-    public User(){}
+    public User(){
+        User thisUser = this;
+        addObserver(new Observer() {
+            @Override
+            public void update(Observable o, Object arg) {
+                NotificationService.getInstance().sendUserProfileUpdateNotification(thisUser);
+            }
+        });
+    }
 
     public User(String user, String pass, String email, LocalDate date, BufferedImage image)
     {

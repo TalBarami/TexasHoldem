@@ -22,12 +22,12 @@ import java.util.stream.Stream;
  */
 public class Games implements IGames {
     private HashMap<Integer, Game> _games;
-    private List<Game> archivedGames;
+    // private List<Game> archivedGames;
     int _newGameId;
 
     public Games() {
         _games = new HashMap<Integer, Game>();
-        archivedGames=new ArrayList<>();
+        // archivedGames=new ArrayList<>();
         _newGameId = 0;
     }
 
@@ -46,7 +46,7 @@ public class Games implements IGames {
     public void archiveGame(Game game){
         saveAllGameEvents(game);
         saveAllMoveEvents(game);
-        archivedGames.add(game);
+        // archivedGames.add(game);
         _games.remove(game.getGameId());
         Users.deleteGameMapping(game.getSettings().getName());
     }
@@ -180,9 +180,24 @@ public class Games implements IGames {
         return _newGameId++;
     }
 
-    public List<Game> getArchivedGames(){ return archivedGames; }
+    public List<String> getArchivedGames() {
+        Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
+        List<String> gameNames = null;
+        try{
+            session.beginTransaction();
+            String sql = "SELECT DISTINCT game_name FROM system_event";
+            gameNames = session.createSQLQuery(sql).list();
+            session.getTransaction().commit();
+        }catch (HibernateException e) {
+            if (session.getTransaction()!=null) session.getTransaction().rollback();
+        }finally {
+            session.close();
+        }
+        return gameNames;
+    }
 
     public boolean isArchived(Game g){
-        return archivedGames.contains(g);
+        List<String> archivedGameNames = getArchivedGames();
+        return archivedGameNames.contains(g.getName());
     }
 }

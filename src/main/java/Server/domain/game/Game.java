@@ -32,6 +32,7 @@ public class Game {
     private boolean isActive;
     private List<GameEvent> gameEvents;
     private int numPlayersStarted;
+    private boolean canBeArchived;
 
     public Game(GameSettings settings, User creator, LeagueManager leagueManager){
         this.settings=settings;
