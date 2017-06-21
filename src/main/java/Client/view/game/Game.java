@@ -62,7 +62,7 @@ public class Game extends JFrame{
 
     public Game(MainMenu ancestor, String gameName) throws EntityDoesNotExistsException, InvalidArgumentException {
         this.ancestor = ancestor;
-        gameHandler = new GameHandler(gameName);
+        this.gameHandler = new GameHandler(gameName);
 
         assignActionListeners();
         initializeGame(gameHandler.getGameDetails());
