@@ -200,6 +200,11 @@ public class Round {
         if (isRoundActive) {
             chipsToCall = 0;
             initPlayersLastBetSinceCardOpen();
+            if(isAllInMode()){
+                openCardsLeft();
+                endRiverFlow();
+                return;
+            }
 
             switch (currentState) {
                 case PREFLOP:
@@ -216,6 +221,27 @@ public class Round {
                     break;
             }
         }
+    }
+
+    private void openCardsLeft()
+    {
+        int numOpenedCards = openedCards.size();
+        openedCards.addAll(dealer.open(5 - numOpenedCards));
+        logger.info("Cards opened are: ");
+
+        for (Card c : openedCards) {
+            logger.info("{} , ", c);
+        }
+    }
+
+    private boolean isAllInMode(){
+        int playersWithMoreThan0 = 0;
+        for(Player p : activePlayers)
+        {
+            if(p.getChipsAmount() > 0)
+                playersWithMoreThan0++;
+        }
+        return playersWithMoreThan0 == 0 || playersWithMoreThan0 == 1;
     }
 
     private void endRiverFlow() {
