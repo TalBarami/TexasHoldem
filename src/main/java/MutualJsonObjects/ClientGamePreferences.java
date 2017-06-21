@@ -22,6 +22,8 @@ public class ClientGamePreferences {
     private boolean searchByMaximumPlayersAmount;
     private int maximumPlayersAmount;
     private boolean serachBySpectatingAvailable;
+    private boolean searchByPotSize;
+    private int potSizeToSearch;
 
     public String getUsername() {
         return username;
@@ -157,5 +159,21 @@ public class ClientGamePreferences {
 
     public void setSerachBySpectatingAvailable(boolean serachBySpectatingAvailable) {
         this.serachBySpectatingAvailable = serachBySpectatingAvailable;
+    }
+
+    public boolean isSearchByPotSize() {
+        return searchByPotSize;
+    }
+
+    public void setSearchByPotSize(boolean searchByPotSize) {
+        this.searchByPotSize = searchByPotSize;
+    }
+
+    public int getPotSizeToSearch() {
+        return potSizeToSearch;
+    }
+
+    public void setPotSizeToSearch(int potSizeToSearch) {
+        this.potSizeToSearch = potSizeToSearch;
     }
 }

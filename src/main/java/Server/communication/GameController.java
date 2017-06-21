@@ -186,6 +186,10 @@ public class GameController {
                 gameList = searchService.findGamesByMaximumPlayers(gamePreferences.getMaximumPlayersAmount());
             }
 
+            else if (gamePreferences.isSearchByPotSize()) {
+                gameList = searchService.findGamesByPotSize(gamePreferences.getPotSizeToSearch());
+            }
+
             else {
                 gameList = searchService.findSpectatableGames();
             }

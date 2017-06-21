@@ -17,8 +17,9 @@ public class ClientGameDetails {
     private int maximumPlayersAmount;
     private boolean isSpectateValid;
     private List<ClientPlayer> playerList;
+    private boolean isRunning;
 
-    public ClientGameDetails(String username, String name, int policyType, int policyLimitAmount, int minimumBet, int buyInAmount, int chipPolicyAmount, int minimumPlayersAmount, int maximumPlayersAmount, boolean isSpectateValid, List<ClientPlayer> playerList) {
+    public ClientGameDetails(String username, String name, int policyType, int policyLimitAmount, int minimumBet, int buyInAmount, int chipPolicyAmount, int minimumPlayersAmount, int maximumPlayersAmount, boolean isSpectateValid, List<ClientPlayer> playerList, boolean isRunning) {
         this.username = username;
         this.name = name;
         this.policyType = policyType;
@@ -30,6 +31,7 @@ public class ClientGameDetails {
         this.maximumPlayersAmount = maximumPlayersAmount;
         this.isSpectateValid = isSpectateValid;
         this.playerList = playerList;
+        this.isRunning = isRunning;
     }
 
     public ClientGameDetails() {
@@ -121,6 +123,14 @@ public class ClientGameDetails {
 
     public void setPlayerList(List<ClientPlayer> playerList) {
         this.playerList = playerList;
+    }
+
+    public boolean isRunning() {
+        return isRunning;
+    }
+
+    public void setRunning(boolean running) {
+        isRunning = running;
     }
 
     @Override
