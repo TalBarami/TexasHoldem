@@ -322,7 +322,7 @@ public class Game extends JFrame{
 
     private void reconfigureStartButton(List<ClientPlayer> players){
         boolean isClientPlaying = isClientPlaying(players);
-        boolean isGameRunning = false;
+        boolean isGameRunning = gameHandler.getGameDetails().isRunning();
         boolean hasEnoughPlayers =  gameHandler.getGameDetails().getMinimumPlayersAmount() <= players.size() &&
                 players.size() <= gameHandler.getGameDetails().getMaximumPlayersAmount();
         logger.info("Client is player: {}, Game running: {}, Game has enough players: {}", isClientPlaying, isGameRunning, hasEnoughPlayers);
