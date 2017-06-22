@@ -233,16 +233,7 @@ public class Game {
         return !settings.tournamentMode();
     }
 
-    private double getConvertRatio(){
-        return (realMoneyGame()) ? 1 : settings.getBuyInPolicy()/settings.getChipPolicy();
-
-    }
-
     public boolean isActive(){
-        /*if(rounds.isEmpty())
-            return true;
-        return (!realMoneyGame() && isActive && rounds.get(rounds.size()-1).isRoundActive()) ||
-                (realMoneyGame() && rounds.get(rounds.size()-1).isRoundActive());*/
         if(rounds.isEmpty())
             return false;
         if(realMoneyGame())
@@ -315,21 +306,7 @@ public class Game {
     }
 
     private boolean canStart(){
-        if(realMoneyGame()){
-            return players.size() >= getMinimalAmountOfPlayer();
-        }
-        else{
-            if(canBeJoined())
-                return players.size() >= getMinimalAmountOfPlayer();
-            else{
-                return numPlayersStarted>0 && numPlayersStarted<getMinimalAmountOfPlayer();
-            }
-        }
-        /*if(!realMoneyGame() && (numPlayersStarted>0 && numPlayersStarted<getMinimalAmountOfPlayer()))
-            return true;*/
-        /*if(!realMoneyGame() && !isActive())
-            return numPlayersStarted>0 && numPlayersStarted<getMinimalAmountOfPlayer();
-        return players.size()>=getMinimalAmountOfPlayer();*/
+        return realMoneyGame() ? players.size() >= getMinimalAmountOfPlayer() : canBeJoined() ? players.size() >= getMinimalAmountOfPlayer() : true;
     }
 
     private void resetDealerIndex(){

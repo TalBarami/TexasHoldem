@@ -235,7 +235,7 @@ public class GameCenter {
             throw new GameIsFullException("Can't join game as player because it's full.");
         else if(!game.realMoneyGame() && (userBalance < buyInPolicy))
             throw new NoBalanceForBuyInException(String.format("Buy in is %d, but user's balance is %d;",buyInPolicy,userBalance));
-        else if(game.isActive()){
+        else if(!game.canBeJoined()){
             throw new GameException("Can't join game as player because there is a round in progress, please try again in several minutes.");
         }
 
