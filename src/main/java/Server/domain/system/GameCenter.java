@@ -65,9 +65,9 @@ public class GameCenter {
 
     public void login(String userName,String pass) throws LoginException, EntityDoesNotExistsException {
         User user=usersDb.verifyCredentials(userName,pass);
-        if(loggedInUsers.contains(user)){
-            throw new  LoginException(String.format("'%s' is already logged in to the game.",userName));
-        }
+        for (User u : loggedInUsers)
+            if (u.getUsername().equals(userName))
+                throw new LoginException(String.format("'%s' is already logged in to the game.", userName));
         loggedInUsers.add(user);
         logger.info("{} has logged in to the system.",userName);
     }
@@ -111,6 +111,9 @@ public class GameCenter {
         Player playerInGame=(Player)user.getGamePlayerMappings().get(game);
         if(playerInGame==null)
             throw new GameException(String.format("User '%s' is not currently playing in game '%s",userName,gameName));
+        if(game.isActive()){
+            throw new GameException("Can't start a game, because it's already started.");
+        }
 
         game.startGame(playerInGame);
     }
@@ -174,7 +177,7 @@ public class GameCenter {
 
         return activeGames.stream()
                 .filter(game -> game.getLeague() == user.getCurrLeague() &&
-                        (game.realMoneyGame() || (!game.realMoneyGame() && game.isActive() && (game.getBuyInPolicy() <= user.getBalance()))) &&
+                        (game.realMoneyGame() || (!game.realMoneyGame() && game.canBeJoined() && (game.getBuyInPolicy() <= user.getBalance()))) &&
                         game.getPlayers().size() < game.getMaximalAmountOfPlayers() &&
                         !user.getGamePlayerMappings().containsKey(game))
                 .collect(Collectors.toList());
@@ -232,8 +235,8 @@ public class GameCenter {
             throw new GameIsFullException("Can't join game as player because it's full.");
         else if(!game.realMoneyGame() && (userBalance < buyInPolicy))
             throw new NoBalanceForBuyInException(String.format("Buy in is %d, but user's balance is %d;",buyInPolicy,userBalance));
-        else if(!game.isActive()){
-            throw new GameException("Can't join game as player because tournament game is in progress");
+        else if(game.isActive()){
+            throw new GameException("Can't join game as player because there is a round in progress, please try again in several minutes.");
         }
 
         game.joinGameAsPlayer(user);

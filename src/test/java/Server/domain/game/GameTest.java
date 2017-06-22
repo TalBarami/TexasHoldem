@@ -253,12 +253,12 @@ public class GameTest {
     }
 
     @Test
-    public void isActive() throws Exception {
+    public void canBeJoined() throws Exception {
         User user1=mock(User.class);
         Game game=new Game(realMoneyGameSettings,user1,null);
-        assertTrue(game.isActive());
+        assertTrue(game.canBeJoined());
 
         game=new Game(tournamentGameSettings,user1,null);
-        assertTrue(game.isActive());
+        assertTrue(game.canBeJoined());
     }
 }

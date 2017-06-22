@@ -167,11 +167,11 @@ public class GamePlayerUserLeagueTest {
     }
 
     @Test
-    public void isActive() throws Exception {
+    public void canBeJoined() throws Exception {
         Game game=new Game(realMoneyGameSettings,testUser1,leagueManager);
-        assertTrue(game.isActive());
+        assertTrue(game.canBeJoined());
 
         game=new Game(tournamentGameSettings,testUser1,leagueManager);
-        assertTrue(game.isActive());
+        assertTrue(game.canBeJoined());
     }
 }

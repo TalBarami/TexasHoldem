@@ -16,7 +16,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Game {
@@ -66,32 +68,46 @@ public class Game {
     }
 
     public void startGame(Player initiator) throws GameException {
+        if(!canPlayerContinue(initiator)){
+            throw new GameException("You can't start a new round, because you've lost your chips\\money.\nYou'll be joined now as a spectator.");
+        }
+
         if (!canStart())
             throw new GameException(String.format("Can't start round, minimal amount for a new round is %d, but currently there are only %d players.",
                     getMinimalAmountOfPlayer(), players.size()));
 
-        addGameEvent(initiator, GameActions.NEWROUND);
+        filterNoChipsPlayersOrZeroBalance();
 
+        if(isTournamentAndEnded())
+            throw new GameException("Can't start a new round, because tournament has ended. \nWait for new players.");
+
+        if(isCashAndLast())
+            throw new GameException("Can't start a new round, because you are the only one in the table.\nWait for new players.");
+
+        addGameEvent(initiator, GameActions.NEWROUND);
         if (realMoneyGame()) {
             logger.info("A new money round in game '{}' has started.", getName());
-            handleNewRound();
+            handleNewRound(initiator.getUser().getUsername());
         } else { //tournament
             setIsActive(false);
             numPlayersStarted=players.size();
             logger.info("A new tournament round in game '{}' has started.", getName());
-            handleNewRound();
+            handleNewRound(initiator.getUser().getUsername());
         }
-
-        // Send notification about the action
-        NotificationService.getInstance().sendGameUpdateNotification(GameActions.NEWROUND, initiator.getUser().getUsername(),this);
     }
 
-    private void handleNewRound(){
+    private void handleNewRound(String initiator){
         initPlayersBeforeStartNewRound();
+        if(dealerIndex == players.size())
+            dealerIndex=0;
         Round rnd=new Round(players,settings,dealerIndex);
         rnd.setSpectatorList(this.spectators);
         dealerIndex=(dealerIndex+1)%players.size();
         rounds.add(rnd);
+
+        // Send notification about the action
+        NotificationService.getInstance().sendGameUpdateNotification(GameActions.NEWROUND, initiator,this);
+
         rnd.startRound();
     }
 
@@ -187,6 +203,32 @@ public class Game {
         }
     }
 
+    private void filterNoChipsPlayersOrZeroBalance(){
+        Iterator<Player> it = players.iterator();
+        while (it.hasNext()) {
+            Player p = it.next();
+            if (!canPlayerContinue(p)) {
+                it.remove();
+                logger.info("'{}' has left the round, because his chips amount is 0 or balance is 0, now he is a spectator in the room .", p.getUser().getUsername());
+
+                if (isTournamentAndEnded()) {
+                    logger.info("'{} has won the tournament in game {}.", players.get(0).getUser().getUsername(), getName());
+                    handleEndTournament();
+                }
+                leagueManager.updateUserLeague(p.getUser());
+                addGameEvent(p, GameActions.EXIT);
+                // Send notification about the action
+                NotificationService.getInstance().sendGameUpdateNotification(GameActions.EXIT, p.getUser().getUsername(), this);
+
+                joinGameAsSpectator(p.getUser());
+            }
+        }
+    }
+
+    private boolean canPlayerContinue(Player p){
+        return !(p.getChipsAmount() == 0 || (realMoneyGame() && p.getUser().getBalance() == 0));
+    }
+
     public boolean realMoneyGame(){
         return !settings.tournamentMode();
     }
@@ -197,6 +239,18 @@ public class Game {
     }
 
     public boolean isActive(){
+        /*if(rounds.isEmpty())
+            return true;
+        return (!realMoneyGame() && isActive && rounds.get(rounds.size()-1).isRoundActive()) ||
+                (realMoneyGame() && rounds.get(rounds.size()-1).isRoundActive());*/
+        if(rounds.isEmpty())
+            return false;
+        if(realMoneyGame())
+            return rounds.get(rounds.size()-1).isRoundActive();
+        return !canBeJoined() && rounds.get(rounds.size()-1).isRoundActive();
+    }
+
+    public boolean canBeJoined(){
         return isActive;
     }
 
@@ -261,9 +315,21 @@ public class Game {
     }
 
     private boolean canStart(){
-        if(!realMoneyGame() && (numPlayersStarted>0 && numPlayersStarted<getMinimalAmountOfPlayer()))
-            return true;
-        return players.size()>=getMinimalAmountOfPlayer();
+        if(realMoneyGame()){
+            return players.size() >= getMinimalAmountOfPlayer();
+        }
+        else{
+            if(canBeJoined())
+                return players.size() >= getMinimalAmountOfPlayer();
+            else{
+                return numPlayersStarted>0 && numPlayersStarted<getMinimalAmountOfPlayer();
+            }
+        }
+        /*if(!realMoneyGame() && (numPlayersStarted>0 && numPlayersStarted<getMinimalAmountOfPlayer()))
+            return true;*/
+        /*if(!realMoneyGame() && !isActive())
+            return numPlayersStarted>0 && numPlayersStarted<getMinimalAmountOfPlayer();
+        return players.size()>=getMinimalAmountOfPlayer();*/
     }
 
     private void resetDealerIndex(){
@@ -272,7 +338,15 @@ public class Game {
 
     private boolean isTournamentAndEnded(){
         // amount of players in the room is 1 and he won the whole 'pot'.
-        return (!realMoneyGame() && (players.size() == 1));
+        return checkEndCase(false);
+    }
+
+    private boolean isCashAndLast(){
+        return checkEndCase(true);
+    }
+
+    private boolean checkEndCase(boolean realMoney){
+        return (realMoneyGame() == realMoney && (players.size() == 1));
     }
 
     public void addGameEvent(Participant initiator, GameActions eventAction){
