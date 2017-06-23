@@ -226,9 +226,9 @@ public class MainMenu extends JFrame {
             logger.info("Games in table: {}", games.toString());
             int selectedIndex = gamesTable.getSelectedRow();
             logger.info("Selected row: {}, Game: {}", selectedIndex, games.get(selectedIndex));
-            joinSelectedGameButton.setEnabled(true); // FIXME: !isRunning() or available(myself) or something.
+            joinSelectedGameButton.setEnabled(true);
             spectateSelectedGameButton.setEnabled(games.get(selectedIndex).isSpectateValid());
-            replaySelectedGameButton.setEnabled(true); // FIXME: !archived
+            replaySelectedGameButton.setEnabled(games.get(selectedIndex).isArchived());
         }
     }
 

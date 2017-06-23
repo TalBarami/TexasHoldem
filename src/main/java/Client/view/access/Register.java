@@ -6,10 +6,13 @@ import Client.domain.SessionHandler;
 import Client.ClientUtils;
 import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
 import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
+import net.sourceforge.jdatepicker.impl.UtilCalendarModel;
 import net.sourceforge.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
+import java.util.Calendar;
+import java.util.Date;
 
 public class Register {
     private Welcome ancestor;
@@ -49,7 +52,7 @@ public class Register {
 
     private void onOK() {
         try {
-            SessionHandler.getInstance().register(text_name.getText(), new String(text_password.getPassword()), text_email.getText(), datePicker_birthday.getJFormattedTextField().getText(), text_picture.getText());
+            SessionHandler.getInstance().register(text_name.getText(), new String(text_password.getPassword()), text_email.getText(), (Calendar) datePicker_birthday.getModel().getValue(), text_picture.getText());
             ancestor.showLogin();
         } catch (InvalidArgumentException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -65,7 +68,7 @@ public class Register {
     }
 
     private void createUIComponents() {
-        UtilDateModel model = new UtilDateModel();
+        UtilCalendarModel model = new UtilCalendarModel();
         JDatePanelImpl datePanel = new JDatePanelImpl(model);
         datePicker_birthday = new JDatePickerImpl(datePanel);
     }

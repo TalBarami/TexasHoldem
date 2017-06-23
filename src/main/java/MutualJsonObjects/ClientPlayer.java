@@ -52,4 +52,14 @@ public class ClientPlayer {
     public void setLastBetSinceCardOpen(int lastBetSinceCardOpen) {
         this.lastBetSinceCardOpen = lastBetSinceCardOpen;
     }
+
+    @Override
+    public String toString() {
+        return "ClientPlayer{" +
+                "playerName='" + playerName + '\'' +
+                ", playerCards=" + playerCards +
+                ", chipAmount=" + chipAmount +
+                ", lastBetSinceCardOpen=" + lastBetSinceCardOpen +
+                '}';
+    }
 }

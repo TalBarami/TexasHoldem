@@ -161,6 +161,7 @@ public class GameHandler {
         gameDetails = gameUpdateNotification.getGameDetails();
         addNotificationsMessages(gameUpdateNotification);
         gameUpdateCallbacks.forEach(c -> c.execute(gameUpdateNotification));
+        logger.info("Successfully finished executing {} game callbacks.", gameUpdateCallbacks.size());
     }
 
     public void addGameUpdateCallback(GameUpdateCallback callback){
@@ -171,6 +172,7 @@ public class GameHandler {
         logger.info("Received round update notification: {}", roundUpdateNotification.toString());
         addNotificationsMessages(roundUpdateNotification);
         roundUpdateCallbacks.forEach(c -> c.execute(roundUpdateNotification));
+        logger.info("Successfully finished executing {} round callbacks.", roundUpdateCallbacks.size());
     }
 
     public void addRoundUpdateCallback(RoundUpdateCallback callback){
@@ -180,6 +182,7 @@ public class GameHandler {
     private void updateChat(ChatNotification message){
         logger.info("Received chat update notification: {}", message.toString());
         chatUpdateCallbacks.forEach(c -> c.execute(message));
+        logger.info("Successfully finished executing {} chat callbacks.", chatUpdateCallbacks.size());
     }
 
     public void addChatUpdateCallback(ChatUpdateCallback callback){
@@ -189,6 +192,7 @@ public class GameHandler {
     private void updateGameMoves(List<Move> possibleMoves){
         logger.info("Received moves update notification: {}", possibleMoves.toString());
         moveUpdateCallbacks.forEach(c -> c.execute(possibleMoves));
+        logger.info("Successfully finished executing {} move callbacks.", moveUpdateCallbacks.size());
     }
 
     public void addMoveUpdateCallback(MoveUpdateCallback callback){

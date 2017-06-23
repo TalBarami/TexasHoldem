@@ -153,13 +153,13 @@ public class Game extends JFrame{
     }
 
     private void generateUserInformation(ClientUserProfile user){
-        logger.info("Adding user information.");
+        logger.info("Updating user information on header: {}.", user);
         usernameLabel.setText("Name: " + user.getUsername());
         cashLabel.setText("Balance: " + String.valueOf(user.getBalance()));
     }
 
     private void updatePlayersInformation(List<ClientPlayer> players, String currentPlayerName){
-        logger.info("Updating players information.");
+        logger.info("Updating players information on table. Current player: {}, players: {}.", currentPlayerName, players);
         seats.forEach(Container::removeAll);
         chatComboBox.removeAllItems();
 
@@ -190,6 +190,7 @@ public class Game extends JFrame{
     }
 
     private void notifyPlayers(){
+        logger.info("Attempting to notify players of the new event.");
         eventsPanel.removeAll();
         for(String message : gameHandler.getNotificationMessages()){
             eventsPanel.add(new JLabel(message));
@@ -200,6 +201,7 @@ public class Game extends JFrame{
 
 
     private void updateTable(RoundUpdateNotification roundUpdateNotification){
+        logger.info("Updating table: {}", roundUpdateNotification);
         cardsPanel.removeAll();
         potLabel.setText("Pot size: " + String.valueOf(roundUpdateNotification.getCurrentPotSize()));
         List<ClientCard> tableCards = roundUpdateNotification.getCurrentOpenedCards();
@@ -212,6 +214,7 @@ public class Game extends JFrame{
     }
 
     private void reconfigureRaiseButton(RoundUpdateNotification roundUpdateNotification){
+        logger.info("Determining raise button values: {}", roundUpdateNotification);
         int maxBet = roundUpdateNotification.getCurrentPlayers().stream()
                 .map(ClientPlayer::getLastBetSinceCardOpen)
                 .max(Integer::compareTo)
@@ -323,9 +326,7 @@ public class Game extends JFrame{
 
     private void reconfigureStartButton(List<ClientPlayer> players, boolean isGameRunning){
         boolean isClientPlaying = isClientPlaying(players);
-        boolean hasEnoughPlayers =  gameHandler.getGameDetails().getMinimumPlayersAmount() <= players.size() &&
-                players.size() <= gameHandler.getGameDetails().getMaximumPlayersAmount();
-        logger.info("Client is player: {}, Game running: {}, Game has enough players: {}", isClientPlaying, isGameRunning, hasEnoughPlayers);
-        startGameButton.setEnabled(isClientPlaying && !isGameRunning && hasEnoughPlayers);
+        logger.info("Configuring start button: client is player: {}, Game running: {}", isClientPlaying, isGameRunning);
+        startGameButton.setEnabled(isClientPlaying && !isGameRunning);
     }
 }

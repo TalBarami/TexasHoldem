@@ -19,6 +19,8 @@ import org.springframework.messaging.simp.stomp.StompSession;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -58,10 +60,8 @@ public class SessionHandler {
         return ipAddress;
     }
 
-    public void register(String username, String password, String email, String birthday, String localImagePath) throws InvalidArgumentException {
-        verifyStrings(username, password, email, birthday, localImagePath);
-        LocalDate date = LocalDate.parse(birthday);
-        ClientUserProfile profile = new ClientUserProfile(username, password, email, date.getDayOfMonth(), date.getMonthValue(), date.getYear(), -1, -1, -1, -1);
+    public void register(String username, String password, String email, Calendar birthday, String localImagePath) throws InvalidArgumentException {
+        ClientUserProfile profile = new ClientUserProfile(username, password, email, birthday.get(Calendar.DAY_OF_MONTH) +1, birthday.get(Calendar.MONTH), birthday.get(Calendar.YEAR), -1, -1, -1, -1);
         logger.info("Registering: {}", profile);
         userRequestHandler.requestUserProfileRegistration(profile);
 
@@ -120,15 +120,11 @@ public class SessionHandler {
         return user;
     }
 
-    void verifyStrings(String... strings) throws InvalidArgumentException {
-        if(SystemUtils.hasNullOrEmptyOrSpecialChars(strings))
-            throw new InvalidArgumentException("Null/Empty fields or invalid characters are not allowed.");
-    }
-
     public void updateUserDetails(ClientUserProfile profile){
         logger.info("Received user update callback. new profile: {}", profile);
         user = profile;
-        updateCallbacks.parallelStream().forEach(c -> c.execute(profile));
+        updateCallbacks.forEach(c -> c.execute(profile));
+        logger.info("Successfully finished executing {} user callbacks.", updateCallbacks.size());
     }
 
     public void addUpdateCallback(UserUpdateCallback callback){

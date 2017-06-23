@@ -23,6 +23,9 @@ public class Address extends JFrame {
         getRootPane().setDefaultButton(enterButton);
 
         assignActionListeners();
+
+        // FIXME: Remove before submission!
+        IPAddressTextField.setText("localhost:8080");
     }
 
     private void init(){

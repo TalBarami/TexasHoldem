@@ -5,6 +5,8 @@ import Client.view.system.MainMenu;
 import MutualJsonObjects.ClientGameEvent;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -59,6 +61,10 @@ public class Replay extends JFrame{
     }
 
     private void addGameEvents(List<ClientGameEvent> events){
+        replayPanel.setLayout(new BoxLayout(replayPanel, BoxLayout.Y_AXIS));
+        replayPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        replayPanel.setBackground(Color.lightGray);
+
         List<String> gameLog = events.stream().map(event -> {
             switch (event.getAction()){
                 case CHECK:
