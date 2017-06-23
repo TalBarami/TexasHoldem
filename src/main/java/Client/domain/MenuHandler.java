@@ -35,7 +35,7 @@ public class MenuHandler {
                            int minPlayerAmount, int maxPlayerAmount, boolean specAccept) throws InvalidArgumentException, EntityDoesNotExistsException, NoBalanceForBuyInException, ArgumentNotInBoundsException {
         ClientGameDetails gameDetails = new ClientGameDetails(SessionHandler.getInstance().user().getUsername(),
                 gameName, gamePolicy.getPolicy(), policyLimit, minBet, buyInPolicy,
-                chipPolicy, minPlayerAmount, maxPlayerAmount, specAccept, new ArrayList<>(), false);
+                chipPolicy, minPlayerAmount, maxPlayerAmount, specAccept, new ArrayList<>(), false, false);
         gameRequestHandler.requestGameCreation(gameDetails);
     }
 

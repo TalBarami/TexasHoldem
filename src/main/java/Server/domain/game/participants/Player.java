@@ -12,9 +12,10 @@ import java.util.*;
 /**
  * Created by Hod and Rotem on 05/04/2017.
  */
+
+
 public class Player extends Participant{
     private static Logger logger = LoggerFactory.getLogger(Player.class);
-
     private Set<Card> cards;
     private int chipsAmount;
     private int lastBetSinceCardOpen;
@@ -126,5 +127,17 @@ public class Player extends Participant{
 
     public void clearCards(){
         cards.clear();
+    }
+
+    public void setCards(Set<Card> cards) {
+        this.cards = cards;
+    }
+
+    public int getChipPolicy() {
+        return chipPolicy;
+    }
+
+    public void setChipPolicy(int chipPolicy) {
+        this.chipPolicy = chipPolicy;
     }
 }

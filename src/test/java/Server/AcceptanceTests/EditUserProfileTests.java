@@ -1,5 +1,7 @@
 package Server.AcceptanceTests;
 
+import Server.data.users.Users;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,6 +16,12 @@ public class EditUserProfileTests extends ProjectTest {
     public void setUp()
     {
         super.setUp();
+    }
+
+    @After
+    public void tearDown() {
+        Users.getUsersInGame().clear();
+        super.clearAllUsersFromDB();
     }
 
     @Test

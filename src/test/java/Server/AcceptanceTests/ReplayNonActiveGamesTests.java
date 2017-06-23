@@ -1,9 +1,17 @@
 
 package Server.AcceptanceTests;
 
+import Server.data.Hybernate.HibernateUtil;
+import Server.data.users.Users;
+import Server.domain.events.SystemEvent;
 import Server.domain.events.gameFlowEvents.GameEvent;
+import Server.domain.events.gameFlowEvents.MoveEvent;
 import Server.domain.game.GameActions;
 import Enumerations.GamePolicy;
+import Server.domain.user.User;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,6 +21,7 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
 
 
 public class ReplayNonActiveGamesTests extends ProjectTest {
@@ -27,11 +36,14 @@ public class ReplayNonActiveGamesTests extends ProjectTest {
     }
 
     @After
-    public void teardown(){
+    public void tearDown() {
         logoutUsers();
         deleteUsers();
+        Users.getUsersInGame().clear();
+        super.clearAllEventsFromDB();
+        super.clearAllUsersFromDB();
     }
-
+    
     @Test
     public void testNoReplayForActiveGames()
     {
@@ -39,6 +51,7 @@ public class ReplayNonActiveGamesTests extends ProjectTest {
         usersJoinsGames();
         List<GameEvent> ans=this.replaynonactivegame("achiadg-poker-game");
         assertNull(ans);
+        leaveGames();
     }
 
     @Test
@@ -72,13 +85,13 @@ public class ReplayNonActiveGamesTests extends ProjectTest {
         usersJoinsGames();
         leaveGames();
         List<GameEvent> ans=this.replaynonactivegame("achiadg-poker-game");
-        assertTrue(ans.get(0).getEventInitiator().getUser().getUsername().equals("achiadg"));
-        assertTrue(ans.get(1).getEventInitiator().getUser().getUsername().equals("hodbub"));
-        assertTrue(ans.get(2).getEventInitiator().getUser().getUsername().equals("rotemw"));
-        assertTrue(ans.get(3).getEventInitiator().getUser().getUsername().equals("achiadg"));
-        assertTrue(ans.get(4).getEventInitiator().getUser().getUsername().equals("rotemw"));
-        assertTrue(ans.get(5).getEventInitiator().getUser().getUsername().equals("hodbub"));
-        assertTrue(ans.get(6).getEventInitiator().getUser().getUsername().equals("hodbub"));
+        assertTrue(ans.get(0).getCreatorUserName().equals("achiadg"));
+        assertTrue(ans.get(1).getCreatorUserName().equals("hodbub"));
+        assertTrue(ans.get(2).getCreatorUserName().equals("rotemw"));
+        assertTrue(ans.get(3).getCreatorUserName().equals("achiadg"));
+        assertTrue(ans.get(4).getCreatorUserName().equals("rotemw"));
+        assertTrue(ans.get(5).getCreatorUserName().equals("hodbub"));
+        assertTrue(ans.get(6).getCreatorUserName().equals("hodbub"));
     }
 
     @Test
@@ -131,26 +144,26 @@ public class ReplayNonActiveGamesTests extends ProjectTest {
         String gameName = playTournamentAllIn();
         List<GameEvent> ans=this.replaynonactivegame(gameName);
         int x=5;
-        assertTrue(ans.get(0).getEventInitiator().getUser().getUsername().equals("achiadg"));
-        assertTrue(ans.get(1).getEventInitiator().getUser().getUsername().equals("hodbub"));
-        assertTrue(ans.get(2).getEventInitiator().getUser().getUsername().equals("rotemw"));
-        assertTrue(ans.get(3).getEventInitiator().getUser().getUsername().equals("achiadg"));
-        assertTrue(ans.get(4).getEventInitiator().getUser().getUsername().equals("achiadg"));
-        assertTrue(ans.get(5).getEventInitiator().getUser().getUsername().equals("hodbub"));
-        assertTrue(ans.get(6).getEventInitiator().getUser().getUsername().equals("rotemw"));
-        assertTrue(ans.get(7).getEventInitiator().getUser().getUsername().equals("hodbub"));
-        assertTrue(ans.get(8).getEventInitiator().getUser().getUsername().equals("rotemw"));
-        assertTrue(ans.get(9).getEventInitiator().getUser().getUsername().equals("achiadg"));
-        assertTrue(ans.get(10).getEventInitiator().getUser().getUsername().equals("hodbub"));
-        assertTrue(ans.get(11).getEventInitiator().getUser().getUsername().equals("rotemw"));
-        assertTrue(ans.get(12).getEventInitiator().getUser().getUsername().equals("achiadg"));
-        assertTrue(ans.get(13).getEventInitiator().getUser().getUsername().equals("hodbub"));
-        assertTrue(ans.get(14).getEventInitiator().getUser().getUsername().equals("rotemw"));
-        assertTrue(ans.get(15).getEventInitiator().getUser().getUsername().equals("achiadg"));
-        assertTrue(ans.get(16).getEventInitiator().getUser().getUsername().equals("achiadg"));
-        assertTrue(ans.get(17).getEventInitiator().getUser().getUsername().equals("rotemw"));
-        assertTrue(ans.get(18).getEventInitiator().getUser().getUsername().equals("hodbub"));
-        assertTrue(ans.get(19).getEventInitiator().getUser().getUsername().equals("hodbub"));
+        assertTrue(ans.get(0).getCreatorUserName().equals("achiadg"));
+        assertTrue(ans.get(1).getCreatorUserName().equals("hodbub"));
+        assertTrue(ans.get(2).getCreatorUserName().equals("rotemw"));
+        assertTrue(ans.get(3).getCreatorUserName().equals("achiadg"));
+        assertTrue(ans.get(4).getCreatorUserName().equals("achiadg"));
+        assertTrue(ans.get(5).getCreatorUserName().equals("hodbub"));
+        assertTrue(ans.get(6).getCreatorUserName().equals("rotemw"));
+        assertTrue(ans.get(7).getCreatorUserName().equals("hodbub"));
+        assertTrue(ans.get(8).getCreatorUserName().equals("rotemw"));
+        assertTrue(ans.get(9).getCreatorUserName().equals("achiadg"));
+        assertTrue(ans.get(10).getCreatorUserName().equals("hodbub"));
+        assertTrue(ans.get(11).getCreatorUserName().equals("rotemw"));
+        assertTrue(ans.get(12).getCreatorUserName().equals("achiadg"));
+        assertTrue(ans.get(13).getCreatorUserName().equals("hodbub"));
+        assertTrue(ans.get(14).getCreatorUserName().equals("rotemw"));
+        assertTrue(ans.get(15).getCreatorUserName().equals("achiadg"));
+        assertTrue(ans.get(16).getCreatorUserName().equals("achiadg"));
+        assertTrue(ans.get(17).getCreatorUserName().equals("rotemw"));
+        assertTrue(ans.get(18).getCreatorUserName().equals("hodbub"));
+        assertTrue(ans.get(19).getCreatorUserName().equals("hodbub"));
     }
 
     @Test
@@ -184,32 +197,49 @@ public class ReplayNonActiveGamesTests extends ProjectTest {
         assertThat(ans.get(19).getEventAction(),is(GameActions.CLOSED));
     }
 
+    @Test
+    public void testReplayAfterGameEnds()
+    {
 
+    }
 
     private String playTournamentAllIn(){
         /* FIRST TOURNAMENT ROUND */
         this.startgame("achiadg", "achiadg-poker-game");
+        realSleep(1000);
 
         this.playcall("achiadg", "achiadg-poker-game");
+        realSleep(1000);
         this.playcall("hodbub", "achiadg-poker-game");
+        realSleep(1000);
         this.playcheck("rotemw", "achiadg-poker-game");
+        realSleep(1000);
 
 
         /* FLOP */
         this.playraise("hodbub", "achiadg-poker-game",90);
+        realSleep(1000);
         this.playcall("rotemw", "achiadg-poker-game");
+        realSleep(1000);
         this.playcall("achiadg", "achiadg-poker-game");
+        realSleep(1000);
 
         /* RIVER */
         this.playcheck("hodbub", "achiadg-poker-game");
+        realSleep(1000);
         this.playcheck("rotemw", "achiadg-poker-game");
+        realSleep(1000);
         this.playcheck("achiadg", "achiadg-poker-game");
+        realSleep(1000);
 
 
         /* TURN */
         this.playcheck("hodbub", "achiadg-poker-game");
+        realSleep(1000);
         this.playcheck("rotemw", "achiadg-poker-game");
+        realSleep(1000);
         this.playcheck("achiadg", "achiadg-poker-game");
+        realSleep(1000);
 
         leaveGames();
 
@@ -255,16 +285,30 @@ public class ReplayNonActiveGamesTests extends ProjectTest {
     private void createGames()
     {
         this.createnewgame("achiadg","achiadg-poker-game",  GamePolicy.NOLIMIT , 100, 100, 10, 2, 9, true);
+        realSleep(1000);
     }
 
     public void leaveGames() {
         this.leavegame("achiadg", "YES", "achiadg-poker-game");
+        realSleep(1000);
         this.leavegame("rotemw" , "YES","achiadg-poker-game");
+        realSleep(1000);
         this.leavegame("hodbub","YES","achiadg-poker-game");
+        realSleep(1000);
     }
 
     private void usersJoinsGames() {
         this.joinexistinggame("hodbub" , "achiadg-poker-game",false);
+        realSleep(1000);
         this.joinexistinggame("rotemw" , "achiadg-poker-game",false);
+        realSleep(1000);
+    }
+
+    private void realSleep(int mili){
+        try {
+            Thread.sleep(mili);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

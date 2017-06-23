@@ -1,6 +1,7 @@
 package Server.IntegrationTests;
 
 import Enumerations.GamePolicy;
+import Server.data.users.Users;
 import Server.domain.events.gameFlowEvents.MoveEvent;
 import Server.domain.game.*;
 import Server.domain.game.card.Card;
@@ -9,7 +10,9 @@ import Server.domain.game.card.Suit;
 import Server.domain.game.participants.Player;
 import Server.domain.user.LeagueManager;
 import Server.domain.user.User;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.lang.reflect.Method;
@@ -23,15 +26,35 @@ import java.util.Set;
  * Created by hod on 12/05/2017.
  */
 public class RoundUserTest {
+    User user1, user2, user3, user4;
+    Users usersDb;
+
+    @Before
+    public void setUp() throws Exception {
+        user1 = new User("waldr", "1234", "waldr@post.bgu.ac.il", LocalDate.now(), null);
+        user2 = new User("hodbub", "1234", "hobdud@post.bgu.ac.il", LocalDate.now(), null);
+        user3 = new User("achiadg", "1234", "achiadg@post.bgu.ac.il", LocalDate.now(), null);
+        user4 = new User("ronenb", "1234", "ronenb@post.bgu.ac.il", LocalDate.now(), null);
+
+        usersDb = new Users();
+        usersDb.addUser(user1);
+        usersDb.addUser(user2);
+        usersDb.addUser(user3);
+        usersDb.addUser(user4);
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        usersDb.deleteUser(user1);
+        usersDb.deleteUser(user2);
+        usersDb.deleteUser(user3);
+        usersDb.deleteUser(user4);
+    }
 
     @Test
     public void round1_testPaySmallAndBigBlind() throws Exception {
         int smallBlindAmount = 5;
         int bigBlindAmount = 10;
-
-        User user1 = new User("waldr", "1234", "waldr@post.bgu.ac.il", LocalDate.now(), null);
-        User user2 = new User("hodbub", "1234", "hobdud@post.bgu.ac.il", LocalDate.now(), null);
-        User user3 = new User("achiadg", "1234", "achiadg@post.bgu.ac.il", LocalDate.now(), null);
 
         user1.deposit(100, true);
         user2.deposit(100, true);
@@ -60,11 +83,6 @@ public class RoundUserTest {
 
     @Test
     public void round1_testPreFlop_AllFold() throws Exception {
-        User user1 = new User("waldr", "1234", "waldr@post.bgu.ac.il", LocalDate.now(), null);
-        User user2 = new User("hodbub", "1234", "hobdud@post.bgu.ac.il", LocalDate.now(), null);
-        User user3 = new User("achiadg", "1234", "achiadg@post.bgu.ac.il", LocalDate.now(), null);
-        User user4 = new User("ronenb", "1234", "ronenb@post.bgu.ac.il", LocalDate.now(), null);
-
         user1.deposit(100, true);
         user2.deposit(100, true);
         user3.deposit(100, true);
@@ -73,7 +91,7 @@ public class RoundUserTest {
         Player player1 = new Player(user1, 0, 0);
         Player player2 = new Player(user2, 0, 0);
         Player player3 = new Player(user3, 0, 0);
-        Player player4 = new Player(user3, 0, 0);
+        Player player4 = new Player(user4, 0, 0);
 
         List<Player> playerList1 = new LinkedList<Player>();
         playerList1.add(player1);
@@ -85,9 +103,9 @@ public class RoundUserTest {
         Game game1 = new Game(settings1, user1, new LeagueManager());
         Round round1 = new Round(playerList1, settings1, 0);
 
-        MoveEvent me1 = new MoveEvent(player1, GameActions.FOLD, 0, game1.getName());
-        MoveEvent me2 = new MoveEvent(player2, GameActions.FOLD, 0, game1.getName());
-        MoveEvent me4 = new MoveEvent(player4, GameActions.FOLD, 0, game1.getName());
+        MoveEvent me1 = new MoveEvent(user1.getUsername(), GameActions.FOLD, 0, game1.getName());
+        MoveEvent me2 = new MoveEvent(user2.getUsername(), GameActions.FOLD, 0, game1.getName());
+        MoveEvent me4 = new MoveEvent(user4.getUsername(), GameActions.FOLD, 0, game1.getName());
 
         round1.setRoundActive(true);
         round1.setCurrentState(RoundState.PREFLOP);
@@ -109,11 +127,6 @@ public class RoundUserTest {
 
     @Test
     public void round1_testPreFlop_AllCheck() throws Exception {
-        User user1 = new User("waldr", "1234", "waldr@post.bgu.ac.il", LocalDate.now(), null);
-        User user2 = new User("hodbub", "1234", "hobdud@post.bgu.ac.il", LocalDate.now(), null);
-        User user3 = new User("achiadg", "1234", "achiadg@post.bgu.ac.il", LocalDate.now(), null);
-        User user4 = new User("ronenb", "1234", "ronenb@post.bgu.ac.il", LocalDate.now(), null);
-
         user1.deposit(100, true);
         user2.deposit(100, true);
         user3.deposit(100, true);
@@ -122,7 +135,7 @@ public class RoundUserTest {
         Player player1 = new Player(user1, 0, 0);
         Player player2 = new Player(user2, 0, 0);
         Player player3 = new Player(user3, 0, 0);
-        Player player4 = new Player(user3, 0, 0);
+        Player player4 = new Player(user4, 0, 0);
 
         List<Player> playerList1 = new LinkedList<Player>();
         playerList1.add(player1);
@@ -134,10 +147,10 @@ public class RoundUserTest {
         Game game1 = new Game(settings1, user1, new LeagueManager());
         Round round1 = new Round(playerList1, settings1, 0);
 
-        MoveEvent me1 = new MoveEvent(player1, GameActions.CHECK, 0, game1.getName());
-        MoveEvent me2 = new MoveEvent(player2, GameActions.CHECK, 0, game1.getName());
-        MoveEvent me3 = new MoveEvent(player3, GameActions.CHECK, 0, game1.getName());
-        MoveEvent me4 = new MoveEvent(player4, GameActions.CHECK, 0, game1.getName());
+        MoveEvent me1 = new MoveEvent(user1.getUsername(), GameActions.CHECK, 0, game1.getName());
+        MoveEvent me2 = new MoveEvent(user2.getUsername(), GameActions.CHECK, 0, game1.getName());
+        MoveEvent me3 = new MoveEvent(user3.getUsername(), GameActions.CHECK, 0, game1.getName());
+        MoveEvent me4 = new MoveEvent(user4.getUsername(), GameActions.CHECK, 0, game1.getName());
 
         round1.setRoundActive(true);
         round1.setCurrentState(RoundState.PREFLOP);
@@ -161,11 +174,6 @@ public class RoundUserTest {
 
     @Test
     public void round1_testPreFlop_MixOfActions() throws Exception {
-        User user1 = new User("waldr", "1234", "waldr@post.bgu.ac.il", LocalDate.now(), null);
-        User user2 = new User("hodbub", "1234", "hobdud@post.bgu.ac.il", LocalDate.now(), null);
-        User user3 = new User("achiadg", "1234", "achiadg@post.bgu.ac.il", LocalDate.now(), null);
-        User user4 = new User("ronenb", "1234", "ronenb@post.bgu.ac.il", LocalDate.now(), null);
-
         user1.deposit(100, true);
         user2.deposit(100, true);
         user3.deposit(100, true);
@@ -190,12 +198,12 @@ public class RoundUserTest {
         round1.setCurrentState(RoundState.TURN);
 
         // Player 4 is the first player
-        MoveEvent me4 = new MoveEvent(player4, GameActions.CALL, 0, game1.getName());
-        MoveEvent me1 = new MoveEvent(player1, GameActions.FOLD, 0, game1.getName());
-        MoveEvent me2 = new MoveEvent(player2, GameActions.CALL, 0, game1.getName());
-        MoveEvent me3 = new MoveEvent(player3, GameActions.RAISE, 20, game1.getName());
-        MoveEvent me41 = new MoveEvent(player4, GameActions.CALL, 0, game1.getName());
-        MoveEvent me21 = new MoveEvent(player2, GameActions.FOLD, 0, game1.getName());
+        MoveEvent me4 = new MoveEvent(player4.getUser().getUsername(), GameActions.CALL, 0, game1.getName());
+        MoveEvent me1 = new MoveEvent(player1.getUser().getUsername(), GameActions.FOLD, 0, game1.getName());
+        MoveEvent me2 = new MoveEvent(player2.getUser().getUsername(), GameActions.CALL, 0, game1.getName());
+        MoveEvent me3 = new MoveEvent(player3.getUser().getUsername(), GameActions.RAISE, 20, game1.getName());
+        MoveEvent me41 = new MoveEvent(player4.getUser().getUsername(), GameActions.CALL, 0, game1.getName());
+        MoveEvent me21 = new MoveEvent(player2.getUser().getUsername(), GameActions.FOLD, 0, game1.getName());
 
         int oldChipsAmount4 = player4.getChipsAmount();
         int oldChipsAmount1 = player1.getChipsAmount();
@@ -222,9 +230,6 @@ public class RoundUserTest {
 
     @Test
     public void round1_testCalculateWinner_oneWinner() throws Exception {
-        User user1 = new User("waldr", "1234", "waldr@post.bgu.ac.il", LocalDate.now(), null);
-        User user2 = new User("hodbub", "1234", "hobdud@post.bgu.ac.il", LocalDate.now(), null);
-
         Player player1 = new Player(user1, 0, 0);
         Player player2 = new Player(user2, 0, 0);
 
@@ -273,9 +278,6 @@ public class RoundUserTest {
 
     @Test
     public void round1_testCalculateWinner_twoWinnersSplitPot() throws Exception {
-        User user1 = new User("waldr", "1234", "waldr@post.bgu.ac.il", LocalDate.now(), null);
-        User user2 = new User("hodbub", "1234", "hobdud@post.bgu.ac.il", LocalDate.now(), null);
-
         Player player1 = new Player(user1, 0, 0);
         Player player2 = new Player(user2, 0, 0);
 
@@ -324,10 +326,6 @@ public class RoundUserTest {
 
     @Test
     public void round1_testCalculateWinner_twoWinnersDifferentAmount() throws Exception {
-        User user1 = new User("waldr", "1234", "waldr@post.bgu.ac.il", LocalDate.now(), null);
-        User user2 = new User("hodbub", "1234", "hobdud@post.bgu.ac.il", LocalDate.now(), null);
-        User user3 = new User("achiadg", "1234", "achiadg@post.bgu.ac.il", LocalDate.now(), null);
-
         user1.deposit(100, true);
         user2.deposit(100, true);
         user3.deposit(100, true);

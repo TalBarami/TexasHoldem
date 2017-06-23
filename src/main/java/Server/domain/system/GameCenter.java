@@ -6,6 +6,8 @@ import Server.data.games.IGames;
 import Server.data.users.IUsers;
 import Server.data.users.IUsersForDistributionAlgorithm;
 import Server.data.users.Users;
+import Server.domain.events.gameFlowEvents.GameEvent;
+import Server.domain.events.gameFlowEvents.MoveEvent;
 import Server.domain.game.Game;
 import Server.domain.game.GameActions;
 import Enumerations.GamePolicy;
@@ -77,19 +79,19 @@ public class GameCenter {
             throw new InvalidArgumentException(String.format("'%s' isn't logged in, so can't log out.",userName));
 
         //remove from all playing rooms
-        loggedInUsers.forEach(user -> {
+        for(User user: loggedInUsers){
             if(user.getUsername().equals(userName)) {
-                Map<Game, Participant> mappings = user.getGamePlayerMappings();
-                Iterator<Map.Entry<Game, Participant>> it = mappings.entrySet().iterator();
+                Map<String, Participant> mappings = user.getGameMapping();
+                Iterator<Map.Entry<String, Participant>> it = mappings.entrySet().iterator();
                 while (it.hasNext()) {
-                    Map.Entry<Game, Participant> keyValue = it.next();
-                    Game g = keyValue.getKey();
-                    Participant p = mappings.get(g);
-                    p.removeFromGame(g);
+                    Map.Entry<String, Participant> keyValue = it.next();
+                    String gameName = keyValue.getKey();
+                    Participant p = mappings.get(gameName);
+                    p.removeFromGame(gamesDb.getActiveGamesByName(gameName).get(0));
                     it.remove();
                 }
             }
-        });
+        }
         //remove from logged in user
         loggedInUsers=loggedInUsers.stream().filter(user -> !user.getUsername().equals(userName)).collect(Collectors.toList());
         logger.info("{} has logged out from the system, attempting to notify played games if needed.",userName);
@@ -108,7 +110,7 @@ public class GameCenter {
     public void startGame(String userName,String gameName) throws GameException {
         User user=getSpecificUserIfExist(userName);
         Game game= getSpecificGameIfExist(gameName);
-        Player playerInGame=(Player)user.getGamePlayerMappings().get(game);
+        Player playerInGame=(Player)user.getGameMapping().get(game.getSettings().getName());
         if(playerInGame==null)
             throw new GameException(String.format("User '%s' is not currently playing in game '%s",userName,gameName));
         if(game.isActive()){
@@ -141,7 +143,7 @@ public class GameCenter {
         Game toJoin = getSpecificGameIfExist(gameName);
         User user = getSpecificUserIfExist(userName);
 
-        if(user.getGamePlayerMappings().containsKey(toJoin))
+        if(user.getGameMapping().containsKey(toJoin.getSettings().getName()))
             throw new GameException(String.format("User '%s' is already in game '%s'.", userName, gameName));
 
         if (asSpectator){
@@ -157,17 +159,17 @@ public class GameCenter {
         User user=getSpecificUserIfExist(userName);
         Game game= getSpecificGameIfExist(gameName);
 
-        if(!user.getGamePlayerMappings().containsKey(game))
+        if(!user.getGameMapping().containsKey(gameName))
             throw new GameException(String.format("User '%s' can't leave game '%s', since he is not playing inside.",userName,gameName));
 
-        Participant participant=user.getGamePlayerMappings().get(game);
+        Participant participant=user.getGameMapping().get(gameName);
         participant.removeFromGame(game);
-        user.getGamePlayerMappings().remove(game);
+        user.getGameMapping().remove(gameName);
 
         if(game.canBeArchived()){
+            game.addGameEvent(participant, GameActions.CLOSED);
             gamesDb.archiveGame(game); // todo : notify someway to spectators of the room that room is closed?
             logger.info("Game '{}' is archived, since all players left.",gameName);
-            game.addGameEvent(participant, GameActions.CLOSED);
         }
     }
 
@@ -179,7 +181,7 @@ public class GameCenter {
                 .filter(game -> game.getLeague() == user.getCurrLeague() &&
                         (game.realMoneyGame() || (!game.realMoneyGame() && game.canBeJoined() && (game.getBuyInPolicy() <= user.getBalance()))) &&
                         game.getPlayers().size() < game.getMaximalAmountOfPlayers() &&
-                        !user.getGamePlayerMappings().containsKey(game))
+                        !user.getGameMapping().containsKey(game.getSettings().getName()))
                 .collect(Collectors.toList());
     }
 
@@ -273,9 +275,22 @@ public class GameCenter {
     }
 
 
-    public List<Game> getArchivedGames(){
-        return gamesDb.getArchivedGames();
+    public List<String> getArchivedGames() throws EntityDoesNotExistsException {
+        List<String> gameNames = gamesDb.getArchivedGames();
+
+        if (gameNames.isEmpty())
+            throw new EntityDoesNotExistsException("No archived games available");
+
+        return gameNames;
     }
+
+    public List<GameEvent> getAllGameEvents(String gameName) {
+        return gamesDb.getAllGameEvents(gameName);
+    }
+
+//    public List<MoveEvent> getAllMoveEvents(String gameName) {
+//        return gamesDb.getAllMoveEvents(gameName);
+//    }
 
     public void redistributeUsersInLeagues(DistributionAlgorithm da) {
         leagueManager.redistributeUsersInLeagues(da);

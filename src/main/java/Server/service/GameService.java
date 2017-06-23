@@ -64,24 +64,24 @@ public class GameService {
         verifyStrings(username,gameName);
         Round currentRound = gameCenter.getGameByName(gameName).getLastRound();
         User user = gameCenter.getUser(username);
-        Optional<Player> optPlayer = currentRound.getActivePlayers().stream().filter(p -> p.getUser().equals(user)).findFirst();
-        optPlayer.ifPresent(player -> currentRound.playTurnOfPlayer(new MoveEvent(player, GameActions.CALL, 0, gameName)));
+        Optional<Player> optPlayer = currentRound.getActivePlayers().stream().filter(p -> p.getUser().getUsername().equals(user.getUsername())).findFirst();
+        optPlayer.ifPresent(player -> currentRound.playTurnOfPlayer(new MoveEvent(username, GameActions.CALL, 0, gameName)));
     }
 
     public void playCheck(String username, String gameName) throws InvalidArgumentException, EntityDoesNotExistsException {
         verifyStrings(username,gameName);
         Round currentRound = gameCenter.getGameByName(gameName).getLastRound();
         User user = gameCenter.getUser(username);
-        Optional<Player> optPlayer = currentRound.getActivePlayers().stream().filter(p -> p.getUser().equals(user)).findFirst();
-        optPlayer.ifPresent(player -> currentRound.playTurnOfPlayer(new MoveEvent(player, GameActions.CHECK, 0, gameName)));
+        Optional<Player> optPlayer = currentRound.getActivePlayers().stream().filter(p -> p.getUser().getUsername().equals(user.getUsername())).findFirst();
+        optPlayer.ifPresent(player -> currentRound.playTurnOfPlayer(new MoveEvent(username, GameActions.CHECK, 0, gameName)));
     }
 
     public void playFold(String username, String gameName) throws InvalidArgumentException, EntityDoesNotExistsException {
         verifyStrings(username,gameName);
         Round currentRound = gameCenter.getGameByName(gameName).getLastRound();
         User user = gameCenter.getUser(username);
-        Optional<Player> optPlayer = currentRound.getActivePlayers().stream().filter(p -> p.getUser().equals(user)).findFirst();
-        optPlayer.ifPresent(player -> currentRound.playTurnOfPlayer(new MoveEvent(player, GameActions.FOLD, 0, gameName)));
+        Optional<Player> optPlayer = currentRound.getActivePlayers().stream().filter(p -> p.getUser().getUsername().equals(user.getUsername())).findFirst();
+        optPlayer.ifPresent(player -> currentRound.playTurnOfPlayer(new MoveEvent(username, GameActions.FOLD, 0, gameName)));
     }
 
     public void playRaise(String username, String gameName, int amount) throws InvalidArgumentException, EntityDoesNotExistsException {
@@ -89,8 +89,8 @@ public class GameService {
         verifyPositiveNumbers(amount);
         Round currentRound = gameCenter.getGameByName(gameName).getLastRound();
         User user = gameCenter.getUser(username);
-        Optional<Player> optPlayer = currentRound.getActivePlayers().stream().filter(p -> p.getUser().equals(user)).findFirst();
-        optPlayer.ifPresent(player -> currentRound.playTurnOfPlayer(new MoveEvent(player, GameActions.RAISE, amount, gameName)));
+        Optional<Player> optPlayer = currentRound.getActivePlayers().stream().filter(p -> p.getUser().getUsername().equals(user.getUsername())).findFirst();
+        optPlayer.ifPresent(player -> currentRound.playTurnOfPlayer(new MoveEvent(username, GameActions.RAISE, amount, gameName)));
     }
 
     /*
@@ -115,13 +115,13 @@ public class GameService {
         allPlayersInGame.addAll(game.getPlayers());
 
         try { //check if he is a player
-            Player player = allPlayersInGame.stream().filter(p -> p.getUser().equals(user)).findFirst().get();
-            game.handleMessageFromPlayer(new MessageEvent(player, new Message(content), gameName));
+            Player player = allPlayersInGame.stream().filter(p -> p.getUser().getUsername().equals(user.getUsername())).findFirst().get();
+            game.handleMessageFromPlayer(new MessageEvent(username, new Message(content), gameName));
         }catch (NoSuchElementException e){
             List<Spectator> allSpectators = new ArrayList<>();
             allSpectators.addAll(game.getSpectators());
-            Spectator spectator = allSpectators.stream().filter(p -> p.getUser().equals(user)).findFirst().get();
-            game.handleMessageFromSpectator(new MessageEvent(spectator, new Message(content), gameName));
+            Spectator spectator = allSpectators.stream().filter(p -> p.getUser().getUsername().equals(user.getUsername())).findFirst().get();
+            game.handleMessageFromSpectator(new MessageEvent(username, new Message(content), gameName));
         }
     }
 
@@ -140,25 +140,24 @@ public class GameService {
         allPlayersInGame.addAll(game.getPlayers());
 
         try { //check the sender is a player
-            Player player = allPlayersInGame.stream().filter(p -> p.getUser().equals(user)).findFirst().get();
-            game.handleWhisperFromPlayer(new WhisperEvent(player, new Message(content), parToSendTo, gameName));
+            Player player = allPlayersInGame.stream().filter(p -> p.getUser().getUsername().equals(user.getUsername())).findFirst().get();
+            game.handleWhisperFromPlayer(new WhisperEvent(username, new Message(content), parToSendTo, gameName));
         }catch (NoSuchElementException e){
             List<Spectator> allSpectators = new ArrayList<>();
             allSpectators.addAll(game.getSpectators());
-            Spectator spectator = allSpectators.stream().filter(p -> p.getUser().equals(user)).findFirst().get();
-            game.handleWhisperFromSpectator(spectator, new WhisperEvent(spectator, new Message(content), parToSendTo, gameName));
+            Spectator spectator = allSpectators.stream().filter(p -> p.getUser().getUsername().equals(user.getUsername())).findFirst().get();
+            game.handleWhisperFromSpectator(spectator, new WhisperEvent(username, new Message(content), parToSendTo, gameName));
         }
     }
 
     public List<GameEvent> replayGame(String gameName) throws EntityDoesNotExistsException {
-        Game game = gameCenter.getArchivedGames().stream().filter(g -> g.getName().equals(gameName)).findFirst().orElse(null);
-        if(game==null)
+        List<GameEvent> gameEvents = gameCenter.getAllGameEvents(gameName);
+//        List<MoveEvent> moveEvents = gameCenter.getAllMoveEvents(gameName);
+
+        if (gameEvents.isEmpty())
             throw new EntityDoesNotExistsException(String.format("There is no archived game with the name '%s'.",gameName));
 
-        return Stream.concat(
-                    game.getGameEvents().stream(),
-                    game.getRounds().stream()
-                        .flatMap(r -> r.getEvents().stream()))
+        return gameEvents.stream()
                 .sorted(Comparator.comparing(GameEvent::getEventTime))
                 .collect(Collectors.toList());
     }

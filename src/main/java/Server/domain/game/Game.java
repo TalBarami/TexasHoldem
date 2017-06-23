@@ -22,10 +22,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Game {
-
     private static Logger logger = LoggerFactory.getLogger(Game.class);
+    private int gameId;
     private GameSettings settings;
-    private int id;
+    private boolean game_over;
     private List<Player> players;
     private List<Round> rounds;
     private List<Spectator> spectators;
@@ -34,6 +34,7 @@ public class Game {
     private boolean isActive;
     private List<GameEvent> gameEvents;
     private int numPlayersStarted;
+    private boolean canBeArchived;
 
     public Game(GameSettings settings, User creator, LeagueManager leagueManager){
         this.settings=settings;
@@ -45,6 +46,7 @@ public class Game {
         this.leagueManager = leagueManager;
         this.isActive=true;
         this.numPlayersStarted=0;
+        this.game_over = false;
         //Automatically the creator is added to the room.
         logger.info("A new game '{}' created by the user {}.",getName(),creator.getUsername());
         addPlayer(creator);
@@ -245,10 +247,6 @@ public class Game {
         return isActive;
     }
 
-    public void setGameId(int gameId){
-        this.id=gameId;
-    }
-
     public List<Player> getPlayers() {
         return players;
     }
@@ -293,10 +291,6 @@ public class Game {
         return spectators;
     }
 
-    public int getId() {
-        return id;
-    }
-
     public boolean canBeArchived(){
         return players.isEmpty() && spectators.isEmpty();
     }
@@ -327,7 +321,7 @@ public class Game {
     }
 
     public void addGameEvent(Participant initiator, GameActions eventAction){
-        this.gameEvents.add(new GameEvent(initiator,eventAction, this.getName()));
+        this.gameEvents.add(new GameEvent(initiator.getUser().getUsername(),eventAction, this.getName()));
     }
 
     public List<GameEvent> getGameEvents(){
@@ -368,6 +362,70 @@ public class Game {
             p.setLastBetSinceCardOpen(0);
             p.setTotalAmountPayedInRound(0);
         }
+    }
+
+    public void setSettings(GameSettings settings) {
+        this.settings = settings;
+    }
+
+    public void setPlayers(List<Player> players) {
+        this.players = players;
+    }
+
+    public void setRounds(List<Round> rounds) {
+        this.rounds = rounds;
+    }
+
+    public void setSpectators(List<Spectator> spectators) {
+        this.spectators = spectators;
+    }
+
+    public void setDealerIndex(int dealerIndex) {
+        this.dealerIndex = dealerIndex;
+    }
+
+    public LeagueManager getLeagueManager() {
+        return leagueManager;
+    }
+
+    public void setLeagueManager(LeagueManager leagueManager) {
+        this.leagueManager = leagueManager;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    public void setGameEvents(List<GameEvent> gameEvents) {
+        this.gameEvents = gameEvents;
+    }
+
+    public int getNumPlayersStarted() {
+        return numPlayersStarted;
+    }
+
+    public void setNumPlayersStarted(int numPlayersStarted) {
+        this.numPlayersStarted = numPlayersStarted;
+    }
+
+    public boolean isGame_over() {
+        return game_over;
+    }
+
+    public void setGame_over(boolean game_over) {
+        this.game_over = game_over;
+    }
+
+    public int getGameId() {
+        return gameId;
+    }
+
+    public int getId() {
+        return gameId;
+    }
+
+    public void setGameId(int gameId) {
+        this.gameId = gameId;
     }
 }
 

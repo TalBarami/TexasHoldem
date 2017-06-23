@@ -1,50 +1,98 @@
 package Server.domain.user;
 
 import Exceptions.ArgumentNotInBoundsException;
+import Server.data.users.Users;
 import Server.domain.game.Game;
 import Server.domain.game.participants.Participant;
+import org.hibernate.annotations.*;
 import Server.notification.NotificationService;
 
+import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.awt.image.BufferedImage;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
+@Entity
+@Table(name = "users")
 public class User extends Observable {
-
+    @Id
+    @Column(name = "userName")
     private String username;
-    private String password;
-    private String email;
-    private LocalDate dateOfBirth;
-    private BufferedImage img;
-    private Wallet wallet;
-    private Map<Game,Participant> gameMapping;
 
+    @Column(name = "password")
+    private String password;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "birthDate")
+    private LocalDate dateOfBirth;
+
+    @Transient
+    private BufferedImage img;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "walletId")
+    @Cascade( {org.hibernate.annotations.CascadeType.DELETE_ORPHAN} )
+    private Wallet wallet;
+
+    @Column(name = "amountEarnedInLeague")
     private int amountEarnedInLeague;
+
+    @Column(name = "currLeague")
     private int currLeague;
+
+    @Column(name = "netoProfit")
     private int totalNetoProfit;
+
+    @Column(name = "grossProfit")
     private int totalGrossProfit;
+
+    @Column(name = "highestCashGain")
     private int highestCashGain;
+
+    @Column(name = "numOfGamesPlayed")
     private int numOfGamesPlayed;
 
-    private User(){}
+    public User(){
+        User thisUser = this;
+        addObserver(new Observer() {
+            @Override
+            public void update(Observable o, Object arg) {
+                NotificationService.getInstance().sendUserProfileUpdateNotification(thisUser);
+            }
+        });
+    }
 
     public User(String user, String pass, String email, LocalDate date, BufferedImage image)
     {
         this.username = user;
-        this.password = pass;
+
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(pass.getBytes());
+            byte[] digest = md.digest();
+            this.password = new String(digest);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
         this.wallet = new Wallet();
         this.email = email;
         this.dateOfBirth = date;
         this.img = image;
-        this.gameMapping = new HashMap<>();
-        this.currLeague = LeagueManager.defaultLeagueForNewUsers;
         this.numOfGamesPlayed = 0;
         this.totalNetoProfit = 0;
         this.totalGrossProfit = 0;
         this.highestCashGain = 0;
+        this.currLeague = LeagueManager.defaultLeagueForNewUsers;
 
         User thisUser = this;
         addObserver(new Observer() {
@@ -67,6 +115,7 @@ public class User extends Observable {
             updateHighestCashGain(amount);
         }
 
+        Users.updateUser(this);
         setChanged();
         notifyObservers();
     }
@@ -85,47 +134,18 @@ public class User extends Observable {
             totalNetoProfit -= amountToReduce;
         }
 
+        Users.updateUser(this);
         setChanged();
         notifyObservers();
 
         return amountToReduce;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        User user = (User) o;
-
-        if (amountEarnedInLeague != user.amountEarnedInLeague) return false;
-        if (currLeague != user.currLeague) return false;
-        if (username != null ? !username.equals(user.username) : user.username != null) return false;
-        if (password != null ? !password.equals(user.password) : user.password != null) return false;
-        if (email != null ? !email.equals(user.email) : user.email != null) return false;
-        if (dateOfBirth != null ? !dateOfBirth.equals(user.dateOfBirth) : user.dateOfBirth != null) return false;
-        if (img != null ? !img.equals(user.img) : user.img != null) return false;
-        if (wallet != null ? !wallet.equals(user.wallet) : user.wallet != null) return false;
-        return gameMapping != null ? gameMapping.equals(user.gameMapping) : user.gameMapping == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = username != null ? username.hashCode() : 0;
-        result = 31 * result + (password != null ? password.hashCode() : 0);
-        result = 31 * result + (email != null ? email.hashCode() : 0);
-        result = 31 * result + (dateOfBirth != null ? dateOfBirth.hashCode() : 0);
-        result = 31 * result + (img != null ? img.hashCode() : 0);
-        result = 31 * result + (wallet != null ? wallet.hashCode() : 0);
-        result = 31 * result + (gameMapping != null ? gameMapping.hashCode() : 0);
-        result = 31 * result + amountEarnedInLeague;
-        result = 31 * result + currLeague;
-        return result;
-    }
-
     private void updateHighestCashGain(int amount) {
-        if(amount > highestCashGain)
+        if(amount > highestCashGain) {
             highestCashGain = amount;
+            Users.updateUser(this);
+        }
     }
 
     public String getPassword() {
@@ -136,7 +156,7 @@ public class User extends Observable {
         return username;
     }
 
-    private Wallet getWallet() {
+    public Wallet getWallet() {
         return wallet;
     }
 
@@ -146,8 +166,15 @@ public class User extends Observable {
     }
 
     public void setPassword(String password) {
-        this.password = password;
-        setChanged();
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(password.getBytes());
+            byte[] digest = md.digest();
+            this.password = new String(digest);
+            setChanged();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getEmail() {
@@ -168,17 +195,13 @@ public class User extends Observable {
         setChanged();
     }
 
-    public Map<Game,Participant> getGamePlayerMappings(){
-        return gameMapping;
-    }
-
     public void addGameParticipant(Game game,Participant p){
-        gameMapping.put(game,p);
+        Users.addGameParticipant(this, game, p);
     }
 
-    public void removeGameParticipant(Game game){
-        gameMapping.remove(game);
-    }
+//    public void removeGameParticipant(Game game){
+//        gameMapping.remove(game);
+//    }
 
     public int getBalance(){
         return getWallet().getBalance();
@@ -190,6 +213,7 @@ public class User extends Observable {
 
     public void setAmountEarnedInLeague(int amountEarnedInLeague) {
         this.amountEarnedInLeague = amountEarnedInLeague;
+        Users.updateUser(this);
     }
 
     public int getCurrLeague() {
@@ -198,6 +222,7 @@ public class User extends Observable {
 
     public void setCurrLeague(int currLeague) {
         this.currLeague = currLeague;
+        Users.updateUser(this);
         setChanged();
         notifyObservers();
     }
@@ -216,6 +241,7 @@ public class User extends Observable {
 
     public void updateGamesPlayed() {
         this.numOfGamesPlayed++;
+        Users.updateUser(this);
         setChanged();
         notifyObservers();
     }
@@ -236,6 +262,26 @@ public class User extends Observable {
         return totalGrossProfit;
     }
 
+    public void setWallet(Wallet wallet) {
+        this.wallet = wallet;
+    }
+
+    public void setTotalNetoProfit(int totalNetoProfit) {
+        this.totalNetoProfit = totalNetoProfit;
+    }
+
+    public void setTotalGrossProfit(int totalGrossProfit) {
+        this.totalGrossProfit = totalGrossProfit;
+    }
+
+    public void setHighestCashGain(int highestCashGain) {
+        this.highestCashGain = highestCashGain;
+    }
+
+    public void setNumOfGamesPlayed(int numOfGamesPlayed) {
+        this.numOfGamesPlayed = numOfGamesPlayed;
+    }
+
     public double getAvgNetoProfit(){
         return getNumOfGamesPlayed() != 0 ? getTotalNetoProfit()/getNumOfGamesPlayed() : 0;
     }
@@ -243,4 +289,9 @@ public class User extends Observable {
     public double getAvgGrossProfit(){
         return getNumOfGamesPlayed() != 0 ? getTotalGrossProfit()/getNumOfGamesPlayed() : 0;
     }
+
+    public Map<String, Participant> getGameMapping() {
+        return Users.getGameParticipant(this);
+    }
+
 }

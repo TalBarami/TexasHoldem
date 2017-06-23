@@ -10,9 +10,11 @@ import java.util.List;
 /**
  * Created by Tal on 05/04/2017.
  */
+
 public class Dealer {
     private static Logger logger = LoggerFactory.getLogger(Dealer.class);
     private Deck deck;
+
     public Dealer(){
         deck = new Deck();
     }
@@ -29,5 +31,15 @@ public class Dealer {
         List<Card> cards = deck.get(numOfCards);
         logger.info("Revealing {} new cards: {}", numOfCards, cards);
         return cards;
+    }
+
+    public Deck getDeck()
+    {
+        return deck;
+    }
+
+    public void setDeck(Deck deck)
+    {
+        this.deck = deck;
     }
 }

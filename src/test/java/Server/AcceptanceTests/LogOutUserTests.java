@@ -4,6 +4,8 @@ package Server.AcceptanceTests;
  * Created by אחיעד on 05/04/2017.
  */
 
+import Server.data.users.Users;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,6 +17,12 @@ public class LogOutUserTests extends ProjectTest {
     public void setUp()
     {
         super.setUp();
+    }
+
+    @After
+    public void tearDown() {
+        Users.getUsersInGame().clear();
+        super.clearAllUsersFromDB();
     }
 
     @Test

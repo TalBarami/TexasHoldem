@@ -190,6 +190,20 @@ public class GameController {
                 gameList = searchService.findGamesByPotSize(gamePreferences.getPotSizeToSearch());
             }
 
+            else if (gamePreferences.isSearchForReplayableGames()) {
+                List<String> gameNames = searchService.findArchivedGamesNames();
+                List<ClientGameDetails> gameList1 = new LinkedList<>();
+
+                for (String s : gameNames) {
+                    ClientGameDetails cgd = new ClientGameDetails();
+                    cgd.setName(s);
+                    cgd.setArchived(true);
+                    gameList1.add(cgd);
+                }
+
+                return new ResponseMessage("Games found successfully", gameList1);
+            }
+
             else {
                 gameList = searchService.findSpectatableGames();
             }

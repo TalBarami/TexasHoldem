@@ -75,7 +75,7 @@ public class NotificationService {
     public void sendMessageNotification(Participant participant, MessageEvent event) {
         if (messageSender != null) {
             String userName = participant.getUser().getUsername();
-            String senderUserName = event.getEventInitiator().getUser().getUsername();
+            String senderUserName = event.getCreatorUserName();
             String messageContent = event.getContent().getContent();
             String gameName = event.getGameName();
 
@@ -87,7 +87,7 @@ public class NotificationService {
     public void sendWhisperNotification(WhisperEvent event) {
         if (messageSender != null) {
             String recipientUserName = event.getParticipantToSendTo().getUser().getUsername();
-            String senderUserName = event.getEventInitiator().getUser().getUsername();
+            String senderUserName = event.getCreatorUserName();
             String msgContent = event.getContent().getContent();
             String gameName = event.getGameName();
 

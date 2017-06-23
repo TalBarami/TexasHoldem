@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/texasholdem</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password">achI12#*</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+        <property name="show_sql">true</property>
+        <property name="format_sql">true</property>
+        <property name="hbm2ddl.auto">update</property>
+        <property name="hibernate.id.new_generator_mappings">false</property>
+        <mapping class="Server.domain.user.User"/>
+        <mapping class="Server.domain.user.Wallet"/>
+        <mapping class="Server.domain.game.card.Card"/>
+        <mapping class="Server.domain.game.card.Deck"/>
+        <mapping class="Server.domain.game.card.Dealer"/>
+        <mapping class="Server.domain.game.participants.Participant"/>
+        <mapping class="Server.domain.game.participants.Spectator"/>
+        <mapping class="Server.domain.game.participants.Player"/>
+        <mapping class="Server.domain.game.GameSettings"/>
+        <mapping class="Server.domain.events.SystemEvent"/>
+        <mapping class="Server.domain.events.gameFlowEvents.GameEvent"/>
+        <mapping class="Server.domain.events.gameFlowEvents.MoveEvent"/>
+        <mapping class="Server.domain.game.Round"/>
+        <mapping class="Server.domain.game.Game"/>
+    </session-factory>
+</hibernate-configuration>

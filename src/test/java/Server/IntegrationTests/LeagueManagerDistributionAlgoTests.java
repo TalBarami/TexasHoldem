@@ -86,10 +86,10 @@ public class LeagueManagerDistributionAlgoTests {
             leagueManager.setMaxLeague(3);
             leagueManager.redistributeUsersInLeagues(distribute);
 
-            assertEquals(2, gameCenter.getUser("waldr").getCurrLeague());
+            assertEquals(3, gameCenter.getUser("waldr").getCurrLeague());
             assertEquals(3, gameCenter.getUser("hodbub").getCurrLeague());
             assertEquals(2, gameCenter.getUser("achiadg").getCurrLeague());
-            assertEquals(3, gameCenter.getUser("ronenb").getCurrLeague());
+            assertEquals(2, gameCenter.getUser("ronenb").getCurrLeague());
 
             gameCenter.deleteUser("waldr");
             gameCenter.deleteUser("hodbub");
@@ -199,8 +199,8 @@ public class LeagueManagerDistributionAlgoTests {
             assertEquals(2, gameCenter.getUser("achiadg").getCurrLeague());
             assertEquals(1, gameCenter.getUser("ronenb").getCurrLeague());
             assertEquals(2, gameCenter.getUser("talb").getCurrLeague());
-            assertEquals(0, gameCenter.getUser("avig").getCurrLeague());
-            assertEquals(1, gameCenter.getUser("yossih").getCurrLeague());
+            assertEquals(1, gameCenter.getUser("avig").getCurrLeague());
+            assertEquals(0, gameCenter.getUser("yossih").getCurrLeague());
 
             gameCenter.deleteUser("waldr");
             gameCenter.deleteUser("hodbub");

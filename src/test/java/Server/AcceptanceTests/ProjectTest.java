@@ -1,8 +1,14 @@
 package Server.AcceptanceTests;
 
+import Server.data.Hybernate.HibernateUtil;
+import Server.domain.events.SystemEvent;
 import Server.domain.events.gameFlowEvents.GameEvent;
 import Enumerations.GamePolicy;
+import Server.domain.events.gameFlowEvents.MoveEvent;
+import Server.domain.user.User;
 import junit.framework.TestCase;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 import java.time.LocalDate;
 import java.awt.image.BufferedImage;
@@ -134,6 +140,40 @@ public abstract class ProjectTest extends TestCase{
 
     public int getuserleague(String username) {
         return bridge.getuserleague(username);
+    }
+
+    public void clearAllEventsFromDB(){
+        SessionFactory sessionFactory = HibernateUtil.getInstance().getSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+
+        List<?> instances = session.createCriteria(MoveEvent.class).list();
+        for (Object obj : instances) {
+            session.delete(obj);
+        }
+        instances = session.createCriteria(GameEvent.class).list();
+        for (Object obj : instances) {
+            session.delete(obj);
+        }
+        instances = session.createCriteria(SystemEvent.class).list();
+        for (Object obj : instances) {
+            session.delete(obj);
+        }
+
+        session.getTransaction().commit();
+    }
+
+    public void clearAllUsersFromDB(){
+        SessionFactory sessionFactory = HibernateUtil.getInstance().getSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+
+        List<?> instances = session.createCriteria(User.class).list();
+        for (Object obj : instances) {
+            session.delete(obj);
+        }
+
+        session.getTransaction().commit();
     }
 
     /* DELETED FROM PREVIOUS ASSIGNMENTS

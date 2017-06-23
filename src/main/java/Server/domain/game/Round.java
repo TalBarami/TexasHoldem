@@ -150,7 +150,8 @@ public class Round {
     }
 
     public void playTurnOfPlayer(MoveEvent playerMoveEvent) throws IllegalArgumentException{
-        if(currentPlayer != playerMoveEvent.getEventInitiator())
+        Player creatorPlayer = activePlayers.stream().filter(player -> player.getUser().getUsername().equals(playerMoveEvent.getCreatorUserName())).collect(Collectors.toList()).get(0);
+        if(currentPlayer != creatorPlayer)
             throw new IllegalArgumentException("This is not your turn");
 
         if(!calculateTurnOptions().contains(playerMoveEvent.getEventAction()))
@@ -199,6 +200,11 @@ public class Round {
         if (isRoundActive) {
             chipsToCall = 0;
             initPlayersLastBetSinceCardOpen();
+            if(isAllInMode()){
+                openCardsLeft();
+                endRiverFlow();
+                return;
+            }
 
             switch (currentState) {
                 case PREFLOP:
@@ -215,6 +221,27 @@ public class Round {
                     break;
             }
         }
+    }
+
+    private void openCardsLeft()
+    {
+        int numOpenedCards = openedCards.size();
+        openedCards.addAll(dealer.open(5 - numOpenedCards));
+        logger.info("Cards opened are: ");
+
+        for (Card c : openedCards) {
+            logger.info("{} , ", c);
+        }
+    }
+
+    private boolean isAllInMode(){
+        int playersWithMoreThan0 = 0;
+        for(Player p : activePlayers)
+        {
+            if(p.getChipsAmount() > 0)
+                playersWithMoreThan0++;
+        }
+        return playersWithMoreThan0 == 0 || playersWithMoreThan0 == 1;
     }
 
     private void endRiverFlow() {
@@ -270,7 +297,8 @@ public class Round {
     }
 
     private boolean isLastPlayerPlayed(MoveEvent playerMoveEvent) {
-        return (playerMoveEvent.getEventInitiator() == lastPlayer && playerMoveEvent.getEventAction() != GameActions.RAISE);
+        Player creatorPlayer = activePlayers.stream().filter(player -> player.getUser().getUsername().equals(playerMoveEvent.getCreatorUserName())).collect(Collectors.toList()).get(0);
+        return (creatorPlayer == lastPlayer && playerMoveEvent.getEventAction() != GameActions.RAISE);
     }
 
     private int getMaxAmountToRaise() {
@@ -346,6 +374,8 @@ public class Round {
     }
 
     private void calculateWinner() {
+        boolean firstWinnerFound = false;
+
         while(!activePlayers.isEmpty()) {
             List<Player> winners = new LinkedList<Player>();
             Player currentPlayer = activePlayers.get(0);
@@ -374,6 +404,14 @@ public class Round {
                 }
             }
 
+            if (!firstWinnerFound) {
+                for (Player p : winners) {
+                    winnerList.add(p);
+                }
+
+                firstWinnerFound = true;
+            }
+
             Player winnerWithMinChips = findMinWinner(winners);
             divideWinningsBetweenWinners(winners, winnerWithMinChips);
             updateActivePlayers();
@@ -398,7 +436,6 @@ public class Round {
         sumToDivide =  sumToDivide/winners.size();
         for(Player p : winners) {
             p.addChips(sumToDivide);
-            winnerList.add(p);
             logger.info("Player {} earned {}$", p.getUser().getUsername(), sumToDivide);
         }
     }
@@ -535,6 +572,47 @@ public class Round {
     public GameSettings getGameSettings() {
         return gameSettings;
     }
+
+    public void setGameSettings(GameSettings gameSettings) {
+        this.gameSettings = gameSettings;
+    }
+
+    public void setActivePlayers(List<Player> activePlayers) {
+        this.activePlayers = activePlayers;
+    }
+
+    public void setOriginalPlayersInRound(List<Player> originalPlayersInRound) {
+        this.originalPlayersInRound = originalPlayersInRound;
+    }
+
+    public void setDealer(Dealer dealer) {
+        this.dealer = dealer;
+    }
+
+    public void setCurrentPlayer(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
+
+    public void setLastPlayer(Player lastPlayer) {
+        this.lastPlayer = lastPlayer;
+    }
+
+    public void setPotAmount(int potAmount) {
+        this.potAmount = potAmount;
+    }
+
+    public void setCurrentDealerPlayer(Player currentDealerPlayer) {
+        this.currentDealerPlayer = currentDealerPlayer;
+    }
+
+    public List<GameEvent> getEventList() {
+        return eventList;
+    }
+
+    public void setEventList(List<GameEvent> eventList) {
+        this.eventList = eventList;
+    }
+
 
     public List<Player> getWinnerList() {
         return winnerList;

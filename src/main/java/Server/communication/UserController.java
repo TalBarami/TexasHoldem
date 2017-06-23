@@ -88,7 +88,7 @@ public class UserController {
     }
 
     @RequestMapping(method = GET, value="/user/{username}")
-    public ResponseMessage getActiveGames(@PathVariable("username") String userName) throws InvalidArgumentException, EntityDoesNotExistsException {
+    public ResponseMessage getUser(@PathVariable("username") String userName) throws InvalidArgumentException, EntityDoesNotExistsException {
         ClientUserProfile clientProfile = UserClientUserProfileConverter.convert(service.getUser(userName));
         return new ResponseMessage<ClientUserProfile>("User received successfully", clientProfile);
     }

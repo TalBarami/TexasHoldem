@@ -1,6 +1,5 @@
 package Server.domain.game.card;
 
-
 public class Card implements Comparable<Card>{
     private Rank rank;
     private Suit suit;
@@ -10,8 +9,7 @@ public class Card implements Comparable<Card>{
         this.suit = suit;
     }
 
-    private Card(){
-
+    public Card(){
     }
 
     @Override
@@ -50,6 +48,16 @@ public class Card implements Comparable<Card>{
 
     public Suit getSuit() {
         return suit;
+    }
+
+    public void setRank(Rank rank)
+    {
+        this.rank = rank;
+    }
+
+    public void setSuit(Suit suit)
+    {
+        this.suit = suit;
     }
 
     public String toString() {

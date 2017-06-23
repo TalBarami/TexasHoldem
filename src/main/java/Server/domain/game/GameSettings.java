@@ -3,15 +3,15 @@ package Server.domain.game;
 import Enumerations.GamePolicy;
 import org.apache.commons.lang3.tuple.Pair;
 
-public class GameSettings {
-
+public class GameSettings implements java.io.Serializable {
     private String name;
     private GamePolicy gameType;
     private int gameTypeLimit;
     private int minBet;
     private int buyInPolicy;
     private int chipPolicy;
-    private Pair<Integer,Integer> playerRange;
+    private int minAmountPlayers;
+    private int maxAmountPlayers;
     private boolean acceptSpectating;
     private int leagueCriteria;
 
@@ -22,7 +22,8 @@ public class GameSettings {
         this.minBet = minBet;
         this.buyInPolicy = buyInPolicy;
         this.chipPolicy = chipPolicy;
-        playerRange = Pair.of(minPlyerAmount,maxPlayerAmount);
+        this.minAmountPlayers = minPlyerAmount;
+        this.maxAmountPlayers = maxPlayerAmount;
         this.acceptSpectating = specAccept;
     }
 
@@ -44,7 +45,7 @@ public class GameSettings {
 
     public int getChipPolicy() {return chipPolicy;}
 
-    public Pair<Integer, Integer> getPlayerRange() {return playerRange;}
+    public Pair<Integer, Integer> getPlayerRange() {return Pair.of(minAmountPlayers, maxAmountPlayers);}
 
     public boolean isAcceptSpectating() {return acceptSpectating;}
 
@@ -61,10 +62,46 @@ public class GameSettings {
     }
 
     public void setMaximalPlayers(int amount){
-        playerRange=Pair.of(playerRange.getLeft(),amount);
+        this.maxAmountPlayers = amount;
     }
 
     public void setMinimalPlayers(int amount){
-        playerRange=Pair.of(amount,playerRange.getRight());
+        this.minAmountPlayers = amount;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setGameType(GamePolicy gameType) {
+        this.gameType = gameType;
+    }
+
+    public void setGameTypeLimit(int gameTypeLimit) {
+        this.gameTypeLimit = gameTypeLimit;
+    }
+
+    public void setMinBet(int minBet) {
+        this.minBet = minBet;
+    }
+
+    public void setBuyInPolicy(int buyInPolicy) {
+        this.buyInPolicy = buyInPolicy;
+    }
+
+    public void setChipPolicy(int chipPolicy) {
+        this.chipPolicy = chipPolicy;
+    }
+
+    public void setAcceptSpectating(boolean acceptSpectating) {
+        this.acceptSpectating = acceptSpectating;
+    }
+
+    public int getMinAmountPlayers() {
+        return minAmountPlayers;
+    }
+
+    public int getMaxAmountPlayers() {
+        return maxAmountPlayers;
     }
 }

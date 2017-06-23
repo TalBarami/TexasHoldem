@@ -9,7 +9,7 @@ import Server.domain.game.GameActions;
  */
 public class GameEventClientGameEvent {
     public static ClientGameEvent convert(GameEvent e) {
-        String gameEventInitiator = e.getEventInitiator().getUser().getUsername();
+        String gameEventInitiator = e.getCreatorUserName();
         GameActions action = e.getEventAction();
 
         return new ClientGameEvent(gameEventInitiator, action);

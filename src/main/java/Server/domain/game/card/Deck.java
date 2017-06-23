@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-
 public class Deck {
     private static Logger logger = LoggerFactory.getLogger(Deck.class);
     private List<Card> cards;
@@ -21,7 +20,7 @@ public class Deck {
         logger.info("Preparing new deck.");
         for (Suit suit : Suit.values())
             for (Rank rank : Rank.values())
-                cards.add(rank.of(suit));
+                cards.add(new Card(rank, suit));
         shuffle();
     }
 
@@ -35,5 +34,15 @@ public class Deck {
         cards.removeAll(topCards);
         logger.info("Taking {} cards from the top of the deck: {}", amount, topCards);
         return topCards;
+    }
+
+    public List<Card> getCards()
+    {
+        return cards;
+    }
+
+    public void setCards(List<Card> cards)
+    {
+        this.cards = cards;
     }
 }
