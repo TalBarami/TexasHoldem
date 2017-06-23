@@ -64,22 +64,26 @@ public class GameHandler {
     }
 
     public void startGame() throws GameException {
+        logger.info("Start game called.");
         handleGameAction(5);
     }
 
     public void playCheck() throws GameException {
+        logger.info("Play check called.");
         handleGameAction(0);
     }
 
     public void playCall() throws GameException {
+        logger.info("Play call called.");
         handleGameAction(2);
     }
 
     public void playFold() throws GameException {
+        logger.info("Play fold called.");
         handleGameAction(3);
     }
 
-    public void handleGameAction(int actionID) throws GameException {
+    private void handleGameAction(int actionID) throws GameException {
         ClientGameRequest request = new ClientGameRequest();
         request.setGameName(gameDetails.getName());
         request.setUsername(SessionHandler.getInstance().user().getUsername());
@@ -89,6 +93,7 @@ public class GameHandler {
     }
 
     public void playRaise(String amount) throws GameException {
+        logger.info("Play raise called for {}.", amount);
         ClientGameRequest request = new ClientGameRequest();
         request.setGameName(gameDetails.getName());
         request.setUsername(SessionHandler.getInstance().user().getUsername());
@@ -99,11 +104,13 @@ public class GameHandler {
     }
 
     public void sendMessage(String message) throws GameException {
-        sendMessageHandler(message, "");
+        logger.info("Sent message: {}", message);
+        sendMessage(message, "");
     }
 
     public void sentPrivateMessage(String message, String playerName) throws GameException{
-        sendMessageHandler(message, playerName);
+        logger.info("Sent private message to {}: \"{}\"", playerName, message);
+        sendMessage(message, playerName);
     }
 
     private void addNotificationsMessages(GameUpdateNotification gameUpdateNotification) {
@@ -123,7 +130,7 @@ public class GameHandler {
         notificationsMessages.add(String.format("%s has %s the game.", gameUpdateNotification.getGameActionInitiator(), action));
     }
 
-    public List<String> getNotiicationMessages(){
+    public List<String> getNotificationMessages(){
         return new ArrayList<>(notificationsMessages);
     }
 
@@ -138,7 +145,7 @@ public class GameHandler {
         }
     }
 
-    private void sendMessageHandler(String message,String recipientUser) throws GameException {
+    private void sendMessage(String message, String recipientUser) throws GameException {
         ClientGameRequest request = new ClientGameRequest();
         request.setGameName(gameDetails.getName());
         request.setUsername(SessionHandler.getInstance().user().getUsername());

@@ -7,6 +7,8 @@ import Exceptions.EntityDoesNotExistsException;
 import Exceptions.InvalidArgumentException;
 
 import Client.communication.GameRequestHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -14,7 +16,10 @@ import java.util.*;
  * Created by User on 14/05/2017.
  */
 public class SearchHandler {
+    private static Logger logger = LoggerFactory.getLogger(SearchHandler.class);
+
     private static SearchHandler instance;
+
     private GameRequestHandler gameRequestHandler;
     private Map<String, SearchPolicy> searchPolicies;
 
@@ -56,7 +61,7 @@ public class SearchHandler {
 
     public List<ClientGameDetails> findReplayableGames(String ignore) throws EntityDoesNotExistsException, InvalidArgumentException {
         ClientGamePreferences pref = new ClientGamePreferences();
-        // FIXME: Add "find replayable"
+        pref.setSearchForReplayableGames(true);
         return sendSearchRequest(pref);
     }
 
@@ -69,7 +74,8 @@ public class SearchHandler {
 
     public List<ClientGameDetails> findGamesByPotSize(String potSize) throws EntityDoesNotExistsException, InvalidArgumentException {
         ClientGamePreferences pref = new ClientGamePreferences();
-        // FIXME: Set pot size & boolean field
+        pref.setSearchByPotSize(true);
+        pref.setPotSizeToSearch(Integer.parseInt(potSize));
 
         return sendSearchRequest(pref);
     }

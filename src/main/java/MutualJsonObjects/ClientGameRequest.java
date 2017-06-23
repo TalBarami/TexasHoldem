@@ -68,4 +68,16 @@ public class ClientGameRequest {
         this.recipientUserName = recipientUserName;
     }
 
+    @Override
+    public String toString() {
+        return "ClientGameRequest{" +
+                "username='" + username + '\'' +
+                ", gameName='" + gameName + '\'' +
+                ", action=" + action +
+                ", amount=" + amount +
+                ", spectating=" + spectating +
+                ", messageContent='" + messageContent + '\'' +
+                ", recipientUserName='" + recipientUserName + '\'' +
+                '}';
+    }
 }

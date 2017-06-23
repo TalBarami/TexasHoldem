@@ -25,7 +25,6 @@ public class Profile {
     public JPanel contentPane;
     private JButton buttonApply;
     private JButton buttonCancel;
-    private JPasswordField oldPasswordPasswordField;
     private JPasswordField newPasswordPasswordField;
     private JPasswordField repeatPasswordPasswordField;
     private JTextField newEmailTextField;
@@ -52,7 +51,7 @@ public class Profile {
     public void init(){
         ClientUtils.frameInit(ancestor, contentPane);
         ancestor.getRootPane().setDefaultButton(buttonApply);
-        ClientUtils.clearTextFields(oldPasswordPasswordField, newPasswordPasswordField, repeatPasswordPasswordField, newEmailTextField, repeatEmailTextField, newBirthdayDatePicker.getJFormattedTextField(), newPictureTextField);
+        ClientUtils.clearTextFields(newPasswordPasswordField, repeatPasswordPasswordField, newEmailTextField, repeatEmailTextField, newBirthdayDatePicker.getJFormattedTextField(), newPictureTextField);
     }
 
     private void assignActionListeners(){

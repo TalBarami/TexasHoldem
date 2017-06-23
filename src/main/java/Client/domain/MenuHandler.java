@@ -8,11 +8,14 @@ import Exceptions.*;
 import Client.communication.GameRequestHandler;
 import Client.communication.UserRequestHandler;
 import Server.domain.user.Transaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MenuHandler {
+    private static Logger logger = LoggerFactory.getLogger(MenuHandler.class);
     private static MenuHandler instance;
 
     private GameRequestHandler gameRequestHandler;
@@ -36,6 +39,8 @@ public class MenuHandler {
         ClientGameDetails gameDetails = new ClientGameDetails(SessionHandler.getInstance().user().getUsername(),
                 gameName, gamePolicy.getPolicy(), policyLimit, minBet, buyInPolicy,
                 chipPolicy, minPlayerAmount, maxPlayerAmount, specAccept, new ArrayList<>(), false, false);
+        logger.info("Sent game creation request for {}", gameDetails);
+
         gameRequestHandler.requestGameCreation(gameDetails);
     }
 
@@ -44,6 +49,7 @@ public class MenuHandler {
         request.setGameName(gameName);
         request.setUsername(username);
         request.setAction(4);
+        logger.info("Sent game join request {}", request);
 
         gameRequestHandler.requestGameEventSend(request);
     }
@@ -54,11 +60,13 @@ public class MenuHandler {
         request.setUsername(username);
         request.setAction(4);
         request.setSpectating(true);
+        logger.info("Sent game spectate request {}", request);
 
         gameRequestHandler.requestGameEventSend(request);
     }
 
     public List<ClientGameEvent> replayGame(String gameName) throws GameException {
+        logger.info("Sent game replay request {}", gameName);
         return replayRequestHandler.requestGameReplay(gameName);
     }
 
@@ -66,6 +74,8 @@ public class MenuHandler {
         ClientLeaveGameDetails leaveGameDetails = new ClientLeaveGameDetails();
         leaveGameDetails.setGameName(gameName);
         leaveGameDetails.setUsername(username);
+        logger.info("Sent game leave request {}", leaveGameDetails);
+
         gameRequestHandler.requestGameLeave(leaveGameDetails);
     }
 
@@ -73,6 +83,8 @@ public class MenuHandler {
         ClientTransactionRequest request = new ClientTransactionRequest();
         request.setAction(Transaction.DEPOSIT);
         request.setAmount(amount);
+        logger.info("Sent game deposit request {}", request);
+
         userRequestHandler.requestUserTransaction(username, request);
     }
 }

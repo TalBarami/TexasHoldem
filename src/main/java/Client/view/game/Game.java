@@ -12,9 +12,7 @@ import Client.domain.MenuHandler;
 import Client.ClientUtils;
 import Client.view.system.MainMenu;
 import NotificationMessages.ChatNotification;
-import NotificationMessages.GameUpdateNotification;
 import NotificationMessages.RoundUpdateNotification;
-import Server.domain.game.GameActions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +23,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by User on 14/05/2017.
@@ -194,7 +191,7 @@ public class Game extends JFrame{
 
     private void notifyPlayers(){
         eventsPanel.removeAll();
-        for(String message : gameHandler.getNotiicationMessages()){
+        for(String message : gameHandler.getNotificationMessages()){
             eventsPanel.add(new JLabel(message));
         }
         pack();
