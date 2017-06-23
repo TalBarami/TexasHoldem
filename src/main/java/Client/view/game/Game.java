@@ -90,7 +90,7 @@ public class Game extends JFrame{
         eventsPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         eventsPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
-        reconfigureStartButton(gameHandler.getGameDetails().getPlayerList());
+        reconfigureStartButton(gameHandler.getGameDetails().getPlayerList(), false);
         disableGameActions();
         sendButton.setEnabled(isClientPlaying(gameHandler.getGameDetails().getPlayerList()));
         chatComboBox.setEnabled(isClientPlaying(gameHandler.getGameDetails().getPlayerList()));
@@ -113,13 +113,17 @@ public class Game extends JFrame{
 
         gameHandler.addGameUpdateCallback(gameUpdateNotification -> notifyPlayers());
         gameHandler.addGameUpdateCallback(gameUpdateNotification -> updatePlayersInformation(gameUpdateNotification.getGameDetails().getPlayerList()));
-        gameHandler.addGameUpdateCallback(gameUpdateNotification -> reconfigureStartButton(gameUpdateNotification.getGameDetails().getPlayerList()));
+        gameHandler.addGameUpdateCallback(gameUpdateNotification -> reconfigureStartButton(
+                gameUpdateNotification.getGameDetails().getPlayerList(),
+                gameUpdateNotification.getGameDetails().isRunning()));
 
         gameHandler.addRoundUpdateCallback(roundUpdateNotification -> notifyPlayers());
         gameHandler.addRoundUpdateCallback(this::updateTable);
         gameHandler.addRoundUpdateCallback(this::reconfigureRaiseButton);
         gameHandler.addRoundUpdateCallback(roundUpdateNotification -> updatePlayersInformation(roundUpdateNotification.getCurrentPlayers(), roundUpdateNotification.getCurrentPlayerName()));
-        gameHandler.addRoundUpdateCallback(roundUpdateNotification -> reconfigureStartButton(roundUpdateNotification.getCurrentPlayers()));
+        gameHandler.addRoundUpdateCallback(roundUpdateNotification -> reconfigureStartButton(
+                roundUpdateNotification.getCurrentPlayers(),
+                !roundUpdateNotification.isFinished()));
 
         gameHandler.addMoveUpdateCallback(this::updateGameMoves);
 
@@ -320,9 +324,8 @@ public class Game extends JFrame{
         checkButton.setEnabled(false);
     }
 
-    private void reconfigureStartButton(List<ClientPlayer> players){
+    private void reconfigureStartButton(List<ClientPlayer> players, boolean isGameRunning){
         boolean isClientPlaying = isClientPlaying(players);
-        boolean isGameRunning = gameHandler.getGameDetails().isRunning();
         boolean hasEnoughPlayers =  gameHandler.getGameDetails().getMinimumPlayersAmount() <= players.size() &&
                 players.size() <= gameHandler.getGameDetails().getMaximumPlayersAmount();
         logger.info("Client is player: {}, Game running: {}, Game has enough players: {}", isClientPlaying, isGameRunning, hasEnoughPlayers);
