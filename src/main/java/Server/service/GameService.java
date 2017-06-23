@@ -13,6 +13,8 @@ import Server.domain.game.participants.Player;
 import Server.domain.game.participants.Spectator;
 import Server.domain.system.GameCenter;
 import Server.domain.user.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.List;
@@ -26,6 +28,7 @@ import static Server.service.TexasHoldemService.verifyStrings;
  * Created by Tal on 05/05/2017.
  */
 public class GameService {
+    private static Logger logger = LoggerFactory.getLogger(GameService.class);
     private GameCenter gameCenter;
 
     public GameService(GameCenter gameCenter){
@@ -33,6 +36,7 @@ public class GameService {
     }
 
     public void startGame(String username,String gameName) throws GameException {
+        logger.info("New start game request with the following info [user name: {}, game name: {}]", username, gameName);
         verifyStrings(username,gameName);
         gameCenter.startGame(username,gameName);
     }
@@ -40,27 +44,32 @@ public class GameService {
 
     public void createGame(String creatorUsername, String gameName, GamePolicy policy, int limit, int minBet, int buyInPolicy, int chipPolicy,
                            int minPlayerAmount, int maxPlayerAmount, boolean specAccept) throws NoBalanceForBuyInException, InvalidArgumentException, ArgumentNotInBoundsException, EntityDoesNotExistsException {
+        logger.info("New create game request with the following info [user name: {}, game name: {}]", creatorUsername, gameName);
         verifyStrings(creatorUsername, gameName);
         verifyPositiveNumbers(limit, minBet, buyInPolicy, chipPolicy, minPlayerAmount, maxPlayerAmount);
         gameCenter.createGame(creatorUsername, new GameSettings(gameName, policy, limit, minBet, buyInPolicy, chipPolicy, minPlayerAmount, maxPlayerAmount, specAccept));
     }
 
     public void joinGame(String username, String gameName) throws GameException {
+        logger.info("New join game request with the following info [user name: {}, game name: {}]", username, gameName);
         verifyStrings(username, gameName);
         gameCenter.joinGame(username, gameName, false);
     }
 
     public void spectateGame(String username, String gameName) throws GameException {
+        logger.info("New spectate game request with the following info [user name: {}, game name: {}]", username, gameName);
         verifyStrings(username, gameName);
         gameCenter.joinGame(username, gameName, true);
     }
 
     public void leaveGame(String username, String gameName) throws GameException {
+        logger.info("New leave game request with the following info [user name: {}, game name: {}]", username, gameName);
         verifyStrings(username, gameName);
         gameCenter.leaveGame(username, gameName);
     }
 
     public void playCall(String username, String gameName) throws InvalidArgumentException, EntityDoesNotExistsException {
+        logger.info("New call move request with the following info [user name: {}, game name: {}]", username, gameName);
         verifyStrings(username,gameName);
         Round currentRound = gameCenter.getGameByName(gameName).getLastRound();
         User user = gameCenter.getUser(username);
@@ -69,6 +78,7 @@ public class GameService {
     }
 
     public void playCheck(String username, String gameName) throws InvalidArgumentException, EntityDoesNotExistsException {
+        logger.info("New check move request with the following info [user name: {}, game name: {}]", username, gameName);
         verifyStrings(username,gameName);
         Round currentRound = gameCenter.getGameByName(gameName).getLastRound();
         User user = gameCenter.getUser(username);
@@ -77,6 +87,7 @@ public class GameService {
     }
 
     public void playFold(String username, String gameName) throws InvalidArgumentException, EntityDoesNotExistsException {
+        logger.info("New fold move request with the following info [user name: {}, game name: {}]", username, gameName);
         verifyStrings(username,gameName);
         Round currentRound = gameCenter.getGameByName(gameName).getLastRound();
         User user = gameCenter.getUser(username);
@@ -85,6 +96,7 @@ public class GameService {
     }
 
     public void playRaise(String username, String gameName, int amount) throws InvalidArgumentException, EntityDoesNotExistsException {
+        logger.info("New raise move request with the following info [user name: {}, game name: {}, amount: {}]", username, gameName, amount);
         verifyStrings(username,gameName);
         verifyPositiveNumbers(amount);
         Round currentRound = gameCenter.getGameByName(gameName).getLastRound();
@@ -107,6 +119,7 @@ public class GameService {
     */
 
     public void sendMessage(String username, String gameName, String content) throws InvalidArgumentException, EntityDoesNotExistsException {
+        logger.info("New send message request with the following info [from user name: {}, game  name: {}, content: {}]", username, gameName, content);
         verifyStrings(username,gameName);
         Game game = gameCenter.getGameByName(gameName);
         User user = gameCenter.getUser(username);
@@ -126,6 +139,7 @@ public class GameService {
     }
 
     public void sendWhisper(String username, String gameName, String content, String userNameToSend) throws InvalidArgumentException, EntityDoesNotExistsException, ArgumentNotInBoundsException {
+        logger.info("New send whisper message request with the following info [from user name: {}, to user name: {}, game name: {}, content: {}]", username, userNameToSend, gameName, content);
         verifyStrings(username,gameName);
         Game game = gameCenter.getGameByName(gameName);
         User user = gameCenter.getUser(username);
@@ -151,6 +165,7 @@ public class GameService {
     }
 
     public List<GameEvent> replayGame(String gameName) throws EntityDoesNotExistsException {
+        logger.info("New replay request with the following info [game name: {}]", gameName);
         List<GameEvent> gameEvents = gameCenter.getAllGameEvents(gameName);
 //        List<MoveEvent> moveEvents = gameCenter.getAllMoveEvents(gameName);
 
