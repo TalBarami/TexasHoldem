@@ -111,4 +111,20 @@ public class ClientUserProfile {
     public void setYearOfBirth(int yearOfBirth) {
         this.yearOfBirth = yearOfBirth;
     }
+
+    @Override
+    public String toString() {
+        return "ClientUserProfile{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", dayOfBirth=" + dayOfBirth +
+                ", monthOfBirth=" + monthOfBirth +
+                ", yearOfBirth=" + yearOfBirth +
+                ", balance=" + balance +
+                ", currLeague=" + currLeague +
+                ", numOfGamesPlayed=" + numOfGamesPlayed +
+                ", amountEarnedInLeague=" + amountEarnedInLeague +
+                '}';
+    }
 }

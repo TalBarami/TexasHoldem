@@ -13,6 +13,8 @@ import Exceptions.LoginException;
 import Client.communication.SessionRequestHandler;
 import Client.communication.UserRequestHandler;
 import Server.common.SystemUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.stomp.StompSession;
 
 import java.time.LocalDate;
@@ -22,6 +24,7 @@ import java.util.concurrent.ExecutionException;
 
 public class SessionHandler {
     private static SessionHandler instance;
+    private static Logger logger = LoggerFactory.getLogger(SessionHandler.class);
 
     private StompSession stompSession;
     private String ipAddress;
@@ -59,6 +62,7 @@ public class SessionHandler {
         verifyStrings(username, password, email, birthday, localImagePath);
         LocalDate date = LocalDate.parse(birthday);
         ClientUserProfile profile = new ClientUserProfile(username, password, email, date.getDayOfMonth(), date.getMonthValue(), date.getYear(), -1, -1, -1, -1);
+        logger.info("Registering: {}", profile);
         userRequestHandler.requestUserProfileRegistration(profile);
 
         user = userRequestHandler.requestUserProfileEntity(username);
@@ -83,6 +87,8 @@ public class SessionHandler {
         /*if(newImage == null || newImage.isEmpty())
             newImage = user.getImage();*/
         ClientUserProfile profile = new ClientUserProfile(user.getUsername(), newPassword, newEmail, day, month, year, user.getBalance(), user.getCurrLeague(), user.getNumOfGamesPlayed(), user.getAmountEarnedInLeague());
+        logger.info("Edit profile: {}", user);
+        logger.info("New profile: {}", profile);
         userRequestHandler.requestUserProfileUpdate(user.getUsername(), profile);
 
         user = userRequestHandler.requestUserProfileEntity(user.getUsername());
@@ -90,6 +96,7 @@ public class SessionHandler {
 
     public void login(String username, String password) throws LoginException, EntityDoesNotExistsException, InvalidArgumentException, ExecutionException, InterruptedException {
         ClientUserLoginDetails details = new ClientUserLoginDetails(username, password);
+        logger.info("Sending login request: {}", details);
         sessionRequestHandler.requestUserLogin(details);
 
         user = userRequestHandler.requestUserProfileEntity(username);
@@ -99,6 +106,7 @@ public class SessionHandler {
 
     public void logout(String username) throws InvalidArgumentException {
         ClientUserLoginDetails details = new ClientUserLoginDetails(username, "");
+        logger.info("Sending logout request: {}", details);
         sessionRequestHandler.requestUserLogout(details);
         user = null;
 
@@ -118,6 +126,7 @@ public class SessionHandler {
     }
 
     public void updateUserDetails(ClientUserProfile profile){
+        logger.info("Received user update callback. new profile: {}", profile);
         user = profile;
         updateCallbacks.parallelStream().forEach(c -> c.execute(profile));
     }
