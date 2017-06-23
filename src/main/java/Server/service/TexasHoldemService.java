@@ -62,6 +62,11 @@ public class TexasHoldemService {
             throw new InvalidArgumentException("Null/Empty fields or invalid characters are not allowed.");
     }
 
+    static void verifyPassword(String pass) throws InvalidArgumentException {
+        if(SystemUtils.verifyPassword(pass))
+            throw new InvalidArgumentException("Password is empty\\contains special characters.");
+    }
+
     static void verifyObjects(Object... objects) throws InvalidArgumentException{
         for(Object o : objects){
             if(o == null)

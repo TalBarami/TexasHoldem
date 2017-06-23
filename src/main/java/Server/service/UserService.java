@@ -14,9 +14,7 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
-import static Server.service.TexasHoldemService.verifyObjects;
-import static Server.service.TexasHoldemService.verifyPositiveNumbers;
-import static Server.service.TexasHoldemService.verifyStrings;
+import static Server.service.TexasHoldemService.*;
 
 /**
  * Created by Tal on 05/05/2017.
@@ -58,6 +56,7 @@ public class UserService {
     public void editProfile(String originalUserName,String newUserName, String pass,String email, LocalDate date) throws InvalidArgumentException, EntityDoesNotExistsException {
         logger.info("Received edit profile request: original usernamme={}, new username={}, pass={}, email={}, date={}", originalUserName, newUserName, pass, email, date);
         verifyStrings(originalUserName, newUserName, email);
+        verifyPassword(pass);
         verifyObjects(date);
         gameCenter.editProfile(originalUserName, newUserName, pass, email, date);
     }
