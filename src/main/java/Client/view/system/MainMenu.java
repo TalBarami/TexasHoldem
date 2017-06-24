@@ -142,16 +142,11 @@ public class MainMenu extends JFrame {
     }
 
     private void onLogout() {
-        try {
-            SessionHandler.getInstance().logout(SessionHandler.getInstance().user().getUsername());
-            Welcome welcome = new Welcome();
-            welcome.pack();
-            welcome.setLocationRelativeTo(null);
-            welcome.setVisible(true);
-            dispose();
-        } catch (InvalidArgumentException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
+        Welcome welcome = new Welcome();
+        welcome.pack();
+        welcome.setLocationRelativeTo(null);
+        welcome.setVisible(true);
+        onExit();
     }
 
     private void onCreateGame(){
@@ -226,7 +221,7 @@ public class MainMenu extends JFrame {
             logger.info("Games in table: {}", games.toString());
             int selectedIndex = gamesTable.getSelectedRow();
             logger.info("Selected row: {}, Game: {}", selectedIndex, games.get(selectedIndex));
-            joinSelectedGameButton.setEnabled(true);
+            joinSelectedGameButton.setEnabled(!games.get(selectedIndex).isArchived());
             spectateSelectedGameButton.setEnabled(games.get(selectedIndex).isSpectateValid());
             replaySelectedGameButton.setEnabled(games.get(selectedIndex).isArchived());
         }

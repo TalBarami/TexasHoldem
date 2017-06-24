@@ -6,6 +6,7 @@ import MutualJsonObjects.ClientPlayer;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,16 +19,18 @@ public class Player {
 
     private JPanel container;
     private JLabel nameLabel;
+    private JLabel chipAmountLabel;
+    private JLabel lastBetLabel;
 
     public Player(ClientPlayer player){
         this.player = player;
         nameLabel = new JLabel("Name: " + player.getPlayerName());
-        JLabel chipAmountLabel = new JLabel("Chips: " + String.valueOf(player.getChipAmount()));
-        JLabel lastBetLabel = new JLabel("Last Bet: " + String.valueOf(player.getLastBetSinceCardOpen()));
+        chipAmountLabel = new JLabel("Chips: " + String.valueOf(player.getChipAmount()));
+        lastBetLabel = new JLabel("Last Bet: " + String.valueOf(player.getLastBetSinceCardOpen()));
 
         container = new JPanel();
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-        container.setBorder(new EmptyBorder(10, 10, 10, 10));
+        container.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
         container.setBackground(Color.lightGray);
 
         JPanel labelsPanel = new JPanel();
@@ -44,9 +47,20 @@ public class Player {
         container.add(labelsPanel);
     }
 
+    public void markAsCurrent(){
+        mark();
+        container.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, Color.lightGray, Color.red));
+    }
+    public void markAsWinner(){
+        mark();
+        container.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, Color.lightGray, Color.yellow));
+    }
+
     public void mark(){
         Font f = nameLabel.getFont();
         nameLabel.setFont(f.deriveFont(Font.BOLD, f.getSize() + 2));
+        chipAmountLabel.setFont(f.deriveFont(Font.BOLD, f.getSize() + 2));
+        lastBetLabel.setFont(f.deriveFont(Font.BOLD, f.getSize() + 2));
     }
 
     public void showCards(){
@@ -65,6 +79,7 @@ public class Player {
 
     public void self(){
         nameLabel.setText(nameLabel.getText() + " (You)");
+        container.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, Color.darkGray, Color.blue));
     }
 
     public JPanel getContainer(){

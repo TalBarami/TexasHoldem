@@ -21,6 +21,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -117,7 +118,7 @@ public class Game extends JFrame{
         gameHandler.addRoundUpdateCallback(roundUpdateNotification -> notifyPlayers());
         gameHandler.addRoundUpdateCallback(this::updateTable);
         gameHandler.addRoundUpdateCallback(this::reconfigureRaiseButton);
-        gameHandler.addRoundUpdateCallback(roundUpdateNotification -> updatePlayersInformation(roundUpdateNotification.getCurrentPlayers(), roundUpdateNotification.getCurrentPlayerName()));
+        gameHandler.addRoundUpdateCallback(roundUpdateNotification -> updatePlayersInformation(roundUpdateNotification.getCurrentPlayers(), roundUpdateNotification.getCurrentPlayerName(), roundUpdateNotification.isFinished(), roundUpdateNotification.getWinnerPlayers()));
         gameHandler.addRoundUpdateCallback(roundUpdateNotification -> reconfigureStartButton(
                 roundUpdateNotification.getCurrentPlayers(),
                 !roundUpdateNotification.isFinished()));
@@ -158,7 +159,7 @@ public class Game extends JFrame{
         cashLabel.setText("Balance: " + String.valueOf(user.getBalance()));
     }
 
-    private void updatePlayersInformation(List<ClientPlayer> players, String currentPlayerName){
+    private void updatePlayersInformation(List<ClientPlayer> players, String currentPlayerName, boolean isFinished, List<ClientPlayer> winners){
         logger.info("Updating players information on table. Current player: {}, players: {}.", currentPlayerName, players);
         seats.forEach(Container::removeAll);
         chatComboBox.removeAllItems();
@@ -166,12 +167,20 @@ public class Game extends JFrame{
         for (int i = 0; i < players.size(); i++) {
             ClientPlayer clientPlayer = players.get(i);
             Player player = new Player(clientPlayer);
-            if(isTurnOf(clientPlayer, currentPlayerName)){
-                player.mark();
-            }
             if(isClientPlaying(clientPlayer)){
-                player.showCards();
                 player.self();
+            }
+            if(isTurnOf(clientPlayer, currentPlayerName)){
+                player.markAsCurrent();
+            }
+            if(isClientPlaying(clientPlayer) && !isFinished){
+                player.showCards();
+            }
+            if(isFinished){
+                player.showCards();
+                if(winners.contains(clientPlayer)){
+                    player.markAsWinner();
+                }
             }
             JPanel playerComponent = player.getContainer();
             seats.get(i % 4).add(playerComponent);
@@ -182,11 +191,11 @@ public class Game extends JFrame{
             chatComboBox.addItem(player.getPlayerName());
         }
         pack();
-        revalidate();
+        //revalidate();
     }
 
     private void updatePlayersInformation(List<ClientPlayer> players) {
-        updatePlayersInformation(players, null);
+        updatePlayersInformation(players, null, false, new ArrayList<>());
     }
 
     private void notifyPlayers(){
