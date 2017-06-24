@@ -228,7 +228,7 @@ public class Game {
     }
 
     private boolean canPlayerContinue(Player p){
-        return !(p.getChipsAmount() == 0 || (realMoneyGame() && p.getUser().getBalance() == 0));
+        return !((!realMoneyGame() && p.getChipsAmount() == 0) || (realMoneyGame() && p.getUser().getBalance() == 0));
     }
 
     public boolean realMoneyGame(){
