@@ -53,6 +53,13 @@ public class Users implements IUsers, IUsersForDistributionAlgorithm {
         }finally {
             session.close();
         }
+
+        if (getUsersInGame().containsKey(user.getUsername())) {
+            Map<String, Participant> map = getUsersInGame().get(user.getUsername());
+            for (Participant p : map.values()) {
+                p.getUser().getWallet().setBalance(user.getBalance());
+            }
+        }
     }
 
     public void editUser(String oldUser, String newUser, String pass, String email, LocalDate date) throws InvalidArgumentException, EntityDoesNotExistsException {
