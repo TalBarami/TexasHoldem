@@ -117,7 +117,7 @@ public class ReplayNonActiveGamesTests extends ProjectTest {
 
         String gameName = playTournamentAllIn();
         List<GameEvent> res=this.replaynonactivegame(gameName);
-        assertThat(res.size(),is(20));
+        assertThat(res.size(),is(14));
     }
 
     @Test
@@ -154,16 +154,10 @@ public class ReplayNonActiveGamesTests extends ProjectTest {
         assertTrue(ans.get(7).getCreatorUserName().equals("hodbub"));
         assertTrue(ans.get(8).getCreatorUserName().equals("rotemw"));
         assertTrue(ans.get(9).getCreatorUserName().equals("achiadg"));
-        assertTrue(ans.get(10).getCreatorUserName().equals("hodbub"));
+        assertTrue(ans.get(10).getCreatorUserName().equals("achiadg"));
         assertTrue(ans.get(11).getCreatorUserName().equals("rotemw"));
-        assertTrue(ans.get(12).getCreatorUserName().equals("achiadg"));
+        assertTrue(ans.get(12).getCreatorUserName().equals("hodbub"));
         assertTrue(ans.get(13).getCreatorUserName().equals("hodbub"));
-        assertTrue(ans.get(14).getCreatorUserName().equals("rotemw"));
-        assertTrue(ans.get(15).getCreatorUserName().equals("achiadg"));
-        assertTrue(ans.get(16).getCreatorUserName().equals("achiadg"));
-        assertTrue(ans.get(17).getCreatorUserName().equals("rotemw"));
-        assertTrue(ans.get(18).getCreatorUserName().equals("hodbub"));
-        assertTrue(ans.get(19).getCreatorUserName().equals("hodbub"));
     }
 
     @Test
@@ -185,16 +179,10 @@ public class ReplayNonActiveGamesTests extends ProjectTest {
         assertThat(ans.get(7).getEventAction(),is(GameActions.RAISE));
         assertThat(ans.get(8).getEventAction(),is(GameActions.CALL));
         assertThat(ans.get(9).getEventAction(),is(GameActions.CALL));
-        assertThat(ans.get(10).getEventAction(),is(GameActions.CHECK));
-        assertThat(ans.get(11).getEventAction(),is(GameActions.CHECK));
-        assertThat(ans.get(12).getEventAction(),is(GameActions.CHECK));
-        assertThat(ans.get(13).getEventAction(),is(GameActions.CHECK));
-        assertThat(ans.get(14).getEventAction(),is(GameActions.CHECK));
-        assertThat(ans.get(15).getEventAction(),is(GameActions.CHECK));
-        assertThat(ans.get(16).getEventAction(),is(GameActions.EXIT));
-        assertThat(ans.get(17).getEventAction(),is(GameActions.EXIT));
-        assertThat(ans.get(18).getEventAction(),is(GameActions.EXIT));
-        assertThat(ans.get(19).getEventAction(),is(GameActions.CLOSED));
+        assertThat(ans.get(10).getEventAction(),is(GameActions.EXIT));
+        assertThat(ans.get(11).getEventAction(),is(GameActions.EXIT));
+        assertThat(ans.get(12).getEventAction(),is(GameActions.EXIT));
+        assertThat(ans.get(13).getEventAction(),is(GameActions.CLOSED));
     }
 
     @Test
