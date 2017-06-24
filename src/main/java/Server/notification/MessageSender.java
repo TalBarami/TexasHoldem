@@ -1,6 +1,8 @@
 package Server.notification;
 
 import NotificationMessages.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
@@ -13,6 +15,8 @@ import org.springframework.stereotype.Service;
  */
 @Service("MessageSender")
 public class MessageSender {
+    private static Logger logger = LoggerFactory.getLogger(MessageSender.class);
+
     private SimpMessageSendingOperations messagingTemplate;
     private WebAgentSessionRegistry webAgentSessionRegistry;
 
@@ -34,6 +38,7 @@ public class MessageSender {
 
         if (sessionId != null) {
             messagingTemplate.convertAndSendToUser(sessionId, "/queue/move", notification, createHeaders(sessionId));
+            logger.info("PlayMoveNotification about game {} has been sent to {}", notification.getGameName(), notification.getRecipientUserName());
         }
     }
 
@@ -42,6 +47,12 @@ public class MessageSender {
 
         if (sessionId != null) {
             messagingTemplate.convertAndSendToUser(sessionId, "/queue/message", notification, createHeaders(sessionId));
+
+            if (!notification.isPrivate()) {
+                logger.info("Public ChatNotification to room {} has been sent to {} from {}", notification.getGameName(), notification.getRecipientUserName(), notification.getSenderUserName());
+            } else {
+                logger.info("Private ChatNotification to room {} has been sent to {} from {}", notification.getGameName(), notification.getRecipientUserName(), notification.getSenderUserName());
+            }
         }
     }
 
@@ -50,6 +61,7 @@ public class MessageSender {
 
         if (sessionId != null) {
             messagingTemplate.convertAndSendToUser(sessionId, "/queue/profile", notification, createHeaders(sessionId));
+            logger.info("UserProfileUpdateNotification has been sent to {}", notification.getRecipientUserName());
         }
     }
 
@@ -58,6 +70,7 @@ public class MessageSender {
 
         if (sessionId != null) {
             messagingTemplate.convertAndSendToUser(sessionId, "/queue/round", notification, createHeaders(sessionId));
+            logger.info("RoundUpdateNotification about game {} has been sent to {}", notification.getGameName(), notification.getRecipientUserName());
         }
     }
 
@@ -66,6 +79,7 @@ public class MessageSender {
 
         if (sessionId != null) {
             messagingTemplate.convertAndSendToUser(sessionId, "/queue/game", notification, createHeaders(sessionId));
+            logger.info("GameUpdateNotification about game {} has been sent to {}", notification.getGameName(), notification.getRecipientUserName());
         }
     }
 }
