@@ -120,7 +120,7 @@ public class SessionHandler {
         return user;
     }
 
-    public void updateUserDetails(ClientUserProfile profile){
+    public synchronized void updateUserDetails(ClientUserProfile profile){
         logger.info("Received user update callback. new profile: {}", profile);
         user = profile;
         updateCallbacks.forEach(c -> c.execute(profile));

@@ -191,7 +191,7 @@ public class Game extends JFrame{
             chatComboBox.addItem(player.getPlayerName());
         }
         pack();
-        //revalidate();
+        revalidate();
     }
 
     private void updatePlayersInformation(List<ClientPlayer> players) {
