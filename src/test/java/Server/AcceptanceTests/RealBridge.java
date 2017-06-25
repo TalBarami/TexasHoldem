@@ -24,7 +24,7 @@ public class RealBridge implements Bridge {
     }
 
 
-    public boolean registerUser(String username, String password, String email, LocalDate dateTime, BufferedImage img)
+    public boolean registerUser(String username, String password, String email, LocalDate dateTime, String img)
     {
         try {
             service.userService().register(username, password, email, dateTime, img);

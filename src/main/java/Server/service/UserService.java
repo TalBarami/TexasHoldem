@@ -28,7 +28,7 @@ public class UserService {
         this.gameCenter = gameCenter;
     }
 
-    public void register(String username, String pass, String email, LocalDate date, BufferedImage img) throws InvalidArgumentException {
+    public void register(String username, String pass, String email, LocalDate date, String img) throws InvalidArgumentException {
         logger.info("Received registration request: username={}, pass={}, email={}, date={}, img={}", username, pass, email, date, img);
         verifyStrings(username, pass, email);
         verifyObjects(date);

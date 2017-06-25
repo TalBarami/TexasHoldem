@@ -34,7 +34,7 @@ public abstract class ProjectTest extends TestCase{
         return bridge.deleteUser(username);
     }
 
-    public boolean registerUser(String username, String password, String email, LocalDate dateofbirth, BufferedImage img) {
+    public boolean registerUser(String username, String password, String email, LocalDate dateofbirth, String img) {
         return bridge.registerUser(username, password, email, dateofbirth, img);
     }
 

@@ -14,7 +14,7 @@ import java.util.List;
 public interface Bridge {
 
 
-    boolean registerUser(String username, String password, String email, LocalDate dateTime, BufferedImage img);
+    boolean registerUser(String username, String password, String email, LocalDate dateTime, String img);
 
     boolean searchUser(String username);
 

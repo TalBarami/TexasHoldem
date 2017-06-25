@@ -35,9 +35,6 @@ public class User extends Observable {
     @Column(name = "birthDate")
     private LocalDate dateOfBirth;
 
-    @Transient
-    private BufferedImage img;
-
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "walletId")
     @Cascade( {org.hibernate.annotations.CascadeType.DELETE_ORPHAN} )
@@ -61,6 +58,9 @@ public class User extends Observable {
     @Column(name = "numOfGamesPlayed")
     private int numOfGamesPlayed;
 
+    @Column(name = "image")
+    private String image;
+
     public User(){
         User thisUser = this;
         addObserver(new Observer() {
@@ -71,7 +71,7 @@ public class User extends Observable {
         });
     }
 
-    public User(String user, String pass, String email, LocalDate date, BufferedImage image)
+    public User(String user, String pass, String email, LocalDate date, String image)
     {
         this.username = user;
 
@@ -87,7 +87,7 @@ public class User extends Observable {
         this.wallet = new Wallet();
         this.email = email;
         this.dateOfBirth = date;
-        this.img = image;
+        this.image = image;
         this.numOfGamesPlayed = 0;
         this.totalNetoProfit = 0;
         this.totalGrossProfit = 0;
@@ -227,12 +227,14 @@ public class User extends Observable {
         notifyObservers();
     }
 
-    public BufferedImage getImg() {
-        return img;
+    public String getImg() {
+        String x = this.image;
+        return image;
     }
 
-    public void setImg(BufferedImage img) {
-        this.img = img;
+    public void setImg(String img) {
+        this.image = img;
+        setChanged();
     }
 
     public int getNumOfGamesPlayed() {

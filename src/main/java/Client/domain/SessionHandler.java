@@ -1,5 +1,6 @@
 package Client.domain;
 
+import Client.ClientUtils;
 import Client.domain.callbacks.UserUpdateCallback;
 import Client.notification.ClientStompSessionHandler;
 import Client.notification.SubscriptionManager;
@@ -12,15 +13,13 @@ import Exceptions.LoginException;
 
 import Client.communication.SessionRequestHandler;
 import Client.communication.UserRequestHandler;
-import Server.common.SystemUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.stomp.StompSession;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -61,7 +60,8 @@ public class SessionHandler {
     }
 
     public void register(String username, String password, String email, Calendar birthday, String localImagePath) throws InvalidArgumentException {
-        ClientUserProfile profile = new ClientUserProfile(username, password, email, birthday.get(Calendar.DAY_OF_MONTH) +1, birthday.get(Calendar.MONTH), birthday.get(Calendar.YEAR), -1, -1, -1, -1);
+        String base64encoding = ClientUtils.encodeImage(localImagePath);
+        ClientUserProfile profile = new ClientUserProfile(username, password, email, birthday.get(Calendar.DAY_OF_MONTH), birthday.get(Calendar.MONTH) +1, birthday.get(Calendar.YEAR), -1, -1, -1, -1, base64encoding);
         logger.info("Registering: {}", profile);
         userRequestHandler.requestUserProfileRegistration(profile);
 
@@ -86,7 +86,7 @@ public class SessionHandler {
         }
         /*if(newImage == null || newImage.isEmpty())
             newImage = user.getImage();*/
-        ClientUserProfile profile = new ClientUserProfile(user.getUsername(), newPassword, newEmail, day, month, year, user.getBalance(), user.getCurrLeague(), user.getNumOfGamesPlayed(), user.getAmountEarnedInLeague());
+        ClientUserProfile profile = new ClientUserProfile(user.getUsername(), newPassword, newEmail, day, month, year, user.getBalance(), user.getCurrLeague(), user.getNumOfGamesPlayed(), user.getAmountEarnedInLeague(),newImage);
         logger.info("Edit profile: {}", user);
         logger.info("New profile: {}", profile);
         userRequestHandler.requestUserProfileUpdate(user.getUsername(), profile);

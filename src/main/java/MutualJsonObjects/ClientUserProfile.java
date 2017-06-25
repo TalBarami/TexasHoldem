@@ -16,7 +16,9 @@ public class ClientUserProfile {
     private int numOfGamesPlayed;
     private int amountEarnedInLeague;
 
-    public ClientUserProfile(String username, String password, String email, int dayOfBirth, int monthOfBirth, int yearOfBirth, int balance, int currLeague, int numOfGamesPlayed, int amountEarnedInLeague) {
+    private String image;
+
+    public ClientUserProfile(String username, String password, String email, int dayOfBirth, int monthOfBirth, int yearOfBirth, int balance, int currLeague, int numOfGamesPlayed, int amountEarnedInLeague, String image) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -27,6 +29,7 @@ public class ClientUserProfile {
         this.amountEarnedInLeague = amountEarnedInLeague;
         this.currLeague = currLeague;
         this.numOfGamesPlayed = numOfGamesPlayed;
+        this.image=image;
     }
 
     public ClientUserProfile() {
@@ -110,6 +113,14 @@ public class ClientUserProfile {
 
     public void setYearOfBirth(int yearOfBirth) {
         this.yearOfBirth = yearOfBirth;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     @Override
