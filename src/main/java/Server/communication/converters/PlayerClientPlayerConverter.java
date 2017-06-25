@@ -25,7 +25,7 @@ public class PlayerClientPlayerConverter {
         }
         clientPlayer.setPlayerCards(clientCards);
 
-        clientPlayer.setImage(player.getUser().getImg());
+        //clientPlayer.setImage(player.getUser().getImg());
 
         return clientPlayer;
     }
