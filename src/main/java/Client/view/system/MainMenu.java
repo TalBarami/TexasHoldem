@@ -120,12 +120,11 @@ public class MainMenu extends JFrame {
 
     private void generateUserInformation(ClientUserProfile profile){
         ClientUserProfile user = SessionHandler.getInstance().user();
-        //ImageIcon icon = new ImageIcon(user.getImg().getScaledInstance(100, 100, 0));
         label_name.setText("Name: " + user.getUsername());
         label_cash.setText("Cash: " + String.valueOf(user.getBalance()));
         label_league.setText("League: " + String.valueOf(user.getCurrLeague()));
         label_picture.setText("");
-        //label_picture.setIcon(icon);
+        label_picture.setIcon(ClientUtils.getProfileImage(profile.getImage(), 100, 100));
     }
 
     private void onDeposit(){

@@ -1,5 +1,6 @@
 package Client.view.game;
 
+import Client.ClientUtils;
 import MutualJsonObjects.CardsImages;
 import MutualJsonObjects.ClientCard;
 import MutualJsonObjects.ClientPlayer;
@@ -18,12 +19,14 @@ public class Player {
     private ClientPlayer player;
 
     private JPanel container;
+    private JLabel pictureLabel;
     private JLabel nameLabel;
     private JLabel chipAmountLabel;
     private JLabel lastBetLabel;
 
     public Player(ClientPlayer player){
         this.player = player;
+        pictureLabel = new JLabel(/*ClientUtils.getProfileImage(player.getImage(), 100, 100)*/); // FIXME: Add.
         nameLabel = new JLabel("Name: " + player.getPlayerName());
         chipAmountLabel = new JLabel("Chips: " + String.valueOf(player.getChipAmount()));
         lastBetLabel = new JLabel("Last Bet: " + String.valueOf(player.getLastBetSinceCardOpen()));
@@ -34,15 +37,30 @@ public class Player {
         container.setBackground(Color.lightGray);
 
         JPanel labelsPanel = new JPanel();
-        labelsPanel.setLayout(new BoxLayout(labelsPanel, BoxLayout.X_AXIS));
+        labelsPanel.setLayout(new BoxLayout(labelsPanel, BoxLayout.Y_AXIS));
         labelsPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         labelsPanel.setBackground(Color.lightGray);
 
-        labelsPanel.add(nameLabel);
-        labelsPanel.add(Box.createRigidArea(new Dimension(5, 0)));
-        labelsPanel.add(chipAmountLabel);
-        labelsPanel.add(Box.createRigidArea(new Dimension(5, 0)));
-        labelsPanel.add(lastBetLabel);
+        JPanel identityPanel = new JPanel();
+        identityPanel.setLayout(new BoxLayout(labelsPanel, BoxLayout.X_AXIS));
+        identityPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        identityPanel.setBackground(Color.lightGray);
+
+        identityPanel.add(pictureLabel);
+        identityPanel.add(Box.createRigidArea(new Dimension(5, 0)));
+        identityPanel.add(nameLabel);
+
+        JPanel informationPanel = new JPanel();
+        informationPanel.setLayout(new BoxLayout(labelsPanel, BoxLayout.X_AXIS));
+        informationPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        informationPanel.setBackground(Color.lightGray);
+
+        informationPanel.add(chipAmountLabel);
+        informationPanel.add(Box.createRigidArea(new Dimension(5, 0)));
+        informationPanel.add(lastBetLabel);
+
+        labelsPanel.add(identityPanel);
+        labelsPanel.add(informationPanel);
 
         container.add(labelsPanel);
     }

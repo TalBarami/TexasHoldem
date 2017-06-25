@@ -1,5 +1,6 @@
 package Client;
 
+import MutualJsonObjects.ClientUserProfile;
 import com.google.common.io.Files;
 import com.sun.org.apache.xerces.internal.impl.dv.util.*;
 import com.sun.org.apache.xml.internal.security.utils.Base64;
@@ -98,6 +99,10 @@ public class ClientUtils {
     }
 
     public static Image resize(String path){
+        return null;
+    }
+
+    public static ImageIcon getProfileImage(String imagePath, int width, int height){
         return null;
     }
 }

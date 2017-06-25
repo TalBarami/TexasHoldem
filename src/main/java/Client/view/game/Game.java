@@ -55,6 +55,7 @@ public class Game extends JFrame{
     private JComboBox<String> chatComboBox;
     private JPanel cardsPanel;
     private JPanel eventsPanel;
+    private JLabel pictureLabel;
 
     private List<JPanel> seats = Arrays.asList(bottomPanel, leftPanel, topPanel, rightPanel);
 
@@ -68,13 +69,11 @@ public class Game extends JFrame{
 
     public void init(){
         toFront();
-        setSize(800, 600);
         ClientUtils.frameInit(this, contentPane);
         setLocationRelativeTo(ancestor);
         setTitle(gameHandler.getGameDetails().getName());
         getRootPane().setDefaultButton(sendButton);
         setSize(800, 600);
-        //pack();
     }
 
     private void initializeGame(ClientGameDetails gameDetails){
@@ -157,6 +156,8 @@ public class Game extends JFrame{
 
     private void generateUserInformation(ClientUserProfile user){
         logger.info("Updating user information on header: {}.", user);
+        pictureLabel.setText("");
+        pictureLabel.setIcon(ClientUtils.getProfileImage(user.getImage(), 100, 100));
         usernameLabel.setText("Name: " + user.getUsername());
         cashLabel.setText("Balance: " + String.valueOf(user.getBalance()));
     }

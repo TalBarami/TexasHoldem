@@ -79,8 +79,8 @@ public class Profile {
     }
 
     public void generateUserInformation(ClientUserProfile profile){
-        Image decoded = ClientUtils.decodeImage(profile.getImage(),profile.getUsername());
-        label_userPicture.setIcon(new ImageIcon(decoded.getScaledInstance(200, 200, 0)));
+        label_userPicture.setText("");
+        label_userPicture.setIcon(ClientUtils.getProfileImage(profile.getImage(), 200, 200));
         label_name.setText("Name: " + profile.getUsername());
         label_birthday.setText("Birthday: " + profile.getDayOfBirth() + "/" + profile.getMonthOfBirth() + "/" + profile.getYearOfBirth());
         label_email.setText("E-mail: " + profile.getEmail());
