@@ -44,13 +44,13 @@ public class SearchHandler {
     public List<ClientGameDetails> findAvailableGames(String ignore) throws EntityDoesNotExistsException, InvalidArgumentException {
         ClientGamePreferences pref = new ClientGamePreferences();
         pref.setDisplayAllAvailableGames(true);
-        String sessionUser = SessionHandler.getInstance().user().getUsername();
-        pref.setUsername(sessionUser);
+        pref.setUsername(SessionHandler.getInstance().user().getUsername());
         return sendSearchRequest(pref);
     }
 
     public List<ClientGameDetails> findGameByName(String gameName) throws EntityDoesNotExistsException, InvalidArgumentException {
-        return Collections.singletonList(gameRequestHandler.requestGameEntity(gameName));
+        lastSearchedGames = Collections.singletonList(gameRequestHandler.requestGameEntity(gameName));
+        return lastSearchedGames;
     }
 
     public List<ClientGameDetails> findSpectateableGames(String ignore) throws EntityDoesNotExistsException, InvalidArgumentException {
