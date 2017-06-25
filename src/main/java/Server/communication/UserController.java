@@ -58,12 +58,12 @@ public class UserController {
         String password = user.getPassword();
         String email = user.getEmail();
         LocalDate dateOfBirth = LocalDate.of(user.getYearOfBirth(), user.getMonthOfBirth(), user.getDayOfBirth());
-        BufferedImage img = null;
+        String image = user.getImage();
 
         manager.validate(userName, sessionID);
 
         // TODO :: Verify username and password
-        service.editProfile(oldUserName, userName, password, email, dateOfBirth);
+        service.editProfile(oldUserName, userName, password, email, dateOfBirth, image);
         return new ResponseMessage("Edit user profile succeeded", null);
     }
 

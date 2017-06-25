@@ -53,12 +53,12 @@ public class UserService {
         gameCenter.logout(username);
     }
 
-    public void editProfile(String originalUserName,String newUserName, String pass,String email, LocalDate date) throws InvalidArgumentException, EntityDoesNotExistsException {
+    public void editProfile(String originalUserName,String newUserName, String pass,String email, LocalDate date, String image) throws InvalidArgumentException, EntityDoesNotExistsException {
         logger.info("Received edit profile request: original usernamme={}, new username={}, pass={}, email={}, date={}", originalUserName, newUserName, pass, email, date);
         verifyStrings(originalUserName, newUserName, email);
         verifyPassword(pass);
         verifyObjects(date);
-        gameCenter.editProfile(originalUserName, newUserName, pass, email, date);
+        gameCenter.editProfile(originalUserName, newUserName, pass, email, date, image);
     }
 
     public void deposit(String username, int amount) throws ArgumentNotInBoundsException, InvalidArgumentException, EntityDoesNotExistsException {

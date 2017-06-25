@@ -10,17 +10,17 @@ public class ClientPlayer {
     private Set<ClientCard> playerCards;
     private int chipAmount;
     private int lastBetSinceCardOpen;
-    //private String image;
+    private String image;
 
     public ClientPlayer() {
     }
 
-    public ClientPlayer(String playerName, Set<ClientCard> playerCards, int chipAmount, int lastBetSinceCardOpen/*, String image*/) {
+    public ClientPlayer(String playerName, Set<ClientCard> playerCards, int chipAmount, int lastBetSinceCardOpen,String image) {
         this.playerName = playerName;
         this.playerCards = playerCards;
         this.chipAmount = chipAmount;
         this.lastBetSinceCardOpen = lastBetSinceCardOpen;
-        //this.image = image;
+        this.image = image;
     }
 
     public String getPlayerName() {
@@ -55,13 +55,13 @@ public class ClientPlayer {
         this.lastBetSinceCardOpen = lastBetSinceCardOpen;
     }
 
-    /*public String getImage() {
+    public String getImage() {
         return image;
     }
 
     public void setImage(String image) {
         this.image = image;
-    }*/
+    }
 
     @Override
     public String toString() {

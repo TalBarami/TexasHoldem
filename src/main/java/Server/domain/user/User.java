@@ -228,7 +228,6 @@ public class User extends Observable {
     }
 
     public String getImg() {
-        String x = this.image;
         return image;
     }
 

@@ -97,8 +97,8 @@ public class GameCenter {
         logger.info("{} has logged out from the system, attempting to notify played games if needed.",userName);
     }
 
-    public void editProfile(String originalUserName,String newUserName, String pass,String email, LocalDate date) throws InvalidArgumentException, EntityDoesNotExistsException {
-        usersDb.editUser(originalUserName,newUserName,pass,email,date);
+    public void editProfile(String originalUserName,String newUserName, String pass,String email, LocalDate date, String image) throws InvalidArgumentException, EntityDoesNotExistsException {
+        usersDb.editUser(originalUserName,newUserName,pass,email,date,image);
         logger.info("'{}' user edit his profile [u: {}, p: {}, e: {}, d: {}] .",originalUserName,newUserName,pass,email,date);
     }
 

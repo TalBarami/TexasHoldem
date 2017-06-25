@@ -178,14 +178,14 @@ public class GameCenterTest {
     @Test
     public void editProfileFailTest() throws Exception {
         try{
-            gc.editProfile("fail",testUser1,testUser1Pass,testUser1Email,now);
+            gc.editProfile("fail",testUser1,testUser1Pass,testUser1Email,now,"newImage");
             fail();
         }catch(EntityDoesNotExistsException e){}
 
         gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
         gc.registerUser(testUser2,testUser2Pass,testUser2Email,now,null);
         try{
-            gc.editProfile(testUser1,testUser2,testUser1Pass,testUser1Email,now);
+            gc.editProfile(testUser1,testUser2,testUser1Pass,testUser1Email,now,"newImage");
             fail();
         }catch(InvalidArgumentException e){
             if(!e.getMessage().equals("Selected user name already exist."))
@@ -193,7 +193,7 @@ public class GameCenterTest {
         }
 
         try{
-            gc.editProfile(testUser1,testUser1,testUser1Pass,testUser2Email,now);
+            gc.editProfile(testUser1,testUser1,testUser1Pass,testUser2Email,now,"newImage");
             fail();
         }catch(InvalidArgumentException e){
             if(!e.getMessage().equals("Selected e-mail already exist."))
@@ -201,7 +201,7 @@ public class GameCenterTest {
         }
 
         try{
-            gc.editProfile(testUser1,testUser2,testUser1Pass,testUser2Email,now);
+            gc.editProfile(testUser1,testUser2,testUser1Pass,testUser2Email,now,"newImage");
             fail();
         }catch(InvalidArgumentException e){
             if(!e.getMessage().equals("Selected user name and e-mail already exist."))
@@ -218,7 +218,7 @@ public class GameCenterTest {
             gc.getUser("newName");
             fail();
         }catch(Exception e){}
-        gc.editProfile(testUser1,"newName","newPass","new@gmail.com",now.minusYears(2));
+        gc.editProfile(testUser1,"newName","newPass","new@gmail.com",now.minusYears(2),"newImage");
         User u=gc.getUser(testUser1);
         assertThat(u.getEmail(),is("new@gmail.com"));
         assertThat(u.getDateOfBirth(),is(now.minusYears(2)));

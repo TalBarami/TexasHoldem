@@ -46,8 +46,8 @@ public abstract class ProjectTest extends TestCase{
         return bridge.logout(username);
     }
 
-    public boolean editusername(String oldusername, String newusername, String password, String email, LocalDate date) {
-        return bridge.editUserName(oldusername, newusername,password,email,date);
+    public boolean editusername(String oldusername, String newusername, String password, String email, LocalDate date, String image) {
+        return bridge.editUserName(oldusername, newusername,password,email,date,image);
     }
 
     public boolean addbalancetouserwallet(String username, int amounttoadd) {

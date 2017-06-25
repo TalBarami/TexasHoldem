@@ -62,7 +62,7 @@ public class Users implements IUsers, IUsersForDistributionAlgorithm {
         }
     }
 
-    public void editUser(String oldUser, String newUser, String pass, String email, LocalDate date) throws InvalidArgumentException, EntityDoesNotExistsException {
+    public void editUser(String oldUser, String newUser, String pass, String email, LocalDate date, String image) throws InvalidArgumentException, EntityDoesNotExistsException {
         if(!userNameExists(oldUser))
             throw new EntityDoesNotExistsException(String.format("'%s' doesn't exist in the system.",oldUser));
 
@@ -96,6 +96,8 @@ public class Users implements IUsers, IUsersForDistributionAlgorithm {
                 userToUpdate.setEmail(email);
             if(!userToUpdate.getDateOfBirth().isEqual(date))
                 userToUpdate.setDateOfBirth(date);
+            if(!userToUpdate.getImg().equals(image))
+                userToUpdate.setImg(image);
 
             session.update(userToUpdate);
             session.getTransaction().commit();

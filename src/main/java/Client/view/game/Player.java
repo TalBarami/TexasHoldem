@@ -19,14 +19,14 @@ public class Player {
     private ClientPlayer player;
 
     private JPanel container;
-    //private JLabel pictureLabel;
+    private JLabel pictureLabel;
     private JLabel nameLabel;
     private JLabel chipAmountLabel;
     private JLabel lastBetLabel;
 
     public Player(ClientPlayer player){
         this.player = player;
-        //pictureLabel = new JLabel(ClientUtils.getProfileImage(player.getImage() ,player.getPlayerName(), 100, 100));
+        pictureLabel = new JLabel(ClientUtils.getProfileImage(player.getImage(),100,100));
         nameLabel = new JLabel("Name: " + player.getPlayerName());
         chipAmountLabel = new JLabel("Chips: " + String.valueOf(player.getChipAmount()));
         lastBetLabel = new JLabel("Last Bet: " + String.valueOf(player.getLastBetSinceCardOpen()));
@@ -46,7 +46,7 @@ public class Player {
         identityPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         identityPanel.setBackground(Color.lightGray);
 
-        //identityPanel.add(pictureLabel);
+        identityPanel.add(pictureLabel);
         identityPanel.add(Box.createRigidArea(new Dimension(5, 0)));
         identityPanel.add(nameLabel);
 
