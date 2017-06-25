@@ -124,7 +124,7 @@ public class MainMenu extends JFrame {
         label_cash.setText("Cash: " + String.valueOf(user.getBalance()));
         label_league.setText("League: " + String.valueOf(user.getCurrLeague()));
         label_picture.setText("");
-        label_picture.setIcon(ClientUtils.getProfileImage(profile.getImage(), profile.getUsername(), 100, 100));
+        label_picture.setIcon(ClientUtils.getProfileImage(profile.getImage(),100,100));
     }
 
     private void onDeposit(){

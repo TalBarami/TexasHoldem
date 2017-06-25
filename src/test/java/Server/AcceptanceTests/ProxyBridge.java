@@ -50,8 +50,8 @@ public class ProxyBridge implements Bridge {
     }
 
     @Override
-    public boolean editUserName(String oldusername, String newusername, String password, String email, LocalDate date) {
-        return real.editUserName(oldusername,newusername, password, email, date);
+    public boolean editUserName(String oldusername, String newusername, String password, String email, LocalDate date,String image) {
+        return real.editUserName(oldusername,newusername, password, email, date, image);
     }
 
 

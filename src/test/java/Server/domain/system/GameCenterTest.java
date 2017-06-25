@@ -85,7 +85,7 @@ public class GameCenterTest {
             gc.getUser(testUser1);
             fail();
         }catch(Exception e){}
-        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
+        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,"newImage");
         assertThat(gc.getUser(testUser1).getCurrLeague(),is(gc.getLeagueManager().getDefaultLeagueForNewUsers()));
         gc.deleteUser(testUser1);
     }
@@ -100,7 +100,7 @@ public class GameCenterTest {
 
     @Test
     public void deleteUserSuccessTest() throws Exception {
-        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
+        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,"newImage");
         assertNotNull(gc.getUser(testUser1));
         gc.deleteUser(testUser1);
         try{
@@ -115,7 +115,7 @@ public class GameCenterTest {
             gc.login("failFail","1234");
         }catch(EntityDoesNotExistsException e){}
 
-        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
+        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,"newImage");
         assertTrue(gc.getLoggedInUsers().isEmpty());
 
         try{
@@ -127,7 +127,7 @@ public class GameCenterTest {
 
     @Test
     public void loginSuccessTest() throws Exception {
-        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
+        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,"newImage");
         assertTrue(gc.getLoggedInUsers().isEmpty());
         gc.login(testUser1,testUser1Pass);
         assertThat(gc.getLoggedInUsers().size(),is(1));
@@ -145,13 +145,13 @@ public class GameCenterTest {
 
     @Test
     public void logoutSuccessTest() throws Exception {
-        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
+        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,"newImage");
         gc.login(testUser1,testUser1Pass);
         assertThat(gc.getLoggedInUsers().size(),is(1));
         gc.logout(testUser1);
         assertTrue(gc.getLoggedInUsers().isEmpty());
 
-        gc.registerUser(testUser2,testUser2Pass,testUser2Email,now,null);
+        gc.registerUser(testUser2,testUser2Pass,testUser2Email,now,"newImage");
         gc.login(testUser1,testUser1Pass);
         gc.login(testUser2,testUser2Pass);
         assertTrue(gc.getUser(testUser1).getGameMapping().isEmpty());
@@ -178,14 +178,14 @@ public class GameCenterTest {
     @Test
     public void editProfileFailTest() throws Exception {
         try{
-            gc.editProfile("fail",testUser1,testUser1Pass,testUser1Email,now);
+            gc.editProfile("fail",testUser1,testUser1Pass,testUser1Email,now,"newImage");
             fail();
         }catch(EntityDoesNotExistsException e){}
 
-        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
-        gc.registerUser(testUser2,testUser2Pass,testUser2Email,now,null);
+        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,"newImage");
+        gc.registerUser(testUser2,testUser2Pass,testUser2Email,now,"newImage");
         try{
-            gc.editProfile(testUser1,testUser2,testUser1Pass,testUser1Email,now);
+            gc.editProfile(testUser1,testUser2,testUser1Pass,testUser1Email,now,"newImage");
             fail();
         }catch(InvalidArgumentException e){
             if(!e.getMessage().equals("Selected user name already exist."))
@@ -193,7 +193,7 @@ public class GameCenterTest {
         }
 
         try{
-            gc.editProfile(testUser1,testUser1,testUser1Pass,testUser2Email,now);
+            gc.editProfile(testUser1,testUser1,testUser1Pass,testUser2Email,now,"newImage");
             fail();
         }catch(InvalidArgumentException e){
             if(!e.getMessage().equals("Selected e-mail already exist."))
@@ -201,7 +201,7 @@ public class GameCenterTest {
         }
 
         try{
-            gc.editProfile(testUser1,testUser2,testUser1Pass,testUser2Email,now);
+            gc.editProfile(testUser1,testUser2,testUser1Pass,testUser2Email,now,"newImage");
             fail();
         }catch(InvalidArgumentException e){
             if(!e.getMessage().equals("Selected user name and e-mail already exist."))
@@ -213,12 +213,12 @@ public class GameCenterTest {
 
     @Test
     public void editProfileSuccessTest() throws Exception {
-        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
+        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,"newImage");
         try{
             gc.getUser("newName");
             fail();
         }catch(Exception e){}
-        gc.editProfile(testUser1,"newName","newPass","new@gmail.com",now.minusYears(2));
+        gc.editProfile(testUser1,"newName","newPass","new@gmail.com",now.minusYears(2),"newImage");
         User u=gc.getUser(testUser1);
         assertThat(u.getEmail(),is("new@gmail.com"));
         assertThat(u.getDateOfBirth(),is(now.minusYears(2)));
@@ -227,7 +227,7 @@ public class GameCenterTest {
 
     @Test
     public void depositMoneyFailTest() throws Exception {
-        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
+        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,"newImage");
         try{
             gc.depositMoney(testUser1,-100);
         }catch(ArgumentNotInBoundsException e){}
@@ -236,7 +236,7 @@ public class GameCenterTest {
 
     @Test
     public void depositMoneySuccessTest() throws Exception {
-        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
+        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,"newImage");
         assertThat(gc.getUser(testUser1).getAmountEarnedInLeague(),is(0));
         assertThat(gc.getUser(testUser1).getBalance(),is(0));
         gc.depositMoney(testUser1,1000);
@@ -247,7 +247,7 @@ public class GameCenterTest {
 
     @Test
     public void createGameFailTest() throws Exception {
-        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
+        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,"newImage");
         tournamentGameSettings.setMaximalPlayers(0);
         try{
             gc.createGame(testUser1,tournamentGameSettings);
@@ -276,7 +276,7 @@ public class GameCenterTest {
 
     @Test
     public void createGameSuccessTest() throws Exception {
-        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
+        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,"newImage");
         gc.depositMoney(testUser1,tournamentGameSettings.getBuyInPolicy()+100);
         try{
             assertNull(gc.getGameByName(tournamentGameSettings.getName()));
@@ -296,9 +296,9 @@ public class GameCenterTest {
 
     @Test
     public void joinGameFailTest() throws Exception {
-        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
-        gc.registerUser(testUser2,testUser2Pass,testUser2Email,now,null);
-        gc.registerUser(testUser3,testUser3Pass,testUser3Email,now,null);
+        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,"newImage");
+        gc.registerUser(testUser2,testUser2Pass,testUser2Email,now,"newImage");
+        gc.registerUser(testUser3,testUser3Pass,testUser3Email,now,"newImage");
 
         try{
             gc.joinGame(testUser1,"fail",false);
@@ -353,8 +353,8 @@ public class GameCenterTest {
 
     @Test
     public void joinGameSuccessTest() throws Exception {
-        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
-        gc.registerUser(testUser2,testUser2Pass,testUser2Email,now,null);
+        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,"newImage");
+        gc.registerUser(testUser2,testUser2Pass,testUser2Email,now,"newImage");
 
         gc.depositMoney(testUser1,tournamentGameSettings.getBuyInPolicy()+100);
         gc.depositMoney(testUser2,tournamentGameSettings.getBuyInPolicy()+100);
@@ -382,7 +382,7 @@ public class GameCenterTest {
                 fail();
         }
 
-        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
+        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,"newImage");
         try{
             gc.leaveGame(testUser1,tournamentGameSettings.getName());
             fail();
@@ -392,7 +392,7 @@ public class GameCenterTest {
         }
 
         gc.createGame(testUser1,realMoneyGameSettings);
-        gc.registerUser(testUser2,testUser2Pass,testUser2Email,now,null);
+        gc.registerUser(testUser2,testUser2Pass,testUser2Email,now,"newImage");
         try{
             gc.leaveGame(testUser2,realMoneyGameSettings.getName());
             fail();
@@ -407,8 +407,8 @@ public class GameCenterTest {
 
     @Test
     public void leaveGameSuccessTest() throws Exception {
-        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
-        gc.registerUser(testUser2,testUser2Pass,testUser2Email,now,null);
+        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,"newImage");
+        gc.registerUser(testUser2,testUser2Pass,testUser2Email,now,"newImage");
         gc.createGame(testUser1,realMoneyGameSettings);
         gc.joinGame(testUser2,realMoneyGameSettings.getName(),false);
 
@@ -428,7 +428,7 @@ public class GameCenterTest {
 
     @Test
     public void leaveGameSuccessWithArchivingTest() throws Exception {
-        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
+        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,"newImage");
         gc.createGame(testUser1,realMoneyGameSettings);
         Game g=gc.getGameByName(realMoneyGameSettings.getName());
 
@@ -440,9 +440,9 @@ public class GameCenterTest {
 
     @Test
     public void findAvailableGames() throws Exception {
-        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
-        gc.registerUser(testUser2,testUser2Pass,testUser2Email,now,null);
-        gc.registerUser(testUser3,testUser3Pass,testUser3Email,now,null);
+        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,"newImage");
+        gc.registerUser(testUser2,testUser2Pass,testUser2Email,now,"newImage");
+        gc.registerUser(testUser3,testUser3Pass,testUser3Email,now,"newImage");
 
         gc.depositMoney(testUser1,100000000);
 
@@ -488,7 +488,7 @@ public class GameCenterTest {
 
     @Test
     public void findSpectateableGames() throws Exception {
-        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,null);
+        gc.registerUser(testUser1,testUser1Pass,testUser1Email,now,"newImage");
         gc.depositMoney(testUser1,100000000);
 
         List<Game> games=gc.findSpectateableGames();

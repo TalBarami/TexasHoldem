@@ -82,9 +82,9 @@ public class RealBridge implements Bridge {
     }
 
     @Override
-    public boolean editUserName(String oldusername, String newusername, String password, String email, LocalDate date) {
+    public boolean editUserName(String oldusername, String newusername, String password, String email, LocalDate date, String image) {
         try {
-            service.userService().editProfile(oldusername,newusername,  password, email, date);
+            service.userService().editProfile(oldusername,newusername,  password, email, date, image);
         }catch (InvalidArgumentException e){
             return false;
         } catch (EntityDoesNotExistsException e) {

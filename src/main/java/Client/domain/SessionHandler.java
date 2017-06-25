@@ -60,8 +60,8 @@ public class SessionHandler {
     }
 
     public void register(String username, String password, String email, Calendar birthday, String localImagePath) throws InvalidArgumentException {
-        String base64encoding = ClientUtils.encodeImage(localImagePath);
-        ClientUserProfile profile = new ClientUserProfile(username, password, email, birthday.get(Calendar.DAY_OF_MONTH), birthday.get(Calendar.MONTH) +1, birthday.get(Calendar.YEAR), -1, -1, -1, -1, base64encoding);
+        //String base64encoding = ClientUtils.encodeImage(localImagePath);
+        ClientUserProfile profile = new ClientUserProfile(username, password, email, birthday.get(Calendar.DAY_OF_MONTH), birthday.get(Calendar.MONTH) +1, birthday.get(Calendar.YEAR), -1, -1, -1, -1, localImagePath);
         logger.info("Registering: {}", profile);
         userRequestHandler.requestUserProfileRegistration(profile);
 
@@ -84,8 +84,8 @@ public class SessionHandler {
             month = Integer.parseInt(date[1]);
             year = Integer.parseInt(date[2]);
         }
-        /*if(newImage == null || newImage.isEmpty())
-            newImage = user.getImage();*/
+        if(newImage == null || newImage.isEmpty())
+            newImage = user.getImage();
         ClientUserProfile profile = new ClientUserProfile(user.getUsername(), newPassword, newEmail, day, month, year, user.getBalance(), user.getCurrLeague(), user.getNumOfGamesPlayed(), user.getAmountEarnedInLeague(),newImage);
         logger.info("Edit profile: {}", user);
         logger.info("New profile: {}", profile);

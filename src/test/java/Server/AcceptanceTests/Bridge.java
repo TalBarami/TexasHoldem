@@ -24,7 +24,7 @@ public interface Bridge {
 
     boolean logout(String username);
 
-    boolean editUserName(String oldusername, String newusername, String password, String email, LocalDate date) ;
+    boolean editUserName(String oldusername, String newusername, String password, String email, LocalDate date, String image) ;
 
     boolean addbalancetouserwallet(String username,int amounttoadd);
 

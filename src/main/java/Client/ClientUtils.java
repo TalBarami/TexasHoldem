@@ -58,68 +58,7 @@ public class ClientUtils {
         return sb.toString();
     }
 
-    public static Image decodeImage(String base64String,String userName){
-        Image decoded = null;
-        BufferedImage image;
-        byte[] imageByte;
-        File outputfile;
-
-        BASE64Decoder decoder = new BASE64Decoder();
-        try{
-            imageByte = decoder.decodeBuffer(base64String);
-            ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
-            image = ImageIO.read(bis);
-            bis.close();
-
-            // write the image to a file
-            outputfile = new File(userName+".png");
-            ImageIO.write(image, "png", outputfile);
-
-            decoded = ImageIO.read(outputfile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return decoded;
-    }
-
-    public static String encodeImage(String path) {
-        //Image scaled = resize(path);
-
-        String encodedImage = null;
-        BufferedImage img=resizeImage(path);
-
-        try {
-            File outputfile = new File(LocalDate.now().toString()+".png");
-            ImageIO.write(img, "png", outputfile);
-
-            //File imageFile =  new File(path);
-            FileInputStream fileInputStreamReader = new FileInputStream(outputfile);
-            byte[] bytes = new byte[(int)outputfile.length()];
-            fileInputStreamReader.read(bytes);
-            encodedImage = new String(Base64.encode(bytes).toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return encodedImage;
-    }
-
-    private static BufferedImage resizeImage(String imagePath){
-        BufferedImage img = null;
-        try {
-            img = ImageIO.read(new File(imagePath));
-        } catch (IOException e) {}
-        BufferedImage resizedImage = new BufferedImage(200, 200, TYPE_INT_RGB);
-        Graphics2D g = resizedImage.createGraphics();
-        g.drawImage(img, 0, 0, 200, 200, null);
-        g.dispose();
-
-        return resizedImage;
-    }
-
-    public static ImageIcon getProfileImage(String encodedImage,String userName, int width, int height){
-        Image decoded = decodeImage(encodedImage,userName);
-        return new ImageIcon(decoded.getScaledInstance(width,height,0));
+    public static ImageIcon getProfileImage(String path, int width, int height){
+        return new ImageIcon(new ImageIcon(path).getImage().getScaledInstance(width,height,0));
     }
 }

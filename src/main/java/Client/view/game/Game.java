@@ -157,7 +157,7 @@ public class Game extends JFrame{
     private void generateUserInformation(ClientUserProfile user){
         logger.info("Updating user information on header: {}.", user);
         pictureLabel.setText("");
-        pictureLabel.setIcon(ClientUtils.getProfileImage(user.getImage(), user.getUsername(), 100, 100));
+        pictureLabel.setIcon(ClientUtils.getProfileImage(user.getImage(),100,100));
         usernameLabel.setText("Name: " + user.getUsername());
         cashLabel.setText("Balance: " + String.valueOf(user.getBalance()));
     }
