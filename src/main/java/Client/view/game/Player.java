@@ -26,7 +26,7 @@ public class Player {
 
     public Player(ClientPlayer player){
         this.player = player;
-        pictureLabel = new JLabel(/*ClientUtils.getProfileImage(player.getImage(), 100, 100)*/); // FIXME: Add.
+        pictureLabel = new JLabel(ClientUtils.getProfileImage(player.getImage() ,player.getPlayerName(), 100, 100));
         nameLabel = new JLabel("Name: " + player.getPlayerName());
         chipAmountLabel = new JLabel("Chips: " + String.valueOf(player.getChipAmount()));
         lastBetLabel = new JLabel("Last Bet: " + String.valueOf(player.getLastBetSinceCardOpen()));
@@ -42,7 +42,7 @@ public class Player {
         labelsPanel.setBackground(Color.lightGray);
 
         JPanel identityPanel = new JPanel();
-        identityPanel.setLayout(new BoxLayout(labelsPanel, BoxLayout.X_AXIS));
+        identityPanel.setLayout(new BoxLayout(identityPanel, BoxLayout.X_AXIS));
         identityPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         identityPanel.setBackground(Color.lightGray);
 
@@ -51,7 +51,7 @@ public class Player {
         identityPanel.add(nameLabel);
 
         JPanel informationPanel = new JPanel();
-        informationPanel.setLayout(new BoxLayout(labelsPanel, BoxLayout.X_AXIS));
+        informationPanel.setLayout(new BoxLayout(informationPanel, BoxLayout.X_AXIS));
         informationPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         informationPanel.setBackground(Color.lightGray);
 

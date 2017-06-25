@@ -80,7 +80,7 @@ public class Profile {
 
     public void generateUserInformation(ClientUserProfile profile){
         label_userPicture.setText("");
-        label_userPicture.setIcon(ClientUtils.getProfileImage(profile.getImage(), 200, 200));
+        label_userPicture.setIcon(ClientUtils.getProfileImage(profile.getImage(), profile.getUsername(), 200, 200));
         label_name.setText("Name: " + profile.getUsername());
         label_birthday.setText("Birthday: " + profile.getDayOfBirth() + "/" + profile.getMonthOfBirth() + "/" + profile.getYearOfBirth());
         label_email.setText("E-mail: " + profile.getEmail());

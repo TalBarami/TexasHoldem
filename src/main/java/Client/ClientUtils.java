@@ -12,6 +12,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.List;
 
@@ -84,25 +85,41 @@ public class ClientUtils {
 
     public static String encodeImage(String path) {
         //Image scaled = resize(path);
-        String encodedfile = null;
-        File imageFile =  new File(path);
+
+        String encodedImage = null;
+        BufferedImage img=resizeImage(path);
+
         try {
-            FileInputStream fileInputStreamReader = new FileInputStream(imageFile);
-            byte[] bytes = new byte[(int)imageFile.length()];
+            File outputfile = new File(LocalDate.now().toString()+".png");
+            ImageIO.write(img, "png", outputfile);
+
+            //File imageFile =  new File(path);
+            FileInputStream fileInputStreamReader = new FileInputStream(outputfile);
+            byte[] bytes = new byte[(int)outputfile.length()];
             fileInputStreamReader.read(bytes);
-            encodedfile = new String(Base64.encode(bytes).toString());
+            encodedImage = new String(Base64.encode(bytes).toString());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return encodedfile;
+        return encodedImage;
     }
 
-    public static Image resize(String path){
-        return null;
+    private static BufferedImage resizeImage(String imagePath){
+        BufferedImage img = null;
+        try {
+            img = ImageIO.read(new File(imagePath));
+        } catch (IOException e) {}
+        BufferedImage resizedImage = new BufferedImage(200, 200, TYPE_INT_RGB);
+        Graphics2D g = resizedImage.createGraphics();
+        g.drawImage(img, 0, 0, 200, 200, null);
+        g.dispose();
+
+        return resizedImage;
     }
 
-    public static ImageIcon getProfileImage(String imagePath, int width, int height){
-        return null;
+    public static ImageIcon getProfileImage(String encodedImage,String userName, int width, int height){
+        Image decoded = decodeImage(encodedImage,userName);
+        return new ImageIcon(decoded.getScaledInstance(width,height,0));
     }
 }

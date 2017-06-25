@@ -14,17 +14,10 @@ import Exceptions.LoginException;
 import Client.communication.SessionRequestHandler;
 import Client.communication.UserRequestHandler;
 
-import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
-import org.apache.tomcat.util.http.fileupload.FileUtils;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.stomp.StompSession;
-import sun.misc.BASE64Encoder;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.*;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;

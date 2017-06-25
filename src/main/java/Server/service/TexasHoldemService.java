@@ -24,7 +24,7 @@ public class TexasHoldemService {
         searchService = new SearchService(gameCenter);
         statisticsService = new StatisticsService(gameCenter);
 
-        try {
+        /*try {
             userService.register("user1", "123", "tal@gmail", LocalDate.now(), null);
             userService.register("user2", "123", "ronen@gmail", LocalDate.now().plusDays(2), null);
             userService.register("user3", "123", "achiad@gmail", LocalDate.now().plusDays(3), null);
@@ -35,7 +35,7 @@ public class TexasHoldemService {
             userService.register("user8", "123", "c@gmail", LocalDate.now().plusDays(8), null);
         } catch(InvalidArgumentException e){
             System.out.println("ERROR! INVALID ARGUMENT!");
-        }
+        }*/
     }
 
     public GameService gameService(){
