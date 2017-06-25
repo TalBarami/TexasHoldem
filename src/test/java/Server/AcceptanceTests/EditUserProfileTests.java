@@ -27,7 +27,7 @@ public class EditUserProfileTests extends ProjectTest {
     @Test
     public void testEditPassword()
     {
-        boolean useradded = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com", LocalDate.of(1991,4,20),null);
+        boolean useradded = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com", LocalDate.of(1991,4,20),"newImage");
         assertTrue(useradded);
         boolean useredited1 = this.editusername("achiadg", "achiadg", "aChi1234#*","achiadg@gmail.com", LocalDate.of(1991,4,20),"newImage");
         assertTrue(useredited1);
@@ -42,7 +42,7 @@ public class EditUserProfileTests extends ProjectTest {
     @Test
     public void testEditEmail()
     {
-        boolean useradded = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com",LocalDate.of(1991,4,20),null);
+        boolean useradded = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com",LocalDate.of(1991,4,20),"newImage");
         assertTrue(useradded);
         boolean useredited1 = this.editusername("achiadg", "achiadg", "aChi12#*","achiadg@post.bgu.ac.il",LocalDate.of(1991,4,20),"newImage");
         assertTrue(useredited1);
@@ -57,7 +57,7 @@ public class EditUserProfileTests extends ProjectTest {
     @Test
     public void testEditPasswordNoChange()
     {
-        boolean useradded = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com",LocalDate.of(1991,4,20),null);
+        boolean useradded = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com",LocalDate.of(1991,4,20),"newImage");
         assertTrue(useradded);
         boolean useredited = this.editusername("achiadg","achiadg", "aChi12#*", "achiadg@gmail.com",LocalDate.of(1991,4,20),"newImage");
         assertTrue(useredited);
@@ -70,7 +70,7 @@ public class EditUserProfileTests extends ProjectTest {
     @Test
     public void testEditEmailNoChange()
     {
-        boolean useradded = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com",LocalDate.of(1991,4,20),null);
+        boolean useradded = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com",LocalDate.of(1991,4,20),"newImage");
         assertTrue(useradded);
         boolean useredited = this.editusername("achiadg","achiadg", "aChi12#*", "achiadg@gmail.com",LocalDate.of(1991,4,20),"newImage");
         assertTrue(useredited);
@@ -83,7 +83,7 @@ public class EditUserProfileTests extends ProjectTest {
     @Test
     public void testEditPasswordNoValid()
     {
-        boolean useradded = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com",LocalDate.of(1991,4,20),null);
+        boolean useradded = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com",LocalDate.of(1991,4,20),"newImage");
         assertTrue(useradded);
         boolean useredited = this.editusername("achiadg", "achiadg","aChi1\n2#*", "achiadg@gmail.com",LocalDate.of(1991,4,20),"newImage");
         assertFalse(useredited);
@@ -96,7 +96,7 @@ public class EditUserProfileTests extends ProjectTest {
     @Test
     public void testEditPasswordEmpty()
     {
-        boolean useradded = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com",LocalDate.of(1991,4,20),null);
+        boolean useradded = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com",LocalDate.of(1991,4,20),"newImage");
         assertTrue(useradded);
         boolean useredited = this.editusername("achiadg", "achiadg","", "achiadg@gmail.com",LocalDate.of(1991,4,20),"newImage");
         assertFalse(useredited);
@@ -109,7 +109,7 @@ public class EditUserProfileTests extends ProjectTest {
     @Test
     public void testEditEmailNoValid()
     {
-        boolean useradded = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com",LocalDate.of(1991,4,20),null);
+        boolean useradded = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com",LocalDate.of(1991,4,20),"newImage");
         assertTrue(useradded);
         boolean useredited = this.editusername("achiadg", "achiadg","aChi12#*","achi\tadg@g\nmail.com",LocalDate.of(1991,4,20),"newImage");
         assertFalse(useredited);
@@ -122,7 +122,7 @@ public class EditUserProfileTests extends ProjectTest {
     @Test
     public void testEditEmailEmpty()
     {
-        boolean useradded = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com",LocalDate.of(1991,4,20),null);
+        boolean useradded = this.registerUser("achiadg","aChi12#*","achiadg@gmail.com",LocalDate.of(1991,4,20),"newImage");
         assertTrue(useradded);
         boolean useredited = this.editusername("achiadg", "achiadg","aChi12#*","",LocalDate.of(1991,4,20),"newImage");
         assertFalse(useredited);
