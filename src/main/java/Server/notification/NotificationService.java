@@ -108,8 +108,9 @@ public class NotificationService {
             int currLeague = user.getCurrLeague();
             int numOfGamesPlayed = user.getNumOfGamesPlayed();
             int amountEarnedInLeague = user.getAmountEarnedInLeague();
+            String image=user.getImg();
 
-            ClientUserProfile profile = new ClientUserProfile(username, password, email, dayOfBirth, monthOfBirth, yearOfBirth, balance, currLeague, numOfGamesPlayed, amountEarnedInLeague);
+            ClientUserProfile profile = new ClientUserProfile(username, password, email, dayOfBirth, monthOfBirth, yearOfBirth, balance, currLeague, numOfGamesPlayed, amountEarnedInLeague,image);
             UserProfileUpdateNotification profileNotification = new UserProfileUpdateNotification(username, profile);
 
             messageSender.sendUserProfileUpdateNotification(profileNotification);

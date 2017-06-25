@@ -42,7 +42,7 @@ public class GameCenter {
         leagueManager = new LeagueManager();
     }
 
-    public void registerUser(String userName, String pass, String email, LocalDate date, BufferedImage img) throws InvalidArgumentException {
+    public void registerUser(String userName, String pass, String email, LocalDate date, String img) throws InvalidArgumentException {
         User newUser = new User(userName,pass,email,date,img);
         usersDb.addUser(newUser);
         leagueManager.addNewUserToLeague(newUser);

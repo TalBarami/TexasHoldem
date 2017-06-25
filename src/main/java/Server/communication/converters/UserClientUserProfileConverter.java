@@ -20,6 +20,7 @@ public class UserClientUserProfileConverter {
         client.setAmountEarnedInLeague(user.getAmountEarnedInLeague());
         client.setCurrLeague(user.getCurrLeague());
         client.setNumOfGamesPlayed(user.getNumOfGamesPlayed());
+        client.setImage(user.getImg());
 
         return client;
 

@@ -46,7 +46,7 @@ public class UserController {
         String password = user.getPassword();
         String email = user.getEmail();
         LocalDate dateOfBirth = LocalDate.of(user.getYearOfBirth(), user.getMonthOfBirth(), user.getDayOfBirth());
-        BufferedImage img = null;
+        String img = user.getImage();
 
         service.register(userName, password, email, dateOfBirth, img);
         return new ResponseMessage("Register succeeded", null);

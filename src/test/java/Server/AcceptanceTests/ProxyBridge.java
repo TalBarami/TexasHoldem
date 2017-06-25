@@ -28,7 +28,7 @@ public class ProxyBridge implements Bridge {
     }
 
 
-    public boolean registerUser(String username, String password, String email, LocalDate dateTime, BufferedImage img) {
+    public boolean registerUser(String username, String password, String email, LocalDate dateTime, String img) {
        return real.registerUser(username, password, email, dateTime, img);
     }
 

@@ -9,11 +9,18 @@ import Client.ClientUtils;
 import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
 import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
 import net.sourceforge.jdatepicker.impl.UtilDateModel;
+import sun.misc.BASE64Decoder;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 
 /**
@@ -72,9 +79,8 @@ public class Profile {
     }
 
     public void generateUserInformation(ClientUserProfile profile){
-        /*ImageIcon icon = new ImageIcon(user.getImg().getScaledInstance(200, 200, 0));*/
-        label_userPicture.setText("");
-        /*label_userPicture.setIcon(icon);*/
+        Image decoded = ClientUtils.decodeImage(profile.getImage(),profile.getUsername());
+        label_userPicture.setIcon(new ImageIcon(decoded.getScaledInstance(200, 200, 0)));
         label_name.setText("Name: " + profile.getUsername());
         label_birthday.setText("Birthday: " + profile.getDayOfBirth() + "/" + profile.getMonthOfBirth() + "/" + profile.getYearOfBirth());
         label_email.setText("E-mail: " + profile.getEmail());
@@ -134,4 +140,6 @@ public class Profile {
         JDatePanelImpl datePanel = new JDatePanelImpl(model);
         newBirthdayDatePicker = new JDatePickerImpl(datePanel);
     }
+
+
 }
