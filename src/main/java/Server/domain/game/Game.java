@@ -91,8 +91,9 @@ public class Game {
             logger.info("A new money round in game '{}' has started.", getName());
             handleNewRound(initiator.getUser().getUsername());
         } else { //tournament
+            if(isActive)
+                numPlayersStarted = players.size();
             setIsActive(false);
-            numPlayersStarted=players.size();
             logger.info("A new tournament round in game '{}' has started.", getName());
             handleNewRound(initiator.getUser().getUsername());
         }
@@ -333,6 +334,7 @@ public class Game {
         resetDealerIndex();
         try {
             depositTournamentEarningsForWinner();
+            numPlayersStarted = 0;
         } catch (ArgumentNotInBoundsException e) {
             e.printStackTrace();
         }
