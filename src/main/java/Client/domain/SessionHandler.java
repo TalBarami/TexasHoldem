@@ -59,9 +59,8 @@ public class SessionHandler {
         return ipAddress;
     }
 
-    public void register(String username, String password, String email, Calendar birthday, String localImagePath) throws InvalidArgumentException {
-        //String base64encoding = ClientUtils.encodeImage(localImagePath);
-        ClientUserProfile profile = new ClientUserProfile(username, password, email, birthday.get(Calendar.DAY_OF_MONTH), birthday.get(Calendar.MONTH) +1, birthday.get(Calendar.YEAR), -1, -1, -1, -1, localImagePath);
+    public void register(String username, String password, String email, Calendar birthday, String imagePath) throws InvalidArgumentException {
+        ClientUserProfile profile = new ClientUserProfile(username, password, email, birthday.get(Calendar.DAY_OF_MONTH), birthday.get(Calendar.MONTH) +1, birthday.get(Calendar.YEAR), -1, -1, -1, -1, imagePath);
         logger.info("Registering: {}", profile);
         userRequestHandler.requestUserProfileRegistration(profile);
 

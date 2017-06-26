@@ -62,7 +62,6 @@ public class UserController {
 
         manager.validate(userName, sessionID);
 
-        // TODO :: Verify username and password
         service.editProfile(oldUserName, userName, password, email, dateOfBirth, image);
         return new ResponseMessage("Edit user profile succeeded", null);
     }
@@ -75,14 +74,11 @@ public class UserController {
             service.deposit(username, transaction.getAmount());
         }
 
-        // TODO :: Add withdraw support
-        // TODO :: Verify username and password
         return new ResponseMessage("Transaction completed successfully", null);
     }
 
     @RequestMapping(method=DELETE, value="/user/{username}")
     public ResponseMessage updateUser(@PathVariable("username") String userName) throws InvalidArgumentException, EntityDoesNotExistsException {
-        // TODO :: Verify username and password
         service.deleteUser(userName);
         return new ResponseMessage("Delete user profile succeeded", null);
     }

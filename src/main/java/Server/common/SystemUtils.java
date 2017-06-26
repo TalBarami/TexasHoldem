@@ -28,7 +28,7 @@ public class SystemUtils {
             return true;
         }
 
-        List<Character> bad = Arrays.asList(new Character[]{'\t','\b','r','f','\n','\'','\"','\\'});
+        List<Character> bad = Arrays.asList(new Character[]{'\t','\b','\r','\f','\n','\'','\"','\\'});
         char[] chars = pass.toCharArray();
         for(char c : chars){
             if(bad.contains(c)){
