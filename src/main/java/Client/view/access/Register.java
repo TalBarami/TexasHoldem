@@ -52,6 +52,10 @@ public class Register {
 
     private void onOK() {
         try {
+            if(text_email.getText().isEmpty() || new String(text_password.getPassword()).isEmpty() || text_email.getText().isEmpty() || datePicker_birthday.getJFormattedTextField().getText().isEmpty() || text_picture.getText().isEmpty()){
+                JOptionPane.showMessageDialog(null, "Please fill all registration fields properly.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             SessionHandler.getInstance().register(text_name.getText(), new String(text_password.getPassword()), text_email.getText(), (Calendar) datePicker_birthday.getModel().getValue(), text_picture.getText());
             ancestor.showLogin();
         } catch (InvalidArgumentException e) {

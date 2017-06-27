@@ -112,7 +112,7 @@ public class MainMenu extends JFrame {
             searchComboBox.addItem(policy);
         }
 
-        searchSpinner.setModel(new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 1));
+        searchSpinner.setModel(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
         JFormattedTextField txt = ((JSpinner.NumberEditor) searchSpinner.getEditor()).getTextField();
         ((NumberFormatter) txt.getFormatter()).setAllowsInvalid(false);
     }
@@ -193,6 +193,12 @@ public class MainMenu extends JFrame {
     }
 
     private void onFind(){
+        if(searchTextField.isVisible() && searchTextField.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please enter a valid text to search.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+
         DefaultTableModel dtm = (DefaultTableModel) gamesTable.getModel();
         dtm.setRowCount(0);
 
@@ -200,7 +206,7 @@ public class MainMenu extends JFrame {
         String searchValue = searchTextField.isVisible() ? searchTextField.getText()
                 : searchSpinner.isVisible() ? String.valueOf(searchSpinner.getValue())
                 : searchComboBox.isVisible() ? String.valueOf(searchComboBox.getSelectedItem())
-                : "";
+                : "null";
         try {
             SearchHandler searchHandler = SearchHandler.getInstance();
             List<ClientGameDetails> found = searchHandler.getPolicy(searchType).find(searchValue);
